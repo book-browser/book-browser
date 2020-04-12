@@ -1,29 +1,35 @@
-<nav class="navbar navbar-expand-md bg-light navbar-light">
+<nav class="navbar navbar-expand bg-light navbar-light flex-wrap">
     <div class="navbar-header">
         <a class="navbar-brand" href="#">BookBrowser</a>
     </div>
-    <ul class="navbar-nav">
+
+    <ul class="navbar-nav mr-auto d-none d-md-flex">
         <li class="nav-item"><a href="#" class="nav-link">Home</a></li>
         <li class="nav-item"><a href="#" class="nav-link">Popular</a></li>
         <li class="nav-item"><a href="#" class="nav-link">Recent</a></li>
     </ul>
 
     <span class="ml-auto form-inline">
-        <button class="btn btn-primary mr-sm-4" [ngbPopover]="loginContent">Login</button>
-       
-        <input class="form-control mr-sm-2" placeholder="Search" />
-        <button class="btn btn-primary">Search</button>
+        <input class="form-control mr-2" placeholder="Search" style="width: 250px" />
+        <button class="btn btn-primary mr-2">Search</button>
+
+        <button *ngIf="!principal" class="btn btn-primary" [autoClose]="'outside'" [ngbPopover]="loginContent">Login</button>
+        <span *ngIf="principal">
+            <button class="btn btn-outline-secondary mr-2"><i class="fas fa-bell"></i></button>
+            <button class="btn btn-outline-secondary mr-2"><i class="fas fa-envelope"></i></button>
+            <button class="btn btn-outline-secondary mr-2"><i class="fas fa-user"></i></button>
+        </span>
     </span>
 </nav>
 
 <ng-template #loginContent>
     <p>Login</p>
     <div class="mb-3">
-        <input class="form-control mb-2" placeholder="Username" />
-        <input class="form-control" placeholder="Password" />
+        <input type="input" class="form-control mb-2" placeholder="Username" [(ngModel)]="username" />
+        <input type="password" class="form-control" placeholder="Password" [(ngModel)]="password" />
     </div>
     <div class="form-inline">
         <button class="btn btn-secondary mr-2">Register</button>
-        <button class="btn btn-primary">Login</button>
+        <button class="btn btn-primary" (click)="login()">Login</button>
     </div>
 </ng-template>
