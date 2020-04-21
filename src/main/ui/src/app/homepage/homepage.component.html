@@ -1,24 +1,24 @@
 <nav class="navbar navbar-expand bg-light navbar-light flex-wrap">
-    <div class="navbar-header">
-        <a class="navbar-brand" href="#">BookBrowser</a>
-    </div>
+    <a class="navbar-brand" href="#">BookBrowser</a>
 
-    <ul class="navbar-nav mr-auto d-none d-md-flex">
-        <li class="nav-item"><a href="#" class="nav-link">Home</a></li>
-        <li class="nav-item"><a href="#" class="nav-link">Popular</a></li>
-        <li class="nav-item"><a href="#" class="nav-link">Recent</a></li>
-    </ul>
+    <span class="header-left">
+        <ul class="navbar-nav mr-auto d-none d-md-flex">
+            <li class="nav-item"><a href="#" class="nav-link">Home</a></li>
+            <li class="nav-item"><a href="#" class="nav-link">Popular</a></li>
+            <li class="nav-item"><a href="#" class="nav-link">Recent</a></li>
+        </ul>
+    </span>
+    
 
-    <span class="ml-auto form-inline">
-        <input class="form-control mr-2" placeholder="Search" style="width: 250px" />
+    <span class="header-right ml-auto form-inline">
+        <input class="form-control mr-2" placeholder="Search" style="width: 250px" [(ngModel)]="model" [ngbTypeahead]="search" [resultTemplate]="rt"/>
         <button class="btn btn-primary mr-2">Search</button>
 
         <button *ngIf="!principal" class="btn btn-primary" [autoClose]="'outside'" [ngbPopover]="loginContent">Login</button>
-        <span *ngIf="principal">
-            <button class="btn btn-outline-secondary mr-2"><i class="fas fa-bell"></i></button>
-            <button class="btn btn-outline-secondary mr-2"><i class="fas fa-envelope"></i></button>
-            <button class="btn btn-outline-secondary mr-2"><i class="fas fa-user"></i></button>
-        </span>
+        
+        <button *ngIf="principal" class="btn btn-outline-secondary mr-2"><i class="fas fa-bell"></i></button>
+        <button *ngIf="principal" class="btn btn-outline-secondary mr-2"><i class="fas fa-envelope"></i></button>
+        <button *ngIf="principal" class="btn btn-outline-secondary mr-2"><i class="fas fa-user"></i></button>
     </span>
 </nav>
 
@@ -32,4 +32,9 @@
         <button class="btn btn-secondary mr-2">Register</button>
         <button class="btn btn-primary" (click)="login()">Login</button>
     </div>
+</ng-template>
+
+<ng-template #rt let-r="result" let-t="term">
+    <img src="/api/book/{{r.id}}/thumbnail" class="mr-2" style="width: 40px; height: 40px">
+    <ngb-highlight [result]="r.title" [term]="t"></ngb-highlight>
 </ng-template>

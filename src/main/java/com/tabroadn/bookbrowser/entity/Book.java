@@ -1,6 +1,7 @@
 package com.tabroadn.bookbrowser.entity;
 
 import java.sql.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,7 +20,9 @@ public class Book {
 	
 	private String description;
 	
-	private String thumbnailUrl;
+//	private List<String> authors;
+	
+	private byte[] thumbnail;
 	
 	private int pageViews;
 	
