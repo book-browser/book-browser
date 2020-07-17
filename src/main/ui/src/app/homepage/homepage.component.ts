@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../services/user.service';
 import { Principal } from '../entities/principal';
-import { CookieService } from 'ngx-cookie-service';
-import { Observable, from, of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import {catchError, debounceTime, distinctUntilChanged, map, tap, switchMap} from 'rxjs/operators';
 import { BookService } from '../services/book.service';
 
@@ -27,11 +26,16 @@ export class HomepageComponent implements OnInit {
     });
   }
 
-  
-  
   login() {
     this.userService.login(this.username, this.password).subscribe((principal) => {
       this.principal = principal;
+    });
+  }
+
+  logout() {
+    setTimeout(() => {
+      this.userService.logout();
+      this.principal = null;
     });
   }
 
@@ -50,6 +54,5 @@ export class HomepageComponent implements OnInit {
       ),
       tap(() => this.searching = false)
     )
-  };
-    
+  };   
 }

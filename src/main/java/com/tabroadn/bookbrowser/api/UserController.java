@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tabroadn.bookbrowser.entity.LoginForm;
 import com.tabroadn.bookbrowser.entity.User;
 
 @RestController
@@ -33,9 +33,9 @@ public class UserController {
 	}
 	
 	@PostMapping("/login")
-	public Object login(@RequestParam String username, @RequestParam String password)
+	public Object login(@RequestBody LoginForm loginForm)
 	{
-		Authentication request = new UsernamePasswordAuthenticationToken(username, password);
+		Authentication request = new UsernamePasswordAuthenticationToken(loginForm.getUsername(), loginForm.getPassword());
 
         Authentication result = authenticationManager.authenticate(request);
         

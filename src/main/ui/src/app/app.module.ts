@@ -7,7 +7,8 @@ import { HomepageComponent } from './homepage/homepage.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { CookieService } from 'ngx-cookie-service';
+
+import { AutofocusFixModule } from 'ngx-autofocus-fix';
 
 @NgModule({
   declarations: [
@@ -19,9 +20,10 @@ import { CookieService } from 'ngx-cookie-service';
     AppRoutingModule,
     NgbModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    AutofocusFixModule.forRoot()
   ],
-  providers: [ CookieService ],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
