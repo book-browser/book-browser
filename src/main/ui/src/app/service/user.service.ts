@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Principal } from '../entities/principal';
+import { HttpClient } from '@angular/common/http';
+import { Principal } from '../entity/principal';
 import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({

@@ -3,7 +3,7 @@ CREATE TABLE book_browser.book (
     title VARCHAR(50),
     description VARCHAR(250),
     thumbnail BLOB,
-    pageViews INT,
-    uploadDate DATE,
+    page_views INT,
+    upload_date DATE,
     PRIMARY KEY (id)
 );

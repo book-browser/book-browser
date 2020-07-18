@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../services/user.service';
-import { Principal } from '../entities/principal';
+import { UserService } from '../service/user.service';
+import { Principal } from '../entity/principal';
 import { Observable, of } from 'rxjs';
 import {catchError, debounceTime, distinctUntilChanged, map, tap, switchMap} from 'rxjs/operators';
-import { BookService } from '../services/book.service';
+import { BookService } from '../service/book.service';
+import { Person } from '../entity/person';
+import { Book } from '../entity/book';
 
 @Component({
   selector: 'homepage',
@@ -44,15 +46,30 @@ export class HomepageComponent implements OnInit {
       debounceTime(300),
       distinctUntilChanged(),
       tap(() => this.searching = true),
-      switchMap(term =>
-        this.bookService.findByTitleContaining(term).pipe(
-          tap(() => this.searchFailed = false),
-          catchError(() => {
-            this.searchFailed = true;
-            return of([]);
-          }))
+      switchMap(term => {
+        if (term) {
+          return this.bookService.findByTitleContaining(term).pipe(
+            tap(() => this.searchFailed = false),
+            catchError(() => {
+              this.searchFailed = true;
+              return of([]);
+            }))
+          }
+          return of([]);
+        }
       ),
       tap(() => this.searching = false)
     )
-  };   
+  }
+  
+  getSearchResultAuthorsDescription(result: Book) {
+    let authorsDescription = '';
+    result.authors.forEach((author, index) => {
+      authorsDescription += `${author.firstName} ${author.lastName}`;
+      if (index + 1 != result.authors.length) {
+        authorsDescription += ' , ';
+      }
+    });
+    return authorsDescription;  
+  }
 }

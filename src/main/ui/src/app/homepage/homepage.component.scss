@@ -1,3 +1,24 @@
 .navbar {
 
 }
+
+.dropdown-menu {
+  width: 90%;
+}
+
+.search-result {
+  width: 400px;
+  display: flex;
+}
+
+.search-result-thumbnail {
+  width: 40px;
+  height: 40px;
+  flex-grow: 0;
+  margin: auto;
+}
+
+.search-result-description {
+  flex-grow: 1;
+  margin-left: 5px;
+}

@@ -6,6 +6,9 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 
 import lombok.Data;
 
@@ -20,11 +23,16 @@ public class Book {
 	
 	private String description;
 	
-//	private List<String> authors;
+	@ManyToMany
+	@JoinTable(
+	  name = "author", 
+	  joinColumns = @JoinColumn(name = "book_id"), 
+	  inverseJoinColumns = @JoinColumn(name = "person_id"))
+	private List<Person> authors;
 	
 	private byte[] thumbnail;
 	
-	private int pageViews;
+	private Integer pageViews;
 	
 	private Date uploadDate;
 }

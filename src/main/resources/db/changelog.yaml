@@ -22,3 +22,11 @@ databaseChangeLog:
         - sqlFile:
             path: changelog/scripts/03-tabroadn-create-book-table.sql
             relativeToChangelogFile: true
+
+    - changeSet:
+        id: createPersonAuthorTable
+        author: Tariq Broadnax
+        changes:
+        - sqlFile:
+            path: changelog/scripts/04-tabroadn-create-person-author-tables.sql
+            relativeToChangelogFile: true

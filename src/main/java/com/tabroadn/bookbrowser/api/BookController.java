@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.tabroadn.bookbrowser.dto.BookInfoDto;
 import com.tabroadn.bookbrowser.entity.Book;
 import com.tabroadn.bookbrowser.service.BookService;
 
@@ -32,7 +33,7 @@ public class BookController {
 	}
 	
 	@PostMapping("/books/search")
-	public List<Book> findByTitleContaining(@RequestBody JsonNode node) {
+	public List<BookInfoDto> findByTitleContaining(@RequestBody JsonNode node) {
 		String title = node.get("query").asText();
 		return service.findByTitleContaining(title);
 	}

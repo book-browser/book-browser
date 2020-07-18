@@ -1,4 +1,4 @@
-import { Principal } from 'src/app/entities/principal';
+import { Principal } from 'src/app/entity/principal';
 
 export let principal = {
     username: 'false',

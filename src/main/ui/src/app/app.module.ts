@@ -9,11 +9,13 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 
 import { AutofocusFixModule } from 'ngx-autofocus-fix';
+import { TruncatePipe } from './pipe/truncate.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomepageComponent,
+    TruncatePipe
   ],
   imports: [
     BrowserModule,
