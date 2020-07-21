@@ -23,12 +23,12 @@ public class BookController {
 	private BookService service;
 	
 	@GetMapping("/books/popular")
-	public List<Book> getPopularBooks() {
+	public List<BookInfoDto> getPopularBooks() {
 		return service.getPopularBooks();
 	}
 	
 	@GetMapping("/books/new")
-	public List<Book> getNewBooks() {
+	public List<BookInfoDto> getNewBooks() {
 		return service.getNewBooks();
 	}
 	

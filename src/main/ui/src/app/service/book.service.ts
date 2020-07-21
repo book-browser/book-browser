@@ -13,4 +13,8 @@ export class BookService {
         
       return this.http.post<Book[]>('/api/books/search', body);
     }
+
+    findNewBooks() {
+      return this.http.get<Book[]>('/api/books/new');
+    }
 }

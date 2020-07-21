@@ -1,5 +1,6 @@
-.navbar {
-
+.content {
+  width: 1150px;
+  margin: auto;
 }
 
 .dropdown-menu {
@@ -21,4 +22,21 @@
 .search-result-description {
   flex-grow: 1;
   margin-left: 5px;
+}
+
+.new-books {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.card {
+  width: 180px;
+  margin: 5px;
+  img {
+    height: 210px
+  }
+  img:hover {
+    opacity: 0.3;
+  }
 }

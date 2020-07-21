@@ -1,6 +1,6 @@
 package com.tabroadn.bookbrowser.entity;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -34,5 +34,5 @@ public class Book {
 	
 	private Integer pageViews;
 	
-	private Date uploadDate;
+	private LocalDate publishDate;
 }

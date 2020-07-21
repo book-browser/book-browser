@@ -1,6 +1,6 @@
 package com.tabroadn.bookbrowser.dto;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import lombok.Data;
@@ -15,7 +15,7 @@ public class BookInfoDto {
 		
 	private Integer pageViews;
 	
-	private Date uploadDate;
+	private LocalDate publishDate;
 	
 	private List<PersonDto> authors;
 }

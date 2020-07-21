@@ -6,5 +6,5 @@ export class Book {
   authors: Person[];
   description: string;
   pageViews: number;
-  uploadDate: Date;
+  publishDate: Date;
 }

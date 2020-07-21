@@ -19,6 +19,7 @@ export class HomepageComponent implements OnInit {
   model: string;
   searching = false;
   searchFailed = false;
+  newBooks: Book[];
 
   constructor(private userService: UserService, private bookService: BookService) { }
 
@@ -26,6 +27,9 @@ export class HomepageComponent implements OnInit {
     this.userService.getPrincipal().subscribe((principal) => {
       this.principal = principal;
     });
+    this.bookService.findNewBooks().subscribe((newBooks) => {
+      this.newBooks = newBooks;
+    })
   }
 
   login() {

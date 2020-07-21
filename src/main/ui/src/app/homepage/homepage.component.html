@@ -37,6 +37,16 @@
   </span>
 </nav>
 
+<div class="content">
+  <h1>New</h1>
+  <div class="new-books">
+    <div *ngFor="let book of newBooks" class="card">
+      <a href="#"><img class="card-img-top" src="/api/book/{{book.id}}/thumbnail" alt="" /></a>
+      <a href="#">{{book.title | truncate:[18, '...']}}</a>
+    </div>
+  </div>
+</div>
+
 <ng-template #loginContent>
   <p>Login</p>
   <div class="mb-3">

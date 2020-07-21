@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
@@ -15,20 +14,23 @@ import com.tabroadn.bookbrowser.entity.Book;
 import com.tabroadn.bookbrowser.entity.Person;
 import com.tabroadn.bookbrowser.repository.BookRepository;
 
-@Profile("!mock")
 @Component
 public class BookServiceImpl implements BookService {
 	@Autowired
 	private BookRepository repository;
 	
 	@Override
-	public List<Book> getNewBooks() {
-		return repository.findAll(PageRequest.of(0, 20, Sort.by(Sort.Direction.DESC, "uploadDate"))).toList();
+	public List<BookInfoDto> getNewBooks() {
+		return repository.findAll(PageRequest.of(0, 12, Sort.by(Sort.Direction.DESC, "publishDate")))
+				.map(BookServiceImpl::convertBookToBookInfo)
+				.toList();
 	}
 	
 	@Override
-	public List<Book> getPopularBooks() {
-		return repository.findAll(PageRequest.of(0, 20, Sort.by(Sort.Direction.DESC, "pageViews"))).toList();
+	public List<BookInfoDto> getPopularBooks() {
+		return repository.findAll(PageRequest.of(0, 12, Sort.by(Sort.Direction.DESC, "pageViews")))
+				.map(BookServiceImpl::convertBookToBookInfo)
+				.toList();
 	}
 
 	@Override
@@ -49,7 +51,7 @@ public class BookServiceImpl implements BookService {
 		bookInfo.setDescription(book.getDescription());
 		bookInfo.setPageViews(book.getPageViews());
 		bookInfo.setTitle(book.getTitle());
-		bookInfo.setUploadDate(book.getUploadDate());
+		bookInfo.setPublishDate(book.getPublishDate());
 		bookInfo.setAuthors(
 				book.getAuthors().stream()
 					.map(BookServiceImpl::convertPersonToPersonDto)
