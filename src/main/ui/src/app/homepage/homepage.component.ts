@@ -6,6 +6,8 @@ import {catchError, debounceTime, distinctUntilChanged, map, tap, switchMap} fro
 import { BookService } from '../service/book.service';
 import { Person } from '../entity/person';
 import { Book } from '../entity/book';
+import { Release } from '../entity/release';
+import { ReleaseService } from '../service/release.service';
 
 @Component({
   selector: 'homepage',
@@ -19,16 +21,22 @@ export class HomepageComponent implements OnInit {
   model: string;
   searching = false;
   searchFailed = false;
-  newBooks: Book[];
+  releases: Release[][];
 
-  constructor(private userService: UserService, private bookService: BookService) { }
+
+
+  constructor(private userService: UserService, private bookService: BookService,
+    private releaseService: ReleaseService) { }
 
   ngOnInit() { 
     this.userService.getPrincipal().subscribe((principal) => {
       this.principal = principal;
     });
-    this.bookService.findNewBooks().subscribe((newBooks) => {
-      this.newBooks = newBooks;
+    this.releaseService.getReleases().subscribe((releases) => {
+      this.releases = [];
+      for (var i = 0; i < releases.length / 15; i++) {
+        this.releases.push(releases.slice(i * 15, (i + 1) * 15));
+      }
     })
   }
 

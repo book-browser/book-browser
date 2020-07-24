@@ -79,56 +79,110 @@ INSERT INTO book_browser.person(id, first_name, last_name)
 INSERT INTO book_browser.book(id, title, thumbnail, publish_date)
   values (1, 'The Witch''s Throne', FILE_READ('classpath:/images/the-witchs-throne.jpg'), '2017-08-27');
 
+INSERT INTO book_browser.release(id, book_id, release_type, release_number, publish_date)
+  values (1, 1, 'ISSUE', 1, '2017-08-27');
+
 INSERT INTO book_browser.book(id, title, thumbnail, publish_date)
   values (2, 'The Deep & Dark Blue', FILE_READ('classpath:/images/deep-and-dark-blue.jpg'), '2020-01-07');
+
+INSERT INTO book_browser.release(id, book_id, release_type, release_number, publish_date)
+  values (2, 2, 'VOLUME', 1, '2020-01-07');
 
 INSERT INTO book_browser.book(id, title, thumbnail, publish_date)
   values (3, 'Witchy', FILE_READ('classpath:/images/witchy.jpg'), '2019-09-17');
 
+INSERT INTO book_browser.release(id, book_id, release_type, release_number, publish_date)
+  values (3, 3, 'VOLUME', 1, '2020-01-07');
+  
 INSERT INTO book_browser.book(id, title, thumbnail, publish_date)
   values (4, 'Cry Wolf Girl', FILE_READ('classpath:/images/cry-wolf-girl.jpg'), '2019-09-01');
+
+INSERT INTO book_browser.release(id, book_id, release_type, release_number, publish_date)
+  values (4, 4, 'VOLUME', 1, '2019-09-01');
 
 INSERT INTO book_browser.book(id, title, thumbnail, publish_date)
   values (5, 'Snapdragon', FILE_READ('classpath:/images/snapdragon.jpg'), '2020-02-04');
 
+INSERT INTO book_browser.release(id, book_id, release_type, release_number, publish_date)
+  values (5, 5, 'VOLUME', 1, '2020-02-04');
+
 INSERT INTO book_browser.book(id, title, thumbnail, publish_date)
   values (6, 'The Okay Witch', FILE_READ('classpath:/images/the-okay-witch.jpg'), '2019-09-03');
+
+INSERT INTO book_browser.release(id, book_id, release_type, release_number, publish_date)
+  values (6, 6, 'VOLUME', 1, '2019-09-03');
 
 INSERT INTO book_browser.book(id, title, thumbnail, publish_date)
   values (7, 'The Prince and the Dressmaker', FILE_READ('classpath:/images/the-prince-and-the-dressmaker.jpg'), '2018-02-13');
 
+INSERT INTO book_browser.release(id, book_id, release_type, release_number, publish_date)
+  values (7, 7, 'VOLUME', 1, '2018-02-13');
+
 INSERT INTO book_browser.book(id, title, thumbnail, publish_date)
   values (8, 'In Real Life', FILE_READ('classpath:/images/in-real-life.jpg'), '2014-10-14');
+
+INSERT INTO book_browser.release(id, book_id, release_type, release_number, publish_date)
+  values (8, 8, 'VOLUME', 1, '2014-10-14');
 
 INSERT INTO book_browser.book(id, title, thumbnail, publish_date)
   values (9, 'Nimona', FILE_READ('classpath:/images/nimona.jpg'), '2015-05-12');
 
+INSERT INTO book_browser.release(id, book_id, release_type, release_number, publish_date)
+  values (9, 9, 'VOLUME', 1, '2015-05-12');
+
 INSERT INTO book_browser.book(id, title, thumbnail, publish_date)
   values (10, 'Anya''s Ghost', FILE_READ('classpath:/images/anyas-ghost.jpg'), '2011-06-07');
+
+INSERT INTO book_browser.release(id, book_id, release_type, release_number, publish_date)
+  values (10, 10, 'VOLUME', 1, '2011-06-07');
 
 INSERT INTO book_browser.book(id, title, thumbnail, publish_date)
   values (11, 'Seconds', FILE_READ('classpath:/images/seconds.jpg'), '2014-07-15');
 
+INSERT INTO book_browser.release(id, book_id, release_type, release_number, publish_date)
+  values (11, 11, 'VOLUME', 1, '2014-07-15');
+
 INSERT INTO book_browser.book(id, title, thumbnail, publish_date)
   values (12, 'Beauty', FILE_READ('classpath:/images/beauty.jpg'), '2014-10-01');
+
+INSERT INTO book_browser.release(id, book_id, release_type, release_number, publish_date)
+  values (12, 12, 'VOLUME', 1, '2014-10-01');
 
 INSERT INTO book_browser.book(id, title, thumbnail, publish_date)
   values (13, 'Beautiful Darkness', FILE_READ('classpath:/images/beautiful-darkness.jpg'), '2014-02-25');
 
+INSERT INTO book_browser.release(id, book_id, release_type, release_number, publish_date)
+  values (13, 13, 'VOLUME', 1, '2014-02-25');
+
 INSERT INTO book_browser.book(id, title, thumbnail, publish_date)
   values (14, 'Primer', FILE_READ('classpath:/images/primer.jpg'), '2020-06-23');
+
+INSERT INTO book_browser.release(id, book_id, release_type, release_number, publish_date)
+  values (14, 14, 'VOLUME', 1, '2020-06-23');
 
 INSERT INTO book_browser.book(id, title, thumbnail, publish_date)
   values (15, 'Happily Ever After & Everything In Between', FILE_READ('classpath:/images/happily-ever-after.jpg'), '2020-06-02');
 
+INSERT INTO book_browser.release(id, book_id, release_type, release_number, publish_date)
+  values (15, 15, 'VOLUME', 1, '2020-06-02');
+
 INSERT INTO book_browser.book(id, title, thumbnail, publish_date)
   values (16, 'Wonder Woman: Tempest Tossed', FILE_READ('classpath:/images/wonder-woman-tempest-tossed.jpg'), '2020-06-02');
+
+INSERT INTO book_browser.release(id, book_id, release_type, release_number, publish_date)
+  values (16, 16, 'VOLUME', 1, '2020-06-02');
 
 INSERT INTO book_browser.book(id, title, thumbnail, publish_date)
   values (17, 'Understanding Comics: The Invisible Art', FILE_READ('classpath:/images/understanding-comics-the-invisible-art.jpg'), '1993-01-01');
 
+INSERT INTO book_browser.release(id, book_id, release_type, release_number, publish_date)
+  values (17, 17, 'VOLUME', 1, '1993-01-01');
+
 INSERT INTO book_browser.book(id, title, thumbnail, publish_date)
   values (18, 'Spinning', FILE_READ('classpath:/images/spinning.jpg'), '2017-09-12');
+
+INSERT INTO book_browser.release(id, book_id, release_type, release_number, publish_date)
+  values (18, 18, 'VOLUME', 1, '2017-09-12');
 
 INSERT INTO book_browser.author(book_id, person_id)
   values (1, 1);

@@ -6,7 +6,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-import domain.Genre;
+import com.tabroadn.bookbrowser.domain.Genre;
+
 import lombok.Data;
 import lombok.NonNull;
 

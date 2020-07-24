@@ -30,3 +30,11 @@ databaseChangeLog:
         - sqlFile:
             path: changelog/scripts/04-tabroadn-create-person-author-tables.sql
             relativeToChangelogFile: true
+
+    - changeSet:
+        id: createReleaseTable
+        author: Tariq Broadnax
+        changes:
+        - sqlFile:
+            path: changelog/scripts/05-tabroadn-create-release-table.sql
+            relativeToChangelogFile: true

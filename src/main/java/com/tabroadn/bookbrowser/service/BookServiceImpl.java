@@ -21,14 +21,14 @@ public class BookServiceImpl implements BookService {
 	
 	@Override
 	public List<BookInfoDto> getNewBooks() {
-		return repository.findAll(PageRequest.of(0, 12, Sort.by(Sort.Direction.DESC, "publishDate")))
+		return repository.findAll(PageRequest.of(0, 45, Sort.by(Sort.Direction.DESC, "publishDate")))
 				.map(BookServiceImpl::convertBookToBookInfo)
 				.toList();
 	}
 	
 	@Override
 	public List<BookInfoDto> getPopularBooks() {
-		return repository.findAll(PageRequest.of(0, 12, Sort.by(Sort.Direction.DESC, "pageViews")))
+		return repository.findAll(PageRequest.of(0, 45, Sort.by(Sort.Direction.DESC, "pageViews")))
 				.map(BookServiceImpl::convertBookToBookInfo)
 				.toList();
 	}

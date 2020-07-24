@@ -40,11 +40,27 @@
 <main>
   <section class="content">
     <h1>New</h1>
-    <div class="new-books">
-      <div *ngFor="let book of newBooks" class="card">
-        <a href="#"><img class="card-img-top" src="/api/book/{{book.id}}/thumbnail" alt="" /></a>
-        <a href="#">{{book.title | truncate:[18, '...']}}</a>
+    <div id="carouselExampleControls" class="carousel row" data-interval="false">
+      <div class="carousel-inner col">
+        <div *ngFor="let releaseArr of releases;let i = index" [ngClass]="i == 0 ? 'active carousel-item' : 'carousel-item'">
+          <div class="new-books">
+            <div *ngFor="let release of releaseArr" class="book-card">
+              <a href="#"><img class="book-card-image" src="/api/book/{{release.bookId}}/thumbnail" alt="" /></a>
+              <span><a href="#" class="book-card-title">{{release.bookTitle | truncate:[13, '...']}}</a></span>
+              <span *ngIf="release.releaseType === 'VOLUME'" class="float-right">vol. {{release.releaseNumber}}</span>
+              <span *ngIf="release.releaseType === 'ISSUE'" class="float-right">#{{release.releaseNumber}}</span>
+            </div>
+          </div>
+        </div>
       </div>
+      <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
     </div>
   </section>
 </main>
