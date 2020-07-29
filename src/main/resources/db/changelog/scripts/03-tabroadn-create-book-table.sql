@@ -1,7 +1,7 @@
 CREATE TABLE book_browser.book (
     id INT NOT NULL,
     title VARCHAR(50),
-    description VARCHAR(250),
+    description VARCHAR(2000),
     thumbnail BLOB,
     page_views INT,
     publish_date DATE,

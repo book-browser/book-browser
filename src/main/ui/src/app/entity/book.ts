@@ -1,10 +1,11 @@
-import { Person } from './person';
+import { Release } from './release';
+import { PersonCreator } from './person-creator';
 
 export class Book {
-  id: number;
-  title: string;
-  authors: Person[];
-  description: string;
-  pageViews: number;
-  publishDate: Date;
-}
+    id: number;
+	title: string;
+	description: string;
+    creators: PersonCreator[];
+	issues: Release[];
+	volumes: Release[];
+  }

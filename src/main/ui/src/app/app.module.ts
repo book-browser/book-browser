@@ -10,12 +10,16 @@ import { FormsModule } from '@angular/forms';
 
 import { AutofocusFixModule } from 'ngx-autofocus-fix';
 import { TruncatePipe } from './pipe/truncate.pipe';
+import { BookPageComponent } from './book-page/book-page.component';
+import { ReplaceLineBreaksPipe } from './pipe/replace-line-breaks.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomepageComponent,
-    TruncatePipe
+    BookPageComponent,
+    TruncatePipe,
+    ReplaceLineBreaksPipe,
   ],
   imports: [
     BrowserModule,

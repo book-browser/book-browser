@@ -154,8 +154,8 @@ INSERT INTO book_browser.book(id, title, thumbnail, publish_date)
 INSERT INTO book_browser.release(id, book_id, release_type, release_number, publish_date)
   values (13, 13, 'VOLUME', 1, '2014-02-25');
 
-INSERT INTO book_browser.book(id, title, thumbnail, publish_date)
-  values (14, 'Primer', FILE_READ('classpath:/images/primer.jpg'), '2020-06-23');
+INSERT INTO book_browser.book(id, title, thumbnail, publish_date, description)
+  values (14, 'Primer', FILE_READ('classpath:/images/primer.jpg'), '2020-06-23', 'Ashley Rayburn is an upbeat girl with a decidedly downbeat past. Her father is a known criminal who once used Ashley to help him elude justice, and in his attempt to escape, a life was taken. He now sits in federal prison, but still casts a shadow over Ashley''s life. In the meantime, Ashley has bounced from foster home to foster home and represents a real challenge to the social workers who try to help her--not because she''s inherently bad, but because trouble always seems to find her.\nAshley''s latest set of presumably short-term foster parents are Kitch and Yuka Nolan. Like Ashley, Kitch happens to be an artist. Yuka, on the other hand, is a geneticist working for a very high-level tech company, one that''s contracted out to work for the government and the military. And it''s Yuka''s latest top secret project that has her very concerned. Developed for the military, it''s a set of body paints that, when applied to the wearer, grant them a wide range of special powers. Fearful that this invention will be misused, Yuka sneaks the set of paints home, substituting a dummy suitcase with an ordinary set of paints in their place.\nFrom here, signals get crossed. Ashley comes home from school one day with her new friend Luke and, thinking that the Nolans have purchased a surprise gift for her upcoming birthday, finds the set of paints. Being an artist, Ashley naturally assumes these are for her. It isn''t long before she realizes that she''s stumbled upon something much bigger and a lot more dangerous. Although she uses her newly discovered powers for good, it''s not long before the military becomes wise to what happened to their secret weapon. And this spells big trouble not only for Ashley, but for her newfound family and friends as well.');
 
 INSERT INTO book_browser.release(id, book_id, release_type, release_number, publish_date)
   values (14, 14, 'VOLUME', 1, '2020-06-23');
@@ -184,80 +184,80 @@ INSERT INTO book_browser.book(id, title, thumbnail, publish_date)
 INSERT INTO book_browser.release(id, book_id, release_type, release_number, publish_date)
   values (18, 18, 'VOLUME', 1, '2017-09-12');
 
-INSERT INTO book_browser.author(book_id, person_id)
+INSERT INTO book_browser.creator(book_id, person_id)
   values (1, 1);
 
-INSERT INTO book_browser.author(book_id, person_id)
+INSERT INTO book_browser.creator(book_id, person_id)
   values (2, 2);
 
-INSERT INTO book_browser.author(book_id, person_id)
+INSERT INTO book_browser.creator(book_id, person_id)
   values (3, 3);
 
-INSERT INTO book_browser.author(book_id, person_id)
+INSERT INTO book_browser.creator(book_id, person_id)
   values (4, 3);
 
-INSERT INTO book_browser.author(book_id, person_id)
+INSERT INTO book_browser.creator(book_id, person_id)
   values (5, 4);
 
-INSERT INTO book_browser.author(book_id, person_id)
+INSERT INTO book_browser.creator(book_id, person_id)
   values (6, 5);
 
-INSERT INTO book_browser.author(book_id, person_id)
+INSERT INTO book_browser.creator(book_id, person_id)
   values (7, 6);
 
-INSERT INTO book_browser.author(book_id, person_id)
+INSERT INTO book_browser.creator(book_id, person_id)
   values (8, 7);
 
-INSERT INTO book_browser.author(book_id, person_id)
-  values (8, 6);
+INSERT INTO book_browser.creator(book_id, person_id, creator_type)
+  values (8, 6, 'ILLUSTRATOR');
 
-INSERT INTO book_browser.author(book_id, person_id)
+INSERT INTO book_browser.creator(book_id, person_id)
   values (9, 8);
 
-INSERT INTO book_browser.author(book_id, person_id)
+INSERT INTO book_browser.creator(book_id, person_id)
   values (10, 9);
 
-INSERT INTO book_browser.author(book_id, person_id)
+INSERT INTO book_browser.creator(book_id, person_id)
   values (11, 10);
 
-INSERT INTO book_browser.author(book_id, person_id)
-  values (11, 11);
+INSERT INTO book_browser.creator(book_id, person_id, creator_type)
+  values (11, 11, 'COLORIST');
 
-INSERT INTO book_browser.author(book_id, person_id)
-  values (12, 12);
+INSERT INTO book_browser.creator(book_id, person_id, creator_type)
+  values (12, 12, 'ILLUSTRATOR');
 
-INSERT INTO book_browser.author(book_id, person_id)
+INSERT INTO book_browser.creator(book_id, person_id)
   values (12, 13);
   
-INSERT INTO book_browser.author(book_id, person_id)
+INSERT INTO book_browser.creator(book_id, person_id)
   values (13, 12);
 
-INSERT INTO book_browser.author(book_id, person_id)
-  values (13, 14);
+INSERT INTO book_browser.creator(book_id, person_id, creator_type)
+  values (13, 14, 'ILLUSTRATOR');
 
-INSERT INTO book_browser.author(book_id, person_id)
-  values (13, 15);
+INSERT INTO book_browser.creator(book_id, person_id, creator_type)
+  values (13, 15, 'TRANSLATOR');
 
-INSERT INTO book_browser.author(book_id, person_id)
-  values (14, 16);
+INSERT INTO book_browser.creator(book_id, person_id, creator_type)
+  values (14, 16, 'AUTHOR');
 
-INSERT INTO book_browser.author(book_id, person_id)
-  values (14, 17);
+INSERT INTO book_browser.creator(book_id, person_id, creator_type)
+  values (14, 17, 'AUTHOR');
 
-INSERT INTO book_browser.author(book_id, person_id)
-  values (14, 18);
+INSERT INTO book_browser.creator(book_id, person_id, creator_type)
+  values (14, 18, 'ILLUSTRATOR');
 
-INSERT INTO book_browser.author(book_id, person_id)
+INSERT INTO book_browser.creator(book_id, person_id)
   values (15, 19);
 
-INSERT INTO book_browser.author(book_id, person_id)
+INSERT INTO book_browser.creator(book_id, person_id)
   values (16, 20);
 
-INSERT INTO book_browser.author(book_id, person_id)
+INSERT INTO book_browser.creator(book_id, person_id)
   values (16, 21);
 
-INSERT INTO book_browser.author(book_id, person_id)
+INSERT INTO book_browser.creator(book_id, person_id)
   values (17, 22);
 
-INSERT INTO book_browser.author(book_id, person_id)
+INSERT INTO book_browser.creator(book_id, person_id)
   values (18, 23);

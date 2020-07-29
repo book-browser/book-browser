@@ -7,8 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
-import com.tabroadn.bookbrowser.dto.BookInfoDto;
-import com.tabroadn.bookbrowser.dto.ReleaseDto;
+import com.tabroadn.bookbrowser.dto.BookReleaseDto;
 import com.tabroadn.bookbrowser.entity.Release;
 import com.tabroadn.bookbrowser.repository.ReleaseRepository;
 
@@ -18,20 +17,20 @@ public class ReleaseService {
 	@Autowired
 	private ReleaseRepository repository;
 	
-	public List<ReleaseDto> getReleases(int amount) {
+	public List<BookReleaseDto> getReleases(int amount) {
 		return repository.findAll(PageRequest.of(0, amount, Sort.by(Sort.Direction.DESC, "publishDate")))
-				.map(ReleaseService::convertReleaseToReleaseDto)
+				.map(ReleaseService::convertReleaseToBookReleaseDto)
 				.toList();
 	}
 	
-	private static ReleaseDto convertReleaseToReleaseDto(Release release) {
-		ReleaseDto releaseDto = new ReleaseDto();
-		releaseDto.setId(release.getId());
-		releaseDto.setBookId(release.getBook().getId());
-		releaseDto.setBookTitle(release.getBook().getTitle());
-		releaseDto.setReleaseNumber(release.getReleaseNumber());
-		releaseDto.setReleaseType(release.getReleaseType());
-		releaseDto.setPublishDate(release.getPublishDate());
-		return releaseDto;
+	private static BookReleaseDto convertReleaseToBookReleaseDto(Release release) {
+		BookReleaseDto bookReleaseDto = new BookReleaseDto();
+		bookReleaseDto.setId(release.getId());
+		bookReleaseDto.setBookId(release.getBook().getId());
+		bookReleaseDto.setBookTitle(release.getBook().getTitle());
+		bookReleaseDto.setReleaseNumber(release.getReleaseNumber());
+		bookReleaseDto.setReleaseType(release.getReleaseType());
+		bookReleaseDto.setPublishDate(release.getPublishDate());
+		return bookReleaseDto;
 	}
 }

@@ -1,21 +1,20 @@
 package com.tabroadn.bookbrowser.dto;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import lombok.Data;
 
 @Data
-public class BookInfoDto {
+public class BookDto {
 	private Long id;
 	
 	private String title;
 	
 	private String description;
 		
-	private Integer pageViews;
+	private List<PersonCreatorDto> creators;
 	
-	private LocalDate publishDate;
+	private List<ReleaseDto> issues;
 	
-	private List<PersonDto> authors;
+	private List<ReleaseDto> volumes;
 }

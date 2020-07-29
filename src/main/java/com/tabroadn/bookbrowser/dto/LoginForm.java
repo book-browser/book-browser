@@ -1,4 +1,4 @@
-package com.tabroadn.bookbrowser.entity;
+package com.tabroadn.bookbrowser.dto;
 
 import lombok.Data;
 

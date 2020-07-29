@@ -7,11 +7,13 @@ import com.tabroadn.bookbrowser.domain.ReleaseTypeEnum;
 import lombok.Data;
 
 @Data
-public class ReleaseDto {
+public class BookReleaseDto {
 	private Long id;
 	
-	private String description;
+	private Long bookId;
 	
+	private String bookTitle;
+		
 	private ReleaseTypeEnum releaseType;
 	
 	private Integer releaseNumber;

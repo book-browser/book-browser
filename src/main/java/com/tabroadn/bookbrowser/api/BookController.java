@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.tabroadn.bookbrowser.dto.BookInfoDto;
-import com.tabroadn.bookbrowser.entity.Book;
+import com.tabroadn.bookbrowser.dto.BookDto;
+import com.tabroadn.bookbrowser.dto.BookSummaryDto;
 import com.tabroadn.bookbrowser.service.BookService;
 
 @RestController
@@ -22,18 +22,13 @@ public class BookController {
 	@Autowired
 	private BookService service;
 	
-	@GetMapping("/books/popular")
-	public List<BookInfoDto> getPopularBooks() {
-		return service.getPopularBooks();
-	}
-	
-	@GetMapping("/books/new")
-	public List<BookInfoDto> getNewBooks() {
-		return service.getNewBooks();
+	@GetMapping("/book/{id}")
+	public BookDto findById(@PathVariable("id") Long id) {
+		return service.findById(id);
 	}
 	
 	@PostMapping("/books/search")
-	public List<BookInfoDto> findByTitleContaining(@RequestBody JsonNode node) {
+	public List<BookSummaryDto> findByTitleContaining(@RequestBody JsonNode node) {
 		String title = node.get("query").asText();
 		return service.findByTitleContaining(title);
 	}
@@ -42,6 +37,6 @@ public class BookController {
 		value = "/book/{id}/thumbnail",
 		produces = MediaType.IMAGE_JPEG_VALUE)
 	public byte[] getBookThumbnail(@PathVariable("id") Long id) {
-		return service.findById(id).getThumbnail();
+		return service.findBookThumbnail(id);
 	}
 }

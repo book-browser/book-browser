@@ -1,0 +1,27 @@
+.dropdown-menu {
+  width: 90%;
+}
+
+.search-result {
+  width: 400px;
+  display: flex;
+}
+
+.search-result-thumbnail {
+  width: 40px;
+  height: 40px;
+  flex-grow: 0;
+  margin: auto;
+}
+
+.search-result-description {
+  flex-grow: 1;
+  margin-left: 5px;
+}
+
+footer {
+  text-align: center;
+  margin: 10px 0px;
+  padding: 20px;
+  border-top: 1px solid #e5e5e5;  
+}
