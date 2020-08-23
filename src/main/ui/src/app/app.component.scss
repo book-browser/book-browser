@@ -1,3 +1,29 @@
+@import '../variables.scss';
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 1020;
+}
+
+.navbar {
+  background-color: $theme-color;
+  
+
+  a {
+    color: $on-theme-variant-color;
+  }
+
+  .navbar-brand {
+    color: $on-theme-color;
+  }
+
+  a:hover {
+    color: $on-theme-color;
+  }
+}
+
+
 .dropdown-menu {
   width: 90%;
 }
@@ -19,9 +45,18 @@
   margin-left: 5px;
 }
 
-footer {
-  text-align: center;
-  margin: 10px 0px;
-  padding: 20px;
-  border-top: 1px solid #e5e5e5;  
+.inline-alert {
+  * {
+    margin-right: $container-sm-margin; 
+  }
+}
+
+.close {
+  margin-left: auto;
+}
+
+:host {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
 }

@@ -12,6 +12,12 @@ import { AutofocusFixModule } from 'ngx-autofocus-fix';
 import { TruncatePipe } from './pipe/truncate.pipe';
 import { BookPageComponent } from './book-page/book-page.component';
 import { ReplaceLineBreaksPipe } from './pipe/replace-line-breaks.pipe';
+import { RegisterComponent } from './page/register/register.component';
+import { MatchDirective } from './validator/match.directive';
+import { UniqueUserDirective } from './validator/unique-user.directive';
+import { RegisterSuccessComponent } from './page/register-success/register-success.component';
+import { UserVerifyComponent } from './page/user-verify/user-verify.component';
+import { CookieService } from 'ngx-cookie-service';
 
 @NgModule({
   declarations: [
@@ -20,6 +26,11 @@ import { ReplaceLineBreaksPipe } from './pipe/replace-line-breaks.pipe';
     BookPageComponent,
     TruncatePipe,
     ReplaceLineBreaksPipe,
+    RegisterComponent,
+    MatchDirective,
+    UniqueUserDirective,
+    RegisterSuccessComponent,
+    UserVerifyComponent,
   ],
   imports: [
     BrowserModule,
@@ -29,7 +40,7 @@ import { ReplaceLineBreaksPipe } from './pipe/replace-line-breaks.pipe';
     FormsModule,
     AutofocusFixModule.forRoot()
   ],
-  providers: [],
+  providers: [CookieService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

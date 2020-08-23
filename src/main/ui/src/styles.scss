@@ -1,1 +1,25 @@
 /* You can add global styles to this file, and also import other style files */
+@import 'variables';
+@import "~bootstrap/scss/bootstrap";
+@import '~@tkrotoff/bootstrap-input-spinner/src/bootstrap4-input-spinner';
+
+body {
+  position: relative;
+  min-height: 100vh;
+  padding-bottom: $footer-height;
+  background: $background-color;
+}
+
+footer {
+  border-top: $background-border;
+  padding: $container-xl-padding;
+  text-align: center;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+}
+
+.required:before {
+  content:"*\00a0";
+  color:red;
+}

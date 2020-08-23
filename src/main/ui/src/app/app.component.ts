@@ -1,10 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { UserService } from './service/user.service';
-import { Principal } from './entity/principal';
 import { BookSummary } from './entity/book-summary';
 import { Observable, of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, tap, switchMap, catchError } from 'rxjs/operators';
 import { BookService } from './service/book.service';
+import { User } from './entity/user';
+import { FormsModule, NgForm } from '@angular/forms'; 
+import { ApiError } from './entity/api-error';
+import { ErrorCode } from './entity/error-code.enum';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
@@ -16,28 +20,47 @@ export class AppComponent {
 
   username: string;
   password: string;
-  principal: Principal;
+  user: User;
   searching = false;
   searchFailed = false;
+  displayVerificationAlert = true;
+
+  @ViewChild('f') loginForm : NgForm;
+  loginErrorMessage: string;
   
   constructor(private userService: UserService, private bookService: BookService) { }
 
   ngOnInit() { 
-    this.userService.getPrincipal().subscribe((principal) => {
-      this.principal = principal;
+    this.userService.getCurrentUser().subscribe((user) => {
+      this.user = user;
+    });
+
+    $('#loginModal').on('hidden.bs.modal', () => {
+      this.loginForm.reset();
+      this.loginErrorMessage = null;
     });
   }
 
-  login() {
-    this.userService.login(this.username, this.password).subscribe((principal) => {
-      this.principal = principal;
-    });
+  login(form: NgForm) {
+    if (form.valid) {
+      const { username, password } = form.value;
+      this.userService.login(username, password).subscribe((user) => {
+        this.user = user;
+        $('#loginModal').modal('hide');
+      }, (errorResponse: HttpErrorResponse) => {
+        const error: ApiError = errorResponse.error;
+        if (error.code === ErrorCode.USERNAME_NOT_FOUND) {
+          this.loginErrorMessage = 'User with username not found';
+        } else if (error.code === ErrorCode.INCORRECT_PASSWORD) {
+          this.loginErrorMessage = 'The password is incorrect';
+        }
+      });
+    }
   }
 
   logout() {
-    setTimeout(() => {
-      this.userService.logout();
-      this.principal = null;
+    this.userService.logout().subscribe(() => {
+      this.user = null;
     });
   }
 
@@ -71,5 +94,9 @@ export class AppComponent {
       }
     });
     return creatorsDescription;  
+  }
+
+  closeVerificationAlert() {
+    this.displayVerificationAlert = false;
   }
 }

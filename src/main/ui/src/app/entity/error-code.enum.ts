@@ -1,0 +1,6 @@
+
+export enum ErrorCode {
+  UNKNOWN=0,
+  USERNAME_NOT_FOUND=1,
+  INCORRECT_PASSWORD=2
+}

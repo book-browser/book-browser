@@ -38,3 +38,11 @@ databaseChangeLog:
         - sqlFile:
             path: changelog/scripts/05-tabroadn-create-release-table.sql
             relativeToChangelogFile: true
+
+    - changeSet:
+        id: createVerificationTokenTable
+        author: Tariq Broadnax
+        changes:
+        - sqlFile:
+            path: changelog/scripts/06-tabroadn-create-verification-token-table.sql
+            relativeToChangelogFile: true

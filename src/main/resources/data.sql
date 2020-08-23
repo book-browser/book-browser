@@ -1,10 +1,12 @@
-INSERT INTO book_browser.user (email, password, enabled)
+INSERT INTO book_browser.user (id, username, email, password, enabled)
   values (
+    0,
     'admin',
+    'bookbrowser.local@gmail.com',
     '$2a$10$xrHlCjjR/BHUY/UbD.LNA.9uRgy62uWN5UK2Bo9eH4oiYfmLo35NC',
     1);
 
-INSERT INTO book_browser.authorities (email, authority)
+INSERT INTO book_browser.authority (username, role)
   values ('admin', 'ROLE_USER');
 
 INSERT INTO book_browser.person(id, first_name, last_name)

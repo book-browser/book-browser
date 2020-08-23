@@ -16,6 +16,8 @@ import lombok.Data;
 @Data
 @Entity
 public class Creator implements Serializable {
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	private Long bookId;
 	

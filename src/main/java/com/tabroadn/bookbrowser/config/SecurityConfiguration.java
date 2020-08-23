@@ -1,5 +1,6 @@
 package com.tabroadn.bookbrowser.config;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		httpSecurity.csrf()
 					.ignoringAntMatchers("/h2-console/**", "/api/**/*");
 		
+		httpSecurity.logout()
+					.logoutUrl("/api/logout")
+					.permitAll()
+					.logoutSuccessHandler((httpServletRequest, httpServletResponse, authentication) -> {
+					    httpServletResponse.setStatus(HttpServletResponse.SC_OK);
+					});
+			
 		httpSecurity.headers()
 					.frameOptions()
 					.sameOrigin();
@@ -36,13 +44,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		auth.jdbcAuthentication()
 			.dataSource(dataSource)
 			.usersByUsernameQuery(
-					"select email,password,enabled "
+					"select username,password,enabled "
 				  + "from book_browser.user "
-				  + "where email = ?")
+				  + "where username = ?")
 			.authoritiesByUsernameQuery(
-					"select email,authority "
-		          + "from book_browser.authorities "
-		          + "where email = ?");		
+					"select username,role "
+		          + "from book_browser.authority "
+		          + "where username = ?");		
 	}
 	
 	@Bean

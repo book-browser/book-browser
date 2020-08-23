@@ -1,0 +1,9 @@
+@import 'variables';
+
+main {
+  background: $surface-color;
+  border: $surface-border;
+  width: $container-lg-width;
+  margin: $container-lg-margin-y auto;
+  padding: $container-lg-padding;
+}
