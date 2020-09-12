@@ -1,5 +1,5 @@
 .content {
-  width: 850px;
+  max-width: 850px;
   margin: auto;
 }
 
@@ -7,22 +7,17 @@
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  height: 637px;
+  justify-content: center;
 }
 
 .book-card {
-  width: 160px;
   margin: 5px;
   border: none;
 }
 
-.empty-book-card {
-  width: 160px;
-  height: 202px;
-}
-
 .book-card-image {
-  height: 180px;
+  max-width: 160px;
+  max-height: 180px;
   width: 100%;
 }
 
@@ -38,19 +33,6 @@
 
 .book-card-title:hover, .book-card-release-number:hover {
   color: #007bff;
-}
-
-.carousel-control-next,
-.carousel-control-prev {
-  filter: invert(100%);
-}
-
-.carousel-control-prev {
-  margin-left: -100px;
-}
-
-.carousel-control-next {
-  margin-right: -100px;
 }
 
 h1 {

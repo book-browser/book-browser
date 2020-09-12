@@ -8,16 +8,13 @@ import { ReleaseService } from '../service/release.service';
   styleUrls: ['./homepage.component.scss']
 })
 export class HomepageComponent implements OnInit {
-  releases: BookRelease[][];
+  releases: BookRelease[];
 
   constructor(private releaseService: ReleaseService) { }
 
   ngOnInit() { 
     this.releaseService.getReleases().subscribe((releases) => {
-      this.releases = [];
-      for (var i = 0; i < releases.length / 15; i++) {
-        this.releases.push(releases.slice(i * 15, (i + 1) * 15));
-      }
+      this.releases = releases;
     })
   }
 }

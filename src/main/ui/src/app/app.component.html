@@ -1,23 +1,27 @@
 <header>
-  <nav class="navbar navbar-expand flex-wrap">
-    <a class="navbar-brand" routerLink="/home">BookBrowser</a>
+  <nav class="navbar navbar-expand-md flex-wrap">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+      <a class="navbar-brand" routerLink="/home">BookBrowser</a>
 
-    <span>
-      <ul class="navbar-nav mr-auto d-none d-md-flex">
-        <li class="nav-item"><a routerLink="/home" class="nav-link">Home</a></li>
-        <li class="nav-item"><a href="#" class="nav-link">Popular</a></li>
-        <li class="nav-item"><a href="#" class="nav-link">Recent</a></li>
-      </ul>
-    </span>
-
-
-    <span class="header-right ml-auto form-inline">
-      <input class="form-control mr-2" placeholder="Search" style="width: 300px" [(ngModel)]="model"
-        [ngbTypeahead]="search" [resultTemplate]="rt" />
-      <button class="btn btn-primary mr-2">Search</button>
+      <span>
+        <ul class="navbar-nav mr-auto d-flex">
+          <li class="nav-item"><a routerLink="/home" class="nav-link">Home</a></li>
+          <li class="nav-item"><a href="#" class="nav-link">Popular</a></li>
+          <li class="nav-item"><a href="#" class="nav-link">Recent</a></li>
+        </ul>
+      </span>
 
 
-      <button *ngIf="!user" type="button" class="btn btn-primary" data-toggle="modal" data-target="#loginModal">
+      <span class="ml-auto form-inline">
+        <input class="form-control mr-2" placeholder="Search" [(ngModel)]="model"
+          [ngbTypeahead]="search" [resultTemplate]="rt" />
+        <button class="btn btn-primary mr-2">Search</button>
+      </span>
+
+      <button *ngIf="!user" type="button" class="btn btn-primary my-2 my-md-0" data-toggle="modal" data-target="#loginModal">
         Login
       </button>
 
@@ -36,8 +40,7 @@
           <button class="dropdown-item" type="button" (click)="logout()">Log out</button>
         </div>
       </div>
-
-    </span>
+    </div>
   </nav>
 
   <div *ngIf="user && !user.verified && displayVerificationAlert" class="alert alert-info inline-alert" role="alert">

@@ -49,10 +49,12 @@ sourceSets {
  
 // https://blog.marcnuri.com/angular-spring-boot-integration-gradle/ 
 task buildAngular(type:Exec) {
-	// installAngular should be run prior to this task
 	dependsOn "installAngular"
 	workingDir "$webappDir"
-	inputs.dir "$webappDir"
+	inputs.file "$webappDir/angular.json"
+	inputs.dir "$webappDir/src"
+	outputs.dir "$webappDir/dist"
+
 	// Add task to the standard build group
 	group = BasePlugin.BUILD_GROUP
 	// ng doesn't exist as a file in windows -> ng.cmd
@@ -65,7 +67,9 @@ task buildAngular(type:Exec) {
  
 task installAngular(type:Exec) {
 	workingDir "$webappDir"
-	inputs.dir "$webappDir"
+	inputs.file "$webappDir/package.json"
+	outputs.dir "$webappDir/node_modules"
+
 	group = BasePlugin.BUILD_GROUP
 	if (System.getProperty("os.name").toUpperCase().contains("WINDOWS")){
 		commandLine "npm.cmd", "install"
