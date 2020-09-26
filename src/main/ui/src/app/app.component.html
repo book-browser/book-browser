@@ -16,9 +16,9 @@
 
 
       <span class="ml-auto form-inline">
-        <input class="form-control mr-2" placeholder="Search" [(ngModel)]="model"
-          [ngbTypeahead]="search" [resultTemplate]="rt" />
-        <button class="btn btn-primary mr-2">Search</button>
+        <input class="form-control mr-2" placeholder="Search" [(ngModel)]="query"
+          [ngbTypeahead]="displayShortSearchResults" [resultTemplate]="rt" />
+        <button class="btn btn-primary mr-2" (click)="search()">Search</button>
       </span>
 
       <button *ngIf="!user" type="button" class="btn btn-primary my-2 my-md-0" data-toggle="modal" data-target="#loginModal">
@@ -77,11 +77,11 @@
 </ng-template>
 
 <ng-template #rt let-r="result" let-t="term">
-  <div class="search-result row">
+  <div class="search-result row" (click)="navigateToBook(r)">
     <img src="/api/book/{{r.id}}/thumbnail" class="search-result-thumbnail">
     <div class="search-result-description">
       <ngb-highlight [result]="r.title | truncate:[20, '...']" [term]="t"></ngb-highlight>
-      <div>{{r.creators.length > 0 && 'by ' + getSearchResultCreatorsDescription(r)}}</div>
+      <div *ngIf="r.creators.length > 0">{{('by ' + getSearchResultCreatorsDescription(r)) | truncate: [20, '...']}} </div>
     </div>
   </div>
 </ng-template>

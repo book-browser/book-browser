@@ -18,6 +18,7 @@ import { UniqueUserDirective } from './validator/unique-user.directive';
 import { RegisterSuccessComponent } from './page/register-success/register-success.component';
 import { UserVerifyComponent } from './page/user-verify/user-verify.component';
 import { CookieService } from 'ngx-cookie-service';
+import { SearchComponent } from './page/search/search.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { CookieService } from 'ngx-cookie-service';
     UniqueUserDirective,
     RegisterSuccessComponent,
     UserVerifyComponent,
+    SearchComponent,
   ],
   imports: [
     BrowserModule,

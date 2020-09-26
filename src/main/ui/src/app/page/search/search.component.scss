@@ -1,0 +1,39 @@
+@import 'variables';
+
+.thumbnail {
+  width: 112px;
+  height: 114px;
+}
+
+tr {
+  text-align: left;
+}
+
+.main-search-result {
+  display: flex;
+  margin-bottom: $container-md-margin-x;
+}
+
+.main-search-result-title {
+  font-size: $font-size-heading;
+}
+
+.main-search-result-body {
+  margin-left: $container-md-margin-x;
+  height: 100%;
+}
+
+@media only screen and (max-width: $screen-xs) {
+  .main-search-result-details {
+    display: none;
+  }
+}
+
+main {
+  background: $surface-color;
+  border: $surface-border;
+  max-width: $container-xl-width;
+  margin: $container-lg-margin-y auto;
+  padding: $container-lg-padding;
+}
+

@@ -1,0 +1,36 @@
+<main>
+  <h1>Search</h1>
+  <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Search" [(ngModel)]="query" (keydown.enter)="search()">
+    <div class="input-group-append">
+      <button class="btn btn-primary" type="button" (click)="search()">Search</button>
+    </div>
+  </div>
+
+  <div class="main-search-result" *ngFor="let book of books">
+    <div>
+      <a routerLink="/book/{{book.id}}">
+        <img src="/api/book/{{book.id}}/thumbnail" class="thumbnail" />
+      </a>
+    </div>
+    <div class="main-search-result-body">
+      <div class="main-search-result-title">
+        <a routerLink="/book/{{book.id}}">{{book.title}}</a>
+    </div>
+      <p>
+        <span>by </span>
+        <a *ngFor="let creator of book.creators" routerLink="/creator/{{creator.id}}">
+          <span>{{creator.firstName}}</span>
+          <span *ngIf="creator.lastName"> {{creator.lastName}}</span>
+          <span>, </span>
+        </a>
+      </p>
+      <p *ngIf="book.description" class="main-search-result-details">{{book.description | truncate:[250, '...']}}</p>
+    </div>
+  </div>
+</main>
+
+
+
+
+

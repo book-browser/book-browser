@@ -9,6 +9,7 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { ApiError } from './entity/api-error';
 import { ErrorCode } from './entity/error-code.enum';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -24,11 +25,12 @@ export class AppComponent {
   searching = false;
   searchFailed = false;
   displayVerificationAlert = true;
+  query: string;
 
   @ViewChild('f') loginForm : NgForm;
   loginErrorMessage: string;
   
-  constructor(private userService: UserService, private bookService: BookService) { }
+  constructor(private userService: UserService, private bookService: BookService, private router: Router) { }
 
   ngOnInit() { 
     this.userService.getCurrentUser().subscribe((user) => {
@@ -64,14 +66,14 @@ export class AppComponent {
     });
   }
 
-  search = (text$: Observable<string>) => {
+  displayShortSearchResults = (text$: Observable<string>) => {
     return text$.pipe(
       debounceTime(300),
       distinctUntilChanged(),
       tap(() => this.searching = true),
       switchMap(term => {
         if (term) {
-          return this.bookService.findByTitleContaining(term).pipe(
+          return this.bookService.search(term, 10).pipe(
             tap(() => this.searchFailed = false),
             catchError(() => {
               this.searchFailed = true;
@@ -83,6 +85,19 @@ export class AppComponent {
       ),
       tap(() => this.searching = false)
     )
+  }
+
+  search = () => {
+    if (this.query.length > 0) {
+      this.router.navigateByUrl(`/search?query=${this.query}`);
+    }
+  }
+
+  navigateToBook = (book: BookSummary) => {
+    this.router.navigateByUrl(`/book/${book.id}`);
+    setTimeout(() => {
+      this.query = "";
+    });
   }
 
   getSearchResultCreatorsDescription(result: BookSummary) {

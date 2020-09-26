@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { BookSummary } from '../entity/book-summary';
 import { Book } from '../entity/book';
 
@@ -13,10 +13,13 @@ export class BookService {
       return this.http.get<Book>(`/api/book/${id}`);
     }
 
-    findByTitleContaining(title: string) {
-      const body = { query: title }
-        
-      return this.http.post<BookSummary[]>('/api/books/search', body);
+    search(query: string, limit?: number) {
+      const body = { query };
+      let  params = new HttpParams();
+      if (limit) {
+        params = params.append('limit', `${limit}`);
+      }
+      return this.http.post<BookSummary[]>('/api/books/search', body, { params });
     }
 
     findNewBooks() {

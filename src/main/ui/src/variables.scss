@@ -13,6 +13,8 @@ $surface-variant-color: #dadce0;
 $surface-border: 1px solid $surface-variant-color;
 
 
+
+$container-xl-width: 1200px;
 $container-xl-padding: 25px;
 
 $container-lg-width: 1000px;
@@ -23,4 +25,10 @@ $container-lg-margin-x: 50px;
 $container-lg-margin-y: 50px;
 $container-lg-margin: $container-lg-margin-y $container-lg-margin-x;
 
+$container-md-margin-x: 20px;
+
 $container-sm-margin: 10px;
+
+$font-size-heading: 20px;
+
+$screen-xs: 500px;

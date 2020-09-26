@@ -10,5 +10,7 @@ public class BookSummaryDto {
 	
 	private String title;
 	
+	private String description;
+	
 	private List<PersonCreatorDto> creators;
 }

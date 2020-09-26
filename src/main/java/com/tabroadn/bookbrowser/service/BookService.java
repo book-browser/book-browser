@@ -1,6 +1,8 @@
 package com.tabroadn.bookbrowser.service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +31,19 @@ public class BookService {
 		return repository.findById(id).get().getThumbnail();
 	}
 	
-	public List<BookSummaryDto> findByTitleContaining(String title) {
-		return repository.findByTitleContainingIgnoreCase(title)
-						 .stream().map(BookService::convertBookToBookSummaryDto)
-						 .collect(Collectors.toList());
+	public List<BookSummaryDto> search(String query, int limit) {
+		String[] terms = query.split(" ");
+		
+		Set<Book> books = new HashSet<>();
+		
+		for (String term : terms) {
+			books.addAll(repository.search(term));
+		}
+		
+		return books.stream()
+					.limit(limit)
+					.map(BookService::convertBookToBookSummaryDto)
+					.collect(Collectors.toList());
 	}
 	
 	private static BookDto convertBookToBookDto(Book book) {
@@ -58,6 +69,7 @@ public class BookService {
 		BookSummaryDto bookSummary = new BookSummaryDto();
 		bookSummary.setId(book.getId());
 		bookSummary.setTitle(book.getTitle());
+		bookSummary.setDescription(book.getDescription());
 		bookSummary.setCreators(book.getCreators().stream()
 			.map(BookService::convertCreatorToPersonCreatorDto)
 			.collect(Collectors.toList()));
