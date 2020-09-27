@@ -77,3 +77,5 @@ task installAngular(type:Exec) {
 		commandLine "npm", "install"
 	}
 }
+
+processResources.dependsOn tasks.buildAngular
