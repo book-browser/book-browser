@@ -6,9 +6,11 @@ import { RegisterComponent } from './page/register/register.component';
 import { RegisterSuccessComponent } from './page/register-success/register-success.component';
 import { UserVerifyComponent } from './page/user-verify/user-verify.component';
 import { SearchComponent } from './page/search/search.component';
+import { NewBookComponent } from './page/new-book/new-book.component';
 
 const routes: Routes = [
   { path: 'home', component: HomepageComponent },
+  { path: 'book/new', component: NewBookComponent },
   { path: 'book/:id', component: BookPageComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'register/success', component: RegisterSuccessComponent },

@@ -1,5 +1,6 @@
 package com.tabroadn.bookbrowser.service;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -10,18 +11,25 @@ import org.springframework.stereotype.Component;
 
 import com.tabroadn.bookbrowser.domain.ReleaseTypeEnum;
 import com.tabroadn.bookbrowser.dto.BookDto;
+import com.tabroadn.bookbrowser.dto.BookForm;
 import com.tabroadn.bookbrowser.dto.BookSummaryDto;
 import com.tabroadn.bookbrowser.dto.PersonCreatorDto;
 import com.tabroadn.bookbrowser.dto.ReleaseDto;
 import com.tabroadn.bookbrowser.entity.Book;
 import com.tabroadn.bookbrowser.entity.Creator;
+import com.tabroadn.bookbrowser.entity.Person;
 import com.tabroadn.bookbrowser.entity.Release;
+import com.tabroadn.bookbrowser.exception.ImageUploadFailureException;
 import com.tabroadn.bookbrowser.repository.BookRepository;
+import com.tabroadn.bookbrowser.repository.CreatorRepository;
 
 @Component
 public class BookService {
 	@Autowired
 	private BookRepository repository;
+	
+	@Autowired
+	private CreatorRepository creatorRepository;
 
 	public BookDto findById(Long id) {
 		return convertBookToBookDto(repository.findById(id).get());
@@ -44,6 +52,11 @@ public class BookService {
 					.limit(limit)
 					.map(BookService::convertBookToBookSummaryDto)
 					.collect(Collectors.toList());
+	}
+
+	public void save(BookForm bookForm) {
+		Book book = convertBookFormToBook(bookForm);
+		repository.save(book);
 	}
 	
 	private static BookDto convertBookToBookDto(Book book) {
@@ -76,13 +89,37 @@ public class BookService {
 		return bookSummary;
 	}
 	
+	private Book convertBookFormToBook(BookForm bookForm) {
+		Book book = new Book();
+		book.setId(bookForm.getId());
+		book.setTitle(bookForm.getTitle());
+		book.setDescription(bookForm.getDescription());
+		book.setCreators(bookForm.getCreators().stream()
+				.map((creator) -> creator.getId() == null ? convertPersonCreatorDtoToCreator(creator) : creatorRepository.findByPersonId(creator.getId()))
+				.collect(Collectors.toList()));
+		try {
+			book.setThumbnail(bookForm.getThumbnail().getBytes());
+		} catch (IOException e) {
+			throw new ImageUploadFailureException(bookForm.getThumbnail(), e);
+		}
+		return book;
+	}
+	
+	private static Creator convertPersonCreatorDtoToCreator(PersonCreatorDto personCreatorDto) {
+		Person person = new Person();
+		person.setFullName(personCreatorDto.getFullName());
+		
+		Creator creator = new Creator();
+		creator.setPerson(person);
+		creator.setRole(personCreatorDto.getRole());
+		return creator;
+	}
+	
 	private static PersonCreatorDto convertCreatorToPersonCreatorDto(Creator creator) {
 		PersonCreatorDto personCreatorDto = new PersonCreatorDto();
 		personCreatorDto.setId(creator.getPerson().getId());
-		personCreatorDto.setFirstName(creator.getPerson().getFirstName());
-		personCreatorDto.setMiddleName(creator.getPerson().getMiddleName());
-		personCreatorDto.setLastName(creator.getPerson().getLastName());
-		personCreatorDto.setCreatorType(creator.getCreatorType());
+		personCreatorDto.setFullName(creator.getPerson().getFullName());
+		personCreatorDto.setRole(creator.getRole());
 		return personCreatorDto;
 	}
 	

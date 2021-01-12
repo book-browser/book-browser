@@ -5,9 +5,9 @@
   <section class="main-content">
     <h1>{{book.title}}</h1>
     <div class="book-creators" *ngIf="book.creators.length > 0">
-      <span>by {{book.creators[0].firstName}} {{book.creators[0].lastName}}
+      <span>by {{book.creators[0].fullName}}
         {{book.creators[0].creatorType ? '(' + book.creators[0].creatorType.title + ')' : ''}}</span>
-      <span *ngFor="let creator of book.creators.slice(1)">, {{creator.firstName}} {{creator.lastName}}
+      <span *ngFor="let creator of book.creators.slice(1)">, {{creator.fullName}}
         {{creator.creatorType ? '(' + creator.creatorType.title + ')' : ''}}</span>
     </div>
     <p *ngIf="book.description" [innerHTML]="book.description | replaceLineBreaks"></p>

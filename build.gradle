@@ -50,6 +50,7 @@ sourceSets {
  
 // https://blog.marcnuri.com/angular-spring-boot-integration-gradle/ 
 task buildAngular(type:Exec) {
+	description = "Assemble webapp resources that are served by the application"
 	dependsOn "installAngular"
 	workingDir "$webappDir"
 	inputs.file "$webappDir/angular.json"
@@ -67,6 +68,7 @@ task buildAngular(type:Exec) {
 }
  
 task installAngular(type:Exec) {
+	description = "Assemble dependencies required to build the webapp"
 	workingDir "$webappDir"
 	inputs.file "$webappDir/package.json"
 	outputs.dir "$webappDir/node_modules"

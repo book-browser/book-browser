@@ -25,6 +25,9 @@
         Login
       </button>
 
+      <a *ngIf="user" class="btn btn-outline-secondary mr-2" routerLink="/book/new">
+        <i class="fas fa-plus"></i>
+      </a>
       <button *ngIf="user" class="btn btn-outline-secondary mr-2">
         <i class="fas fa-bell"></i>
       </button>
@@ -132,7 +135,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <a class="btn btn-secondary mr-2" routerLink="/register">Register</a>
+          <button class="btn btn-secondary mr-2" (click)="register()">Register</button>
           <button class="btn btn-primary" type="submit">Login</button>
         </div>
       </form>

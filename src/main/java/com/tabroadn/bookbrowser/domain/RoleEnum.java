@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 @Getter
-public enum CreatorTypeEnum {
+public enum RoleEnum {
 	AUTHOR("Author"),
 	ILLUSTRATOR("Illustrator"),
 	COLORIST("Colorist"),
@@ -14,7 +14,7 @@ public enum CreatorTypeEnum {
 	
 	private String title;
 	
-	private CreatorTypeEnum(String title) {
+	private RoleEnum(String title) {
 		this.title = title;
 	}
 }

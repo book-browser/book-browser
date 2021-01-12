@@ -19,11 +19,10 @@
     </div>
       <p>
         <span>by </span>
-        <a *ngFor="let creator of book.creators" routerLink="/creator/{{creator.id}}">
-          <span>{{creator.firstName}}</span>
-          <span *ngIf="creator.lastName"> {{creator.lastName}}</span>
+        <span *ngFor="let creator of book.creators" >
+          <a routerLink="/creator/{{creator.id}}">{{creator.firstName}}</a>
           <span>, </span>
-        </a>
+        </span>
       </p>
       <p *ngIf="book.description" class="main-search-result-details">{{book.description | truncate:[250, '...']}}</p>
     </div>

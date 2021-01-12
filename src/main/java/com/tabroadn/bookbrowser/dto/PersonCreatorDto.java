@@ -1,6 +1,6 @@
 package com.tabroadn.bookbrowser.dto;
 
-import com.tabroadn.bookbrowser.domain.CreatorTypeEnum;
+import com.tabroadn.bookbrowser.domain.RoleEnum;
 
 import lombok.Data;
 
@@ -8,11 +8,7 @@ import lombok.Data;
 public class PersonCreatorDto {
 	private Long id;
 	
-	private String firstName;
-	
-	private String middleName;
-	
-	private String lastName;
-	
-	private CreatorTypeEnum creatorType;
+	private String fullName;
+
+	private RoleEnum role;
 }

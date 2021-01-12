@@ -15,8 +15,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 			"join book_browser.person p on c.person_id = p.id " +
 			"where upper(b.title) like upper(concat('%',:query,'%')) " + 
 			"or upper(b.description) like upper(concat('%',:query,'%')) " +
-			"or upper(p.first_name) like upper(concat('%',:query,'%')) " +
-			"or upper(p.middle_name) like upper(concat('%',:query,'%')) " +
-			"or upper(p.last_name) like upper(concat('%',:query,'%'))", nativeQuery = true)
+			"or upper(p.full_name) like upper(concat('%',:query,'%'))", nativeQuery = true)
 	List<Book> search(String query);
 }

@@ -1,9 +1,7 @@
-import { CreatorType } from './creator-type';
+import { Role } from './role';
 
 export class PersonCreator {
   id: number;
-  firstName: string;
-  middleName: string;
-  lastName: string;
-  creatorType: CreatorType;
+  fullName: string;
+  role: string;
 }

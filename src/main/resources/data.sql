@@ -9,74 +9,74 @@ INSERT INTO book_browser.user (id, username, email, password, enabled)
 INSERT INTO book_browser.authority (username, role)
   values ('admin', 'ROLE_USER');
 
-INSERT INTO book_browser.person(id, first_name, last_name)
-  values (1, 'Cedric', 'Caballes');
+INSERT INTO book_browser.person(id, full_name)
+  values (1, 'Cedric Caballes');
 
-INSERT INTO book_browser.person(id, first_name, last_name)
-  values (2, 'Niki', 'Smith');
+INSERT INTO book_browser.person(id, full_name)
+  values (2, 'Niki Smith');
 
-INSERT INTO book_browser.person(id, first_name, middle_name, last_name)
-  values (3, 'Ariel', 'Slamet', 'Ries');
+INSERT INTO book_browser.person(id, full_name)
+  values (3, 'Ariel Slamet Ries');
 
-INSERT INTO book_browser.person(id, first_name,last_name)
-  values (4, 'Kat', 'Leyh');
+INSERT INTO book_browser.person(id, full_name)
+  values (4, 'Kat Leyh');
 
-INSERT INTO book_browser.person(id, first_name,last_name)
-  values (5, 'Emma', 'Steinkellner');
+INSERT INTO book_browser.person(id, full_name)
+  values (5, 'Emma Steinkellner');
 
-INSERT INTO book_browser.person(id, first_name,last_name)
-  values (6, 'Jen', 'Wang');
+INSERT INTO book_browser.person(id, full_name)
+  values (6, 'Jen Wang');
 
-INSERT INTO book_browser.person(id, first_name,last_name)
-  values (7, 'Cory', 'Doctorow');
+INSERT INTO book_browser.person(id, full_name)
+  values (7, 'Cory Doctorow');
 
-INSERT INTO book_browser.person(id, first_name,last_name)
-  values (8, 'Noelle', 'Stevenson');
+INSERT INTO book_browser.person(id, full_name)
+  values (8, 'Noelle Stevenson');
 
-INSERT INTO book_browser.person(id, first_name,last_name)
-  values (9, 'Vera', 'Brosgol');
+INSERT INTO book_browser.person(id, full_name)
+  values (9, 'Vera Brosgol');
 
-INSERT INTO book_browser.person(id, first_name, middle_name, last_name)
-  values (10, 'Bryan', 'Lee','O''Malley');
+INSERT INTO book_browser.person(id, full_name)
+  values (10, 'Bryan Lee O''Malley');
 
-INSERT INTO book_browser.person(id, first_name, last_name)
-  values (11, 'Nathan', 'Fairbairn');
+INSERT INTO book_browser.person(id, full_name)
+  values (11, 'Nathan Fairbairn');
 
-INSERT INTO book_browser.person(id, first_name)
+INSERT INTO book_browser.person(id, full_name)
   values (12, 'Kerascoët');
 
-INSERT INTO book_browser.person(id, first_name)
+INSERT INTO book_browser.person(id, full_name)
   values (13, 'Hubert');
 
-INSERT INTO book_browser.person(id, first_name, last_name)
-  values (14, 'Fabien', 'Vehlmann');
+INSERT INTO book_browser.person(id, full_name)
+  values (14, 'Fabien Vehlmann');
 
-INSERT INTO book_browser.person(id, first_name, last_name)
-  values (15, 'Helge', 'Dascher');
+INSERT INTO book_browser.person(id, full_name)
+  values (15, 'Helge Dascher');
 
-INSERT INTO book_browser.person(id, first_name, last_name)
-  values (16, 'Jennifer', 'Muro');
+INSERT INTO book_browser.person(id, full_name)
+  values (16, 'Jennifer Muro');
 
-INSERT INTO book_browser.person(id, first_name, last_name)
-  values (17, 'Thomas', 'Krajewski');
+INSERT INTO book_browser.person(id, full_name)
+  values (17, 'Thomas Krajewski');
 
-INSERT INTO book_browser.person(id, first_name, last_name)
-  values (18, 'Gretel', 'Lusky');
+INSERT INTO book_browser.person(id, full_name)
+  values (18, 'Gretel Lusky');
 
-INSERT INTO book_browser.person(id, first_name, last_name)
-  values (19, 'Debbie', 'Tung');
+INSERT INTO book_browser.person(id, full_name)
+  values (19, 'Debbie Tung');
 
-INSERT INTO book_browser.person(id, first_name, middle_name, last_name)
-  values (20, 'Laurie', 'Halse', 'Anderson');
+INSERT INTO book_browser.person(id, full_name)
+  values (20, 'Laurie Halse Anderson');
 
-INSERT INTO book_browser.person(id, first_name, last_name)
-  values (21, 'Leila', 'del Duca');
+INSERT INTO book_browser.person(id, full_name)
+  values (21, 'Leila del Duca');
 
-INSERT INTO book_browser.person(id, first_name, last_name)
-  values (22, 'Scott', 'McCloud');
+INSERT INTO book_browser.person(id, full_name)
+  values (22, 'Scott McCloud');
 
-INSERT INTO book_browser.person(id, first_name, last_name)
-  values (23, 'Tillie', 'Wallen');
+INSERT INTO book_browser.person(id, full_name)
+  values (23, 'Tillie Wallen');
 
 INSERT INTO book_browser.book(id, title, thumbnail, publish_date)
   values (1, 'The Witch''s Throne', FILE_READ('classpath:/images/the-witchs-throne.jpg'), '2017-08-27');
@@ -210,7 +210,7 @@ INSERT INTO book_browser.creator(book_id, person_id)
 INSERT INTO book_browser.creator(book_id, person_id)
   values (8, 7);
 
-INSERT INTO book_browser.creator(book_id, person_id, creator_type)
+INSERT INTO book_browser.creator(book_id, person_id, role)
   values (8, 6, 'ILLUSTRATOR');
 
 INSERT INTO book_browser.creator(book_id, person_id)
@@ -222,10 +222,10 @@ INSERT INTO book_browser.creator(book_id, person_id)
 INSERT INTO book_browser.creator(book_id, person_id)
   values (11, 10);
 
-INSERT INTO book_browser.creator(book_id, person_id, creator_type)
+INSERT INTO book_browser.creator(book_id, person_id, role)
   values (11, 11, 'COLORIST');
 
-INSERT INTO book_browser.creator(book_id, person_id, creator_type)
+INSERT INTO book_browser.creator(book_id, person_id, role)
   values (12, 12, 'ILLUSTRATOR');
 
 INSERT INTO book_browser.creator(book_id, person_id)
@@ -234,19 +234,19 @@ INSERT INTO book_browser.creator(book_id, person_id)
 INSERT INTO book_browser.creator(book_id, person_id)
   values (13, 12);
 
-INSERT INTO book_browser.creator(book_id, person_id, creator_type)
+INSERT INTO book_browser.creator(book_id, person_id, role)
   values (13, 14, 'ILLUSTRATOR');
 
-INSERT INTO book_browser.creator(book_id, person_id, creator_type)
+INSERT INTO book_browser.creator(book_id, person_id, role)
   values (13, 15, 'TRANSLATOR');
 
-INSERT INTO book_browser.creator(book_id, person_id, creator_type)
+INSERT INTO book_browser.creator(book_id, person_id, role)
   values (14, 16, 'AUTHOR');
 
-INSERT INTO book_browser.creator(book_id, person_id, creator_type)
+INSERT INTO book_browser.creator(book_id, person_id, role)
   values (14, 17, 'AUTHOR');
 
-INSERT INTO book_browser.creator(book_id, person_id, creator_type)
+INSERT INTO book_browser.creator(book_id, person_id, role)
   values (14, 18, 'ILLUSTRATOR');
 
 INSERT INTO book_browser.creator(book_id, person_id)

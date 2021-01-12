@@ -25,4 +25,8 @@ export class BookService {
     findNewBooks() {
       return this.http.get<BookSummary[]>('/api/books/new');
     }
+
+    save(book: Book) {
+      return this.http.put('/api/book', book);
+    }
 }

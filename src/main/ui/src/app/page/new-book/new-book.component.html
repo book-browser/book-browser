@@ -1,0 +1,129 @@
+<main>
+  <span class="float-right"><span class="text-danger mr-1">*</span>This field is required</span>
+  <h1>Add a New Book</h1>
+  <form #f="ngForm" (ngSubmit)="onSubmit(f)">
+    <div class="form-group">
+      <label for="title-input" class="control-label">Title</label>
+      <span class="text-danger ml-1">*</span>
+      <input 
+        id="title-input" type="text" placeholder="Enter Title"
+        ngModel name="title" #title="ngModel" class="form-control" 
+        [class.is-valid]="title.valid && title.dirty && !title.pending"
+        [class.is-invalid]="title.invalid && title.touched"
+        [class.is-loading]="title.pending"
+        required
+      />
+
+      <ng-container *ngIf="title.invalid && title.touched">
+        <div *ngIf="title.errors.required" class="invalid-feedback">
+          Title is required.
+        </div>
+      </ng-container>
+    </div>
+
+    <div class="form-group">
+      <label for="description-input" class="control-label">Description</label>
+      <span class="text-danger ml-1">*</span>
+      <textarea 
+        id="description-input" type="text" placeholder="Enter Description"
+        ngModel name="description" #description="ngModel" class="form-control" 
+        [class.is-valid]="description.valid && description.dirty && !description.pending"
+        [class.is-invalid]="description.invalid && description.touched"
+        [class.is-loading]="description.pending"
+        required
+        rows="5"
+      ></textarea>
+
+      <ng-container *ngIf="description.invalid && description.touched">
+        <div *ngIf="description.errors.required" class="invalid-feedback">
+          Description is required.
+        </div>
+      </ng-container>
+    </div>
+
+    <div class="form-group">
+      <label for="thumbnail-input" class="control-label">Thumbnail</label>
+      <span class="text-danger ml-1">*</span>
+      <div class="custom-file">
+        <input type="file" class="custom-file-input" id="thumbnail-input"
+          accept="image/*" ngModel name="thumbnail"
+          #thumbnail="ngModel" (change)="onSelectFile($event)"
+          required
+          [class.is-valid]="thumbnail.valid && thumbnail.dirty"
+          [class.is-invalid]="thumbnail.invalid && thumbnail.touched"
+        />
+        <label class="custom-file-label" for="thumbnail-input" *ngIf="!file">Choose file</label>
+        <label class="custom-file-label" for="thumbnail-input" *ngIf="file">{{file.name}}</label>
+        
+        <ng-container *ngIf="thumbnail.invalid && thumbnail.touched">
+          <div *ngIf="thumbnail.errors.required" class="invalid-feedback">
+            Thumbnail is required.
+          </div>
+        </ng-container>
+      </div>
+
+      <img src="{{url}}" height="200" />
+    </div>
+
+    <div class="form-group">
+      <label class="control-label">Creators</label>
+      <div *ngFor="let creator of creators; index as i" class="row mb-2">
+        <div class="col-6">
+          <label class="col-form-label" *ngIf="i===0">Full name</label>
+          <span class="text-danger ml-1">*</span>
+          <ng-select
+            [items]="people$ | async"
+            [addTag]="addTag"
+            [loading]="peopleLoading"
+            [typeahead]="peopleInput$"
+            bindLabel="name"
+            [(ngModel)]="creator.person"
+            #test="ngModel" 
+            name="test"
+          >
+            <ng-template ng-label-tmp ng-option-tmp let-item="item">
+              <div>{{item.fullName}}</div>
+            </ng-template>
+          </ng-select>
+
+          <ng-container *ngIf="testInputs && testInputs[i]">
+            {{testInputs[i]}}
+            <div class="invalid-feedback">
+              Full name is required.
+            </div>
+          </ng-container>
+        </div>
+        
+        <div class="col-5">
+          <label class="col-form-label" *ngIf="i===0">Role</label>
+          <select [(ngModel)]="creator.role" class="form-control" [ngModelOptions]="{standalone: true}">
+            <option *ngFor="let role of roles$ | async" value="{{role.value}}">{{role.title}}</option>
+          </select>
+        </div>
+
+        <div class="mt-auto">
+          <button class="btn btn-danger" (click)="deleteCreator(creator)"><i class="fas fa-trash"></i></button>
+        </div>
+      </div>
+      <div class="mt-2 row justify-content-end">
+        <div class="col-2">
+          <button type="button" class="btn btn-primary" (click)="addCreator()">Add Creator</button>
+        </div>
+      </div>
+    </div>
+
+    <button *ngIf="!creating" type="submit" class="btn btn-primary m-auto" [disabled]="!f.valid">
+      <span>Create Book</span>
+    </button>
+
+    <button *ngIf="creating" class="btn btn-primary" type="button" disabled>
+      <span class="spinner-border spinner-border-sm mr-1" role="status" aria-hidden="true"></span>
+      <span>Creating Book...</span>
+    </button>
+  </form>
+
+  <div *ngIf="errorMessage" class="alert alert-danger inline-alert mt-3" role="alert">
+    <i class="fas fa-times-circle mr-1"></i>
+    <span>{{errorMessage}}</span>
+  </div>
+</main>

@@ -10,6 +10,8 @@ import { ApiError } from './entity/api-error';
 import { ErrorCode } from './entity/error-code.enum';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { ReferenceDataQuery } from './query/reference-data.query';
+import { ReferenceDataService } from './service/reference-data.service';
 
 @Component({
   selector: 'app-root',
@@ -30,17 +32,26 @@ export class AppComponent {
   @ViewChild('f') loginForm : NgForm;
   loginErrorMessage: string;
   
-  constructor(private userService: UserService, private bookService: BookService, private router: Router) { }
+  constructor(private userService: UserService, private bookService: BookService, private router: Router,
+    private referenceDataService: ReferenceDataService) {
+    }
 
   ngOnInit() { 
     this.userService.getCurrentUser().subscribe((user) => {
       this.user = user;
     });
 
+    this.referenceDataService.updateReferenceData();
+
     $('#loginModal').on('hidden.bs.modal', () => {
       this.loginForm.reset();
       this.loginErrorMessage = null;
     });
+  }
+
+  register() {
+    $('#loginModal').modal('hide');
+    this.router.navigateByUrl('/register');
   }
 
   login(form: NgForm) {
@@ -103,7 +114,7 @@ export class AppComponent {
   getSearchResultCreatorsDescription(result: BookSummary) {
     let creatorsDescription = '';
     result.creators.forEach((creator, index) => {
-      creatorsDescription += `${creator.firstName} ${creator.lastName}`;
+      creatorsDescription += `${creator.fullName}`;
       if (index + 1 != result.creators.length) {
         creatorsDescription += ' , ';
       }

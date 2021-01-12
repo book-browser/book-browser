@@ -17,6 +17,7 @@ public class ApiError {
 	private String apiError;
 	private String message;
 	private String path;
+	private String correlationId;
 	
 	public ApiError(Instant timestamp, HttpStatus httpStatus, ErrorCodeEnum code, String message, String path) {
 		this.timestamp = timestamp;

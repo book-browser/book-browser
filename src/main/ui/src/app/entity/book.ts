@@ -8,4 +8,5 @@ export class Book {
   creators: PersonCreator[];
   issues: Release[];
   volumes: Release[];
+  thumbnail: File;
 }
