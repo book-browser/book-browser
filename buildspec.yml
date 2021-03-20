@@ -9,6 +9,10 @@ phases:
     commands:
       - echo "Entered build phase"
       - gradle build
+  post_build:
+      commands:
+        # move the jar (by wildcard, agnostic to its name) to top level app.jar
+        - mv build/libs/*.jar app.jar
 artifacts:
   files:
-    - build/libs/*
+    - app.jar
