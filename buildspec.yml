@@ -8,7 +8,11 @@ phases:
   build:
     commands:
       - echo "Entered build phase"
-      - gradle build
+      - ls
+      - gradle bootJar
+      - ls
+      - ls build
+      - ls build/libs
   post_build:
       commands:
         # move the jar (by wildcard, agnostic to its name) to top level app.jar
