@@ -1,0 +1,22 @@
+
+version: 0.2
+phases:
+  install:
+    commands:
+      - echo Installing source NPM dependencies...
+      - npm install -g @angular/cli
+  build:
+    commands:
+      - echo "Entered build phase"
+      - ls
+      - gradle bootJar
+      - ls
+      - ls build
+      - ls build/libs
+  post_build:
+      commands:
+        # move the jar (by wildcard, agnostic to its name) to top level app.jar
+        - mv build/libs/*.jar app.jar
+artifacts:
+  files:
+    - app.jar
