@@ -1,6 +1,6 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -35,7 +35,7 @@ import { UniqueUserDirective } from './validator/unique-user.directive';
     RegisterSuccessComponent,
     UserVerifyComponent,
     SearchComponent,
-    NewBookComponent,
+    NewBookComponent
   ],
   imports: [
     BrowserModule,
@@ -43,6 +43,7 @@ import { UniqueUserDirective } from './validator/unique-user.directive';
     NgbModule,
     HttpClientModule,
     NgSelectModule,
+    ReactiveFormsModule,
     FormsModule,
     AutofocusFixModule.forRoot()
   ],

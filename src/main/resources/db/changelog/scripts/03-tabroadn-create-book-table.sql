@@ -1,4 +1,4 @@
-CREATE TABLE book_browser.book (
+CREATE TABLE book (
     id INT NOT NULL,
     title VARCHAR(50),
     description VARCHAR(2000),

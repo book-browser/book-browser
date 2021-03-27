@@ -15,7 +15,7 @@ import com.tabroadn.bookbrowser.domain.ReleaseTypeEnum;
 import lombok.Data;
 
 @Data
-@Entity
+@Entity(name="book_release")
 public class Release {
 	@Id
 	@GeneratedValue

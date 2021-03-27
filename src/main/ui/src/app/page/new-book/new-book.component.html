@@ -1,13 +1,17 @@
-<main>
-  <span class="float-right"><span class="text-danger mr-1">*</span>This field is required</span>
+<main class="panel">
+  <span class="form-key">
+    <span class="text-danger">*</span> This field is required
+  </span>
   <h1>Add a New Book</h1>
-  <form #f="ngForm" (ngSubmit)="onSubmit(f)">
+  <form [formGroup]="newBookForm" (ngSubmit)="onSubmit()">
     <div class="form-group">
-      <label for="title-input" class="control-label">Title</label>
-      <span class="text-danger ml-1">*</span>
+      <label for="title-input" class="control-label">
+        Title <span class="text-danger">*</span>
+      </label>
+      
       <input 
         id="title-input" type="text" placeholder="Enter Title"
-        ngModel name="title" #title="ngModel" class="form-control" 
+        formControlName="title" class="form-control" 
         [class.is-valid]="title.valid && title.dirty && !title.pending"
         [class.is-invalid]="title.invalid && title.touched"
         [class.is-loading]="title.pending"
@@ -22,16 +26,17 @@
     </div>
 
     <div class="form-group">
-      <label for="description-input" class="control-label">Description</label>
-      <span class="text-danger ml-1">*</span>
+      <label for="description-input" class="control-label">
+        Description <span class="text-danger">*</span>
+      </label>
+      
       <textarea 
         id="description-input" type="text" placeholder="Enter Description"
-        ngModel name="description" #description="ngModel" class="form-control" 
+        formControlName="description" class="form-control" 
         [class.is-valid]="description.valid && description.dirty && !description.pending"
         [class.is-invalid]="description.invalid && description.touched"
         [class.is-loading]="description.pending"
-        required
-        rows="5"
+        required rows="5"
       ></textarea>
 
       <ng-container *ngIf="description.invalid && description.touched">
@@ -42,12 +47,14 @@
     </div>
 
     <div class="form-group">
-      <label for="thumbnail-input" class="control-label">Thumbnail</label>
-      <span class="text-danger ml-1">*</span>
+      <label for="thumbnail-input" class="control-label">
+        Thumbnail <span class="text-danger">*</span>
+      </label>
+
       <div class="custom-file">
         <input type="file" class="custom-file-input" id="thumbnail-input"
-          accept="image/*" ngModel name="thumbnail"
-          #thumbnail="ngModel" (change)="onSelectFile($event)"
+          accept="image/*" formControlName="thumbnail"
+          (change)="onSelectFile($event)"
           required
           [class.is-valid]="thumbnail.valid && thumbnail.dirty"
           [class.is-invalid]="thumbnail.invalid && thumbnail.touched"
@@ -65,21 +72,21 @@
       <img src="{{url}}" height="200" />
     </div>
 
-    <div class="form-group">
+    <div class="form-group" formArrayName="creators">
       <label class="control-label">Creators</label>
-      <div *ngFor="let creator of creators; index as i" class="row mb-2">
+      <div *ngFor="let creator of creators.controls; let i = index" class="row form-array-row" [formGroupName]="i">
         <div class="col-6">
-          <label class="col-form-label" *ngIf="i===0">Full name</label>
-          <span class="text-danger ml-1">*</span>
+          <label class="col-form-label" *ngIf="i===0">
+            Full name <span class="text-danger">*</span>
+          </label>
+          
           <ng-select
             [items]="people$ | async"
             [addTag]="addTag"
             [loading]="peopleLoading"
             [typeahead]="peopleInput$"
             bindLabel="name"
-            [(ngModel)]="creator.person"
-            #test="ngModel" 
-            name="test"
+            formControlName="name"
           >
             <ng-template ng-label-tmp ng-option-tmp let-item="item">
               <div>{{item.fullName}}</div>
@@ -96,23 +103,21 @@
         
         <div class="col-5">
           <label class="col-form-label" *ngIf="i===0">Role</label>
-          <select [(ngModel)]="creator.role" class="form-control" [ngModelOptions]="{standalone: true}">
+          <select class="form-control" formControlName="role">
             <option *ngFor="let role of roles$ | async" value="{{role.value}}">{{role.title}}</option>
           </select>
         </div>
 
-        <div class="mt-auto">
-          <button class="btn btn-danger" (click)="deleteCreator(creator)"><i class="fas fa-trash"></i></button>
+        <div class="col-1 form-array-row-button">
+          <button class="btn btn-danger" (click)="deleteCreator(i)"><i class="fas fa-trash"></i></button>
         </div>
       </div>
-      <div class="mt-2 row justify-content-end">
-        <div class="col-2">
-          <button type="button" class="btn btn-primary" (click)="addCreator()">Add Creator</button>
-        </div>
+      <div class="form-array-row">
+        <button type="button" class="btn btn-primary d-block ml-auto" (click)="addCreator()">Add Creator</button>
       </div>
     </div>
 
-    <button *ngIf="!creating" type="submit" class="btn btn-primary m-auto" [disabled]="!f.valid">
+    <button *ngIf="!creating" type="submit" class="btn btn-primary m-auto">
       <span>Create Book</span>
     </button>
 

@@ -1,4 +1,4 @@
-CREATE TABLE book_browser.release (
+CREATE TABLE book_release (
     id INT NOT NULL,
     book_id INT NOT NULL,
     description VARCHAR(250),
@@ -6,5 +6,5 @@ CREATE TABLE book_browser.release (
     release_number INT NOT NULL,
     publish_date DATE NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (book_id) REFERENCES book_browser.book(id)
+    FOREIGN KEY (book_id) REFERENCES book(id)
 );

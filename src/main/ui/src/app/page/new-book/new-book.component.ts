@@ -1,11 +1,11 @@
-import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormArray, FormControl, FormGroup, NgForm } from '@angular/forms';
 import { concat, Observable, of, Subject } from 'rxjs';
 import { catchError, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
 import { Person } from 'src/app/entity/person';
 import { Role } from 'src/app/entity/role';
 import { ReferenceDataQuery } from 'src/app/query/reference-data.query';
 import { PersonService } from 'src/app/service/person.service';
-import { FormsModule, NgForm } from '@angular/forms'; 
 
 @Component({
   selector: 'app-new-book',
@@ -22,18 +22,24 @@ export class NewBookComponent implements OnInit {
 
   roles$: Observable<Role[]>;
 
-  creators: { person: string, role: string }[];
-
   creating: false;
   errorMessage: string;
 
-  @ViewChild('f') newBookForm : NgForm;
+  @ViewChild('f') test : NgForm;
 
-  @ViewChildren('test') testInputs: QueryList<ElementRef>;
-
+  newBookForm = new FormGroup({
+    title: new FormControl(''),
+    description: new FormControl(''),
+    thumbnail: new FormControl(''),
+    creators: new FormArray([
+      new FormGroup({
+        name: new FormControl(''),
+        role: new FormControl('')
+      })
+    ])   
+  });
 
   constructor(private personService: PersonService, private referenceDataQuery: ReferenceDataQuery) { 
-    this.creators = [ { person: undefined, role: undefined }];
   }
 
   ngOnInit() {
@@ -74,19 +80,26 @@ export class NewBookComponent implements OnInit {
     }
   }
 
+  get title() { return this.newBookForm.get('title') }
+
+  get description() { return this.newBookForm.get('description') }
+
+  get thumbnail() { return this.newBookForm.get('thumbnail') }
+
+  get creators() { return this.newBookForm.get('creators') as FormArray }
+
   addCreator = () => {
-    this.creators.push({
-      person: undefined,
-      role: undefined
-    });
+    this.creators.push(new FormGroup({
+      name: new FormControl(''),
+      role: new FormControl('')
+    }));
   }
 
-  deleteCreator = (creator) => {
-    const index = this.creators.indexOf(creator);
-    this.creators.splice(index, 1);
+  deleteCreator = (index) => {
+    this.creators.removeAt(index);
   }
 
-  onSubmit = (form) => {
-    console.log(form.value, form.value.creators);
+  onSubmit = () => {
+    console.log(this.newBookForm.value);
   }
 }

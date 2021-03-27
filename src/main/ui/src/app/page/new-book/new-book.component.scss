@@ -1,9 +1,9 @@
 @import 'variables';
 
-main {
-  background: $surface-color;
-  border: $surface-border;
-  width: $container-lg-width;
-  margin: $container-lg-margin-y auto;
-  padding: $container-lg-padding;
+.form-array-row-button {
+  margin-top: auto;
+}
+
+.form-array-row {
+  margin-bottom: $container-sm-margin;
 }

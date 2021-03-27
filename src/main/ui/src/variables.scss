@@ -12,16 +12,27 @@ $surface-color: #fff;
 $surface-variant-color: #dadce0;
 $surface-border: 1px solid $surface-variant-color;
 
-
-
 $container-xl-width: 1200px;
 $container-xl-padding: 25px;
 
-$container-lg-width: 1000px;
+$container-lg-width: 90%;
+
+@media screen and (min-width: 768px) {
+    $container-lg-width: 720px;
+}
+
+@media screen and (min-width: 992px) {
+    $container-lg-width: 960px;
+}
+
+@media screen and (min-width: 1200px) {
+    $container-lg-width: 1140px;
+}
+
 $container-lg-padding-x: 50px;
 $container-lg-padding-y: 50px;
 $container-lg-padding: $container-lg-padding-y $container-lg-padding-x;
-$container-lg-margin-x: 50px;
+$container-lg-margin-x: 25px;
 $container-lg-margin-y: 50px;
 $container-lg-margin: $container-lg-margin-y $container-lg-margin-x;
 
