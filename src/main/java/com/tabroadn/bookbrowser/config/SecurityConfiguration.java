@@ -45,11 +45,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.dataSource(dataSource)
 			.usersByUsernameQuery(
 					"select username,password,enabled "
-				  + "from book_browser.user "
+				  + "from user "
 				  + "where username = ?")
 			.authoritiesByUsernameQuery(
 					"select username,role "
-		          + "from book_browser.authority "
+		          + "from authority "
 		          + "where username = ?");		
 	}
 	

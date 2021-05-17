@@ -1,9 +1,8 @@
 export class ApiError {
   timestamp: Date
   status: number
-  httpError: string
   code: number
-  apiError: string
   message: string
+  errors: string[]
   path: string
 }

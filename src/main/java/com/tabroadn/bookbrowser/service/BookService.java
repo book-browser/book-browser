@@ -54,9 +54,10 @@ public class BookService {
 					.collect(Collectors.toList());
 	}
 
-	public void save(BookForm bookForm) {
+	public BookDto save(BookForm bookForm) {
 		Book book = convertBookFormToBook(bookForm);
-		repository.save(book);
+		Book newBook = repository.save(book);
+		return convertBookToBookDto(newBook);
 	}
 	
 	private static BookDto convertBookToBookDto(Book book) {
@@ -95,13 +96,25 @@ public class BookService {
 		book.setTitle(bookForm.getTitle());
 		book.setDescription(bookForm.getDescription());
 		book.setCreators(bookForm.getCreators().stream()
-				.map((creator) -> creator.getId() == null ? convertPersonCreatorDtoToCreator(creator) : creatorRepository.findByPersonId(creator.getId()))
+				.map((creator) -> {
+					if (creator.getId() == null) {
+						Creator newCreator = convertPersonCreatorDtoToCreator(creator);
+						newCreator.setBook(book);
+						return newCreator;
+					} else {
+						return creatorRepository.findByPersonId(creator.getId());
+					}
+				})
 				.collect(Collectors.toList()));
+				
 		try {
-			book.setThumbnail(bookForm.getThumbnail().getBytes());
+			if (bookForm.getThumbnail() != null) {
+				book.setThumbnail(bookForm.getThumbnail().getBytes());
+			}
 		} catch (IOException e) {
 			throw new ImageUploadFailureException(bookForm.getThumbnail(), e);
 		}
+		
 		return book;
 	}
 	
@@ -112,6 +125,7 @@ public class BookService {
 		Creator creator = new Creator();
 		creator.setPerson(person);
 		creator.setRole(personCreatorDto.getRole());
+		
 		return creator;
 	}
 	
