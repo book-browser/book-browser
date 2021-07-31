@@ -14,10 +14,8 @@ public class ImageFileValidator implements ConstraintValidator<ValidImage, Multi
     @Override
     public boolean isValid(MultipartFile multipartFile, ConstraintValidatorContext context) {
         boolean result = true;
-
-        String contentType = multipartFile.getContentType();
-        if (!isSupportedContentType(contentType)) {
-            context.disableDefaultConstraintViolation();
+        if (multipartFile != null && !isSupportedContentType(multipartFile.getContentType())) {
+        	context.disableDefaultConstraintViolation();
             context.buildConstraintViolationWithTemplate(
                     "Only PNG or JPG images are allowed.")
                    .addConstraintViolation();

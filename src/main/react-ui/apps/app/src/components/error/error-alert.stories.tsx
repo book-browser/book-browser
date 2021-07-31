@@ -1,9 +1,22 @@
 import React from 'react';
-import { text, number } from '@storybook/addon-knobs';
-import { Button } from 'react-bootstrap';
+import { ApiError } from 'types/api-error';
+import { ErrorAlert } from './error-alert';
 
-export default { title: 'Button' };
+export default { title: 'Error Alert' };
 
-export const primary = () => (
-  <Button>hello world</Button>
-);
+export const SingleError = () => {
+  const error = new Error("Please fill in your first name");
+  return <ErrorAlert error={error} />
+};
+
+export const MultipleErrors = () => {
+  const error = new ApiError({
+    message: "Validation failed for payload",
+    errors: [
+      "Please fill in your first name",
+      "Please fill in your last name"
+    ] 
+  } as any);
+
+  return <ErrorAlert error={error} />
+};

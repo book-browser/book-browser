@@ -13,8 +13,8 @@ export const Confirmation = ({ variant, title, children }: ConfirmationProps) =>
   return (
     <Card>
       <Card.Body>
-        <Card.Title>
-          <CheckCircleOutlineIcon className="mr-2 text-success" />
+        <Card.Title className="d-flex align-items-center">
+          <CheckCircleOutlineIcon className="mr-1 text-success" />
           {title}
         </Card.Title>
         {children}

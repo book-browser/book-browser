@@ -22,7 +22,7 @@ const CreateBookConfirmation = ({ book }: { book: Book }) => {
           <Nav.Link as={Link} to="/home">Return Home</Nav.Link>
         </Nav.Item>
         <Nav.Item className="mr-n3">
-          <Nav.Link as={Link} to={`/book/${book.id}`}>Navigate to Submission</Nav.Link>
+          <Nav.Link as={Link} to={`/book/${book.id}`}>View Submission</Nav.Link>
         </Nav.Item>
       </Nav>
 

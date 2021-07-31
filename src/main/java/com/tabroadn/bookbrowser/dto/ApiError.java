@@ -1,6 +1,7 @@
 package com.tabroadn.bookbrowser.dto;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,15 @@ public class ApiError {
 		this.status = httpStatus.value();
 		this.httpError = httpStatus.name();
 		this.errors = errors;
+		this.message = message;
+		this.path = path;
+	}
+	
+	public ApiError(Instant timestamp, HttpStatus httpStatus, String message, String path) {
+		this.timestamp = timestamp;
+		this.status = httpStatus.value();
+		this.httpError = httpStatus.name();
+		this.errors = new ArrayList<>();
 		this.message = message;
 		this.path = path;
 	}

@@ -1,0 +1,24 @@
+.error-alert-heading {
+  display: flex;
+  align-items: flex-start;
+}
+
+.error-alert-message {
+  word-break: break-word;
+  word-wrap: break-word;
+  margin-left: 5px;
+  font-weight: bolder;
+}
+
+.error-alert-item {
+  word-break: break-word;
+  word-wrap: break-word;
+}
+
+.error-alert-icon {
+  margin-right: 0px;
+}
+
+.error-alert {
+  margin-bottom: 10px;
+}

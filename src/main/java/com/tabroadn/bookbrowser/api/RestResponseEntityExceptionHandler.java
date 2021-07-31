@@ -49,27 +49,18 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     			Instant.now(),
     			HttpStatus.BAD_REQUEST,
     			cause.getLocalizedMessage(),
-    			Arrays.asList(cause.getLocalizedMessage()),
-    			request.getRequestURL().toString());
+    			request.getRequestURI().toString());
 
         return ResponseEntity.badRequest().body(apiError);
     }
 
-    public static Throwable getRootCause(Throwable throwable) {
-        if (throwable.getCause() != null)
-            return getRootCause(throwable.getCause());
-
-        return throwable;
-    }
-    
     @ExceptionHandler(UserNotFoundException.class)
     protected ResponseEntity<ApiError> handleUserNotFound(UserNotFoundException exception, HttpServletRequest request) {
     	ApiError apiError = new ApiError(
     			Instant.now(),
     			HttpStatus.NOT_FOUND,
     			exception.getLocalizedMessage(),
-    			Arrays.asList(exception.getLocalizedMessage()),
-    			request.getRequestURL().toString());
+    			request.getRequestURI().toString());
     	return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiError);
     }
     
@@ -80,7 +71,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     			HttpStatus.UNAUTHORIZED,
     			exception.getLocalizedMessage(),
     			Arrays.asList(exception.getLocalizedMessage()),
-    			request.getRequestURL().toString());
+    			request.getRequestURI().toString());
     	return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(apiError);
     }
     
@@ -91,8 +82,6 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
       HttpStatus status, 
       WebRequest request)  {
     	List<String> errors = new ArrayList<String>();
-    	
-        System.out.println("handleMethodArgumentNotValid");
 
     	for (FieldError error : exception.getBindingResult().getFieldErrors()) {
             errors.add(error.getField() + ": " + error.getDefaultMessage());
@@ -104,12 +93,11 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         ApiError apiError = new ApiError(
     			Instant.now(),
     			HttpStatus.BAD_REQUEST,
-    			exception.getLocalizedMessage(),
+    			"Validation failed for payload",
     			errors,
     			((ServletWebRequest)request).getRequest().getRequestURI().toString());
         
-        return new ResponseEntity<Object>(apiError, HttpStatus.BAD_REQUEST);
-//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
     }
     
     @Override
@@ -128,7 +116,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         ApiError apiError = new ApiError(
     			Instant.now(),
     			HttpStatus.BAD_REQUEST,
-    			exception.getLocalizedMessage(),
+    			"Validation failed for payload",
     			errors,
     			((ServletWebRequest)request).getRequest().getRequestURI().toString());
         
@@ -144,26 +132,10 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         ApiError apiError = new ApiError(
     			Instant.now(),
     			HttpStatus.BAD_REQUEST,
-    			exception.getLocalizedMessage(),
-    			Arrays.asList(error),
+    			error,
     			((ServletWebRequest)request).getRequest().getRequestURI().toString());
         
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
-    }
-    
-    @ExceptionHandler(Exception.class)
-    protected ResponseEntity<ApiError> handleDefaultException(Exception exception, HttpServletRequest request) {
-    	UUID correlationId = UUID.randomUUID();
-    	logger.error(String.format("%s %s", correlationId.toString(), exception.getMessage()));
-    	exception.printStackTrace();
-    	ApiError apiError = new ApiError(
-    			Instant.now(),
-    			HttpStatus.INTERNAL_SERVER_ERROR,
-    			exception.getLocalizedMessage(),
-    			Arrays.asList(exception.getLocalizedMessage()),
-    			request.getRequestURL().toString());
-    	apiError.setCorrelationId(correlationId.toString());
-    	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(apiError);
     }
     
     @ExceptionHandler({ ConstraintViolationException.class })
@@ -177,7 +149,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         ApiError apiError = new ApiError(
     			Instant.now(),
     			HttpStatus.BAD_REQUEST,
-    			exception.getLocalizedMessage(),
+    			"Validation failed for payload",
     			errors,
     			((ServletWebRequest)request).getRequest().getRequestURI().toString());
        
@@ -194,10 +166,30 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         ApiError apiError = new ApiError(
     			Instant.now(),
     			HttpStatus.BAD_REQUEST,
-    			ex.getLocalizedMessage(),
-    			Arrays.asList(error),
+    			error,
     			((ServletWebRequest)request).getRequest().getRequestURI().toString());
         
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
     }
+
+	@ExceptionHandler(Exception.class)
+	protected ResponseEntity<ApiError> handleDefaultException(Exception exception, HttpServletRequest request) {
+		UUID correlationId = UUID.randomUUID();
+		logger.error(String.format("%s %s", correlationId.toString(), exception.getMessage()));
+		exception.printStackTrace();
+		ApiError apiError = new ApiError(
+				Instant.now(),
+				HttpStatus.INTERNAL_SERVER_ERROR,
+				"Something unexpected occurred",
+				request.getRequestURL().toString());
+		apiError.setCorrelationId(correlationId.toString());
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(apiError);
+	}
+
+	public static Throwable getRootCause(Throwable throwable) {
+	    if (throwable.getCause() != null)
+	        return getRootCause(throwable.getCause());
+	
+	    return throwable;
+	}
 }
