@@ -1,3 +1,5 @@
+import { Container } from '@material-ui/core';
+import { NotFound } from 'components/not-found/not-found';
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { BookPage } from './book-page';
@@ -10,8 +12,13 @@ export const Routing = () => {
         <Route path="/book/:id">
           <BookPage />
         </Route>
-        <Route path="/">
+        <Route exact path="/">
           <CreateBookPage />
+        </Route>
+        <Route>
+          <Container maxWidth="sm" className="mt-3">
+            <NotFound />
+          </Container>
         </Route>
       </Switch>
     </BrowserRouter>
