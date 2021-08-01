@@ -1,18 +1,21 @@
 
 export class ApiError extends Error {
-  constructor({ message, timestamp, status, code, errors, path }) {
+  constructor({ message, timestamp, status, httpError, errors, path, correlationId }) {
     super(message);
     this.name = "ApiError";
     this.timestamp = timestamp;
     this.status = status;
-    this.code = code;
+    this.httpError = httpError;
     this.errors = errors;
     this.path = path;
+    this.correlationId = correlationId;
   }
 
-  timestamp: Date
+  timestamp: number
   status: number
-  code: number
+  message: string
+  httpError: string
   errors: string[]
   path: string
+  correlationId: string
 }

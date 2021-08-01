@@ -30,8 +30,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import com.tabroadn.bookbrowser.dto.ApiError;
 import com.tabroadn.bookbrowser.exception.IncorrectPasswordException;
+import com.tabroadn.bookbrowser.exception.ResourceNotFoundException;
 import com.tabroadn.bookbrowser.exception.UserAlreadyExistException;
-import com.tabroadn.bookbrowser.exception.UserNotFoundException;
 import com.tabroadn.bookbrowser.exception.VerificationTokenExpiredException;
 
 @ControllerAdvice
@@ -54,8 +54,8 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return ResponseEntity.badRequest().body(apiError);
     }
 
-    @ExceptionHandler(UserNotFoundException.class)
-    protected ResponseEntity<ApiError> handleUserNotFound(UserNotFoundException exception, HttpServletRequest request) {
+    @ExceptionHandler(ResourceNotFoundException.class)
+    protected ResponseEntity<ApiError> handleUserNotFound(ResourceNotFoundException exception, HttpServletRequest request) {
     	ApiError apiError = new ApiError(
     			Instant.now(),
     			HttpStatus.NOT_FOUND,

@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react';
 import { Card } from 'react-bootstrap';
 import { Variant } from 'react-bootstrap/esm/types';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
+import ErrorIcon from '@material-ui/icons/Error';
 
 export interface ConfirmationProps {
   variant: Variant,
@@ -11,10 +12,11 @@ export interface ConfirmationProps {
 
 export const Confirmation = ({ variant, title, children }: ConfirmationProps) => {
   return (
-    <Card>
+    <Card className="mb-3">
       <Card.Body>
         <Card.Title className="d-flex align-items-center">
-          <CheckCircleOutlineIcon className="mr-1 text-success" />
+          {variant === 'success' && <CheckCircleOutlineIcon className="mr-1 text-success" /> }
+          {variant === 'danger' && <ErrorIcon className="mr-1 text-danger" /> }
           {title}
         </Card.Title>
         {children}

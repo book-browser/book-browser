@@ -20,6 +20,7 @@ import com.tabroadn.bookbrowser.entity.Creator;
 import com.tabroadn.bookbrowser.entity.Person;
 import com.tabroadn.bookbrowser.entity.Release;
 import com.tabroadn.bookbrowser.exception.ImageUploadFailureException;
+import com.tabroadn.bookbrowser.exception.ResourceNotFoundException;
 import com.tabroadn.bookbrowser.repository.BookRepository;
 import com.tabroadn.bookbrowser.repository.CreatorRepository;
 
@@ -31,14 +32,18 @@ public class BookService {
 	@Autowired
 	private CreatorRepository creatorRepository;
 
-	public BookDto findById(Long id) {
-		return convertBookToBookDto(repository.findById(id).get());
+	public BookDto getById(Long id) {
+		return convertBookToBookDto(
+				repository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException(String.format("book with id %s not found", id))));
 	}	
 	
 	public byte[] findBookThumbnail(Long id) {
-		return repository.findById(id).get().getThumbnail();
+		return repository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException(String.format("book with id %s not found", id)))
+				.getThumbnail();
 	}
-	
+
 	public List<BookSummaryDto> search(String query, int limit) {
 		String[] terms = query.split(" ");
 		

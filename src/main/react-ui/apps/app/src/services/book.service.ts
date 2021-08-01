@@ -18,3 +18,8 @@ export const createBook = async (bookSubmission: BookSubmission) => {
 
   return await handleResponse<Book>(response);
 }
+
+export const getById = async (id: number) => {
+  const response = await fetch(`/api/book/${id}`);
+  return await handleResponse<Book>(response);
+}
