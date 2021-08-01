@@ -12,22 +12,19 @@ import org.springframework.web.servlet.resource.PathResourceResolver;
 
 @EnableWebMvc
 @Configuration
-public class WebConfiguration implements WebMvcConfigurer {
+public class WebConfiguration implements WebMvcConfigurer {	
 	@Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/**/*", "*")
-                .addResourceLocations("classpath:/book-browser/")
+                .addResourceLocations("classpath:/app/")
                 .resourceChain(true)
                 .addResolver(new PathResourceResolver() {
                     @Override
                     protected Resource getResource(String resourcePath, Resource location) throws IOException {
-                        Resource requestedResource = location.createRelative(resourcePath);
+                    	Resource requestedResource = location.createRelative(resourcePath);
                         return requestedResource.exists() && requestedResource.isReadable() ? requestedResource
-                                : new ClassPathResource("/book-browser/index.html");
+                                : new ClassPathResource("/app/index.html");
                     }
                 });
-        
-    
-
     }
 }

@@ -40,36 +40,35 @@ test {
 	useJUnitPlatform()
 }
 
-def webappDir = "$projectDir/src/main/ui"
+def webappDir = "$projectDir/src/main/react-ui"
 
 sourceSets {
 	main {
 		resources {
-			srcDirs = ["$webappDir/dist", "$projectDir/src/main/resources"]
+			srcDirs = ["$webappDir/dist/apps", "$projectDir/src/main/resources"]
 		}
 	}
 }
  
-// https://blog.marcnuri.com/angular-spring-boot-integration-gradle/ 
-task buildAngular(type:Exec) {
+task buildReact(type:Exec) {
 	description = "Assemble webapp resources that are served by the application"
-	dependsOn "installAngular"
+	dependsOn "installReact"
 	workingDir "$webappDir"
-	inputs.file "$webappDir/angular.json"
-	inputs.dir "$webappDir/src"
-	outputs.dir "$webappDir/dist"
+	inputs.file "$webappDir/workspace.json"
+	inputs.dir "$webappDir/apps"
+	outputs.dir "$webappDir/dist/apps/app"
 
 	// Add task to the standard build group
 	group = BasePlugin.BUILD_GROUP
 	// ng doesn't exist as a file in windows -> ng.cmd
 	if (System.getProperty("os.name").toUpperCase().contains("WINDOWS")){
-		commandLine "ng.cmd", "build"
+		commandLine "npm.cmd", "run", "build"
 	} else {
-		commandLine "ng", "build"
+		commandLine "npm", "run", "build"
 	}
 }
  
-task installAngular(type:Exec) {
+task installReact(type:Exec) {
 	description = "Assemble dependencies required to build the webapp"
 	workingDir "$webappDir"
 	inputs.file "$webappDir/package.json"

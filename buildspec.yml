@@ -1,15 +1,11 @@
 
 version: 0.2
 phases:
-  install:
-    commands:
-      - echo Installing source NPM dependencies...
-      - npm install -g @angular/cli
   build:
     commands:
       - echo "Entered build phase"
       - ls
-      - gradle bootJar
+      - gradle buildReact bootJar
       - ls
       - ls build
       - ls build/libs
