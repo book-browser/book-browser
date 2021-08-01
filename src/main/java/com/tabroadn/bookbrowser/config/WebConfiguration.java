@@ -26,5 +26,8 @@ public class WebConfiguration implements WebMvcConfigurer {
                                 : new ClassPathResource("/book-browser/index.html");
                     }
                 });
+        
+    
+
     }
 }

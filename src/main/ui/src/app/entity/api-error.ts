@@ -1,9 +1,9 @@
 export class ApiError {
-  timestamp: Date
+  correlationId: string
+  timestamp: number
   status: number
-  httpError: string
-  code: number
-  apiError: string
   message: string
+  httpError: string
+  errors: string[]
   path: string
 }

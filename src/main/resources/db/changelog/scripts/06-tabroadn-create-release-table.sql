@@ -1,5 +1,5 @@
 CREATE TABLE book_release (
-    id INT NOT NULL,
+    id INT AUTO_INCREMENT,
     book_id INT NOT NULL,
     description VARCHAR(250),
     release_type VARCHAR(10) NOT NULL,

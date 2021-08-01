@@ -2,6 +2,7 @@ plugins {
 	id 'org.springframework.boot' version '2.2.2.RELEASE'
 	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
 	id 'java'
+	id 'eclipse'
 }
 
 group = 'com.tabroadn'
@@ -25,10 +26,10 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.liquibase:liquibase-core'
-	compileOnly 'org.projectlombok:lombok'
+	compileOnly 'org.projectlombok:lombok:1.18.20'
 	runtimeOnly 'com.h2database:h2'
 	runtimeOnly "mysql:mysql-connector-java"
-	annotationProcessor 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok:1.18.20'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
@@ -81,5 +82,3 @@ task installAngular(type:Exec) {
 		commandLine "npm", "install"
 	}
 }
-
-processResources.dependsOn tasks.buildAngular

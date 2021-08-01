@@ -22,8 +22,8 @@ import com.tabroadn.bookbrowser.dto.UserSummaryDto;
 import com.tabroadn.bookbrowser.entity.User;
 import com.tabroadn.bookbrowser.entity.VerificationToken;
 import com.tabroadn.bookbrowser.exception.IncorrectPasswordException;
+import com.tabroadn.bookbrowser.exception.ResourceNotFoundException;
 import com.tabroadn.bookbrowser.exception.UserAlreadyExistException;
-import com.tabroadn.bookbrowser.exception.UserNotFoundException;
 import com.tabroadn.bookbrowser.exception.VerificationTokenExpiredException;
 import com.tabroadn.bookbrowser.exception.VerificationTokenNotFoundException;
 import com.tabroadn.bookbrowser.repository.UserRepository;
@@ -173,8 +173,7 @@ public class UserService {
 	public UserDto findByUserByUsername(String username) {
 		User user = userRepository.findByUsername(username);
 		if (user == null) {
-			throw new UserNotFoundException(
-					ErrorCodeEnum.USERNAME_NOT_FOUND,
+			throw new ResourceNotFoundException(
 					String.format("User with username not found: %s", username));
 		}
 		return convertUserToUserDto(user);
@@ -183,8 +182,7 @@ public class UserService {
 	public void verifyUser(String username, String password) {
 		User user = userRepository.findByUsername(username);
 		if (user == null) {
-			throw new UserNotFoundException(
-					ErrorCodeEnum.USERNAME_NOT_FOUND,
+			throw new ResourceNotFoundException(
 					String.format("User with username not found: %s", username));
 		}
 		if (!passwordEncoder.matches(password, user.getPassword())) {

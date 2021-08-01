@@ -20,6 +20,7 @@ import com.tabroadn.bookbrowser.entity.Creator;
 import com.tabroadn.bookbrowser.entity.Person;
 import com.tabroadn.bookbrowser.entity.Release;
 import com.tabroadn.bookbrowser.exception.ImageUploadFailureException;
+import com.tabroadn.bookbrowser.exception.ResourceNotFoundException;
 import com.tabroadn.bookbrowser.repository.BookRepository;
 import com.tabroadn.bookbrowser.repository.CreatorRepository;
 
@@ -31,14 +32,18 @@ public class BookService {
 	@Autowired
 	private CreatorRepository creatorRepository;
 
-	public BookDto findById(Long id) {
-		return convertBookToBookDto(repository.findById(id).get());
+	public BookDto getById(Long id) {
+		return convertBookToBookDto(
+				repository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException(String.format("book with id %s not found", id))));
 	}	
 	
 	public byte[] findBookThumbnail(Long id) {
-		return repository.findById(id).get().getThumbnail();
+		return repository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException(String.format("book with id %s not found", id)))
+				.getThumbnail();
 	}
-	
+
 	public List<BookSummaryDto> search(String query, int limit) {
 		String[] terms = query.split(" ");
 		
@@ -54,9 +59,10 @@ public class BookService {
 					.collect(Collectors.toList());
 	}
 
-	public void save(BookForm bookForm) {
+	public BookDto save(BookForm bookForm) {
 		Book book = convertBookFormToBook(bookForm);
-		repository.save(book);
+		Book newBook = repository.save(book);
+		return convertBookToBookDto(newBook);
 	}
 	
 	private static BookDto convertBookToBookDto(Book book) {
@@ -95,13 +101,25 @@ public class BookService {
 		book.setTitle(bookForm.getTitle());
 		book.setDescription(bookForm.getDescription());
 		book.setCreators(bookForm.getCreators().stream()
-				.map((creator) -> creator.getId() == null ? convertPersonCreatorDtoToCreator(creator) : creatorRepository.findByPersonId(creator.getId()))
+				.map((creator) -> {
+					if (creator.getId() == null) {
+						Creator newCreator = convertPersonCreatorDtoToCreator(creator);
+						newCreator.setBook(book);
+						return newCreator;
+					} else {
+						return creatorRepository.findByPersonId(creator.getId());
+					}
+				})
 				.collect(Collectors.toList()));
+				
 		try {
-			book.setThumbnail(bookForm.getThumbnail().getBytes());
+			if (bookForm.getThumbnail() != null) {
+				book.setThumbnail(bookForm.getThumbnail().getBytes());
+			}
 		} catch (IOException e) {
 			throw new ImageUploadFailureException(bookForm.getThumbnail(), e);
 		}
+		
 		return book;
 	}
 	
@@ -112,6 +130,7 @@ public class BookService {
 		Creator creator = new Creator();
 		creator.setPerson(person);
 		creator.setRole(personCreatorDto.getRole());
+		
 		return creator;
 	}
 	

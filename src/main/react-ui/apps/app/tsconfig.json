@@ -1,6 +1,7 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
+    "baseUrl": "./src",
     "jsx": "react",
     "allowJs": true,
     "esModuleInterop": true,
@@ -14,6 +15,12 @@
     },
     {
       "path": "./tsconfig.spec.json"
+    },
+    {
+      "path": "./.storybook/tsconfig.json"
+    },
+    {
+      "path": "./.storybook/tsconfig.json"
     }
   ]
 }
