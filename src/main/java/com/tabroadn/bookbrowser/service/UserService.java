@@ -9,10 +9,14 @@ import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -30,7 +34,7 @@ import com.tabroadn.bookbrowser.repository.UserRepository;
 import com.tabroadn.bookbrowser.repository.VerificationTokenRepository;
 
 @Component
-public class UserService {
+public class UserService implements UserDetailsService {
 	@Autowired
 	private UserRepository userRepository;
 	
@@ -52,21 +56,20 @@ public class UserService {
 		user.setRoles(Arrays.asList("ROLE_USER"));
 		user.setEnabled(true);
 		
-		if (emailExists(user.getEmail())) {
+		if (userRepository.existsUserByEmail(user.getEmail())) {
 			throw new UserAlreadyExistException(String.format(
-		              "There is an account with that email adress: %s", 
+		              "There is an account with that email address: %s", 
 		              user.getEmail()));
-		} else if (userExists(user.getUsername())) {
+		} else if (userRepository.existsUserByUsername(user.getUsername())) {
 			throw new UserAlreadyExistException(String.format(
 		              "There is an account with that username: %s", 
 		              user.getUsername()));
 		}
 		
-		
 		User newUser = userRepository.save(user);
 		
-		VerificationToken verificationToken = createVerificationToken(newUser);
-		sendVerificationTokenEmail(verificationToken);
+//		VerificationToken verificationToken = createVerificationToken(newUser);
+//		sendVerificationTokenEmail(verificationToken);
 	}
 	
     @Transactional
@@ -141,18 +144,20 @@ public class UserService {
         mailSender.send(email);
 	}
 	
-	private boolean emailExists(String email) {
-        return userRepository.findByEmail(email) != null;
-    }
+	public boolean existsUserByUsername(String username) {
+		return userRepository.existsUserByUsername(username);
+	}
 	
-	private boolean userExists(String username) {
-		return userRepository.findByUsername(username) != null;
+	public boolean existsUserByEmail(String email) {
+		return userRepository.existsUserByEmail(email);
 	}
 	
 	private User convertUserDtoToUser(UserDto userDto) {
 		User user = new User();
 		user.setUsername(userDto.getUsername());
-		user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+		if (!StringUtils.isBlank(userDto.getPassword())) {
+			user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+		}
 		user.setEmail(userDto.getEmail());
 		return user;
 	}
@@ -171,24 +176,30 @@ public class UserService {
 	}
 
 	public UserDto findByUserByUsername(String username) {
-		User user = userRepository.findByUsername(username);
-		if (user == null) {
-			throw new ResourceNotFoundException(
-					String.format("User with username not found: %s", username));
-		}
+		User user = getUserByUsername(username);
 		return convertUserToUserDto(user);
 	}
 	
-	public void verifyUser(String username, String password) {
-		User user = userRepository.findByUsername(username);
-		if (user == null) {
-			throw new ResourceNotFoundException(
-					String.format("User with username not found: %s", username));
-		}
+	public UserDto verifyUser(String username, String password) {
+		User user = getUserByUsername(username);
 		if (!passwordEncoder.matches(password, user.getPassword())) {
 			throw new IncorrectPasswordException(
 					ErrorCodeEnum.INCORRECT_PASSWORD,
 					String.format("Supplied password does not match actual password for user with username: %s", username));
 		}
+		return convertUserToUserDto(user);
+	}
+	
+	private User getUserByUsername(String username) {
+		return userRepository.findByUsername(username)
+				.orElseThrow(() -> new ResourceNotFoundException(
+						String.format("User with username not found: %s", username)));
+	}
+
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		return userRepository.findByUsername(username)
+				.orElseThrow(() -> new UsernameNotFoundException(
+						String.format("User with username not found: %s", username)));
 	}
 }

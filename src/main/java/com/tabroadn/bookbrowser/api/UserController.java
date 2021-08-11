@@ -4,12 +4,17 @@ import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +31,9 @@ import com.tabroadn.bookbrowser.service.UserService;
 public class UserController {
 	@Autowired
     private AuthenticationManager authenticationManager;
+	
+	@Autowired
+	private PersistentTokenBasedRememberMeServices persistentTokenBasedRememberMeServices;
 	
 	@Autowired
 	private UserService userService;
@@ -66,16 +74,33 @@ public class UserController {
 	}
 
 	@PostMapping("/login")
-	public UserDto login(@RequestBody LoginForm loginForm)
+	public UserDto login(HttpServletRequest request, HttpServletResponse response, @RequestBody LoginForm loginForm)
 	{
-		userService.verifyUser(loginForm.getUsername(), loginForm.getPassword());
-		
-		Authentication request = new UsernamePasswordAuthenticationToken(loginForm.getUsername(), loginForm.getPassword());
+		try {
+			UserDto userDto = userService.verifyUser(loginForm.getUsername(), loginForm.getPassword());
+			
+			Authentication authenticationRequest = new UsernamePasswordAuthenticationToken(loginForm.getUsername(), loginForm.getPassword());
 
-        Authentication result = authenticationManager.authenticate(request);
-        
-        SecurityContextHolder.getContext().setAuthentication(result);
-        
-        return userService.findByUserByUsername(loginForm.getUsername());
+	        Authentication result = authenticationManager.authenticate(authenticationRequest);
+	        
+	        SecurityContextHolder.getContext().setAuthentication(result);
+	        	        
+	        persistentTokenBasedRememberMeServices.loginSuccess(request, response, result);
+	        
+	        return userDto;
+		} catch (Exception e) {
+			persistentTokenBasedRememberMeServices.loginFail(request, response);
+			throw e;
+		}
+	}
+	
+	@GetMapping("/user/username/{username}/exists")
+	public boolean existsUserByUsername(@PathVariable("username") String username) {
+		return userService.existsUserByUsername(username);
+	}
+
+	@GetMapping("/user/email/{email}/exists")
+	public boolean existsUserByEmail(@PathVariable("email") String email) {
+		return userService.existsUserByEmail(email);
 	}
 }

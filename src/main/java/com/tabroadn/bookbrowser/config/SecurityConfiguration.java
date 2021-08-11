@@ -4,19 +4,38 @@ import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.RememberMeAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
 @Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private DataSource dataSource;
+	
+	@Autowired
+    private PersistentTokenRepository persistenceTokenRepository;
+
+	@Autowired
+    private UserDetailsService userDetailsService;
+    
+    @Autowired
+    private PersistentTokenBasedRememberMeServices persistentTokenBasedRememberMeServices;
+   
+    @Value("${authentication.rememberMeKey:hello}")
+    public String rememberMeKey;
 
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
@@ -29,10 +48,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		
 		httpSecurity.logout()
 					.logoutUrl("/api/logout")
+					.deleteCookies("JSESSIONID")
 					.permitAll()
 					.logoutSuccessHandler((httpServletRequest, httpServletResponse, authentication) -> {
 					    httpServletResponse.setStatus(HttpServletResponse.SC_OK);
+					    persistentTokenBasedRememberMeServices.logout(httpServletRequest, httpServletResponse, authentication);
 					});
+		
+		httpSecurity.rememberMe()
+					.rememberMeServices(persistentTokenBasedRememberMeServices);
 			
 		httpSecurity.headers()
 					.frameOptions()
@@ -41,16 +65,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	public void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.jdbcAuthentication()
-			.dataSource(dataSource)
-			.usersByUsernameQuery(
-					"select username,password,enabled "
-				  + "from user "
-				  + "where username = ?")
-			.authoritiesByUsernameQuery(
-					"select username,role "
-		          + "from authority "
-		          + "where username = ?");		
+		auth.userDetailsService(userDetailsService)
+			.and()
+			.authenticationProvider(rememberMeAuthenticationProvider());		
 	}
 	
 	@Bean
@@ -63,4 +80,24 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	public AuthenticationManager authenticationManagerBean() throws Exception {
 		return super.authenticationManagerBean();
 	 }
+
+	@Bean
+    public AuthenticationProvider rememberMeAuthenticationProvider() {
+        return new RememberMeAuthenticationProvider("asd");
+    }
+	
+	@Bean
+    public PersistentTokenBasedRememberMeServices getPersistentTokenBasedRememberMeServices() {
+		PersistentTokenBasedRememberMeServices persistenceTokenBasedservice = new PersistentTokenBasedRememberMeServices("asd", userDetailsService, persistenceTokenRepository);
+        persistenceTokenBasedservice.setCookieName("remember-me");
+        persistenceTokenBasedservice.setParameter("rememberMe");
+        return persistenceTokenBasedservice;
+    }
+	
+	@Bean
+	public PersistentTokenRepository persistentTokenRepository() {
+		JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
+		jdbcTokenRepository.setDataSource(dataSource);
+		return jdbcTokenRepository;
+	}
 }

@@ -15,6 +15,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
@@ -171,6 +172,18 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
     }
+
+    @Override
+    protected ResponseEntity<Object> handleExceptionInternal(
+			Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
+		ApiError apiError = new ApiError(
+    			Instant.now(),
+    			status,
+    			ex.getMessage(),
+    			((ServletWebRequest)request).getRequest().getRequestURI().toString());
+		
+        return ResponseEntity.status(status).headers(headers).body(apiError);
+	}
 
 	@ExceptionHandler(Exception.class)
 	protected ResponseEntity<ApiError> handleDefaultException(Exception exception, HttpServletRequest request) {

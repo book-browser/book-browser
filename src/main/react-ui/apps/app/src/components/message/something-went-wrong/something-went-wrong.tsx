@@ -1,4 +1,4 @@
-import { Confirmation } from 'components/confirmation/confirmation';
+import Message from 'components/message/message';
 import React from 'react';
 import { ApiError } from 'types/api-error';
 
@@ -7,12 +7,15 @@ interface SomethingWentWrongProps {
 }
 
 export const SomethingWentWrong = ({ error }: SomethingWentWrongProps) => {
-  const apiError = error instanceof ApiError && error as ApiError;
+  const apiError = error.name === 'ApiError' && error as ApiError;
 
   return (
-    <Confirmation variant="danger" title="Oops. Something went wrong.">
-      <p>Something went wrong. Please try again later.</p>
+    <Message
+      variant="danger"
+      title="Oops. Something went wrong."
+      lead="Something went wrong. Please try again later."
+    >
       {apiError && <small>{`CorrelationId: ${apiError.correlationId}`}</small>}
-    </Confirmation>
+    </Message>
   )
 };

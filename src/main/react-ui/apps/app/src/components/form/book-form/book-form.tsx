@@ -7,19 +7,17 @@ import React, { ChangeEvent, ReactNode, useEffect, useState } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import Feedback from 'react-bootstrap/esm/Feedback';
 import CreatableSelect from 'react-select/creatable';
-import { Book } from 'types/book';
 import { BookSubmission } from 'types/book-submission';
 import { Person } from 'types/person';
 import { PersonCreator } from 'types/person-creator';
 import * as yup from 'yup';
-import { RequiredFieldLegend } from '../../components/form/required-field-legend';
-import { RequiredSymbol } from '../../components/form/required-symbol';
+import { RequiredFieldLegend } from '../required-field-legend';
+import { RequiredSymbol } from '../required-symbol';
 
 const schema = yup.object().shape({
   title: yup.string().required().max(50),
   description: yup.string().required().max(1000),
   thumbnail: yup.mixed().required().test("fileSize", "The file is too large", (file?: File) => {
-    console.log(file && file.size, 1024 * 1024)
     return !(file && file.size > 1024 * 1024);
   }),
   creators: yup.array(yup.object().shape({
@@ -45,7 +43,7 @@ interface BookFormProps {
 export const BookForm = (props: BookFormProps) => {
   const initialValue = props.initialValue || defaultBook;
 
-  const [thumbnailUrl, setThumbnailUrl] = useState(undefined);
+  const [thumbnailUrl, setThumbnailUrl] = useState(props.initialValue ? `/api/book/${props.initialValue.id}/thumbnail` : undefined);
   const [people, setPeople] = useState<Person[]>([]);
 
   const { data: fetchedPeople, execute } = useSearchForPerson();
@@ -79,6 +77,7 @@ export const BookForm = (props: BookFormProps) => {
       isValid,
       errors}) => (
         <Form
+          className="m-3"
           noValidate
           onSubmit={handleSubmit}
           onChange={() => {
@@ -136,7 +135,7 @@ export const BookForm = (props: BookFormProps) => {
                     onBlur={handleBlur}
                     isInvalid={touched.thumbnail && !!errors.thumbnail}
                   />
-                  <Form.File.Label>{values?.thumbnail?.name || 'Browse'}</Form.File.Label>
+                  <Form.File.Label>{values?.thumbnail?.name || (props.initialValue ? `${window.location.origin}/book/${props.initialValue.id}/thumbnail` : 'Browse')}</Form.File.Label>
                   <Form.Text muted>
                     Max file size 1MB
                   </Form.Text>
@@ -144,17 +143,6 @@ export const BookForm = (props: BookFormProps) => {
                     {errors.thumbnail}
                   </Feedback>
                 </Form.File>
-              </Col>
-              <Col xs="auto">
-                <Button
-                  disabled={!values.thumbnail}
-                  variant="danger"
-                  onClick={() => {
-                    setFieldValue('thumbnail', null);
-                    setThumbnailUrl(null);
-                  }}>
-                    Remove
-                  </Button>
               </Col>
             </Row>
             
@@ -176,6 +164,7 @@ export const BookForm = (props: BookFormProps) => {
                 <Row key={index} className="mb-2">
                   <Col>
                     <CreatableSelect
+                      defaultValue={creator.fullName && { label: creator.fullName, value: creator.id }}
                       inputId={`creator${index}-name-select`}
                       name={`creators[${index}].fullName`}
                       options={selectOptions}

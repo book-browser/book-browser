@@ -1,7 +1,7 @@
 import { Container } from '@material-ui/core';
 import { BookDetails } from 'components/book-details/book-details';
-import { NotFound } from 'components/not-found/not-found';
-import { SomethingWentWrong } from 'components/something-went-wrong/something-went-wrong';
+import { NotFound } from 'components/message/not-found/not-found';
+import { SomethingWentWrong } from 'components/message/something-went-wrong/something-went-wrong';
 import { useGetBook } from 'hooks/book.hook';
 import React from 'react';
 import { useEffect } from 'react';
@@ -11,7 +11,7 @@ import { ApiError } from 'types/api-error';
 export const BookPage = () => {
   const { data: book, execute, loading, error } = useGetBook();
   const { id } = useParams();
-  const apiError = error instanceof ApiError && error as ApiError;
+  const apiError = error?.name === 'ApiError' && error as ApiError;
   const notFound = apiError?.status === 404 ;
 
   useEffect(() => {

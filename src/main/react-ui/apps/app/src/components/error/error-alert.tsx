@@ -5,19 +5,20 @@ import WarningIcon from '@material-ui/icons/Warning';
 import './error-alert.scss';
 
 export interface ErrorAlertProps {
-  error: Error
+  error: Error,
+  className?: string
 }
 
 export const ErrorAlert = (props: ErrorAlertProps) => {
   let errors = [];
 
-  if (props.error instanceof ApiError) {
+  if (props.error.name === 'ApiError') {
     const apiError = props.error as ApiError;
     errors = apiError.errors;
   }
 
   return (
-    <Alert variant="danger" className="error-alert">
+    <Alert variant="danger" className={`error-alert ${props.className}`}>
       <div className="error-alert-heading">
         <WarningIcon className="error-alert-icon" />
         <div className="error-alert-message">{props.error.message}</div>

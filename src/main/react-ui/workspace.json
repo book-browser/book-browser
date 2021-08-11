@@ -81,7 +81,8 @@
           "options": {
             "uiFramework": "@storybook/react",
             "port": 4400,
-            "config": { "configFolder": "apps/app/.storybook" }
+            "config": { "configFolder": "apps/app/.storybook" },
+            "staticDir": ["public"]
           },
           "configurations": { "ci": { "quiet": true } }
         },
@@ -91,7 +92,8 @@
           "options": {
             "uiFramework": "@storybook/react",
             "outputPath": "dist/storybook/app",
-            "config": { "configFolder": "apps/app/.storybook" }
+            "config": { "configFolder": "apps/app/.storybook" },
+            "staticDir": ["public"]
           },
           "configurations": { "ci": { "quiet": true } }
         }

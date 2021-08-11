@@ -1,51 +1,26 @@
-import React from 'react';
 import { CircularProgress, Container } from '@material-ui/core';
-import { Button, Card, Nav } from 'react-bootstrap';
-import { BookForm } from 'components/form/book-form';
-import { Book } from 'types/book';
-import { useCreateBook } from 'hooks/book.hook';
-import { BookSubmission } from 'types/book-submission';
-import { Confirmation } from 'components/confirmation/confirmation';
-import { Link } from 'react-router-dom';
 import { ErrorAlert } from 'components/error/error-alert';
-
-const CreateBookConfirmation = ({ book }: { book: Book }) => {
-  return (
-    <Confirmation
-      variant="success"
-      title="Success"
-    >
-      <p>Your submission has been successful!</p>
-
-      <Nav className="justify-content-between">
-        <Nav.Item className="ml-n3">
-          <Nav.Link as={Link} to="/home">Return Home</Nav.Link>
-        </Nav.Item>
-        <Nav.Item className="mr-n3">
-          <Nav.Link as={Link} to={`/book/${book.id}`}>View Submission</Nav.Link>
-        </Nav.Item>
-      </Nav>
-
-    </Confirmation>
-  )
-}
+import { BookForm } from 'components/form/book-form/book-form';
+import BookSubmissionSuccess from 'components/message/book-submission-success/book-submission-success';
+import { useCreateBook } from 'hooks/book.hook';
+import React from 'react';
+import { Button, Card } from 'react-bootstrap';
+import { BookSubmission } from 'types/book-submission';
 
 const AddBookForm = ({ loading, onSubmit, error }: { loading: boolean, onSubmit: (book: BookSubmission) => void, error: Error }) => {
   return (
     <Card>
-      <Card.Body>
-        <Card.Title>Add a New Book</Card.Title>
-        <BookForm
-          onSubmit={onSubmit}
-          footer={
-            <div>
-              {error && <ErrorAlert error={error} />}
-              {!loading && <Button variant="primary" type="submit">Submit</Button>}
-              {loading && <Button variant="primary" type="submit" disabled>Submiting <CircularProgress color="secondary" size={"15px"} /></Button>}
-            </div>
-          }
-        />
-      </Card.Body>
+      <Card.Title className="mt-3 ml-3">Add a New Book</Card.Title>
+      <BookForm
+        onSubmit={onSubmit}
+        footer={
+          <div>
+            {error && <ErrorAlert error={error} />}
+            {!loading && <Button variant="primary" type="submit">Submit</Button>}
+            {loading && <Button variant="primary" type="submit" disabled>Submiting <CircularProgress color="secondary" size={"15px"} /></Button>}
+          </div>
+        }
+      />
     </Card>
   )
 }
@@ -58,9 +33,9 @@ export const CreateBookPage = () => {
   }
 
   return (
-    <Container maxWidth="sm" className="mt-3">
+    <Container maxWidth="md" className="mt-3">
       {!book && <AddBookForm loading={loading} onSubmit={onSubmit} error={error} /> }
-      {book && <CreateBookConfirmation book={book} /> }
+      {book && <Card><BookSubmissionSuccess book={book} /></Card>}
     </Container>
   )
 }

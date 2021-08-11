@@ -22,8 +22,12 @@ public class WebConfiguration implements WebMvcConfigurer {
                     @Override
                     protected Resource getResource(String resourcePath, Resource location) throws IOException {
                     	Resource requestedResource = location.createRelative(resourcePath);
-                        return requestedResource.exists() && requestedResource.isReadable() ? requestedResource
-                                : new ClassPathResource("/app/index.html");
+                    	if (requestedResource.exists() && requestedResource.isReadable()) {
+                    		return requestedResource;
+                    	} else if(resourcePath.startsWith("api")) {
+                    		return null;
+                    	}
+                        return  new ClassPathResource("/app/index.html");
                     }
                 });
     }
