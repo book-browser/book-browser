@@ -15,7 +15,7 @@ export const SomethingWentWrong = ({ error }: SomethingWentWrongProps) => {
       title="Oops. Something went wrong."
       lead="Something went wrong. Please try again later."
     >
-      {apiError && <small>{`CorrelationId: ${apiError.correlationId}`}</small>}
+      {apiError?.correlationId && <small>{`CorrelationId: ${apiError.correlationId}`}</small>}
     </Message>
   )
 };

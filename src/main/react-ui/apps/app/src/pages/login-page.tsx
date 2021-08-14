@@ -1,4 +1,4 @@
-import { Container } from '@material-ui/core';
+import { CircularProgress, Container } from '@material-ui/core';
 import { ErrorAlert } from 'components/error/error-alert';
 import LoginForm from 'components/form/login-form/login-form';
 import { useLogin, useUser } from 'hooks/user.hook';
@@ -10,7 +10,7 @@ import { Link, useHistory } from 'react-router-dom';
 
 const LoginPage = () => {
   const { user } = useUser();
-  const { execute: login, error } = useLogin();
+  const { execute: login, error, loading } = useLogin();
   const [valid, setValid] = useState(false);
 
   const history = useHistory();
@@ -44,8 +44,10 @@ const LoginPage = () => {
             footer={
               <div>
                 {error && <ErrorAlert error={error} />}
-                <Button variant="primary" type="submit" disabled={!valid}>Login</Button>
-                <p className="text-center"><Link to="/register">Forgot Password?</Link></p>
+                {!loading && <Button variant="primary" type="submit" disabled={!valid}>Login</Button>}
+                {loading && <Button variant="primary" type="submit" disabled>Loading <CircularProgress color="secondary" size={"15px"} /></Button>}
+
+                <p className="text-center"><Link to="/username/recover">Forgot Username?</Link></p>
                 <p className="text-center">Don't have an account? <Link to="/register">Register</Link></p>
               </div>
             }

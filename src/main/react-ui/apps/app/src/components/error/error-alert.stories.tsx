@@ -26,6 +26,7 @@ export const SomethingWentWrongError = () => {
 
 export const MultipleErrors = () => {
   const error = {
+    name: 'ApiError',
     message: "Validation failed for payload",
     errors: [
       "Please fill in your first name",

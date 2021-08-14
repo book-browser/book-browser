@@ -1,3 +1,4 @@
+import { json } from "msw/lib/types/context";
 import { LoginRequest } from "types/login-request";
 import { RegisterRequest } from "types/register-request";
 import { User } from "types/user";
@@ -29,6 +30,40 @@ export const register = async (registerRequest: RegisterRequest) => {
   });
   return await handleEmptyResponse(response);
 }
+
+export const confirmRegistration = async (token: string) => {
+  const response = await fetch('/api/user/confirm', {
+    method: 'POST',
+    body: JSON.stringify({ token }),
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  });
+  return await handleEmptyResponse(response);
+}
+
+export const resendVerificationEmail = async (email: string) => {
+  const response = await fetch('/api/verify/email', {
+    method: 'POST',
+    body: JSON.stringify({ email }),
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  });
+  return await handleEmptyResponse(response);
+}
+
+export const sendUsernameEmail = async (email: string) => {
+  const response = await fetch('/api/username/email', {
+    method: 'POST',
+    body: JSON.stringify({ email }),
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  });
+  return await handleEmptyResponse(response);
+}
+
 
 export const logout = async () => {
   const response = await fetch('/api/logout', {

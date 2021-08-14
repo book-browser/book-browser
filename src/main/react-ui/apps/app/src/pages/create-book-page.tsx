@@ -17,7 +17,7 @@ const AddBookForm = ({ loading, onSubmit, error }: { loading: boolean, onSubmit:
           <div>
             {error && <ErrorAlert error={error} />}
             {!loading && <Button variant="primary" type="submit">Submit</Button>}
-            {loading && <Button variant="primary" type="submit" disabled>Submiting <CircularProgress color="secondary" size={"15px"} /></Button>}
+            {loading && <Button variant="primary" type="submit" disabled>Submitting <CircularProgress color="secondary" size={"15px"} /></Button>}
           </div>
         }
       />

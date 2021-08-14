@@ -9,8 +9,8 @@ const RegisterSuccess = ({ footer }: {
   return (
     <Message
       variant="success"
-      title="Thank for registering"
-      lead="A verification email has been sent to your email address."
+      title="Thank you for registering"
+      lead="An email with a verification link to activate your account has been sent to your email address. The link will expire in 24 hours."
     >
       {footer}
     </Message>

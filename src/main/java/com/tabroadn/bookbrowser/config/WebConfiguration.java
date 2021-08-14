@@ -12,23 +12,22 @@ import org.springframework.web.servlet.resource.PathResourceResolver;
 
 @EnableWebMvc
 @Configuration
-public class WebConfiguration implements WebMvcConfigurer {	
+public class WebConfiguration implements WebMvcConfigurer {
 	@Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/**/*", "*")
-                .addResourceLocations("classpath:/app/")
-                .resourceChain(true)
-                .addResolver(new PathResourceResolver() {
-                    @Override
-                    protected Resource getResource(String resourcePath, Resource location) throws IOException {
-                    	Resource requestedResource = location.createRelative(resourcePath);
-                    	if (requestedResource.exists() && requestedResource.isReadable()) {
-                    		return requestedResource;
-                    	} else if(resourcePath.startsWith("api")) {
-                    		return null;
-                    	}
-                        return  new ClassPathResource("/app/index.html");
-                    }
-                });
-    }
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		registry.addResourceHandler("/**/*", "*")
+				.addResourceLocations("classpath:/app/").resourceChain(true)
+				.addResolver(new PathResourceResolver() {
+					@Override
+					protected Resource getResource(String resourcePath, Resource location) throws IOException {
+						Resource requestedResource = location.createRelative(resourcePath);
+						if (requestedResource.exists() && requestedResource.isReadable()) {
+							return requestedResource;
+						} else if (resourcePath.startsWith("api")) {
+							return null;
+						}
+						return new ClassPathResource("/app/index.html");
+					}
+				});
+	}
 }

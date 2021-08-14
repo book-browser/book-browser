@@ -1,16 +1,19 @@
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getCurrentUser, login, logout, register } from "services/user.service";
+import { confirmRegistration, getCurrentUser, login, logout, resendVerificationEmail, register, sendUsernameEmail } from "services/user.service";
 import { RootState } from "slices/store";
 import { userSlice } from "slices/user.slice";
-import { LoginRequest } from "types/login-request";
 import { useEmptyPromise, usePromise } from "./promise.hook";
 
-export const useUser = () => {
-  return {
-    ...useSelector((state: RootState) => state.userReducer),
-  }
-}
+export const useUser = () => useSelector((state: RootState) => state.userReducer);
+
+export const useRegister = () => usePromise(register);
+
+export const useConfirmRegistration = () => usePromise(confirmRegistration);
+
+export const useResendVerificationEmail = () => usePromise(resendVerificationEmail);
+
+export const useSendUsernameEmail = () => usePromise(sendUsernameEmail);
 
 export const useLogin = () => {
   const dispatch = useDispatch();
@@ -26,8 +29,6 @@ export const useLogin = () => {
 
   return loginHook;
 }
-
-export const useRegister = () => usePromise(register);
 
 export const useLogout = () => {
   const dispatch = useDispatch();

@@ -24,76 +24,69 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private DataSource dataSource;
-	
-	@Autowired
-    private PersistentTokenRepository persistenceTokenRepository;
 
 	@Autowired
-    private UserDetailsService userDetailsService;
-    
-    @Autowired
-    private PersistentTokenBasedRememberMeServices persistentTokenBasedRememberMeServices;
-   
-    @Value("${authentication.rememberMeKey:hello}")
-    public String rememberMeKey;
+	private PersistentTokenRepository persistenceTokenRepository;
+
+	@Autowired
+	private UserDetailsService userDetailsService;
+
+	@Autowired
+	private PersistentTokenBasedRememberMeServices persistentTokenBasedRememberMeServices;
+
+	@Autowired
+	private AuthenticationProvider authenticationProvider;
 
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
-		httpSecurity.authorizeRequests()
-					.antMatchers("/h2-console/**", "/api/**/*")
-					.permitAll();
-		
-		httpSecurity.csrf()
-					.ignoringAntMatchers("/h2-console/**", "/api/**/*");
-		
-		httpSecurity.logout()
-					.logoutUrl("/api/logout")
-					.deleteCookies("JSESSIONID")
-					.permitAll()
-					.logoutSuccessHandler((httpServletRequest, httpServletResponse, authentication) -> {
-					    httpServletResponse.setStatus(HttpServletResponse.SC_OK);
-					    persistentTokenBasedRememberMeServices.logout(httpServletRequest, httpServletResponse, authentication);
-					});
-		
-		httpSecurity.rememberMe()
-					.rememberMeServices(persistentTokenBasedRememberMeServices);
-			
-		httpSecurity.headers()
-					.frameOptions()
-					.sameOrigin();
+		httpSecurity.authorizeRequests().antMatchers("/h2-console/**", "/api/**/*").permitAll();
+
+		httpSecurity.csrf().ignoringAntMatchers("/h2-console/**", "/api/**/*");
+
+		httpSecurity.logout().logoutUrl("/api/logout").deleteCookies("JSESSIONID").permitAll()
+				.logoutSuccessHandler((httpServletRequest, httpServletResponse, authentication) -> {
+					httpServletResponse.setStatus(HttpServletResponse.SC_OK);
+					persistentTokenBasedRememberMeServices.logout(httpServletRequest, httpServletResponse,
+							authentication);
+				});
+
+		httpSecurity.rememberMe().rememberMeServices(persistentTokenBasedRememberMeServices);
+
+		httpSecurity.headers().frameOptions().sameOrigin();
 	}
-	
+
 	@Autowired
 	public void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userDetailsService)
-			.and()
-			.authenticationProvider(rememberMeAuthenticationProvider());		
+		auth.userDetailsService(userDetailsService).and().authenticationProvider(authenticationProvider);
 	}
-	
+
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-	    return new BCryptPasswordEncoder();
+		return new BCryptPasswordEncoder();
 	}
-	
+
 	@Bean
 	@Override
 	public AuthenticationManager authenticationManagerBean() throws Exception {
 		return super.authenticationManagerBean();
-	 }
+	}
 
 	@Bean
-    public AuthenticationProvider rememberMeAuthenticationProvider() {
-        return new RememberMeAuthenticationProvider("asd");
-    }
-	
+	public AuthenticationProvider rememberMeAuthenticationProvider(
+			@Value("${authentication.rememberMeKey}") String rememberMeKey) {
+		return new RememberMeAuthenticationProvider(rememberMeKey);
+	}
+
 	@Bean
-    public PersistentTokenBasedRememberMeServices getPersistentTokenBasedRememberMeServices() {
-		PersistentTokenBasedRememberMeServices persistenceTokenBasedservice = new PersistentTokenBasedRememberMeServices("asd", userDetailsService, persistenceTokenRepository);
-        persistenceTokenBasedservice.setCookieName("remember-me");
-        persistenceTokenBasedservice.setParameter("rememberMe");
-        return persistenceTokenBasedservice;
-    }
-	
+	public PersistentTokenBasedRememberMeServices getPersistentTokenBasedRememberMeServices(
+			@Value("${authentication.rememberMeKey}") String rememberMeKey) {
+		PersistentTokenBasedRememberMeServices persistenceTokenBasedservice = new PersistentTokenBasedRememberMeServices(
+				rememberMeKey, userDetailsService, persistenceTokenRepository);
+		persistenceTokenBasedservice.setCookieName("remember-me");
+		persistenceTokenBasedservice.setParameter("rememberMe");
+		return persistenceTokenBasedservice;
+	}
+
 	@Bean
 	public PersistentTokenRepository persistentTokenRepository() {
 		JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();

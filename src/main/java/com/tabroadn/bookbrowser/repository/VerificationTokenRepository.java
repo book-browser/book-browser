@@ -16,6 +16,8 @@ import com.tabroadn.bookbrowser.entity.VerificationToken;
 public interface VerificationTokenRepository extends JpaRepository<VerificationToken, Long>{
 	public VerificationToken findByToken(String token);
 	
+	public VerificationToken findByUserEmail(String email);
+
 	@Transactional
 	@Modifying
 	@Query("delete from VerificationToken vt where vt.expirationDate >= :instant")

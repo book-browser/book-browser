@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -11,7 +12,6 @@ import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,6 +19,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.tabroadn.bookbrowser.domain.ErrorCodeEnum;
 import com.tabroadn.bookbrowser.dto.UserDto;
@@ -29,7 +30,6 @@ import com.tabroadn.bookbrowser.exception.IncorrectPasswordException;
 import com.tabroadn.bookbrowser.exception.ResourceNotFoundException;
 import com.tabroadn.bookbrowser.exception.UserAlreadyExistException;
 import com.tabroadn.bookbrowser.exception.VerificationTokenExpiredException;
-import com.tabroadn.bookbrowser.exception.VerificationTokenNotFoundException;
 import com.tabroadn.bookbrowser.repository.UserRepository;
 import com.tabroadn.bookbrowser.repository.VerificationTokenRepository;
 
@@ -46,9 +46,6 @@ public class UserService implements UserDetailsService {
  
     @Autowired
     private JavaMailSender mailSender;
-    
-    @Value("${application.url:http://localhost:4200}")
-    private String applicationUrl;
     
     @Transactional
 	public void register(UserDto userDto) {
@@ -68,8 +65,8 @@ public class UserService implements UserDetailsService {
 		
 		User newUser = userRepository.save(user);
 		
-//		VerificationToken verificationToken = createVerificationToken(newUser);
-//		sendVerificationTokenEmail(verificationToken);
+		VerificationToken verificationToken = createVerificationToken(newUser);
+		sendVerificationTokenEmail(verificationToken);
 	}
 	
     @Transactional
@@ -77,11 +74,11 @@ public class UserService implements UserDetailsService {
     	VerificationToken verificationToken = verificationTokenRepository.findByToken(token);
     	
     	if (verificationToken == null) {
-    		throw new VerificationTokenNotFoundException(String.format(
-    				"This verification token could not be found: %s", token));
+    		throw new ResourceNotFoundException(String.format(
+    				"The verification token could not be found: %s", token));
     	} else if (verificationToken.isExpired()) {
     		throw new VerificationTokenExpiredException(String.format(
-    				"This verification token is expired: %s", token));
+    				"The verification token is expired: %s", token));
     	}
     	
     	User user = verificationToken.getUser();
@@ -92,15 +89,15 @@ public class UserService implements UserDetailsService {
     	verificationTokenRepository.delete(verificationToken);
     }
     
-    public void recreateVerificationToken(String token) {
-    	VerificationToken verificationToken = verificationTokenRepository.findByToken(token);
+    public void resendVerificationEmail(String email) {
+    	VerificationToken verificationToken = verificationTokenRepository.findByUserEmail(email);
 
     	if (verificationToken == null) {
-    		throw new VerificationTokenNotFoundException(String.format(
-    				"This verification token could not be found: %s", token));
+    		throw new ResourceNotFoundException(String.format(
+    				"This verification token for the email %s could not be found", email));
     	} else if (verificationToken.isExpired()) {
     		throw new VerificationTokenExpiredException(String.format(
-    				"This verification token is expired: %s", token));
+    				"This verification token for the email %s is expired", email));
     	}
     	
     	User user = verificationToken.getUser();
@@ -110,6 +107,23 @@ public class UserService implements UserDetailsService {
     	VerificationToken newVerificationToken = createVerificationToken(user);
 		sendVerificationTokenEmail(newVerificationToken);
     }
+    
+	public void sendUsernameEmail(String email) {
+		Optional<User> optionalUser = userRepository.findByEmail(email);
+		
+		User user = optionalUser.orElseThrow(() -> new ResourceNotFoundException(
+				String.format("User with email %s could not be found", email)));
+		
+        String subject = "BookBrowser - Forgot Username";
+        String message = "A request has been made for the username of this email. Your username is \"%s\".";
+        
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        
+        mailMessage.setTo(user.getEmail());
+        mailMessage.setSubject(subject);
+        mailMessage.setText(String.format(message, user.getUsername()));
+        mailSender.send(mailMessage);
+	}
     
     public List<UserSummaryDto> findUserSummaryByUsernameAndEmail(String username, String email) {
     	return userRepository.findByUsernameAndEmail(username, email)
@@ -131,9 +145,10 @@ public class UserService implements UserDetailsService {
     }
 
 	private void sendVerificationTokenEmail(VerificationToken verificationToken) {	
-        String recipientAddress = verificationToken.getUser().getEmail();
+        String applicationUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
+		String recipientAddress = verificationToken.getUser().getEmail();
         String subject = "BookBrowser - Account Verification";
-        String confirmationUrl = String.format("/user/verify?verification-token=%s", verificationToken.getToken());
+        String confirmationUrl = String.format("/user/verify/%s", verificationToken.getToken());
         String message = "Please click the following link to activate your account:";
         
         SimpleMailMessage email = new SimpleMailMessage();
@@ -143,15 +158,7 @@ public class UserService implements UserDetailsService {
         email.setText(String.format("%s\r\n%s%s", message, applicationUrl, confirmationUrl));
         mailSender.send(email);
 	}
-	
-	public boolean existsUserByUsername(String username) {
-		return userRepository.existsUserByUsername(username);
-	}
-	
-	public boolean existsUserByEmail(String email) {
-		return userRepository.existsUserByEmail(email);
-	}
-	
+
 	private User convertUserDtoToUser(UserDto userDto) {
 		User user = new User();
 		user.setUsername(userDto.getUsername());
@@ -172,6 +179,7 @@ public class UserService implements UserDetailsService {
 		UserDto userDto = new UserDto();
 		userDto.setUsername(user.getUsername());
 		userDto.setVerified(user.isVerified());
+		userDto.setEmail(user.getEmail());
 		return userDto;
 	}
 

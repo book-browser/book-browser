@@ -27,39 +27,37 @@ import lombok.Data;
 @Data
 @Entity
 public class User implements Serializable, UserDetails {
-	
+
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@NotBlank
-	@Size(max=25)
+	@Size(max = 25)
 	@Pattern(regexp = "[a-zA-Z0-9_]+", message = "only letters, numbers, and underscores are allowed")
 	private String username;
-	
+
 	@NotBlank
 	private String password;
-	
+
 	@NotBlank
-	@Size(max=50)
+	@Size(max = 50)
 	private String email;
-	
+
 	private boolean enabled;
-	
+
 	private boolean verified;
-	
+
 	@ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "AUTHORITY", joinColumns = @JoinColumn(name = "USERNAME", referencedColumnName = "USERNAME"))
-    @Column(name = "ROLE")
+	@CollectionTable(name = "AUTHORITY", joinColumns = @JoinColumn(name = "USERNAME", referencedColumnName = "USERNAME"))
+	@Column(name = "ROLE")
 	private List<String> roles;
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return roles.stream()
-					.map(role -> new SimpleGrantedAuthority(role))
-					.collect(Collectors.toList());
+		return roles.stream().map(role -> new SimpleGrantedAuthority(role)).collect(Collectors.toList());
 	}
 
 	@Override

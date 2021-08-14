@@ -14,13 +14,14 @@ export const ErrorAlert = (props: ErrorAlertProps) => {
 
   if (props.error.name === 'ApiError') {
     const apiError = props.error as ApiError;
-    errors = apiError.errors;
+    if (apiError.errors) {
+      errors = apiError.errors;
+    }
   }
 
   return (
     <Alert variant="danger" className={`error-alert ${props.className}`}>
       <div className="error-alert-heading">
-        <WarningIcon className="error-alert-icon" />
         <div className="error-alert-message">{props.error.message}</div>
       </div>
       {errors.length > 0 && (

@@ -7,6 +7,9 @@ import { CreateBookPage } from './create-book-page';
 import Header from './header';
 import LoginPage from './login-page';
 import RegisterPage from './register-page';
+import ResendVerificationEmailPage from './resend-verification-email-page';
+import UsernameRecoveryPage from './username-recovery-page';
+import VerifyUserPage from './verify-user-page';
 
 export const Routing = () => {
   return (
@@ -21,6 +24,15 @@ export const Routing = () => {
         </Route>
         <Route exact path="/register">
           <RegisterPage />
+        </Route>
+        <Route exact path="/user/verify/:token">
+          <VerifyUserPage />
+        </Route>
+        <Route exact path="/verify-email/resend">
+          <ResendVerificationEmailPage />
+        </Route>
+        <Route exact path="/username/recover">
+          <UsernameRecoveryPage />
         </Route>
         <Route exact path="/home">
           <Redirect to="/" />

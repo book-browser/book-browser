@@ -15,7 +15,8 @@ interface RegisterFormProps {
 }
 
 const validationSchema = yup.object().shape({
-  username: yup.string().required().max(25),
+  username: yup.string().required().max(25)
+    .matches(/[a-zA-Z0-9_]+/, 'only letters, numbers, and underscores are allowed'),
   email: yup.string().required().max(50),
   password: yup.string().required().max(25),
   passwordAgain: yup.string().test('passwordMatchCheck', 'Passwords must match', function (value) {

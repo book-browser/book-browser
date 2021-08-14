@@ -1,15 +1,13 @@
+import { CircularProgress } from '@material-ui/core';
 import { ErrorAlert } from 'components/error/error-alert';
 import LoginForm from 'components/form/login-form/login-form';
-import { useLogin, useRegister, useUser } from 'hooks/user.hook';
-import React from 'react';
-import { useState } from 'react';
-import { Button, Modal } from 'react-bootstrap';
-import { LoginRequest } from 'types/login-request';
-import { Link } from 'react-router-dom'; 
-import { useEffect } from 'react';
-import { RegisterRequest } from 'types/register-request';
 import RegisterForm from 'components/form/register-form/register-form';
 import RegisterSuccess from 'components/message/register-success/register-success';
+import { useLogin, useRegister, useSendUsernameEmail, useUser } from 'hooks/user.hook';
+import React, { ChangeEvent, useEffect, useState } from 'react';
+import { Alert, Button, Form, Modal } from 'react-bootstrap';
+import { LoginRequest } from 'types/login-request';
+import { RegisterRequest } from 'types/register-request';
 
 export type HeaderModalTab = 'login' | 'register' | 'recover';
 
@@ -22,7 +20,7 @@ export interface HeaderModalProps {
 const LoginModalContent = ({ setActiveTab } : {
   setActiveTab: React.Dispatch<React.SetStateAction<HeaderModalTab>>
 }) => {
-  const { execute: login, error } = useLogin();
+  const { execute: login, error, loading } = useLogin();
   const [valid, setValid] = useState(false);
 
   const onSubmit = (data: LoginRequest) => {
@@ -45,9 +43,12 @@ const LoginModalContent = ({ setActiveTab } : {
           footer={
             <div>
               {error && <ErrorAlert error={error} />}
-              <Button variant="primary" type="submit" disabled={!valid}>Login</Button>
-              <p className="text-center"><Button variant="link" onClick={() => setActiveTab('recover')}>Forgot Password?</Button></p>
-              <p className="text-center">Don't have an account? <Button variant="link" onClick={() => setActiveTab('register')}>Register</Button></p>
+              <div className="mb-3">
+                {!loading && <Button variant="primary" className="w-100" type="submit" disabled={!valid}>Login</Button>}
+                {loading && <Button variant="primary" className="w-100" type="submit" disabled>Loading <CircularProgress color="inherit" size={"15px"} /></Button>}
+              </div>
+              <div className="text-center"><Button variant="link" onClick={() => setActiveTab('recover')}>Forgot Username?</Button></div>
+              <div className="text-center align-baseline">Don't have an account? <Button variant="link" onClick={() => setActiveTab('register')}>Register</Button></div>
             </div>
           }
         />
@@ -68,9 +69,10 @@ const RegisterSuccessStep = ({ setActiveTab } : {
   );
 }
 
-const RegisterStep = ({ valid, error, onChange, onSubmit, setActiveTab }: {
+const RegisterStep = ({ valid, error, loading, onChange, onSubmit, setActiveTab }: {
   valid: boolean
   error?: Error
+  loading: boolean
   onChange: (data: RegisterRequest, valid: boolean) => void
   onSubmit: (data: RegisterRequest) => void
   setActiveTab: React.Dispatch<React.SetStateAction<HeaderModalTab>>
@@ -82,8 +84,9 @@ const RegisterStep = ({ valid, error, onChange, onSubmit, setActiveTab }: {
       footer={
         <div>
           {error && <ErrorAlert error={error} />}
-          <Button variant="primary" type="submit" disabled={!valid}>Register</Button>
-          <p className="text-center"><Button variant="link" onClick={() => setActiveTab('recover')}>Forgot Password?</Button></p>
+          {!loading && <Button className="mb-4 w-100" variant="primary" type="submit" disabled={!valid}>Register</Button>}
+          {loading && <Button className="mb-4 w-100" variant="primary" type="submit" disabled>Registering <CircularProgress color="inherit" size={"15px"} /></Button>}
+          <p className="text-center"><Button variant="link" onClick={() => setActiveTab('recover')}>Forgot Username?</Button></p>
           <p className="text-center">Already have an account? <Button variant="link" onClick={() => setActiveTab('login')}>Login</Button></p>
         </div>
       }
@@ -94,7 +97,7 @@ const RegisterStep = ({ valid, error, onChange, onSubmit, setActiveTab }: {
 const RegisterModalContent = ({ setActiveTab } : {
   setActiveTab: React.Dispatch<React.SetStateAction<HeaderModalTab>>
 }) => {
-  const { execute: register, executed, error } = useRegister();
+  const { execute: register, executed, error, loading } = useRegister();
   const [valid, setValid] = useState(false);
 
   const onSubmit = (data: RegisterRequest) => {
@@ -116,6 +119,7 @@ const RegisterModalContent = ({ setActiveTab } : {
           <RegisterStep
             valid={valid}
             error={error}
+            loading={loading}
             onChange={onChange}
             onSubmit={onSubmit}
             setActiveTab={setActiveTab}
@@ -124,6 +128,54 @@ const RegisterModalContent = ({ setActiveTab } : {
       </Modal.Body>
     </>
   );
+}
+
+const UsernameRecoveryContent = ({ setActiveTab } : {
+  setActiveTab: React.Dispatch<React.SetStateAction<HeaderModalTab>>
+}) => {
+  const [email, setEmail] = useState('');
+  const { execute, executed, loading, error } = useSendUsernameEmail();
+
+  const onChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setEmail(e.target.value);
+  }
+
+  return (
+    <>
+      <Modal.Header closeButton>
+        <Modal.Title>Recover Username</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <p>Please enter the email address that you want to send the username to.</p>
+        <div>
+          <Form.Group controlId="email-input">
+            <Form.Label>Email Address</Form.Label>
+            <Form.Control
+              type="text"
+              name="email-input"
+              value={email}
+              onChange={onChange}
+            />
+          </Form.Group>
+        </div>
+        <div className="mb-3">
+          {!loading && <Button className="w-100" variant="primary" disabled={email.length === 0} onClick={() => execute(email)}>Send</Button>}
+          {loading && <Button className="w-100" variant="primary" disabled>Resending <CircularProgress color="inherit" size={"15px"} /></Button>}
+        </div>
+        <Form.Text className="mb-3" muted>
+          If you still have not received the email, please check your "Spam" or "Trash" folder in your email.  
+        </Form.Text>
+        <div className="text-center mb-3">
+          <Button variant="link" onClick={() => setActiveTab('login')}>Login</Button>
+          {` | `}
+          <Button variant="link" onClick={() => setActiveTab('register')}>Register</Button>
+
+        </div>
+        {error && <ErrorAlert error={error} />}
+        {executed && !error && <Alert variant="success">Username Email Sent!</Alert>}
+      </Modal.Body>
+    </>
+  )
 }
 
 const HeaderModal = ({
@@ -150,6 +202,7 @@ const HeaderModal = ({
     <Modal animation={false}  show={show} onHide={onHide}>
       {activeTab === 'login' && <LoginModalContent setActiveTab={setActiveTab} />}
       {activeTab === 'register' && <RegisterModalContent setActiveTab={setActiveTab} />}
+      {activeTab === 'recover' && <UsernameRecoveryContent setActiveTab={setActiveTab} />}
     </Modal>
   )
 }
