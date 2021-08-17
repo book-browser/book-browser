@@ -1,6 +1,6 @@
 package com.tabroadn.bookbrowser.entity;
 
-import java.time.LocalDate;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,5 +44,6 @@ public class Book {
 	
 	private Integer pageViews;
 	
-	private LocalDate publishDate;
+	private Instant releaseDate;
+	
 }

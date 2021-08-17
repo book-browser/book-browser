@@ -28,7 +28,7 @@ export const Routing = () => {
         <Route exact path="/user/verify/:token">
           <VerifyUserPage />
         </Route>
-        <Route exact path="/verify-email/resend">
+        <Route exact path="/verify/resend">
           <ResendVerificationEmailPage />
         </Route>
         <Route exact path="/username/recover">

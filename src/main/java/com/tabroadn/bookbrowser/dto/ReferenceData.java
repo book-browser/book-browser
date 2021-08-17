@@ -7,4 +7,5 @@ import lombok.Data;
 @Data
 public class ReferenceData {
 	private List<RoleDto> roles;
+	private List<GenreDto> genres;
 }
