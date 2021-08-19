@@ -21,6 +21,8 @@ public class BookForm {
 		
 	private List<PersonCreatorDto> creators = new ArrayList<>();
 	
+	private List<GenreDto> genres = new ArrayList<>();
+	
 	@NotNull
 	@ValidImage
 	private MultipartFile thumbnail;

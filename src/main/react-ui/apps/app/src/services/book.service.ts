@@ -9,6 +9,16 @@ export const createBook = async (bookSubmission: BookSubmission) => {
   formData.append("thumbnail", bookSubmission.thumbnail);
   bookSubmission.creators.forEach((creator, index) => {
     formData.append(`creators[${index}].fullName`, creator.fullName);
+    if (creator.id) {
+      formData.append(`creators[${index}].id`, `${creator.id}`);
+    }
+    if (creator.role) {
+      formData.append(`creators[${index}].role`, creator.role);
+    }
+  });
+  bookSubmission.genres.forEach((genre, index) => {
+    formData.append(`genres[${index}].id`, `${genre.id}`);
+    formData.append(`genres[${index}].name`, genre.name);
   });
   
   const response = await fetch('/api/book', {

@@ -8,6 +8,7 @@ import { BookSubmission } from 'types/book-submission';
 import { Role } from 'types/role';
 import { Person } from 'types/person';
 import { rest } from 'msw'
+import { Genre } from 'types/genre';
 
 export default { title: 'Forms/Book Form' }
 
@@ -17,6 +18,18 @@ const roles: Role[] = [
     value: 0
   }
 ];
+
+const genres: Genre[] = [
+  {
+    id: 1,
+    name: 'Drama', 
+  },
+  {
+    id: 2,
+    name: 'Fantasy'
+  }
+];
+
 
 const people: Person[] = [
   {
@@ -32,7 +45,8 @@ const people: Person[] = [
 const mockStore = configureStore()({
   referenceDataReducer: {
     data: {
-      roles 
+      roles,
+      genres
     },
     loading: false,
     error: null,
@@ -83,7 +97,8 @@ export const ExistingData = () => {
     title: 'This is a title',
     description: 'This is a description',
     thumbnail: null,
-    creators: [{ id: 0, fullName: 'Jim Jimmerson', role: '0' }]
+    creators: [{ id: 0, fullName: 'Jim Jimmerson', role: '0' }],
+    genres: [{ id: 1, name: 'Drama' }],
   };
 
   return (

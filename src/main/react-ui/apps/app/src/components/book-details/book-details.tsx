@@ -3,6 +3,7 @@ import { Book } from 'types/book';
 import { Link } from 'react-router-dom';
 import './book-details.scss';
 import { Card } from 'react-bootstrap';
+import GenreBadge from 'components/genre-badge/genre-badge';
 
 interface BookProps {
   book: Book
@@ -25,6 +26,10 @@ export const BookDetails = ({
               </span>
             ))}
           </p>
+          <div className="mb-2">
+            Genres: 
+            {book.genres.map((genre) => <GenreBadge key={genre.id} genre={genre} />)}
+          </div>
           <p>{book.description}</p>
         </div>
       </div>

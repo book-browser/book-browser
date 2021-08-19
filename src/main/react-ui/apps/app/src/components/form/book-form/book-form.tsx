@@ -13,6 +13,9 @@ import { PersonCreator } from 'types/person-creator';
 import * as yup from 'yup';
 import { RequiredFieldLegend } from '../required-field-legend';
 import { RequiredSymbol } from '../required-symbol';
+import Select from 'react-select';
+import { Genre } from 'types/genre';
+
 
 const schema = yup.object().shape({
   title: yup.string().required().max(50),
@@ -23,14 +26,16 @@ const schema = yup.object().shape({
   creators: yup.array(yup.object().shape({
     fullName: yup.string().required('name is a required field'),
     role: yup.string(),
-  }))
+  })),
+  genres: yup.array(yup.object()),
 });
 
 const defaultBook = {
   title: '',
   description: '',
   thumbnail: null,
-  creators: [{ }]
+  creators: [{ }],
+  genres: [],
 } as BookSubmission;
 
 interface BookFormProps {
@@ -38,6 +43,10 @@ interface BookFormProps {
   onSubmit?: (book: BookSubmission) => void
   footer?: ReactNode,
   initialValue?: BookSubmission
+}
+
+const convertGenreToSelectOptions = (genres: Genre[]) => {
+  return genres.map(({ id, name }) => ({ value: id, label: name }))
 }
 
 export const BookForm = (props: BookFormProps) => {
@@ -50,6 +59,8 @@ export const BookForm = (props: BookFormProps) => {
   const { data: referenceData } = useReferenceData();
 
   const selectOptions = people?.map(({ id, fullName }) => ({ value: id, label: fullName }));
+  const genreOptions = referenceData ? convertGenreToSelectOptions(referenceData.genres) : [];
+
   const roles = referenceData ? referenceData.roles : [];
 
   useEffect(() => {
@@ -114,6 +125,24 @@ export const BookForm = (props: BookFormProps) => {
             <Form.Control.Feedback type="invalid">
               {errors.description}
             </Form.Control.Feedback>
+          </Form.Group>
+          <Form.Group controlId="genre-select">
+            <Form.Label>Genres</Form.Label>
+            <Select
+              inputId="genre-select"
+              isMulti
+              name="genres"
+              options={genreOptions}
+              defaultValue={convertGenreToSelectOptions(initialValue.genres)}
+              onChange={(data) => {
+                const genres = data.map((item) => ({
+                  id: item.value,
+                  name: item.label
+                }));
+
+                setFieldValue('genres', genres);
+              }}
+            />
           </Form.Group>
           <Form.Group>
             <Form.Label>Thumbnail<RequiredSymbol /></Form.Label>

@@ -1,6 +1,5 @@
 package com.tabroadn.bookbrowser.entity;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +9,9 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -33,17 +35,23 @@ public class Book {
 	private String description;
 
 	@NotEmpty
+	private byte[] thumbnail;
+	
+	private Integer pageViews;
+	
+//	private Instant releaseDate;
+	
+	@NotEmpty
 	@OneToMany(mappedBy="book", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
 	private List<Creator> creators = new ArrayList<>();
 	
 	@OneToMany(mappedBy="book", cascade = CascadeType.MERGE)
 	private List<Release> releases = new ArrayList<>();
 	
-	@NotEmpty
-	private byte[] thumbnail;
-	
-	private Integer pageViews;
-	
-	private Instant releaseDate;
-	
+	@ManyToMany
+	@JoinTable(
+		name = "book_genre",
+		joinColumns = @JoinColumn(name = "book_id"),
+		inverseJoinColumns = @JoinColumn(name = "genre_id"))
+	private List<Genre> genres;
 }

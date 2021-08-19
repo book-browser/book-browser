@@ -7,11 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.tabroadn.bookbrowser.domain.RoleEnum;
-import com.tabroadn.bookbrowser.dto.GenreDto;
 import com.tabroadn.bookbrowser.dto.ReferenceData;
 import com.tabroadn.bookbrowser.dto.RoleDto;
-import com.tabroadn.bookbrowser.entity.Genre;
 import com.tabroadn.bookbrowser.repository.GenreRepository;
+import com.tabroadn.bookbrowser.util.DtoConversionUtils;
 
 @Component
 public class ReferenceDataService {
@@ -30,7 +29,7 @@ public class ReferenceDataService {
 				.collect(Collectors.toList()));
 		
 		referenceData.setGenres(genreRepository.findAll().stream()
-				.map(ReferenceDataService::convertGenreToGenreDto)
+				.map(DtoConversionUtils::convertGenreToGenreDto)
 				.collect(Collectors.toList()));	
 		
 		return referenceData;
@@ -43,10 +42,5 @@ public class ReferenceDataService {
 		return roleDto;
 	}
 	
-	private static GenreDto convertGenreToGenreDto(Genre genre) {
-		GenreDto genreDto = new GenreDto();
-		genreDto.setId(genre.getId());
-		genreDto.setName(genre.getName());
-		return genreDto;
-	}
+	
 }

@@ -23,6 +23,8 @@ import com.tabroadn.bookbrowser.exception.ImageUploadFailureException;
 import com.tabroadn.bookbrowser.exception.ResourceNotFoundException;
 import com.tabroadn.bookbrowser.repository.BookRepository;
 import com.tabroadn.bookbrowser.repository.CreatorRepository;
+import com.tabroadn.bookbrowser.repository.GenreRepository;
+import com.tabroadn.bookbrowser.util.DtoConversionUtils;
 
 @Component
 public class BookService {
@@ -31,6 +33,9 @@ public class BookService {
 	
 	@Autowired
 	private CreatorRepository creatorRepository;
+	
+	@Autowired
+	private GenreRepository genreRepository;
 
 	public BookDto getById(Long id) {
 		return convertBookToBookDto(
@@ -81,6 +86,9 @@ public class BookService {
 			.map(BookService::convertReleaseToReleaseDto)
 			.filter((release) -> release.getReleaseType() == ReleaseTypeEnum.VOLUME)
 			.collect(Collectors.toList()));
+		bookDto.setGenres(book.getGenres().stream()
+				.map(DtoConversionUtils::convertGenreToGenreDto)
+				.collect(Collectors.toList()));	
 		return bookDto;
 	}
 	
@@ -110,8 +118,10 @@ public class BookService {
 						return creatorRepository.findByPersonId(creator.getId());
 					}
 				})
-				.collect(Collectors.toList()));
-				
+				.toList());
+
+		book.setGenres(genreRepository.findAllById(bookForm.getGenres().stream()
+				.map((genreDto) -> genreDto.getId()).toList()));
 		try {
 			if (bookForm.getThumbnail() != null) {
 				book.setThumbnail(bookForm.getThumbnail().getBytes());
