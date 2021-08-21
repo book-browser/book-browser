@@ -77,18 +77,21 @@ public class BookService {
 		bookDto.setDescription(book.getDescription());
 		bookDto.setCreators(book.getCreators().stream()
 			.map(BookService::convertCreatorToPersonCreatorDto)
-			.collect(Collectors.toList()));
+			.toList());
 		bookDto.setIssues(book.getReleases().stream()
 			.map(BookService::convertReleaseToReleaseDto)
 			.filter((release) -> release.getReleaseType() == ReleaseTypeEnum.ISSUE)
-			.collect(Collectors.toList()));
+			.toList());
 		bookDto.setVolumes(book.getReleases().stream()
 			.map(BookService::convertReleaseToReleaseDto)
 			.filter((release) -> release.getReleaseType() == ReleaseTypeEnum.VOLUME)
-			.collect(Collectors.toList()));
+			.toList());
 		bookDto.setGenres(book.getGenres().stream()
 				.map(DtoConversionUtils::convertGenreToGenreDto)
-				.collect(Collectors.toList()));	
+				.toList());
+		bookDto.setLinks(book.getLinks().stream()
+				.map(DtoConversionUtils::convertBookLinkToBookLinkDto)
+				.toList());
 		return bookDto;
 	}
 	
@@ -119,6 +122,11 @@ public class BookService {
 					}
 				})
 				.toList());
+
+		book.setLinks(bookForm.getLinks().stream()
+				.map(DtoConversionUtils::convertBookLinkDtoToBookLink)
+				.toList());
+		book.getLinks().forEach(link -> link.setBook(book));
 
 		book.setGenres(genreRepository.findAllById(bookForm.getGenres().stream()
 				.map((genreDto) -> genreDto.getId()).toList()));

@@ -19,4 +19,6 @@ public class BookDto {
 	private List<ReleaseDto> volumes;
 	
 	private List<GenreDto> genres;
+	
+	private List<BookLinkDto> links;
 }

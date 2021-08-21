@@ -6,4 +6,5 @@ export const BOOK_EXAMPLE: Book = {
   description: 'This is a description',
   creators: [{ id: 0, fullName: 'Jim Jimmerson', role: '0' }],
   genres: [],
+  links: [],
 };

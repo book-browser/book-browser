@@ -3,6 +3,7 @@ package com.tabroadn.bookbrowser.dto;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -22,6 +23,9 @@ public class BookForm {
 	private List<PersonCreatorDto> creators = new ArrayList<>();
 	
 	private List<GenreDto> genres = new ArrayList<>();
+	
+	@Valid
+	private List<BookLinkDto> links = new ArrayList<>();
 	
 	@NotNull
 	@ValidImage

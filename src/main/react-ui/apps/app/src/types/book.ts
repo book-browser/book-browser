@@ -1,6 +1,6 @@
+import { BookLink } from "./book-link";
 import { Genre } from "./genre";
 import { PersonCreator } from "./person-creator";
-import { Release } from "./release";
 
 export class Book {
   id: number;
@@ -8,4 +8,5 @@ export class Book {
   description: string;
   genres: Genre[];
   creators: PersonCreator[];
+  links: BookLink[]
 }

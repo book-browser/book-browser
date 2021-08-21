@@ -42,13 +42,19 @@ public class Book {
 //	private Instant releaseDate;
 	
 	@NotEmpty
-	@OneToMany(mappedBy="book", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+	@OneToMany(
+		mappedBy="book",
+		cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+		fetch = FetchType.LAZY)
 	private List<Creator> creators = new ArrayList<>();
 	
 	@OneToMany(mappedBy="book", cascade = CascadeType.MERGE)
 	private List<Release> releases = new ArrayList<>();
 	
-	@ManyToMany
+	@OneToMany(mappedBy="book", cascade = CascadeType.ALL)
+	private List<BookLink> links = new ArrayList<>();
+	
+	@ManyToMany(cascade={CascadeType.PERSIST, CascadeType.DETACH})
 	@JoinTable(
 		name = "book_genre",
 		joinColumns = @JoinColumn(name = "book_id"),

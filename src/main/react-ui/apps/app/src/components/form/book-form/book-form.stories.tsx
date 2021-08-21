@@ -99,6 +99,7 @@ export const ExistingData = () => {
     thumbnail: null,
     creators: [{ id: 0, fullName: 'Jim Jimmerson', role: '0' }],
     genres: [{ id: 1, name: 'Drama' }],
+    links: [{ id: 1, description: 'Homepage', url: 'https://www.google.com' }]
   };
 
   return (

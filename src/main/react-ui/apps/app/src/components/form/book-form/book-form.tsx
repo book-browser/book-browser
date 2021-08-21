@@ -24,10 +24,14 @@ const schema = yup.object().shape({
     return !(file && file.size > 1024 * 1024);
   }),
   creators: yup.array(yup.object().shape({
-    fullName: yup.string().required('name is a required field'),
+    fullName: yup.string().required().label('name'),
     role: yup.string(),
   })),
   genres: yup.array(yup.object()),
+  links: yup.array(yup.object().shape({
+    url: yup.string().required().max(100).label('url'),
+    description: yup.string().required('description is a required field').max(50).label('description'),
+  })),
 });
 
 const defaultBook = {
@@ -36,6 +40,7 @@ const defaultBook = {
   thumbnail: null,
   creators: [{ }],
   genres: [],
+  links: [],
 } as BookSubmission;
 
 interface BookFormProps {
@@ -97,6 +102,8 @@ export const BookForm = (props: BookFormProps) => {
             }
           }}
         >
+          <h4 className="mb-3">General Information</h4>
+          <hr className="mb-4"/>
           <RequiredFieldLegend />
           <Form.Group controlId="title-input">
             <Form.Label>Title<RequiredSymbol /></Form.Label>
@@ -289,6 +296,80 @@ export const BookForm = (props: BookFormProps) => {
               </div>
             </Form.Group>
           </Form.Group>
+          <hr className="mb-4"/>
+          <h4 className="mb-3">Relevant Links</h4>
+          <Form.Group>
+           {values.links.length > 0 && (
+              <Row>
+                <Col>
+                  <Form.Label htmlFor={`link0-name-select`}>URL<RequiredSymbol /></Form.Label>
+                </Col>
+                <Col xs={3}>
+                  <Form.Label htmlFor={`link0-role-select`}>Description<RequiredSymbol /></Form.Label>
+                </Col>
+                <Col xs={2} />
+              </Row>
+            )}
+            {values.links.map((link, index) => (
+              <Row key={index} className="mb-2">
+                <Col>
+                  <Form.Control
+                    id={`link${index}-url-input`}
+                    type="text"
+                    name={`links[${index}].url`}
+                    value={values.links[index].url}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    isInvalid={touched.links?.[index]?.url && !!(errors as any).links?.[index]?.url}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {(errors as any).links?.[index]?.url}
+                  </Form.Control.Feedback>
+                </Col>
+                <Col xs={3}>
+                  <Form.Control
+                    id={`link${index}-description-input`}
+                    type="text"
+                    name={`links[${index}].description`}
+                    value={values.links[index].description}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    isInvalid={touched.links?.[index].description && !!(errors as any).links?.[index]?.description}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {(errors as any).links?.[index]?.description}
+                  </Form.Control.Feedback>
+                </Col>
+                <Col xs={2}>
+                  <Button
+                    id={`remove-link${index}-button`}
+                    variant="danger"
+                    type="button"
+                    className="position-absolute"
+                    style={{top: "0"}}
+                    onClick={() => {
+                      const newLinks = values.links.filter((item) => item !== link);
+                      setFieldValue('links', newLinks);
+                    }}
+                  >
+                    <DeleteIcon />
+                  </Button>
+                </Col>
+              </Row>
+            ))}
+            <div className="mt-2">
+              <Button
+                variant="link"
+                onClick={() => {
+                  const newLinks = [].concat(values.links).concat([{ description: '', url: '' }]);
+                  setFieldValue('links', newLinks);
+                }}
+              >
+                Add new Link
+              </Button>
+            </div>
+          </Form.Group>
+          <hr className="mb-4"/>
           {props.footer}
         </Form>
       )}

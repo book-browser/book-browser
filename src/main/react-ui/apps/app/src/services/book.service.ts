@@ -3,6 +3,7 @@ import { BookSubmission } from "types/book-submission";
 import { handleResponse } from "./response.service";
 
 export const createBook = async (bookSubmission: BookSubmission) => {
+  console.log(bookSubmission);
   const formData = new FormData();
   formData.append("title", bookSubmission.title);
   formData.append("description", bookSubmission.description);
@@ -20,7 +21,17 @@ export const createBook = async (bookSubmission: BookSubmission) => {
     formData.append(`genres[${index}].id`, `${genre.id}`);
     formData.append(`genres[${index}].name`, genre.name);
   });
+
+  bookSubmission.links.forEach((link, index) => {
+    if (link.id) {
+      formData.append(`links[${index}].id`, `${link.id}`);
+    }
+    formData.append(`links[${index}].url`, `${link.url}`);
+    formData.append(`links[${index}].description`, `${link.description}`);
+  });
   
+  console.log(formData);
+
   const response = await fetch('/api/book', {
     method: 'PUT',
     body: formData

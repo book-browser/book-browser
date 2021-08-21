@@ -78,13 +78,15 @@ INSERT INTO person(id, full_name)
 INSERT INTO person(id, full_name)
   values (23, 'Tillie Wallen');
 
-INSERT INTO book(id, title, thumbnail, publish_date)
-  values (1, 'The Witch''s Throne', FILE_READ('classpath:/images/the-witchs-throne.jpg'), '2017-08-27');
+INSERT INTO book(id, title, description, thumbnail, publish_date)
+  values (1, 'The Witch''s Throne', 'Once every ten years, a random girl awakens as a witch with immeasurable power that is destined to destroy the world. To prevent this calamity from happening, four sacred tournaments are held one year prior to her birth to train and select a party of heroes strong enough to slay her. 99 years have passed since the first witch was born and felled, and the next cycle of tournaments are soon to begin. Follow Agni, a young alchemist with a penchant for explosives and revelry as she gathers her own party of wannabe heroes to participate in the tournaments and uncover the mystery behind the witch''s true origins.', FILE_READ('classpath:/images/the-witchs-throne.jpg'), '2017-08-27');
 
 INSERT INTO book_release(id, book_id, release_type, release_number, publish_date)
   values (1, 1, 'ISSUE', 1, '2017-08-27');
 
 INSERT INTO book_genre VALUES(1, 2);
+
+INSERT INTO book_link VALUES (NULL, 1, 'https://tapas.io/series/thewitchsthrone', 'Tapas');
 
 INSERT INTO book(id, title, thumbnail, publish_date)
   values (2, 'The Deep & Dark Blue', FILE_READ('classpath:/images/deep-and-dark-blue.jpg'), '2020-01-07');

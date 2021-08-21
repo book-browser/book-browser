@@ -1,6 +1,8 @@
 package com.tabroadn.bookbrowser.util;
 
+import com.tabroadn.bookbrowser.dto.BookLinkDto;
 import com.tabroadn.bookbrowser.dto.GenreDto;
+import com.tabroadn.bookbrowser.entity.BookLink;
 import com.tabroadn.bookbrowser.entity.Genre;
 
 public class DtoConversionUtils {
@@ -11,10 +13,19 @@ public class DtoConversionUtils {
 		return genreDto;
 	}
 	
-	public static Genre convertGenreDtoToGenre(GenreDto genreDto) {
-		Genre genre = new Genre();
-		genre.setId(genreDto.getId());
-		genre.setName(genreDto.getName());
-		return genre;
+	public static BookLinkDto convertBookLinkToBookLinkDto(BookLink bookLink) {
+		BookLinkDto bookLinkDto = new BookLinkDto();
+		bookLinkDto.setDescription(bookLink.getDescription());
+		bookLinkDto.setId(bookLink.getId());
+		bookLinkDto.setUrl(bookLink.getUrl());
+		return bookLinkDto;
+	}
+	
+	public static BookLink convertBookLinkDtoToBookLink(BookLinkDto bookLinkDto) {
+		BookLink bookLink = new BookLink();
+		bookLink.setDescription(bookLinkDto.getDescription());
+		bookLink.setId(bookLinkDto.getId());
+		bookLink.setUrl(bookLinkDto.getUrl());
+		return bookLink;
 	}
 }

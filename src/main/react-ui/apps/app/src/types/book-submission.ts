@@ -1,3 +1,4 @@
+import { BookLink } from "./book-link";
 import { Genre } from "./genre";
 import { PersonCreator } from "./person-creator";
 import { Release } from "./release";
@@ -9,4 +10,5 @@ export class BookSubmission {
   creators: PersonCreator[];
   thumbnail: File;
   genres: Genre[];
+  links: BookLink[];
 }
