@@ -3,13 +3,14 @@ package com.tabroadn.bookbrowser.repository;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.tabroadn.bookbrowser.entity.Book;
 
 @Repository
-public interface BookRepository extends JpaRepository<Book, Long> {
+public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificationExecutor<Book>  {
 	@Query(value="select * from book b " + 
 			"join creator c on b.id = c.book_id " +
 			"join person p on c.person_id = p.id " +

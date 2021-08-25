@@ -44,3 +44,10 @@ export const getById = async (id: number) => {
   const response = await fetch(`/api/book/${id}`);
   return await handleResponse<Book>(response);
 }
+
+export const search = async(query: string) => {
+  const response = await fetch('/api/book/search?' + new URLSearchParams({
+    query
+  }));
+  return await handleResponse<Book[]>(response);
+}

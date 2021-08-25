@@ -1,12 +1,16 @@
 package com.tabroadn.bookbrowser.service;
 
 import java.io.IOException;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 import com.tabroadn.bookbrowser.domain.ReleaseTypeEnum;
@@ -17,11 +21,13 @@ import com.tabroadn.bookbrowser.dto.PersonCreatorDto;
 import com.tabroadn.bookbrowser.dto.ReleaseDto;
 import com.tabroadn.bookbrowser.entity.Book;
 import com.tabroadn.bookbrowser.entity.Creator;
+import com.tabroadn.bookbrowser.entity.Genre;
 import com.tabroadn.bookbrowser.entity.Person;
 import com.tabroadn.bookbrowser.entity.Release;
 import com.tabroadn.bookbrowser.exception.ImageUploadFailureException;
 import com.tabroadn.bookbrowser.exception.ResourceNotFoundException;
 import com.tabroadn.bookbrowser.repository.BookRepository;
+import com.tabroadn.bookbrowser.repository.BookSpecification;
 import com.tabroadn.bookbrowser.repository.CreatorRepository;
 import com.tabroadn.bookbrowser.repository.GenreRepository;
 import com.tabroadn.bookbrowser.util.DtoConversionUtils;
@@ -49,17 +55,26 @@ public class BookService {
 				.getThumbnail();
 	}
 
-	public List<BookSummaryDto> search(String query, int limit) {
-		String[] terms = query.split(" ");
+	public List<BookSummaryDto> search(int page, int size, Optional<String> query, Optional<List<String>> genreNames) {
+		Pageable pageable = PageRequest.of(page, size);
 		
-		Set<Book> books = new HashSet<>();
+		Specification<Book> specification = Specification.where(null);
 		
-		for (String term : terms) {
-			books.addAll(repository.search(term));
+		if (query.isPresent()) {
+			specification = specification.and(BookSpecification.hasText(query.get()));
 		}
 		
+		if (genreNames.isPresent()) {
+			List<Genre> genres = genreRepository.findByNameInIgnoreCase(genreNames.get());
+			
+			if (genres.size() > 0) {
+				specification = specification.and(BookSpecification.hasGenres(genres));
+			}
+		}
+		
+		Page<Book> books = repository.findAll(specification, pageable);
+
 		return books.stream()
-					.limit(limit)
 					.map(BookService::convertBookToBookSummaryDto)
 					.collect(Collectors.toList());
 	}

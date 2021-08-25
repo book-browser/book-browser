@@ -16,7 +16,7 @@ export const BookPage = () => {
 
   useEffect(() => {
     execute(id);
-  }, []);
+  }, [id]);
 
   return (
     <Container maxWidth="md" className="mt-3">

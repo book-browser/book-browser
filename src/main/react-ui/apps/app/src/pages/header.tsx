@@ -1,4 +1,5 @@
 import HeaderModal, { HeaderModalTab } from 'components/modals/header-modal';
+import SearchBar from 'components/search-bar/search-bar';
 import { useLogout, useUser } from 'hooks/user.hook';
 import React, { useState } from 'react';
 import { Alert, Button, Navbar } from 'react-bootstrap';
@@ -24,8 +25,9 @@ const Header = () => {
       <Navbar bg="primary" variant="dark" className="mb-5">
         <Navbar.Brand>BookBrowser</Navbar.Brand>
         {!(['/login', '/login/', '/register', '/register/', '/username/recover', 'username/recover/'].includes(location.pathname)) && (
-          <div className="ml-auto">
-            {!user && <Button variant="primary" className="mr-1" onClick={() => openModal('login')}>Login</Button>}
+          <div className="ml-auto d-flex">
+            <SearchBar />
+            {!user && <Button variant="primary" className="ml-2 mr-1" onClick={() => openModal('login')}>Login</Button>}
             {!user && <Button variant="primary" onClick={() => openModal('register')}>Register</Button>}
             {user && <Button variant="primary" onClick={logout}>Logout</Button>}
           </div>

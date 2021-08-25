@@ -1,0 +1,26 @@
+@import '../../variables.scss';
+
+.search-option {
+  display: flex;
+}
+
+.search-option-thumbnail {
+  width: 40px;
+  height: 60px;
+  margin-right: $margin-md;
+}
+
+.rbt .dropdown-item {
+  border-bottom: 1px solid #dee2e6;
+}
+
+.rbt-menu {
+  a {
+    text-decoration: inherit;
+    color: inherit;
+    &:focus, &:hover {
+      text-decoration: inherit;
+      color: inherit;
+    }
+  }  
+}

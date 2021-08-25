@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 export declare type PromiseExecutor<A, B> = (args: A) => Promise<B>;
 
@@ -12,7 +12,7 @@ export const usePromise = <A, B>(executor: PromiseExecutor<A, B>) => {
     executed: false,
   });
 
-  const execute = (args: A) => {
+  const execute = useCallback((args: A) => {
     setState((prevState) => {
       return {
         ...prevState,
@@ -42,7 +42,7 @@ export const usePromise = <A, B>(executor: PromiseExecutor<A, B>) => {
           }
         });
       })
-  }
+  }, []);
 
   return ({
     execute,
@@ -66,7 +66,7 @@ export const useEmptyPromise = <B>(executor: EmptyPromiseExecutor<B>) => {
     executed: false,
   });
 
-  const execute = () => {
+  const execute = useCallback(() => {
     setState((prevState) => {
       return {
         ...prevState,
@@ -96,7 +96,7 @@ export const useEmptyPromise = <B>(executor: EmptyPromiseExecutor<B>) => {
           }
         });
       })
-  }
+  }, []);
 
   return ({
     execute,
