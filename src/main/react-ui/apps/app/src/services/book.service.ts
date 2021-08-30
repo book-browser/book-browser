@@ -1,5 +1,6 @@
 import { Book } from "types/book";
 import { BookSubmission } from "types/book-submission";
+import { Genre } from "types/genre";
 import { handleResponse } from "./response.service";
 
 export const createBook = async (bookSubmission: BookSubmission) => {
@@ -45,9 +46,23 @@ export const getById = async (id: number) => {
   return await handleResponse<Book>(response);
 }
 
-export const search = async(query: string) => {
-  const response = await fetch('/api/book/search?' + new URLSearchParams({
-    query
-  }));
+export const search = async({ query, genres }: 
+  { 
+    query?: string,
+    genres?: Genre[],
+  }) => {
+
+  const params = new URLSearchParams();
+
+  if (query) {
+    params.append('query', query);
+  }
+
+  if (genres) {
+    genres.map((genre) => genre.name)
+          .forEach((genreName) => params.append('genres', genreName));
+  }
+
+  const response = await fetch('/api/book/search?' + params.toString());
   return await handleResponse<Book[]>(response);
 }

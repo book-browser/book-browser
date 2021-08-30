@@ -124,6 +124,7 @@ export const BookForm = (props: BookFormProps) => {
             <Form.Control
               as="textarea"
               name="description"
+              rows="4"
               value={values.description}
               onChange={handleChange}
               onBlur={handleBlur}

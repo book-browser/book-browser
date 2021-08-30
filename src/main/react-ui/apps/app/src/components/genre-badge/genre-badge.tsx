@@ -11,7 +11,7 @@ const GenreBadge = ({
   genre
 }: IGenreBadgeProps) => {
   return (
-    <Badge as={Link} to={`/book/genre/${genre.name.toLowerCase().replace(' ', '-')}`} className="border m-1">
+    <Badge as={Link} to={`/search?genres=${genre.name.toLowerCase().replace(' ', '+')}`} className="border m-1">
       {genre.name}
     </Badge>
   )

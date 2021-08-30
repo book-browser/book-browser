@@ -4,10 +4,12 @@ import React from 'react';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import { BookPage } from './book-page';
 import { CreateBookPage } from './create-book-page';
+import EditBookPage from './edit-book-page';
 import Header from './header';
 import LoginPage from './login-page';
 import RegisterPage from './register-page';
 import ResendVerificationEmailPage from './resend-verification-email-page';
+import SearchPage from './search-page';
 import UsernameRecoveryPage from './username-recovery-page';
 import VerifyUserPage from './verify-user-page';
 
@@ -18,6 +20,12 @@ export const Routing = () => {
       <Switch>
         <Route exact path="/book/:id">
           <BookPage />
+        </Route>
+        <Route exact path="/book/:id/edit">
+          <EditBookPage />
+        </Route>
+        <Route exact path="/search">
+          <SearchPage />
         </Route>
         <Route exact path="/login">
           <LoginPage />

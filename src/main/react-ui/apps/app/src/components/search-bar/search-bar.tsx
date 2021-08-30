@@ -1,5 +1,5 @@
 import { useSearch } from 'hooks/book.hook';
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { AsyncTypeahead, Menu, useItem } from 'react-bootstrap-typeahead';
 import { Book } from 'types/book';
 import './search-bar.scss';
@@ -45,7 +45,7 @@ const SearchBar = () => {
       if (activeIndex != -1) {
         history.push(`/book/${data[activeIndex].id}`)
       } else if (text.length > 0) {
-        history.push(`/search?q=${encodeURIComponent(text)}`)
+        history.push(`/search?query=${encodeURIComponent(text)}`)
       } else {
         history.push(`/search`)
       }
@@ -67,35 +67,35 @@ const SearchBar = () => {
 
   return (
     <InputGroup>
-    <AsyncTypeahead 
-      ref={ref}
-      filterBy={filterBy}
-      id='search-bar'
-      isLoading={loading}
-      labelKey={() => text}
-      onSearch={execute}
-      onFocus={onFocus}
-      onKeyDown={onKeyDown}
-      onInputChange={onInputChange}
-      onChange={onChange}
-      options={data ? data : []}
-      renderMenu={(results, menuProps) => (
-        <Menu {...menuProps}>
-          {results.map((result, index) => <SearchBarOption key={index} option={result} position={index} />)}
-        </Menu>
-      )}
-    >
-      {(state) => {
-        useEffect(() => setActiveIndex(state.activeIndex), [state.activeIndex])
-      // Passing a child render function to the component exposes partial
-      // internal state, including the index of the highlighted menu item.
-    }}
-    </AsyncTypeahead>
-    <InputGroup.Append>
-      <Button variant="secondary">
-        <SearchIcon fontSize="small" />
-      </Button>
-    </InputGroup.Append>
+      <AsyncTypeahead 
+        ref={ref}
+        filterBy={filterBy}
+        id='search-bar'
+        isLoading={loading}
+        labelKey={() => text}
+        onSearch={useCallback((query) => execute({ query }), [])}
+        onFocus={onFocus}
+        onKeyDown={onKeyDown}
+        onInputChange={onInputChange}
+        onChange={onChange}
+        options={data ? data : []}
+        renderMenu={(results, menuProps) => (
+          <Menu {...menuProps}>
+            {results.map((result, index) => <SearchBarOption key={index} option={result} position={index} />)}
+          </Menu>
+        )}
+      >
+        {(state) => {
+          useEffect(() => setActiveIndex(state.activeIndex), [state.activeIndex])
+        // Passing a child render function to the component exposes partial
+        // internal state, including the index of the highlighted menu item.
+      }}
+      </AsyncTypeahead>
+      <InputGroup.Append>
+        <Button variant="secondary">
+          <SearchIcon fontSize="small" />
+        </Button>
+      </InputGroup.Append>
     </InputGroup> 
   );
 }

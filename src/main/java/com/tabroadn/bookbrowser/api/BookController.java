@@ -3,6 +3,7 @@ package com.tabroadn.bookbrowser.api;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +48,8 @@ public class BookController {
 	@GetMapping(
 		value = "/book/{id}/thumbnail",
 		produces = MediaType.IMAGE_JPEG_VALUE)
-	public byte[] getBookThumbnail(@PathVariable("id") Long id) {
+	public byte[] getBookThumbnail(@PathVariable("id") Long id, HttpServletResponse response) {
+	    response.addHeader("Cache-Control", "max-age=86400, must-revalidate, no-transform");
 		return service.findBookThumbnail(id);
 	}
 	

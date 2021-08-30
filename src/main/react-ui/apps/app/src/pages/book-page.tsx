@@ -19,7 +19,7 @@ export const BookPage = () => {
   }, [id]);
 
   return (
-    <Container maxWidth="md" className="mt-3">
+    <Container maxWidth="lg" className="mt-3">
       {book && <BookDetails book={book} />}
       {error && 
         (notFound ? <NotFound /> : <SomethingWentWrong error={error}/>)
