@@ -23,7 +23,7 @@ const Header = () => {
   return (
     <>
       <Navbar bg="primary" variant="dark" className="mb-5">
-        <Navbar.Brand>BookBrowser</Navbar.Brand>
+        <Navbar.Brand as={Link} to="/home">BookBrowser</Navbar.Brand>
         {!(['/login', '/login/', '/register', '/register/', '/username/recover', 'username/recover/'].includes(location.pathname)) && (
           <div className="ml-auto d-flex">
             <SearchBar />
