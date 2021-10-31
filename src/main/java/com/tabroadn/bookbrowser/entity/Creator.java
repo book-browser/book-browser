@@ -2,6 +2,7 @@ package com.tabroadn.bookbrowser.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -21,17 +22,17 @@ public class Creator implements Serializable {
 
 	@EmbeddedId
 	private CreatorId id = new CreatorId();
-	
+
 	@Enumerated(EnumType.STRING)
 	private RoleEnum role;
 
 	@MapsId("bookId")
 	@ManyToOne
-  @JoinColumn(name = "book_id")
+	@JoinColumn(name = "book_id")
 	private Book book;
-	
+
 	@MapsId("personId")
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn
 	private Person person;
 }

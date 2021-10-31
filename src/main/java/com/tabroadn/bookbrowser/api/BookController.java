@@ -12,21 +12,18 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tabroadn.bookbrowser.dto.BookDto;
-import com.tabroadn.bookbrowser.dto.BookForm;
 import com.tabroadn.bookbrowser.dto.BookSummaryDto;
 import com.tabroadn.bookbrowser.service.BookService;
-
-import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @Validated
 @RequestMapping("/api")
-@Slf4j
 public class BookController {
 	@Autowired
 	private BookService service;
@@ -54,10 +51,8 @@ public class BookController {
 	}
 	
 	@Valid
-	@PutMapping(
-		value = "book",
-		consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public BookDto save(@Valid BookForm bookForm) {
-		return service.save(bookForm);
+	@PutMapping(value = "book")
+	public BookDto save(@Valid @RequestBody BookDto bookDto) {
+		return service.save(bookDto);
 	}
 }

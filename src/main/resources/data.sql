@@ -86,7 +86,7 @@ INSERT INTO book_release(id, book_id, release_type, release_number, publish_date
 
 INSERT INTO book_genre VALUES(1, 2);
 
-INSERT INTO book_link VALUES (NULL, 1, 'https://tapas.io/series/thewitchsthrone', 'Tapas');
+INSERT INTO book_link VALUES (1, 'https://tapas.io/series/thewitchsthrone', 'Tapas');
 
 INSERT INTO book(id, title, thumbnail, publish_date)
   values (2, 'The Deep & Dark Blue', FILE_READ('classpath:/images/deep-and-dark-blue.jpg'), '2020-01-07');

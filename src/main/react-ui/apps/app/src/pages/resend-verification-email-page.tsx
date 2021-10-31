@@ -22,7 +22,6 @@ const ResendVerificationEmailPage = () => {
         history.push('/');
       } else {
         setEmail(user.email);
-        console.log(user.email);
       }
     }
   }, [user])

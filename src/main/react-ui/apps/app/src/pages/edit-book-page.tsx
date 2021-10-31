@@ -1,15 +1,21 @@
-import { Container } from '@material-ui/core';
+import { CircularProgress, Container } from '@material-ui/core';
+import { ErrorAlert } from 'components/error/error-alert';
 import { BookForm } from 'components/form/book-form/book-form';
-import { useGetBook } from 'hooks/book.hook';
+import { useGetBook, useSaveBook } from 'hooks/book.hook';
 import React, { useEffect } from 'react';
-import { Breadcrumb } from 'react-bootstrap';
+import { Alert, Breadcrumb, Button } from 'react-bootstrap';
 import { useParams, Link } from 'react-router-dom';
-import { BookSubmission } from 'types/book-submission';
+import { Book } from 'types/book';
 
 const EditBookPage = () => {
   const { id } = useParams();
   const { data: book, execute, loading, error } = useGetBook();
+  const { data: savedBook, execute: save, loading: saving, error: saveError } = useSaveBook();
  
+  const onSubmit = (bookSubmission: Book) => {
+    save(bookSubmission);
+  }
+  
   useEffect(() => {
     execute(id);
   }, [id]);
@@ -24,7 +30,18 @@ const EditBookPage = () => {
             <Breadcrumb.Item linkAs={Link} linkProps={{to: `/book/${book?.id}`}}>{book?.title}</Breadcrumb.Item>
             <Breadcrumb.Item active>Edit</Breadcrumb.Item>
           </Breadcrumb>
-          <BookForm initialValue={book as BookSubmission} />
+          <BookForm
+            initialValue={book}
+            onSubmit={onSubmit}
+            footer={
+              <div>
+                {saveError && <ErrorAlert error={saveError} />}
+                {!loading && savedBook && <Alert variant="success" className="mb-2">Changes successfully saved</Alert>}
+                {!loading && <Button variant="primary" type="submit">Save</Button>}
+                {loading && <Button variant="primary" type="submit" disabled>Saving <CircularProgress color="secondary" size={"15px"} /></Button>}
+              </div>
+            }
+          />
         </div>
       )}
     </Container>

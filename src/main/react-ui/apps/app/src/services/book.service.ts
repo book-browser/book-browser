@@ -3,39 +3,13 @@ import { BookSubmission } from "types/book-submission";
 import { Genre } from "types/genre";
 import { handleResponse } from "./response.service";
 
-export const createBook = async (bookSubmission: BookSubmission) => {
-  console.log(bookSubmission);
-  const formData = new FormData();
-  formData.append("title", bookSubmission.title);
-  formData.append("description", bookSubmission.description);
-  formData.append("thumbnail", bookSubmission.thumbnail);
-  bookSubmission.creators.forEach((creator, index) => {
-    formData.append(`creators[${index}].fullName`, creator.fullName);
-    if (creator.id) {
-      formData.append(`creators[${index}].id`, `${creator.id}`);
-    }
-    if (creator.role) {
-      formData.append(`creators[${index}].role`, creator.role);
-    }
-  });
-  bookSubmission.genres.forEach((genre, index) => {
-    formData.append(`genres[${index}].id`, `${genre.id}`);
-    formData.append(`genres[${index}].name`, genre.name);
-  });
-
-  bookSubmission.links.forEach((link, index) => {
-    if (link.id) {
-      formData.append(`links[${index}].id`, `${link.id}`);
-    }
-    formData.append(`links[${index}].url`, `${link.url}`);
-    formData.append(`links[${index}].description`, `${link.description}`);
-  });
-  
-  console.log(formData);
-
+export const saveBook = async (book: Book) => {
   const response = await fetch('/api/book', {
+    headers: {
+      'Content-Type': 'application/json',
+    },
     method: 'PUT',
-    body: formData
+    body: JSON.stringify(book),
   });
 
   return await handleResponse<Book>(response);

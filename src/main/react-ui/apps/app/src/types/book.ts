@@ -6,6 +6,7 @@ export class Book {
   id: number;
   title: string;
   description: string;
+  thumbnail?: string;
   genres: Genre[];
   creators: PersonCreator[];
   links: BookLink[]

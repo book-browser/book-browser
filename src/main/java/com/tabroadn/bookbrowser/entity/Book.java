@@ -44,20 +44,21 @@ public class Book {
 	@NotEmpty
 	@OneToMany(
 		mappedBy="book",
-		cascade = {CascadeType.PERSIST, CascadeType.MERGE},
-		fetch = FetchType.LAZY)
+		cascade = CascadeType.ALL,
+		fetch = FetchType.LAZY,
+		orphanRemoval=true)
 	private List<Creator> creators = new ArrayList<>();
 	
-	@OneToMany(mappedBy="book", cascade = CascadeType.MERGE)
+	@OneToMany(mappedBy="book", cascade = CascadeType.ALL, orphanRemoval=true)
 	private List<Release> releases = new ArrayList<>();
 	
-	@OneToMany(mappedBy="book", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy="book", cascade = CascadeType.ALL, orphanRemoval=true)
 	private List<BookLink> links = new ArrayList<>();
 	
-	@ManyToMany(cascade={CascadeType.PERSIST, CascadeType.DETACH})
+	@ManyToMany
 	@JoinTable(
 		name = "book_genre",
 		joinColumns = @JoinColumn(name = "book_id"),
 		inverseJoinColumns = @JoinColumn(name = "genre_id"))
-	private List<Genre> genres;
+	private List<Genre> genres = new ArrayList<>();
 }

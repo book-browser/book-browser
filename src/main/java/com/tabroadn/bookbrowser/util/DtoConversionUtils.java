@@ -16,16 +16,7 @@ public class DtoConversionUtils {
 	public static BookLinkDto convertBookLinkToBookLinkDto(BookLink bookLink) {
 		BookLinkDto bookLinkDto = new BookLinkDto();
 		bookLinkDto.setDescription(bookLink.getDescription());
-		bookLinkDto.setId(bookLink.getId());
-		bookLinkDto.setUrl(bookLink.getUrl());
+		bookLinkDto.setUrl(bookLink.getId().getUrl());
 		return bookLinkDto;
-	}
-	
-	public static BookLink convertBookLinkDtoToBookLink(BookLinkDto bookLinkDto) {
-		BookLink bookLink = new BookLink();
-		bookLink.setDescription(bookLinkDto.getDescription());
-		bookLink.setId(bookLinkDto.getId());
-		bookLink.setUrl(bookLinkDto.getUrl());
-		return bookLink;
 	}
 }

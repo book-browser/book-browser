@@ -8,11 +8,11 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 
-@Target(ElementType.FIELD)
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = {ImageFileValidator.class})
-public @interface ValidImage {
-    String message() default "Invalid image file";
+@Constraint(validatedBy = {PersonCreatorDtoValidator.class})
+public @interface ValidPersonCreatorDto {
+    String message() default "Invalid creator";
 
     Class<?>[] groups() default {};
 

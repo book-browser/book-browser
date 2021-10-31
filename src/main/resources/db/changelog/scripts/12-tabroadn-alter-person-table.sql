@@ -1,0 +1,1 @@
+alter table person alter column full_name varchar(150) not null; 

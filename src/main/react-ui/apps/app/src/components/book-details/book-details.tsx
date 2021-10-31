@@ -50,7 +50,7 @@ export const BookDetails = ({
           <span><strong>Relevant Links</strong></span>
           <div className="mb-4">
             {book.links.map((link) => (
-              <div key={link.id}>
+              <div key={link.url}>
                 <Link to={{ pathname: link.url }} target="_blank">{link.description}</Link>
               </div>
             ))}

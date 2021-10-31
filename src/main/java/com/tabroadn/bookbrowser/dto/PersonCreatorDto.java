@@ -1,5 +1,7 @@
 package com.tabroadn.bookbrowser.dto;
 
+import javax.validation.constraints.Size;
+
 import com.tabroadn.bookbrowser.domain.RoleEnum;
 
 import lombok.Data;
@@ -8,6 +10,7 @@ import lombok.Data;
 public class PersonCreatorDto {
 	private Long id;
 	
+	@Size(max = 150)
 	private String fullName;
 
 	private RoleEnum role;

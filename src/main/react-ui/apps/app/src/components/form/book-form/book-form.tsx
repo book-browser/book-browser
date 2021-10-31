@@ -7,7 +7,6 @@ import React, { ChangeEvent, ReactNode, useEffect, useState } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import Feedback from 'react-bootstrap/esm/Feedback';
 import CreatableSelect from 'react-select/creatable';
-import { BookSubmission } from 'types/book-submission';
 import { Person } from 'types/person';
 import { PersonCreator } from 'types/person-creator';
 import * as yup from 'yup';
@@ -15,17 +14,22 @@ import { RequiredFieldLegend } from '../required-field-legend';
 import { RequiredSymbol } from '../required-symbol';
 import Select from 'react-select';
 import { Genre } from 'types/genre';
-
+import { Book } from 'types/book';
 
 const schema = yup.object().shape({
+  id: yup.number().nullable(),
   title: yup.string().required().max(50),
   description: yup.string().required().max(1000),
-  thumbnail: yup.mixed().required().test("fileSize", "The file is too large", (file?: File) => {
+  thumbnail: yup.mixed()
+    .when('id', (id, schema) => {
+      return id ? schema : schema.required();
+    })
+    .test("fileSize", "The file is too large", (file?: File) => {
     return !(file && file.size > 1024 * 1024);
   }),
   creators: yup.array(yup.object().shape({
     fullName: yup.string().required().label('name'),
-    role: yup.string(),
+    role: yup.string().nullable(),
   })),
   genres: yup.array(yup.object()),
   links: yup.array(yup.object().shape({
@@ -34,6 +38,13 @@ const schema = yup.object().shape({
   })),
 });
 
+interface BookFormProps {
+  onChange?: (book: Book, valid: boolean) => void
+  onSubmit?: (book: Book) => void
+  footer?: ReactNode,
+  initialValue?: Book
+}
+
 const defaultBook = {
   title: '',
   description: '',
@@ -41,14 +52,7 @@ const defaultBook = {
   creators: [{ }],
   genres: [],
   links: [],
-} as BookSubmission;
-
-interface BookFormProps {
-  onChange?: (book: BookSubmission, valid: boolean) => void
-  onSubmit?: (book: BookSubmission) => void
-  footer?: ReactNode,
-  initialValue?: BookSubmission
-}
+} as Book;
 
 const convertGenreToSelectOptions = (genres: Genre[]) => {
   return genres.map(({ id, name }) => ({ value: id, label: name }))
@@ -57,6 +61,7 @@ const convertGenreToSelectOptions = (genres: Genre[]) => {
 export const BookForm = (props: BookFormProps) => {
   const initialValue = props.initialValue || defaultBook;
 
+  const [thumbnailFile, setThumbnailFile] = useState<File>();
   const [thumbnailUrl, setThumbnailUrl] = useState(props.initialValue ? `/api/book/${props.initialValue.id}/thumbnail` : undefined);
   const [people, setPeople] = useState<Person[]>([]);
 
@@ -124,7 +129,7 @@ export const BookForm = (props: BookFormProps) => {
             <Form.Control
               as="textarea"
               name="description"
-              rows="4"
+              rows={4}
               value={values.description}
               onChange={handleChange}
               onBlur={handleBlur}
@@ -162,17 +167,25 @@ export const BookForm = (props: BookFormProps) => {
                     accept="image/png, image/jpeg"
                     onChange={(e: ChangeEvent<HTMLInputElement>) => {
                       const file = e.target.files[0];
-                      setFieldValue('thumbnail', file);
                       if (file) {
-                        setThumbnailUrl(URL.createObjectURL(file))
+                        const reader = new FileReader();
+                        reader.readAsDataURL(file);
+                        reader.onload = function () {
+                          setThumbnailFile(file);
+                          setThumbnailUrl(URL.createObjectURL(file));
+                          setFieldValue('thumbnail', reader.result.substring(22));
+                        };
+                       
                       } else {
+                        setThumbnailFile(null);
                         setThumbnailUrl(null);
+                        setFieldValue('thumbnail', null);
                       }
                     }}
                     onBlur={handleBlur}
                     isInvalid={touched.thumbnail && !!errors.thumbnail}
                   />
-                  <Form.File.Label>{values?.thumbnail?.name || (props.initialValue ? `${window.location.origin}/book/${props.initialValue.id}/thumbnail` : 'Browse')}</Form.File.Label>
+                  <Form.File.Label>{thumbnailFile?.name || (props.initialValue ? `${window.location.origin}/book/${props.initialValue.id}/thumbnail` : 'Browse')}</Form.File.Label>
                   <Form.Text muted>
                     Max file size 1MB
                   </Form.Text>
@@ -250,11 +263,11 @@ export const BookForm = (props: BookFormProps) => {
                       as="select"
                       custom
                       name={`creators[${index}].role`}
-                      value={creator.role}
+                      value={creator.role || -1}
                       onChange={(e) => {
                         const newCreator = {
                           ...creator,
-                          role: roles[e.target.value].value
+                          role: e.target.value ? roles[e.target.value].value : null 
                         }
                         
                         setFieldValue(`creators[${index}]`, newCreator);

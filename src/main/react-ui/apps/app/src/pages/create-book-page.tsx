@@ -2,12 +2,12 @@ import { CircularProgress, Container } from '@material-ui/core';
 import { ErrorAlert } from 'components/error/error-alert';
 import { BookForm } from 'components/form/book-form/book-form';
 import BookSubmissionSuccess from 'components/message/book-submission-success/book-submission-success';
-import { useCreateBook } from 'hooks/book.hook';
+import { useSaveBook } from 'hooks/book.hook';
 import React from 'react';
 import { Button, Card } from 'react-bootstrap';
-import { BookSubmission } from 'types/book-submission';
+import { Book } from 'types/book';
 
-const AddBookForm = ({ loading, onSubmit, error }: { loading: boolean, onSubmit: (book: BookSubmission) => void, error: Error }) => {
+const AddBookForm = ({ loading, onSubmit, error }: { loading: boolean, onSubmit: (book: Book) => void, error: Error }) => {
   return (
     <Card>
       <Card.Title className="mt-3 ml-3">Add a New Book</Card.Title>
@@ -26,9 +26,9 @@ const AddBookForm = ({ loading, onSubmit, error }: { loading: boolean, onSubmit:
 }
 
 export const CreateBookPage = () => {
-  const { execute, data: book, loading, error } = useCreateBook();
+  const { execute, data: book, loading, error } = useSaveBook();
 
-  const onSubmit = (bookSubmission: BookSubmission) => {
+  const onSubmit = (bookSubmission: Book) => {
     execute(bookSubmission);
   }
 

@@ -1,7 +1,6 @@
 package com.tabroadn.bookbrowser.service;
 
-import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -15,12 +14,16 @@ import org.springframework.stereotype.Component;
 
 import com.tabroadn.bookbrowser.domain.ReleaseTypeEnum;
 import com.tabroadn.bookbrowser.dto.BookDto;
-import com.tabroadn.bookbrowser.dto.BookForm;
+import com.tabroadn.bookbrowser.dto.BookLinkDto;
 import com.tabroadn.bookbrowser.dto.BookSummaryDto;
+import com.tabroadn.bookbrowser.dto.GenreDto;
 import com.tabroadn.bookbrowser.dto.PersonCreatorDto;
 import com.tabroadn.bookbrowser.dto.ReleaseDto;
 import com.tabroadn.bookbrowser.entity.Book;
+import com.tabroadn.bookbrowser.entity.BookLink;
+import com.tabroadn.bookbrowser.entity.BookLinkId;
 import com.tabroadn.bookbrowser.entity.Creator;
+import com.tabroadn.bookbrowser.entity.CreatorId;
 import com.tabroadn.bookbrowser.entity.Genre;
 import com.tabroadn.bookbrowser.entity.Person;
 import com.tabroadn.bookbrowser.entity.Release;
@@ -28,8 +31,8 @@ import com.tabroadn.bookbrowser.exception.ImageUploadFailureException;
 import com.tabroadn.bookbrowser.exception.ResourceNotFoundException;
 import com.tabroadn.bookbrowser.repository.BookRepository;
 import com.tabroadn.bookbrowser.repository.BookSpecification;
-import com.tabroadn.bookbrowser.repository.CreatorRepository;
 import com.tabroadn.bookbrowser.repository.GenreRepository;
+import com.tabroadn.bookbrowser.repository.PersonRepository;
 import com.tabroadn.bookbrowser.util.DtoConversionUtils;
 
 @Component
@@ -38,10 +41,10 @@ public class BookService {
 	private BookRepository repository;
 	
 	@Autowired
-	private CreatorRepository creatorRepository;
+	private GenreRepository genreRepository;
 	
 	@Autowired
-	private GenreRepository genreRepository;
+	private PersonRepository personRepository;
 
 	public BookDto getById(Long id) {
 		return convertBookToBookDto(
@@ -58,7 +61,8 @@ public class BookService {
 	public List<BookSummaryDto> search(int page, int size, Optional<String> query, Optional<List<String>> genreNames) {
 		Pageable pageable = PageRequest.of(page, size);
 		
-		Specification<Book> specification = Specification.where(null);
+		Specification<Book> emptySpecification = Specification.where(null);
+		Specification<Book> specification = emptySpecification;
 		
 		if (query.isPresent()) {
 			specification = specification.and(BookSpecification.hasText(query.get()));
@@ -74,15 +78,18 @@ public class BookService {
 		
 		Page<Book> books = repository.findAll(specification, pageable);
 
+		if (specification == emptySpecification) {
+			return Arrays.asList();
+		}
+
 		return books.stream()
 					.map(BookService::convertBookToBookSummaryDto)
 					.collect(Collectors.toList());
 	}
 
-	public BookDto save(BookForm bookForm) {
-		Book book = convertBookFormToBook(bookForm);
-		Book newBook = repository.save(book);
-		return convertBookToBookDto(newBook);
+	public BookDto save(BookDto bookDto) {
+		Book book = convertBookDtoToBook(bookDto);
+		return convertBookToBookDto(repository.save(book));
 	}
 	
 	private static BookDto convertBookToBookDto(Book book) {
@@ -121,49 +128,92 @@ public class BookService {
 		return bookSummary;
 	}
 	
-	private Book convertBookFormToBook(BookForm bookForm) {
-		Book book = new Book();
-		book.setId(bookForm.getId());
-		book.setTitle(bookForm.getTitle());
-		book.setDescription(bookForm.getDescription());
-		book.setCreators(bookForm.getCreators().stream()
-				.map((creator) -> {
-					if (creator.getId() == null) {
-						Creator newCreator = convertPersonCreatorDtoToCreator(creator);
-						newCreator.setBook(book);
-						return newCreator;
-					} else {
-						return creatorRepository.findByPersonId(creator.getId());
-					}
-				})
-				.toList());
+	private Book convertBookDtoToBook(BookDto bookDto) {
+		Book book = bookDto.getId() != null
+				? repository.findById(bookDto.getId())
+						.orElseThrow(() -> new ResourceNotFoundException(String.format("book with id %s not found", bookDto.getId())))
+				: new Book();
 
-		book.setLinks(bookForm.getLinks().stream()
-				.map(DtoConversionUtils::convertBookLinkDtoToBookLink)
-				.toList());
-		book.getLinks().forEach(link -> link.setBook(book));
+		if (bookDto.getTitle() != null) {
+			book.setTitle(bookDto.getTitle());
+		}
 
-		book.setGenres(genreRepository.findAllById(bookForm.getGenres().stream()
-				.map((genreDto) -> genreDto.getId()).toList()));
-		try {
-			if (bookForm.getThumbnail() != null) {
-				book.setThumbnail(bookForm.getThumbnail().getBytes());
-			}
-		} catch (IOException e) {
-			throw new ImageUploadFailureException(bookForm.getThumbnail(), e);
+		if (bookDto.getDescription() != null) {
+			book.setDescription(bookDto.getDescription());
 		}
 		
+		if (bookDto.getThumbnail() != null) {
+			try {
+				book.setThumbnail(bookDto.getThumbnailBytes());
+			} catch (IllegalArgumentException e) {
+				throw new ImageUploadFailureException("Unable upload image with invalid base64 scheme", e);
+			}
+		}
+
+		if (bookDto.getCreators() != null) {
+			book.getCreators().clear();
+			book.getCreators().addAll(bookDto.getCreators().stream()
+					.map((creator) -> convertPersonCreatorDtoToCreator(creator, book))
+					.toList());
+		}
+
+		if (bookDto.getLinks() != null) {
+			book.getLinks().clear();
+			book.getLinks().addAll(bookDto.getLinks().stream()
+					.map((link) -> convertBookLinkDtoToBookLink(link, book))
+					.toList());
+		}
+		
+
+		if (bookDto.getGenres() != null) {
+			book.getGenres().clear();
+			book.getGenres().addAll(bookDto.getGenres().stream()
+					.filter(genreDto -> genreDto.getId() != null)
+					.map(this::convertGenreDtoToGenre)
+					.toList());
+		}
+
 		return book;
 	}
 	
-	private static Creator convertPersonCreatorDtoToCreator(PersonCreatorDto personCreatorDto) {
-		Person person = new Person();
-		person.setFullName(personCreatorDto.getFullName());
+	private static BookLink convertBookLinkDtoToBookLink(BookLinkDto bookLinkDto, Book book) {
+		BookLink bookLink = new BookLink();
 		
+		if (book.getId() != null) {
+			BookLinkId bookLinkId = new BookLinkId();
+			bookLinkId.setBookId(book.getId());
+			bookLink.setId(bookLinkId);
+		}
+
+		bookLink.getId().setUrl(bookLinkDto.getUrl());
+		bookLink.setDescription(bookLinkDto.getDescription());
+		bookLink.setBook(book);
+		return bookLink;
+	}
+
+	private Creator convertPersonCreatorDtoToCreator(PersonCreatorDto personCreatorDto, Book book) {
 		Creator creator = new Creator();
+		
+		Person person = null;
+		if (personCreatorDto.getId() == null) {
+			person = new Person();
+			person.setFullName(personCreatorDto.getFullName());
+		} else {
+			person = personRepository.findById(personCreatorDto.getId())
+					.orElseThrow(() -> new ResourceNotFoundException(String.format("person with id %s not found", personCreatorDto.getId())));
+			
+			if (book.getId() != null) {
+				CreatorId creatorId = new CreatorId();
+				creatorId.setBookId(book.getId());
+				creatorId.setPersonId(person.getId());
+				creator.setId(creatorId);
+			}
+		}
+
 		creator.setPerson(person);
 		creator.setRole(personCreatorDto.getRole());
-		
+		creator.setBook(book);
+
 		return creator;
 	}
 	
@@ -183,5 +233,10 @@ public class BookService {
 		releaseDto.setReleaseNumber(release.getReleaseNumber());
 		releaseDto.setDescription(release.getDescription());
 		return releaseDto;
+	}
+	
+	private Genre convertGenreDtoToGenre(GenreDto genreDto) {
+		return genreRepository.findById(genreDto.getId())
+				.orElseThrow(() -> new ResourceNotFoundException(String.format("genre with id %s not found", genreDto.getId())));
 	}
 }
