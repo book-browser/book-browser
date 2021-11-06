@@ -42,7 +42,8 @@ interface BookFormProps {
   onChange?: (book: Book, valid: boolean) => void
   onSubmit?: (book: Book) => void
   footer?: ReactNode,
-  initialValue?: Book
+  initialValue?: Book,
+  value?: Book
 }
 
 const defaultBook = {
@@ -62,7 +63,8 @@ export const BookForm = (props: BookFormProps) => {
   const initialValue = props.initialValue || defaultBook;
 
   const [thumbnailFile, setThumbnailFile] = useState<File>();
-  const [thumbnailUrl, setThumbnailUrl] = useState(props.initialValue ? `/api/book/${props.initialValue.id}/thumbnail` : undefined);
+  const [thumbnailUrl, setThumbnailUrl] = useState<string>();
+
   const [people, setPeople] = useState<Person[]>([]);
 
   const { data: fetchedPeople, execute } = useSearchForPerson();
@@ -77,12 +79,22 @@ export const BookForm = (props: BookFormProps) => {
     if (fetchedPeople) {
       setPeople(fetchedPeople);
     }
-  }, [fetchedPeople])
+  }, [fetchedPeople]);
+
+  const actualValue = props.value || initialValue;
+
+  useEffect(() => {
+    if (!actualValue.thumbnail && actualValue.id) {
+      setThumbnailFile(null);
+      setThumbnailUrl(`/api/book/${actualValue.id}/thumbnail`);
+    }
+  }, [actualValue]);
 
   return (
     <Formik
       validationSchema={schema}
-      initialValues={initialValue}
+      initialValues={actualValue}
+      enableReinitialize
       onSubmit={(values) => {
         if(props.onSubmit) {
           props.onSubmit(values);
@@ -96,16 +108,18 @@ export const BookForm = (props: BookFormProps) => {
       values,
       touched,
       isValid,
-      errors}) => (
+      errors}) => {
+        useEffect(() => {
+          if(props.onChange) {
+            props.onChange(values, isValid)
+          }
+        }, [values]);
+      return (
+
         <Form
           className="m-3"
           noValidate
           onSubmit={handleSubmit}
-          onChange={() => {
-            if(props.onChange) {
-              props.onChange(values, isValid)
-            }
-          }}
         >
           <h4 className="mb-3">General Information</h4>
           <hr className="mb-4"/>
@@ -129,7 +143,7 @@ export const BookForm = (props: BookFormProps) => {
             <Form.Control
               as="textarea"
               name="description"
-              rows={4}
+              rows={6}
               value={values.description}
               onChange={handleChange}
               onBlur={handleBlur}
@@ -146,7 +160,7 @@ export const BookForm = (props: BookFormProps) => {
               isMulti
               name="genres"
               options={genreOptions}
-              defaultValue={convertGenreToSelectOptions(initialValue.genres)}
+              value={convertGenreToSelectOptions(actualValue.genres)}
               onChange={(data) => {
                 const genres = data.map((item) => ({
                   id: item.value,
@@ -173,7 +187,7 @@ export const BookForm = (props: BookFormProps) => {
                         reader.onload = function () {
                           setThumbnailFile(file);
                           setThumbnailUrl(URL.createObjectURL(file));
-                          setFieldValue('thumbnail', reader.result.substring(22));
+                          setFieldValue('thumbnail', (reader.result as string).substring(22));
                         };
                        
                       } else {
@@ -185,7 +199,7 @@ export const BookForm = (props: BookFormProps) => {
                     onBlur={handleBlur}
                     isInvalid={touched.thumbnail && !!errors.thumbnail}
                   />
-                  <Form.File.Label>{thumbnailFile?.name || (props.initialValue ? `${window.location.origin}/book/${props.initialValue.id}/thumbnail` : 'Browse')}</Form.File.Label>
+                  <Form.File.Label>{thumbnailFile?.name || ((!actualValue.thumbnail && actualValue.id) ? `${window.location.origin}/book/${actualValue.id}/thumbnail` : 'Browse')}</Form.File.Label>
                   <Form.Text muted>
                     Max file size 1MB
                   </Form.Text>
@@ -348,7 +362,7 @@ export const BookForm = (props: BookFormProps) => {
                     value={values.links[index].description}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    isInvalid={touched.links?.[index].description && !!(errors as any).links?.[index]?.description}
+                    isInvalid={touched.links?.[index]?.description && !!(errors as any).links?.[index]?.description}
                   />
                   <Form.Control.Feedback type="invalid">
                     {(errors as any).links?.[index]?.description}
@@ -386,7 +400,7 @@ export const BookForm = (props: BookFormProps) => {
           <hr className="mb-4"/>
           {props.footer}
         </Form>
-      )}
+      )}}
     </Formik>
   )
 }

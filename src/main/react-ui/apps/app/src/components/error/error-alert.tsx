@@ -1,7 +1,6 @@
 import React from 'react';
 import { Alert } from 'react-bootstrap';
 import { ApiError } from "types/api-error"
-import WarningIcon from '@material-ui/icons/Warning';
 import './error-alert.scss';
 
 export interface ErrorAlertProps {
