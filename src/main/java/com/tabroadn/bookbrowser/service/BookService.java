@@ -99,21 +99,21 @@ public class BookService {
 		bookDto.setDescription(book.getDescription());
 		bookDto.setCreators(book.getCreators().stream()
 			.map(BookService::convertCreatorToPersonCreatorDto)
-			.toList());
+			.collect(Collectors.toList()));
 		bookDto.setIssues(book.getReleases().stream()
 			.map(BookService::convertReleaseToReleaseDto)
 			.filter((release) -> release.getReleaseType() == ReleaseTypeEnum.ISSUE)
-			.toList());
+			.collect(Collectors.toList()));
 		bookDto.setVolumes(book.getReleases().stream()
 			.map(BookService::convertReleaseToReleaseDto)
 			.filter((release) -> release.getReleaseType() == ReleaseTypeEnum.VOLUME)
-			.toList());
+			.collect(Collectors.toList()));
 		bookDto.setGenres(book.getGenres().stream()
 				.map(DtoConversionUtils::convertGenreToGenreDto)
-				.toList());
+				.collect(Collectors.toList()));
 		bookDto.setLinks(book.getLinks().stream()
 				.map(DtoConversionUtils::convertBookLinkToBookLinkDto)
-				.toList());
+				.collect(Collectors.toList()));
 		return bookDto;
 	}
 	
@@ -154,14 +154,14 @@ public class BookService {
 			book.getCreators().clear();
 			book.getCreators().addAll(bookDto.getCreators().stream()
 					.map((creator) -> convertPersonCreatorDtoToCreator(creator, book))
-					.toList());
+					.collect(Collectors.toList()));
 		}
 
 		if (bookDto.getLinks() != null) {
 			book.getLinks().clear();
 			book.getLinks().addAll(bookDto.getLinks().stream()
 					.map((link) -> convertBookLinkDtoToBookLink(link, book))
-					.toList());
+					.collect(Collectors.toList()));
 		}
 		
 
@@ -170,7 +170,7 @@ public class BookService {
 			book.getGenres().addAll(bookDto.getGenres().stream()
 					.filter(genreDto -> genreDto.getId() != null)
 					.map(this::convertGenreDtoToGenre)
-					.toList());
+					.collect(Collectors.toList()));
 		}
 
 		return book;

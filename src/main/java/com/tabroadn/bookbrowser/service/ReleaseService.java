@@ -1,6 +1,7 @@
 package com.tabroadn.bookbrowser.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -20,7 +21,8 @@ public class ReleaseService {
 	public List<BookReleaseDto> getReleases(int amount) {
 		return repository.findAll(PageRequest.of(0, amount, Sort.by(Sort.Direction.DESC, "publishDate")))
 				.map(ReleaseService::convertReleaseToBookReleaseDto)
-				.toList();
+				.stream()
+				.collect(Collectors.toList());
 	}
 	
 	private static BookReleaseDto convertReleaseToBookReleaseDto(Release release) {
