@@ -20,10 +20,12 @@ export const getById = async (id: number) => {
   return await handleResponse<Book>(response);
 }
 
-export const search = async({ query, genres }: 
+export const search = async({ query, genres, page, limit }: 
   { 
     query?: string,
     genres?: Genre[],
+    page?: number,
+    limit?: number,
   }) => {
 
   const params = new URLSearchParams();
@@ -31,7 +33,12 @@ export const search = async({ query, genres }:
   if (query) {
     params.append('query', query);
   }
-
+  if (page) {
+    params.append('page', `${page}`);
+  }
+  if (limit) {
+    params.append('limit', `${limit}`);
+  }
   if (genres) {
     genres.map((genre) => genre.name)
           .forEach((genreName) => params.append('genres', genreName));

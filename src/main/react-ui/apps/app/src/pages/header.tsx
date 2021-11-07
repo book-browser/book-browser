@@ -27,7 +27,10 @@ const Header = () => {
         {!(['/login', '/login/', '/register', '/register/', '/username/recover', 'username/recover/'].includes(location.pathname)) && (
           <div className="ml-auto d-flex">
             <SearchBar />
-            <Nav><Nav.Link className="ml-2" as={Link} to="/search">Filter</Nav.Link></Nav>
+            <Nav className="ml-2">
+              <Nav.Link as={Link} to="/search">Filter</Nav.Link>
+              <Nav.Link as={Link} to="/random">Random</Nav.Link>
+            </Nav>
             {!user && <Button variant="primary" className="ml-2 mr-1" onClick={() => openModal('login')}>Login</Button>}
             {!user && <Button variant="primary" onClick={() => openModal('register')}>Register</Button>}
             {user && <Button variant="primary" onClick={logout}>Logout</Button>}

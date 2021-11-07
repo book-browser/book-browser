@@ -7,6 +7,7 @@ import { CreateBookPage } from './create-book-page';
 import EditBookPage from './edit-book-page';
 import Header from './header';
 import LoginPage from './login-page';
+import RandomBookPage from './random-book-page';
 import RegisterPage from './register-page';
 import ResendVerificationEmailPage from './resend-verification-email-page';
 import SearchPage from './search-page';
@@ -41,6 +42,9 @@ export const Routing = () => {
         </Route>
         <Route exact path="/username/recover">
           <UsernameRecoveryPage />
+        </Route>
+        <Route exact path="/random">
+          <RandomBookPage />
         </Route>
         <Route exact path="/home">
           <Redirect to="/" />
