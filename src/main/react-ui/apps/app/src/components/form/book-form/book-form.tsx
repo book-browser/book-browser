@@ -109,9 +109,11 @@ export const BookForm = (props: BookFormProps) => {
       isValid,
       errors}) => {
         useEffect(() => {
-          setValue(values);
-          if(props.onChange) {
-            props.onChange(values, isValid);
+          if (values !== actualValue) {
+            setValue(values);
+            if(props.onChange) {
+              props.onChange(values, isValid);
+            }
           }
         }, [values]);
       return (

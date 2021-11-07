@@ -18,6 +18,14 @@ export const BookPage = () => {
     execute(id);
   }, [id]);
 
+  useEffect(() => {
+    if (book) {
+      document.title = `${book.title} | BookBrowser`;
+    } else {
+      document.title = 'BookBrowser';
+    }
+  }, [book]);
+
   return (
     <Container maxWidth="lg" className="mt-3">
       {loading && <Loading />}

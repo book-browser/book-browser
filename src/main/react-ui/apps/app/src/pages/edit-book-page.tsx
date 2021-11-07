@@ -6,9 +6,11 @@ import { NotFound } from 'components/message/not-found/not-found';
 import { useGetBook, useSaveBook } from 'hooks/book.hook';
 import React, { useEffect, useState } from 'react';
 import { Alert, Breadcrumb, Button } from 'react-bootstrap';
-import { useParams, useHistory, Link } from 'react-router-dom';
+import { useParams, useHistory, Link, Prompt } from 'react-router-dom';
 import { ApiError } from 'types/api-error';
 import { Book } from 'types/book';
+
+const UNSAVED_MESSAGE = "Are you sure that you want to leave with unsaved changes?";
 
 const EditBookPage = () => {
   const { id } = useParams();
@@ -18,9 +20,11 @@ const EditBookPage = () => {
   const notFound = loadError?.name === 'ApiError' && (loadError as ApiError)?.status === 404 ;
 
   const [book, setBook] = useState<Book>();
+  const [saved, setSaved] = useState(true);
  
   const onChange = (changedBook: Book) => {
     setBook(changedBook);
+    setSaved(false);
   }
 
   const onSubmit = (bookSubmission: Book) => {
@@ -34,6 +38,14 @@ const EditBookPage = () => {
   const cancel = () => {
     history.push(`/book/${book!.id}`);
   }
+
+  useEffect(() => {
+    if (book) {
+      document.title = `Edit ${(savedBook || loadedBook).title}${saved ? '' : '*'} | BookBrowser`;
+    } else {
+      document.title = 'Edit | BookBrowser';
+    }
+  }, [book, saved]);
   
   useEffect(() => {
     load(id);
@@ -48,6 +60,7 @@ const EditBookPage = () => {
   useEffect(() => {
     if (savedBook) {
       setBook(savedBook);
+      setSaved(true);
     }
   }, [savedBook]);
 
@@ -85,6 +98,7 @@ const EditBookPage = () => {
               </div>
             }
           />
+          <Prompt when={!saved} message={UNSAVED_MESSAGE} />
         </div>
       )}
     </Container>
