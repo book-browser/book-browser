@@ -60,8 +60,7 @@ const convertGenreToSelectOptions = (genres: Genre[]) => {
 }
 
 export const BookForm = (props: BookFormProps) => {
-  const initialValue = props.initialValue || defaultBook;
-
+  const [value, setValue] = useState<Book>(props.initialValue || defaultBook);
   const [thumbnailFile, setThumbnailFile] = useState<File>();
   const [thumbnailUrl, setThumbnailUrl] = useState<string>();
 
@@ -81,7 +80,7 @@ export const BookForm = (props: BookFormProps) => {
     }
   }, [fetchedPeople]);
 
-  const actualValue = props.value || initialValue;
+  const actualValue = props.value || value;
 
   useEffect(() => {
     if (!actualValue.thumbnail && actualValue.id) {
@@ -110,8 +109,9 @@ export const BookForm = (props: BookFormProps) => {
       isValid,
       errors}) => {
         useEffect(() => {
+          setValue(values);
           if(props.onChange) {
-            props.onChange(values, isValid)
+            props.onChange(values, isValid);
           }
         }, [values]);
       return (
@@ -153,24 +153,6 @@ export const BookForm = (props: BookFormProps) => {
               {errors.description}
             </Form.Control.Feedback>
           </Form.Group>
-          <Form.Group controlId="genre-select">
-            <Form.Label>Genres</Form.Label>
-            <Select
-              inputId="genre-select"
-              isMulti
-              name="genres"
-              options={genreOptions}
-              value={convertGenreToSelectOptions(actualValue.genres)}
-              onChange={(data) => {
-                const genres = data.map((item) => ({
-                  id: item.value,
-                  name: item.label
-                }));
-
-                setFieldValue('genres', genres);
-              }}
-            />
-          </Form.Group>
           <Form.Group>
             <Form.Label>Thumbnail<RequiredSymbol /></Form.Label>
             <Row>
@@ -187,7 +169,7 @@ export const BookForm = (props: BookFormProps) => {
                         reader.onload = function () {
                           setThumbnailFile(file);
                           setThumbnailUrl(URL.createObjectURL(file));
-                          setFieldValue('thumbnail', (reader.result as string).substring(22));
+                          setFieldValue('thumbnail', (reader.result as string).split(',')[1]);
                         };
                        
                       } else {
@@ -211,6 +193,23 @@ export const BookForm = (props: BookFormProps) => {
             </Row>
             
             {thumbnailUrl && <img src={thumbnailUrl} className="mt-3" style={{ maxWidth: "100%" }} />}
+          </Form.Group>
+          <Form.Group controlId="genre-select">
+            <Form.Label>Genres</Form.Label>
+            <Select
+              inputId="genre-select"
+              isMulti
+              name="genres"
+              options={genreOptions}
+              value={convertGenreToSelectOptions(actualValue.genres)}
+              onChange={(data) => {
+                const genres = data.map((item) => ({
+                  id: item.value,
+                  name: item.label
+                }));
+                setFieldValue('genres', genres);
+              }}
+            />
           </Form.Group>
           <Form.Group>
             <Form.Label>Creators</Form.Label>
