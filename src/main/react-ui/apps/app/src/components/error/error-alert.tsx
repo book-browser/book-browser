@@ -23,7 +23,7 @@ export const ErrorAlert = (props: ErrorAlertProps) => {
       <div><small>{`Message: ${props.error.message}`}</small></div>
       {apiError && (
         <>
-          <div><small>{`CorrelationId: ${apiError.correlationId}`}</small></div>
+          {apiError.correlationId && <div><small>{`CorrelationId: ${apiError.correlationId}`}</small></div>}
           <div><small>{`Timestamp: ${apiError.timestamp}`}</small></div>
         </>
       )}

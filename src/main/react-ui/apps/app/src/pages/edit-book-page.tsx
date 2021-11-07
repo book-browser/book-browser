@@ -2,10 +2,12 @@ import { CircularProgress, Container } from '@material-ui/core';
 import { ErrorAlert } from 'components/error/error-alert';
 import { BookForm } from 'components/form/book-form/book-form';
 import Loading from 'components/loading/loading';
+import { NotFound } from 'components/message/not-found/not-found';
 import { useGetBook, useSaveBook } from 'hooks/book.hook';
 import React, { useEffect, useState } from 'react';
 import { Alert, Breadcrumb, Button } from 'react-bootstrap';
 import { useParams, useHistory, Link } from 'react-router-dom';
+import { ApiError } from 'types/api-error';
 import { Book } from 'types/book';
 
 const EditBookPage = () => {
@@ -13,6 +15,7 @@ const EditBookPage = () => {
   const history = useHistory();
   const { data: loadedBook, execute: load, loading: loadingBook, error: loadError } = useGetBook();
   const { data: savedBook, execute: save, loading: savingBook, error: saveError } = useSaveBook();
+  const notFound = loadError?.name === 'ApiError' && (loadError as ApiError)?.status === 404 ;
 
   const [book, setBook] = useState<Book>();
  
@@ -51,7 +54,8 @@ const EditBookPage = () => {
   return (
     <Container maxWidth="md" className="mt-3">
       {loadingBook && <Loading />}
-      {loadError && <ErrorAlert uiMessage="Something went wrong. Unable to load this entry." error={loadError} />}
+      {loadError && !notFound && <ErrorAlert uiMessage="Something went wrong. Unable to load this entry." error={loadError} />}
+      {loadError && notFound && <NotFound />}
       {book && (
         <div>
           <h2>Edit Book</h2>

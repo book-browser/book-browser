@@ -6,5 +6,5 @@ export interface ApiError extends Error {
   httpError: string
   errors: string[]
   path: string
-  correlationId: string
+  correlationId?: string
 }
