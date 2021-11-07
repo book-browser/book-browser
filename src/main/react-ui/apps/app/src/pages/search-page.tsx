@@ -48,9 +48,7 @@ const SearchPage = () => {
   }
 
   useEffect(() => {
-    if (query || selectedGenres.length > 0) {
-      execute({ query, genres: selectedGenres });
-    }
+    execute({ query, genres: selectedGenres });
   }, [selectedGenres, query]);
 
   return (

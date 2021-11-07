@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -59,6 +60,14 @@ public class BookService {
 	}
 
 	public List<BookSummaryDto> search(int page, int size, Optional<String> query, Optional<List<String>> genreNames) {
+		if (Stream.of(query, genreNames).allMatch(Optional::isEmpty)) {
+			long count = repository.count();
+			int randomPage = (int) (Math.random() * count / size);
+			return repository.findAll(PageRequest.of(randomPage, size)).stream()
+					.map(BookService::convertBookToBookSummaryDto)
+					.collect(Collectors.toList());
+		}
+		
 		Pageable pageable = PageRequest.of(page, size);
 		
 		Specification<Book> emptySpecification = Specification.where(null);
