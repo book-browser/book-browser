@@ -65,7 +65,7 @@ const ResendVerificationEmailPage = () => {
               </>
             )}
           </div>
-          {error && <ErrorAlert error={error} />}
+          {error && <ErrorAlert uiMessage="Something went wrong. Unable to process your request." error={error} />}
           {executed && !error && <Alert variant="success">Verification Email Resent!</Alert>}
         </Card.Body>
       </Card>

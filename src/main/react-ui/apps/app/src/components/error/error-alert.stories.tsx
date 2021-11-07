@@ -6,7 +6,7 @@ export default { title: 'Error Alert' };
 
 export const SingleError = () => {
   const error = new Error("Please fill in your first name");
-  return <ErrorAlert error={error} />
+  return <ErrorAlert uiMessage="Something went wrong" error={error} />
 };
 
 export const SomethingWentWrongError = () => {
@@ -21,18 +21,5 @@ export const SomethingWentWrongError = () => {
     "correlationId": "434fc0e8-b23a-462b-aa84-a6f3568517e4"
   };
 
-  return <ErrorAlert error={error} />
+  return <ErrorAlert uiMessage="Something went wrong" error={error} />
 }
-
-export const MultipleErrors = () => {
-  const error = {
-    name: 'ApiError',
-    message: "Validation failed for payload",
-    errors: [
-      "Please fill in your first name",
-      "Please fill in your last name"
-   ] 
-  } as ApiError;
-
-  return <ErrorAlert error={error} />
-};

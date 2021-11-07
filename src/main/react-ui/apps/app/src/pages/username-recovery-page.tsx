@@ -53,7 +53,7 @@ const UsernameRecoveryPage = () => {
           <div className="text-center mb-3">
             <Link to="/home">Return Home</Link>
           </div>
-          {error && <ErrorAlert error={error} />}
+          {error && <ErrorAlert uiMessage="Something went wrong. Unable to process your request." error={error} />}
           {executed && !error && <Alert variant="success">Username Email Sent!</Alert>}
         </Card.Body>
       </Card>

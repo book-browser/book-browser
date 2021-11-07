@@ -51,7 +51,7 @@ const EditBookPage = () => {
   return (
     <Container maxWidth="md" className="mt-3">
       {loadingBook && <Loading />}
-      {loadError && <ErrorAlert error={loadError} />}
+      {loadError && <ErrorAlert uiMessage="Something went wrong. Unable to load this entry." error={loadError} />}
       {book && (
         <div>
           <h2>Edit Book</h2>
@@ -66,7 +66,7 @@ const EditBookPage = () => {
             onSubmit={onSubmit}
             footer={
               <div>
-                {saveError && <ErrorAlert error={saveError} />}
+                {saveError && <ErrorAlert uiMessage="Something went wrong. Unable to save this entry." error={saveError} />}
                 {!saveError && savedBook && <Alert variant="success" className="mb-2">Changes successfully saved</Alert>}
                 <>
                   <div className="d-flex">

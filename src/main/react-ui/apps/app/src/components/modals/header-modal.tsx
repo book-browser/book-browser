@@ -42,7 +42,7 @@ const LoginModalContent = ({ setActiveTab } : {
           onSubmit={onSubmit}
           footer={
             <div>
-              {error && <ErrorAlert error={error} />}
+              {error && <ErrorAlert uiMessage="Unable to login." error={error} />}
               <div className="mb-3">
                 {!loading && <Button variant="primary" className="w-100" type="submit" disabled={!valid}>Login</Button>}
                 {loading && <Button variant="primary" className="w-100" type="submit" disabled>Loading <CircularProgress color="inherit" size={"15px"} /></Button>}
@@ -83,7 +83,7 @@ const RegisterStep = ({ valid, error, loading, onChange, onSubmit, setActiveTab 
       onSubmit={onSubmit}
       footer={
         <div>
-          {error && <ErrorAlert error={error} />}
+          {error && <ErrorAlert uiMessage="Something went wrong. Unable to Register." error={error} />}
           {!loading && <Button className="mb-4 w-100" variant="primary" type="submit" disabled={!valid}>Register</Button>}
           {loading && <Button className="mb-4 w-100" variant="primary" type="submit" disabled>Registering <CircularProgress color="inherit" size={"15px"} /></Button>}
           <p className="text-center"><Button variant="link" onClick={() => setActiveTab('recover')}>Forgot Username?</Button></p>
@@ -171,7 +171,7 @@ const UsernameRecoveryContent = ({ setActiveTab } : {
           <Button variant="link" onClick={() => setActiveTab('register')}>Register</Button>
 
         </div>
-        {error && <ErrorAlert error={error} />}
+        {error && <ErrorAlert uiMessage="Something went wrong. Unable to process your request." error={error} />}
         {executed && !error && <Alert variant="success">Username Email Sent!</Alert>}
       </Modal.Body>
     </>

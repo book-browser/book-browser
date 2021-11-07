@@ -43,7 +43,7 @@ const LoginPage = () => {
             onSubmit={onSubmit}
             footer={
               <div>
-                {error && <ErrorAlert error={error} />}
+                {error && <ErrorAlert uiMessage="Something went wrong. Unable to login." error={error} />}
                 {!loading && <Button variant="primary" type="submit" disabled={!valid}>Login</Button>}
                 {loading && <Button variant="primary" type="submit" disabled>Loading <CircularProgress color="secondary" size={"15px"} /></Button>}
 

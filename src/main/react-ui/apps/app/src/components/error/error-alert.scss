@@ -1,12 +1,14 @@
+@import '../../variables.scss';
+
 .error-alert-heading {
   display: flex;
   align-items: flex-start;
+  margin-bottom: $margin-md;
 }
 
 .error-alert-message {
   word-break: break-word;
   word-wrap: break-word;
-  margin-left: 5px;
   font-weight: bolder;
 }
 

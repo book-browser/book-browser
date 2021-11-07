@@ -15,7 +15,7 @@ const AddBookForm = ({ loading, onSubmit, error }: { loading: boolean, onSubmit:
         onSubmit={onSubmit}
         footer={
           <div>
-            {error && <ErrorAlert error={error} />}
+            {error && <ErrorAlert uiMessage="Something went wrong. Unable to add your entry." error={error} />}
             {!loading && <Button variant="primary" type="submit">Submit</Button>}
             {loading && <Button variant="primary" type="submit" disabled>Submitting <CircularProgress color="secondary" size={"15px"} /></Button>}
           </div>

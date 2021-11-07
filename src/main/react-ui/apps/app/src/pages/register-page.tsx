@@ -25,7 +25,7 @@ const RegisterStep = ({ valid, loading, error, onChange, onSubmit }: {
             onSubmit={onSubmit}
             footer={
               <div>
-                {error && <ErrorAlert className="mb-3" error={error} />}
+                {error && <ErrorAlert uiMessage="Something went wrong. Unable to register." className="mb-3" error={error} />}
                 {!loading && <Button className="mb-4" variant="primary" type="submit" disabled={!valid}>Register</Button>}
                 {loading && <Button className="mb-4" variant="primary" type="submit" disabled>Registering <CircularProgress color="secondary" size={"15px"} /></Button>}
                 
