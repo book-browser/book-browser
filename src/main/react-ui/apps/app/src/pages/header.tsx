@@ -2,7 +2,7 @@ import HeaderModal, { HeaderModalTab } from 'components/modals/header-modal';
 import SearchBar from 'components/search-bar/search-bar';
 import { useLogout, useUser } from 'hooks/user.hook';
 import React, { useState } from 'react';
-import { Alert, Button, Navbar } from 'react-bootstrap';
+import { Alert, Button, Nav, Navbar } from 'react-bootstrap';
 import { useLocation, Link } from 'react-router-dom';
 
 const Header = () => {
@@ -27,6 +27,7 @@ const Header = () => {
         {!(['/login', '/login/', '/register', '/register/', '/username/recover', 'username/recover/'].includes(location.pathname)) && (
           <div className="ml-auto d-flex">
             <SearchBar />
+            <Nav><Nav.Link className="ml-2" as={Link} to="/search">Filter</Nav.Link></Nav>
             {!user && <Button variant="primary" className="ml-2 mr-1" onClick={() => openModal('login')}>Login</Button>}
             {!user && <Button variant="primary" onClick={() => openModal('register')}>Register</Button>}
             {user && <Button variant="primary" onClick={logout}>Logout</Button>}
