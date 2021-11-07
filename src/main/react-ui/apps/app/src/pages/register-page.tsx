@@ -82,7 +82,7 @@ const RegisterPage = () => {
   }
 
   useEffect(() => {
-    document.title = 'Register';
+    document.title = 'Register | BookBrowser';
   }, []);
 
   useEffect(() => {

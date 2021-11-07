@@ -14,7 +14,7 @@ const VerifyUserPage = () => {
   const apiError = error?.name === 'ApiError' && error as ApiError;
   
   useEffect(() => {
-    document.title = 'Verify User';
+    document.title = 'Verify User | BookBrowser';
   }, []);
 
   useEffect(() => {

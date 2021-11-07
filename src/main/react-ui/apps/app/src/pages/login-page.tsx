@@ -24,7 +24,7 @@ const LoginPage = () => {
   }
 
   useEffect(() => {
-    document.title = 'Login';
+    document.title = 'Login | BookBrowser';
   }, []);
 
   useEffect(() => {

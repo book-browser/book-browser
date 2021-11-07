@@ -16,7 +16,11 @@ const RandomBookPage = () => {
     if (data) {
       history.push(`/book/${data[0].id}`);
     }
-  }, [data])
+  }, [data]);
+
+  useEffect(() => {
+    document.title = 'Random Book | BookBrowser';
+  }, []);
   
   if (loading) {
     return <Loading />;

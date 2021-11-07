@@ -51,6 +51,10 @@ const SearchPage = () => {
     execute({ query, genres: selectedGenres });
   }, [selectedGenres, query]);
 
+  useEffect(() => {
+    document.title = 'Search | BookBrowser';
+  }, []);
+
   return (
     <Container maxWidth="lg">
       <h2 className="mb-5">Search</h2>

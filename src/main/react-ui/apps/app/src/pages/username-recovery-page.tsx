@@ -12,7 +12,7 @@ const UsernameRecoveryPage = () => {
   const { execute, executed, loading, error } = useSendUsernameEmail();
 
   useEffect(() => {
-    document.title = 'Recover Username';
+    document.title = 'Recover Username | BookBrowser';
   }, []);
 
   useEffect(() => {

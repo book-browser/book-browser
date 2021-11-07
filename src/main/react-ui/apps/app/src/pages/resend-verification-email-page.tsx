@@ -13,7 +13,7 @@ const ResendVerificationEmailPage = () => {
   const { execute, executed, loading, error } = useResendVerificationEmail();
 
   useEffect(() => {
-    document.title = 'Resend Verification Email';
+    document.title = 'Resend Verification Email | BookBrowser';
   }, []);
 
   useEffect(() => {
