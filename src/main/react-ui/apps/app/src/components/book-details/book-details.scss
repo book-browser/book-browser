@@ -11,6 +11,12 @@
   }
 }
 
+@media screen and (max-width: 768px) {
+  .book-details-body {
+    flex-wrap: wrap;
+  }
+}
+
 .book-details-thumbnail {
   width: 300px;
   height: 400px;

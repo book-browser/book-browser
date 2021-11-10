@@ -47,14 +47,18 @@ export const BookDetails = ({
             </div>
           </div>
 
-          <span><strong>Relevant Links</strong></span>
-          <div className="mb-4">
-            {book.links.map((link) => (
-              <div key={link.url}>
-                <Link to={{ pathname: link.url }} target="_blank">{link.description}</Link>
+          {book.links.length > 0 && (
+            <>
+              <span><strong>Relevant Links</strong></span>
+              <div className="mb-4">
+                {book.links.map((link) => (
+                  <div key={link.url}>
+                    <Link to={{ pathname: link.url }} target="_blank">{link.description}</Link>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </>
+          )}
           
         </div>
       </div>

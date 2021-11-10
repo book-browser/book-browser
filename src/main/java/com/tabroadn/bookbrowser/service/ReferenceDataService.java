@@ -38,7 +38,7 @@ public class ReferenceDataService {
 	private static RoleDto convertRoleToRoleDto(RoleEnum role) {
 		RoleDto roleDto = new RoleDto();
 		roleDto.setTitle(role.getTitle());
-		roleDto.setValue(role.ordinal());
+		roleDto.setValue(role.name());
 		return roleDto;
 	}
 	

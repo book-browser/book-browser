@@ -1,12 +1,11 @@
-import { Container } from '@material-ui/core';
-import { NotFound } from 'components/message/not-found/not-found';
 import React from 'react';
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
+import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import { BookPage } from './book-page';
 import { CreateBookPage } from './create-book-page';
 import EditBookPage from './edit-book-page';
 import Header from './header';
 import LoginPage from './login-page';
+import NotFoundPage from './not-found-page';
 import RandomBookPage from './random-book-page';
 import RegisterPage from './register-page';
 import ResendVerificationEmailPage from './resend-verification-email-page';
@@ -53,9 +52,7 @@ export const Routing = () => {
           <CreateBookPage />
         </Route>
         <Route>
-          <Container maxWidth="sm" className="mt-3">
-            <NotFound />
-          </Container>
+          <NotFoundPage />
         </Route>
       </Switch>
     </BrowserRouter>

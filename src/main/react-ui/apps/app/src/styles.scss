@@ -1,7 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 
-@import '~bootstrap/dist/css/bootstrap.min.css';
-
+@import '~bootstrap/dist/css/bootstrap.css';
 
 .custom-file-label {
   z-index: 0;
@@ -16,14 +15,26 @@
   display: none;
 }
 
-.rbt {
-  width: 400px
-}
-
 .breadcrumb {
   background-color: inherit;
   margin-bottom: 0;
   padding-bottom: 0;
+}
+
+.btn-nav {
+  color: rgba(255,255,255,.5);
+  padding: 0.5rem 0;
+  display: block;
+  &:hover {
+    color: rgba(255,255,255,.75);
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .navbar-expand-md .btn-nav {
+    padding: 0.5rem 0.5rem;
+    display: inline-block;
+  }
 }
 
 // .MuiSvgIcon-root {

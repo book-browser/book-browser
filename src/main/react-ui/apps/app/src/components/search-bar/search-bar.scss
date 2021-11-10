@@ -1,5 +1,13 @@
 @import '../../variables.scss';
 
+.search-bar {
+  min-width: 275px;
+  max-width: 400px;
+  .rbt {
+    width: 100%;
+  }  
+}
+
 .search-option {
   display: flex;
 }
@@ -10,8 +18,21 @@
   margin-right: $margin-md;
 }
 
+.search-bar-button {
+  height: 38px;
+  color: #6c757d;
+  &:hover {
+    color: #343a40;
+  }
+}
+
 .rbt .dropdown-item {
   border-bottom: 1px solid #dee2e6;
+}
+
+.rbt-input-main {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
 }
 
 .rbt-menu {

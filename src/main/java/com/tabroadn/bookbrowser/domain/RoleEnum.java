@@ -1,10 +1,7 @@
 package com.tabroadn.bookbrowser.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import lombok.Getter;
 
-@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 @Getter
 public enum RoleEnum {
 	AUTHOR("Author"),

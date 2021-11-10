@@ -31,7 +31,7 @@ const SearchBarOption =({ option, position }: {
   )
 }
 
-const SearchBar = () => {
+const SearchBar = ({ className }: { className?: string }) => {
   const { data, loading, execute } = useSearch();
   const history = useHistory();
   const [activeIndex, setActiveIndex] = useState(-1);
@@ -66,7 +66,7 @@ const SearchBar = () => {
   }
 
   return (
-    <InputGroup>
+    <InputGroup className={`${className} flex-nowrap search-bar`}>
       <AsyncTypeahead 
         ref={ref}
         filterBy={filterBy}
@@ -92,7 +92,7 @@ const SearchBar = () => {
       }}
       </AsyncTypeahead>
       <InputGroup.Append>
-        <Button variant="secondary">
+        <Button variant="test" className="search-bar-button border-left-0 border bg-white outline-secondary">
           <SearchIcon fontSize="small" />
         </Button>
       </InputGroup.Append>

@@ -89,6 +89,8 @@ export const BookForm = (props: BookFormProps) => {
     }
   }, [actualValue]);
 
+  console.log(actualValue);
+
   return (
     <Formik
       validationSchema={schema}
@@ -217,17 +219,17 @@ export const BookForm = (props: BookFormProps) => {
             <Form.Label>Creators</Form.Label>
             <Form.Group>
               <Row>
-                <Col>
+                <Col xs={12} sm={7}>
                   <Form.Label htmlFor={`creator0-name-select`}>Name<RequiredSymbol /></Form.Label>
                 </Col>
-                <Col xs={3}>
+                <Col xs={12} sm={3}>
                   <Form.Label htmlFor={`creator0-role-select`}>Role</Form.Label>
                 </Col>
                 <Col xs={2} />
               </Row>
               {values.creators.map((creator, index) => (
                 <Row key={index} className="mb-2">
-                  <Col>
+                  <Col xs={12} sm={7} className="mb-2 mb-sm-0">
                     <CreatableSelect
                       defaultValue={creator.fullName && { label: creator.fullName, value: creator.id }}
                       inputId={`creator${index}-name-select`}
@@ -272,13 +274,13 @@ export const BookForm = (props: BookFormProps) => {
                     />
                     {touched?.creators?.[index]?.fullName && (errors?.creators as FormikErrors<PersonCreator>[])?.[index]?.fullName && <div className="invalid-feedback d-block">{(errors?.creators as FormikErrors<PersonCreator>[])?.[index]?.fullName}</div>}
                   </Col>
-                  <Col xs={3}>
+                  <Col xs={12} sm={3} className="mb-2 mb-sm-0">
                     <Form.Control
                       id={`creator${index}-role-select`}
                       as="select"
                       custom
                       name={`creators[${index}].role`}
-                      value={creator.role || -1}
+                      value={actualValue.creators[index].role}
                       onChange={(e) => {
                         const newCreator = {
                           ...creator,
@@ -299,8 +301,6 @@ export const BookForm = (props: BookFormProps) => {
                       id={`remove-creator${index}-button`}
                       variant="danger"
                       type="button"
-                      className="position-absolute"
-                      style={{top: "0"}}
                       disabled={values.creators.length === 1}
                       onClick={() => {
                         const newCreators = values.creators.filter((item) => item !== creator);
@@ -315,6 +315,7 @@ export const BookForm = (props: BookFormProps) => {
               <div className="mt-2">
                 <Button
                   variant="link"
+                  className="pl-0"
                   onClick={() => {
                     const newCreators = [].concat(values.creators).concat([{ }]);
                     setFieldValue('creators', newCreators);
@@ -330,10 +331,10 @@ export const BookForm = (props: BookFormProps) => {
           <Form.Group>
            {values.links.length > 0 && (
               <Row>
-                <Col>
+                <Col xs={12} sm={7}>
                   <Form.Label htmlFor={`link0-name-select`}>URL<RequiredSymbol /></Form.Label>
                 </Col>
-                <Col xs={3}>
+                <Col xs={12} sm={3}>
                   <Form.Label htmlFor={`link0-role-select`}>Description<RequiredSymbol /></Form.Label>
                 </Col>
                 <Col xs={2} />
@@ -341,7 +342,7 @@ export const BookForm = (props: BookFormProps) => {
             )}
             {values.links.map((link, index) => (
               <Row key={index} className="mb-2">
-                <Col>
+                <Col xs={12} sm={7} className="mb-2 mb-sm-0">
                   <Form.Control
                     id={`link${index}-url-input`}
                     type="text"
@@ -355,7 +356,7 @@ export const BookForm = (props: BookFormProps) => {
                     {(errors as any).links?.[index]?.url}
                   </Form.Control.Feedback>
                 </Col>
-                <Col xs={3}>
+                <Col xs={12} sm={3} className="mb-2 mb-sm-0">
                   <Form.Control
                     id={`link${index}-description-input`}
                     type="text"
@@ -374,8 +375,6 @@ export const BookForm = (props: BookFormProps) => {
                     id={`remove-link${index}-button`}
                     variant="danger"
                     type="button"
-                    className="position-absolute"
-                    style={{top: "0"}}
                     onClick={() => {
                       const newLinks = values.links.filter((item) => item !== link);
                       setFieldValue('links', newLinks);
@@ -389,6 +388,7 @@ export const BookForm = (props: BookFormProps) => {
             <div className="mt-2">
               <Button
                 variant="link"
+                className="pl-0"
                 onClick={() => {
                   const newLinks = [].concat(values.links).concat([{ description: '', url: '' }]);
                   setFieldValue('links', newLinks);
