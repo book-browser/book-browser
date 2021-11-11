@@ -1,0 +1,1 @@
+alter table book add column release_date date; 

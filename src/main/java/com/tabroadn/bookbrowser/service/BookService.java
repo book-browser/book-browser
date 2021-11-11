@@ -106,6 +106,7 @@ public class BookService {
 		bookDto.setId(book.getId());
 		bookDto.setTitle(book.getTitle());
 		bookDto.setDescription(book.getDescription());
+		bookDto.setReleaseDate(Optional.ofNullable(book.getReleaseDate()));
 		bookDto.setCreators(book.getCreators().stream()
 			.map(BookService::convertCreatorToPersonCreatorDto)
 			.collect(Collectors.toList()));
@@ -151,6 +152,10 @@ public class BookService {
 			book.setDescription(bookDto.getDescription());
 		}
 		
+		if (bookDto.getReleaseDate() != null) {
+			book.setReleaseDate(bookDto.getReleaseDate().orElse(null));
+		}
+
 		if (bookDto.getThumbnail() != null) {
 			try {
 				book.setThumbnail(bookDto.getThumbnailBytes());

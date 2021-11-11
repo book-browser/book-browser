@@ -1,7 +1,9 @@
 package com.tabroadn.bookbrowser.dto;
 
+import java.time.LocalDate;
 import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
@@ -24,6 +26,8 @@ public class BookDto {
 	private String description;
 	
 	private String thumbnail;
+	
+	private Optional<LocalDate> releaseDate;
 		
 	@Valid
 	private List<PersonCreatorDto> creators;

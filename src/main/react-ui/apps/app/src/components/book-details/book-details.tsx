@@ -42,6 +42,10 @@ export const BookDetails = ({
           <span><strong>Details</strong></span>
           <div className="mb-4">
             <div className="mb-2">
+              <div>{`Release Date: ${book.releaseDate.toLocaleDateString() || '-'}`}</div>
+            </div>
+            <hr />
+            <div className="mb-2">
               Genres: 
               {book.genres.map((genre) => <GenreBadge key={genre.id} genre={genre} />)}
             </div>

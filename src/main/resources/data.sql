@@ -78,117 +78,63 @@ INSERT INTO person(id, full_name)
 INSERT INTO person(id, full_name)
   values (23, 'Tillie Wallen');
 
-INSERT INTO book(id, title, description, thumbnail, publish_date)
+INSERT INTO book(id, title, description, thumbnail, release_date)
   values (1, 'The Witch''s Throne', 'Once every ten years, a random girl awakens as a witch with immeasurable power that is destined to destroy the world. To prevent this calamity from happening, four sacred tournaments are held one year prior to her birth to train and select a party of heroes strong enough to slay her. 99 years have passed since the first witch was born and felled, and the next cycle of tournaments are soon to begin. Follow Agni, a young alchemist with a penchant for explosives and revelry as she gathers her own party of wannabe heroes to participate in the tournaments and uncover the mystery behind the witch''s true origins.', FILE_READ('classpath:/images/the-witchs-throne.jpg'), '2017-08-27');
-
-INSERT INTO book_release(id, book_id, release_type, release_number, publish_date)
-  values (1, 1, 'ISSUE', 1, '2017-08-27');
 
 INSERT INTO book_genre VALUES(1, 2);
 
 INSERT INTO book_link VALUES (1, 'https://tapas.io/series/thewitchsthrone', 'Tapas');
 
-INSERT INTO book(id, title, thumbnail, publish_date)
-  values (2, 'The Deep & Dark Blue', FILE_READ('classpath:/images/deep-and-dark-blue.jpg'), '2020-01-07');
+INSERT INTO book(id, title, description, thumbnail, release_date)
+  values (2, 'The Deep & Dark Blue', 'After a terrible political coup usurps their noble house, Hawke and Grayson flee to stay alive and assume new identities, Hanna and Grayce. Desperation and chance lead them to the Communion of Blue, an order of magical women who spin the threads of reality to their will. As the twins learn more about the Communion, and themselves, they begin to hatch a plan to avenge their family and retake their royal home.While Hawke wants to return to his old life, Grayce struggles to keep the threads of her new life from unraveling, and realizes she wants to stay in the one place that will allow her to finally live as a girl', FILE_READ('classpath:/images/deep-and-dark-blue.jpg'), '2020-01-07');
 
-INSERT INTO book_release(id, book_id, release_type, release_number, publish_date)
-  values (2, 2, 'VOLUME', 1, '2020-01-07');
-
-INSERT INTO book(id, title, thumbnail, publish_date)
-  values (3, 'Witchy', FILE_READ('classpath:/images/witchy.jpg'), '2019-09-17');
-
-INSERT INTO book_release(id, book_id, release_type, release_number, publish_date)
-  values (3, 3, 'VOLUME', 1, '2020-01-07');
+INSERT INTO book(id, title, description, thumbnail, release_date)
+  values (3, 'Witchy', 'In the witch kingdom Hyalin, the strength of your magic is determined by the length of your hair. Those that are strong enough are conscripted by the Witch Guard, who enforce the law in peacetime and protect the land during war. However, those with hair judged too long are pronounced enemies of the kingdom, and annihilated. This is called a witch burning.', FILE_READ('classpath:/images/witchy.jpg'), '2019-09-17');
   
-INSERT INTO book(id, title, thumbnail, publish_date)
-  values (4, 'Cry Wolf Girl', FILE_READ('classpath:/images/cry-wolf-girl.jpg'), '2019-09-01');
+INSERT INTO book(id, title, description, thumbnail, release_date)
+  values (4, 'Cry Wolf Girl', 'The story goes like this: There was once a girl named Dawa. Having lost her family to sickness, she found herself with an emptiness inside that she did not know how to fill. Alas, in all her endeavours, nothing she tried ever left her feeling so full as the art -of trickery.', FILE_READ('classpath:/images/cry-wolf-girl.jpg'), '2019-09-01');
 
-INSERT INTO book_release(id, book_id, release_type, release_number, publish_date)
-  values (4, 4, 'VOLUME', 1, '2019-09-01');
+INSERT INTO book(id, title, description, thumbnail, release_date)
+  values (5, 'Snapdragon', 'Snap’s town had a witch. At least, that’s how the rumor goes. But in reality, Jacks is just a Crocs-wearing, internet-savvy old lady who sells roadkill skeletons online. It’s creepy, sure, but Snap thinks it''s kind of cool, too. Snap needs a favor from this old woman, though, so she begins helping Jacks with her strange work. Snap gets to know her and realizes that Jacks may in fact have real magic—and an unlikely connection to Snap’s familys past.', FILE_READ('classpath:/images/snapdragon.jpg'), '2020-02-04');
 
-INSERT INTO book(id, title, thumbnail, publish_date)
-  values (5, 'Snapdragon', FILE_READ('classpath:/images/snapdragon.jpg'), '2020-02-04');
-
-INSERT INTO book_release(id, book_id, release_type, release_number, publish_date)
-  values (5, 5, 'VOLUME', 1, '2020-02-04');
-
-INSERT INTO book(id, title, thumbnail, publish_date)
+INSERT INTO book(id, title, thumbnail, release_date)
   values (6, 'The Okay Witch', FILE_READ('classpath:/images/the-okay-witch.jpg'), '2019-09-03');
 
-INSERT INTO book_release(id, book_id, release_type, release_number, publish_date)
-  values (6, 6, 'VOLUME', 1, '2019-09-03');
-
-INSERT INTO book(id, title, thumbnail, publish_date)
+INSERT INTO book(id, title, thumbnail, release_date)
   values (7, 'The Prince and the Dressmaker', FILE_READ('classpath:/images/the-prince-and-the-dressmaker.jpg'), '2018-02-13');
 
-INSERT INTO book_release(id, book_id, release_type, release_number, publish_date)
-  values (7, 7, 'VOLUME', 1, '2018-02-13');
-
-INSERT INTO book(id, title, thumbnail, publish_date)
+INSERT INTO book(id, title, thumbnail, release_date)
   values (8, 'In Real Life', FILE_READ('classpath:/images/in-real-life.jpg'), '2014-10-14');
 
-INSERT INTO book_release(id, book_id, release_type, release_number, publish_date)
-  values (8, 8, 'VOLUME', 1, '2014-10-14');
-
-INSERT INTO book(id, title, thumbnail, publish_date)
+INSERT INTO book(id, title, thumbnail, release_date)
   values (9, 'Nimona', FILE_READ('classpath:/images/nimona.jpg'), '2015-05-12');
 
-INSERT INTO book_release(id, book_id, release_type, release_number, publish_date)
-  values (9, 9, 'VOLUME', 1, '2015-05-12');
-
-INSERT INTO book(id, title, thumbnail, publish_date)
+INSERT INTO book(id, title, thumbnail, release_date)
   values (10, 'Anya''s Ghost', FILE_READ('classpath:/images/anyas-ghost.jpg'), '2011-06-07');
 
-INSERT INTO book_release(id, book_id, release_type, release_number, publish_date)
-  values (10, 10, 'VOLUME', 1, '2011-06-07');
-
-INSERT INTO book(id, title, thumbnail, publish_date)
+INSERT INTO book(id, title, thumbnail, release_date)
   values (11, 'Seconds', FILE_READ('classpath:/images/seconds.jpg'), '2014-07-15');
 
-INSERT INTO book_release(id, book_id, release_type, release_number, publish_date)
-  values (11, 11, 'VOLUME', 1, '2014-07-15');
-
-INSERT INTO book(id, title, thumbnail, publish_date)
+INSERT INTO book(id, title, thumbnail, release_date)
   values (12, 'Beauty', FILE_READ('classpath:/images/beauty.jpg'), '2014-10-01');
 
-INSERT INTO book_release(id, book_id, release_type, release_number, publish_date)
-  values (12, 12, 'VOLUME', 1, '2014-10-01');
-
-INSERT INTO book(id, title, thumbnail, publish_date)
+INSERT INTO book(id, title, thumbnail, release_date)
   values (13, 'Beautiful Darkness', FILE_READ('classpath:/images/beautiful-darkness.jpg'), '2014-02-25');
 
-INSERT INTO book_release(id, book_id, release_type, release_number, publish_date)
-  values (13, 13, 'VOLUME', 1, '2014-02-25');
-
-INSERT INTO book(id, title, thumbnail, publish_date, description)
+INSERT INTO book(id, title, thumbnail, release_date, description)
   values (14, 'Primer', FILE_READ('classpath:/images/primer.jpg'), '2020-06-23', 'Ashley Rayburn is an upbeat girl with a decidedly downbeat past. Her father is a known criminal who once used Ashley to help him elude justice, and in his attempt to escape, a life was taken. He now sits in federal prison, but still casts a shadow over Ashley''s life. In the meantime, Ashley has bounced from foster home to foster home and represents a real challenge to the social workers who try to help her--not because she''s inherently bad, but because trouble always seems to find her.\nAshley''s latest set of presumably short-term foster parents are Kitch and Yuka Nolan. Like Ashley, Kitch happens to be an artist. Yuka, on the other hand, is a geneticist working for a very high-level tech company, one that''s contracted out to work for the government and the military. And it''s Yuka''s latest top secret project that has her very concerned. Developed for the military, it''s a set of body paints that, when applied to the wearer, grant them a wide range of special powers. Fearful that this invention will be misused, Yuka sneaks the set of paints home, substituting a dummy suitcase with an ordinary set of paints in their place.\nFrom here, signals get crossed. Ashley comes home from school one day with her new friend Luke and, thinking that the Nolans have purchased a surprise gift for her upcoming birthday, finds the set of paints. Being an artist, Ashley naturally assumes these are for her. It isn''t long before she realizes that she''s stumbled upon something much bigger and a lot more dangerous. Although she uses her newly discovered powers for good, it''s not long before the military becomes wise to what happened to their secret weapon. And this spells big trouble not only for Ashley, but for her newfound family and friends as well.');
 
-INSERT INTO book_release(id, book_id, release_type, release_number, publish_date)
-  values (14, 14, 'VOLUME', 1, '2020-06-23');
-
-INSERT INTO book(id, title, thumbnail, publish_date)
+INSERT INTO book(id, title, thumbnail, release_date)
   values (15, 'Happily Ever After & Everything In Between', FILE_READ('classpath:/images/happily-ever-after.jpg'), '2020-06-02');
 
-INSERT INTO book_release(id, book_id, release_type, release_number, publish_date)
-  values (15, 15, 'VOLUME', 1, '2020-06-02');
-
-INSERT INTO book(id, title, thumbnail, publish_date)
+INSERT INTO book(id, title, thumbnail, release_date)
   values (16, 'Wonder Woman: Tempest Tossed', FILE_READ('classpath:/images/wonder-woman-tempest-tossed.jpg'), '2020-06-02');
 
-INSERT INTO book_release(id, book_id, release_type, release_number, publish_date)
-  values (16, 16, 'VOLUME', 1, '2020-06-02');
-
-INSERT INTO book(id, title, thumbnail, publish_date)
+INSERT INTO book(id, title, thumbnail, release_date)
   values (17, 'Understanding Comics: The Invisible Art', FILE_READ('classpath:/images/understanding-comics-the-invisible-art.jpg'), '1993-01-01');
 
-INSERT INTO book_release(id, book_id, release_type, release_number, publish_date)
-  values (17, 17, 'VOLUME', 1, '1993-01-01');
-
-INSERT INTO book(id, title, thumbnail, publish_date)
+INSERT INTO book(id, title, thumbnail, release_date)
   values (18, 'Spinning', FILE_READ('classpath:/images/spinning.jpg'), '2017-09-12');
-
-INSERT INTO book_release(id, book_id, release_type, release_number, publish_date)
-  values (18, 18, 'VOLUME', 1, '2017-09-12');
 
 INSERT INTO creator(book_id, person_id)
   values (1, 1);

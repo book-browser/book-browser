@@ -94,4 +94,12 @@ databaseChangeLog:
         - sqlFile:
             path: changelog/scripts/12-tabroadn-alter-person-table.sql
             relativeToChangelogFile: true
+
+    - changeSet:
+        id: alterBookTableAddReleaseDate13
+        author: Tariq Broadnax
+        changes:
+        - sqlFile:
+            path: changelog/scripts/13-tabroadn-alter-book-add-release-date.sql
+            relativeToChangelogFile: true
             

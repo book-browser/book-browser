@@ -15,11 +15,13 @@ import { RequiredSymbol } from '../required-symbol';
 import Select from 'react-select';
 import { Genre } from 'types/genre';
 import { Book } from 'types/book';
+import DatePicker from "react-datepicker";
 
 const schema = yup.object().shape({
   id: yup.number().nullable(),
   title: yup.string().required().max(50),
   description: yup.string().required().max(1000),
+  releaseDate: yup.date().nullable(),
   thumbnail: yup.mixed()
     .when('id', (id, schema) => {
       return id ? schema : schema.required();
@@ -49,6 +51,7 @@ interface BookFormProps {
 const defaultBook = {
   title: '',
   description: '',
+  releaseDate: null,
   thumbnail: null,
   creators: [{ }],
   genres: [],
@@ -88,8 +91,6 @@ export const BookForm = (props: BookFormProps) => {
       setThumbnailUrl(`/api/book/${actualValue.id}/thumbnail`);
     }
   }, [actualValue]);
-
-  console.log(actualValue);
 
   return (
     <Formik
@@ -155,6 +156,22 @@ export const BookForm = (props: BookFormProps) => {
             />
             <Form.Control.Feedback type="invalid">
               {errors.description}
+            </Form.Control.Feedback>
+          </Form.Group>
+          <Form.Group controlId="release-date-picker" className="w-50">
+            <Form.Label>Release Date</Form.Label>
+            <DatePicker
+              id="release-date-picker"
+              showPopperArrow={false}
+              wrapperClassName={errors.releaseDate ? 'is-invalid' : null}
+              className={`form-control ${errors.releaseDate ? 'is-invalid' : null}`}
+              selected={actualValue.releaseDate || null}
+              onChange={(val) => setFieldValue('releaseDate', val)}
+              onBlur={handleBlur}
+              isClearable
+            />
+            <Form.Control.Feedback type="invalid">
+              {errors.releaseDate}
             </Form.Control.Feedback>
           </Form.Group>
           <Form.Group>
@@ -280,7 +297,7 @@ export const BookForm = (props: BookFormProps) => {
                       as="select"
                       custom
                       name={`creators[${index}].role`}
-                      value={actualValue.creators[index].role}
+                      value={actualValue.creators[index].role || ''}
                       onChange={(e) => {
                         const newCreator = {
                           ...creator,

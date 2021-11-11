@@ -6,6 +6,7 @@ export class Book {
   id: number;
   title: string;
   description: string;
+  releaseDate?: Date;
   thumbnail?: string;
   genres: Genre[];
   creators: PersonCreator[];

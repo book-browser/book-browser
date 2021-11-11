@@ -1,5 +1,4 @@
 import { Book } from "types/book";
-import { BookSubmission } from "types/book-submission";
 import { Genre } from "types/genre";
 import { handleResponse } from "./response.service";
 
@@ -12,12 +11,12 @@ export const saveBook = async (book: Book) => {
     body: JSON.stringify(book),
   });
 
-  return await handleResponse<Book>(response);
+  return convertBookResponseToBook(await handleResponse(response));
 }
 
 export const getById = async (id: number) => {
   const response = await fetch(`/api/book/${id}`);
-  return await handleResponse<Book>(response);
+  return convertBookResponseToBook(await handleResponse(response));
 }
 
 export const search = async({ query, genres, page, limit }: 
@@ -45,5 +44,14 @@ export const search = async({ query, genres, page, limit }:
   }
 
   const response = await fetch('/api/book/search?' + params.toString());
-  return await handleResponse<Book[]>(response);
+  return (await handleResponse<any[]>(response)).map(convertBookResponseToBook);
 }
+
+const convertBookResponseToBook = (data: any) => {
+  console.log(data);
+  return {
+    ...data,
+    releaseDate: new Date(data.releaseDate)
+  } as Book;
+}
+
