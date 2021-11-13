@@ -1,5 +1,6 @@
 package com.tabroadn.bookbrowser.service;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -13,11 +14,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
+import com.tabroadn.bookbrowser.domain.OrderEnum;
 import com.tabroadn.bookbrowser.domain.ReleaseTypeEnum;
 import com.tabroadn.bookbrowser.dto.BookDto;
 import com.tabroadn.bookbrowser.dto.BookLinkDto;
 import com.tabroadn.bookbrowser.dto.BookSummaryDto;
 import com.tabroadn.bookbrowser.dto.GenreDto;
+import com.tabroadn.bookbrowser.dto.PageDto;
 import com.tabroadn.bookbrowser.dto.PersonCreatorDto;
 import com.tabroadn.bookbrowser.dto.ReleaseDto;
 import com.tabroadn.bookbrowser.entity.Book;
@@ -94,6 +97,34 @@ public class BookService {
 		return books.stream()
 					.map(BookService::convertBookToBookSummaryDto)
 					.collect(Collectors.toList());
+	}
+
+	public PageDto<BookDto> findAll(Integer page, Integer size, String sort,
+			OrderEnum order, Optional<LocalDate> startReleaseDate, Optional<LocalDate> endReleaseDate) {
+		validateBookField(sort);
+
+		Pageable pageable = PageRequest.of(page, size);
+		
+		Specification<Book> specification = BookSpecification.orderBy(sort, order);
+		
+		if (startReleaseDate.isPresent()) {
+			specification = specification.and(BookSpecification.releaseDateGreaterThanOrEqual(startReleaseDate.get()));
+		}
+		
+		if (endReleaseDate.isPresent()) {
+			specification = specification.and(BookSpecification.releaseDateLessThanOrEqual(endReleaseDate.get()));
+		}
+
+		return new PageDto<BookDto>(repository.findAll(specification, pageable)
+			.map(BookService::convertBookToBookDto));
+	}
+	
+	private void validateBookField(String fieldName) {
+		try {
+			Book.class.getDeclaredField(fieldName);
+		} catch (Exception e) {
+			throw new IllegalArgumentException(String.format("%s is a not a valid sort parameter", fieldName));
+		}
 	}
 
 	public BookDto save(BookDto bookDto) {

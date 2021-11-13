@@ -1,5 +1,6 @@
 import { Book } from "types/book";
 import { Genre } from "types/genre";
+import { mapPageItems, Page } from "types/page";
 import { handleResponse } from "./response.service";
 
 export const saveBook = async (book: Book) => {
@@ -43,12 +44,43 @@ export const search = async({ query, genres, page, limit }:
           .forEach((genreName) => params.append('genres', genreName));
   }
 
-  const response = await fetch('/api/book/search?' + params.toString());
+  const response = await fetch('/api/books/search?' + params.toString());
   return (await handleResponse<any[]>(response)).map(convertBookResponseToBook);
 }
 
+export const findAll = async({ limit, page, sort, startReleaseDate, endReleaseDate }: 
+  {
+    page?: number,
+    limit?: number,
+    sort?: 'asc' | 'desc',
+    startReleaseDate?: Date,
+    endReleaseDate: Date
+  }) => {
+
+  const params = new URLSearchParams();
+
+ 
+  if (page) {
+    params.append('page', `${page}`);
+  }
+  if (limit) {
+    params.append('limit', `${limit}`);
+  }
+  if (sort) {
+    params.append('sort', sort);
+  }
+  if (startReleaseDate) {
+    params.append('startReleaseDate', startReleaseDate.toISOString().substring(0, 10));
+  }
+  if (endReleaseDate) {
+    params.append('endReleaseDate', endReleaseDate.toISOString().substring(0, 10));
+  }
+
+  const response = await fetch('/api/books?' + params.toString());
+  return mapPageItems(await handleResponse<Page<any>>(response), convertBookResponseToBook);
+}
+
 const convertBookResponseToBook = (data: any) => {
-  console.log(data);
   return {
     ...data,
     releaseDate: new Date(data.releaseDate)

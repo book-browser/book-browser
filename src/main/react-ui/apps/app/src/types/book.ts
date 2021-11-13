@@ -2,7 +2,7 @@ import { BookLink } from "./book-link";
 import { Genre } from "./genre";
 import { PersonCreator } from "./person-creator";
 
-export class Book {
+export interface Book {
   id: number;
   title: string;
   description: string;

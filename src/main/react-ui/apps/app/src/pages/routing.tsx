@@ -7,6 +7,7 @@ import Header from './header';
 import LoginPage from './login-page';
 import NotFoundPage from './not-found-page';
 import RandomBookPage from './random-book-page';
+import RecentBookPage from './recent-book-page';
 import RegisterPage from './register-page';
 import ResendVerificationEmailPage from './resend-verification-email-page';
 import SearchPage from './search-page';
@@ -44,6 +45,9 @@ export const Routing = () => {
         </Route>
         <Route exact path="/random">
           <RandomBookPage />
+        </Route>
+        <Route exact path="/recent">
+          <RecentBookPage />
         </Route>
         <Route exact path="/home">
           <Redirect to="/" />

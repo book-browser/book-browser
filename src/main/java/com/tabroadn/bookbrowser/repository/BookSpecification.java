@@ -1,5 +1,6 @@
 package com.tabroadn.bookbrowser.repository;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +8,7 @@ import javax.persistence.criteria.Predicate;
 
 import org.springframework.data.jpa.domain.Specification;
 
+import com.tabroadn.bookbrowser.domain.OrderEnum;
 import com.tabroadn.bookbrowser.entity.Book;
 import com.tabroadn.bookbrowser.entity.Genre;
 
@@ -38,6 +40,29 @@ public class BookSpecification {
 			}
 	
 			return cb.and(predicates.toArray(Predicate[]::new));
+		 };
+	  }
+	 
+	 public static Specification<Book> releaseDateGreaterThanOrEqual(LocalDate date) {
+		 return (book, cq, cb) -> {
+			 return cb.greaterThanOrEqualTo(book.get("releaseDate"), date);
+		 };
+	  }
+	 
+	 public static Specification<Book> releaseDateLessThanOrEqual(LocalDate date) {
+		 return (book, cq, cb) -> {
+			 return cb.lessThanOrEqualTo(book.get("releaseDate"), date);
+		 };
+	  }
+	 
+	 public static Specification<Book> orderBy(String field, OrderEnum order) {
+		 return (book, cq, cb) -> {
+			 if (order == OrderEnum.ASC) {
+				 cq.orderBy(cb.asc(book.get(field)));
+			 } else {
+				 cq.orderBy(cb.desc(book.get(field)));
+			 }
+			 return null;
 		 };
 	  }
 }
