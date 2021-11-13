@@ -78,6 +78,12 @@ INSERT INTO person(id, full_name)
 INSERT INTO person(id, full_name)
   values (23, 'Tillie Wallen');
 
+INSERT INTO person(id, full_name)
+  values (24, 'Maggie Tokuda-Hall');
+
+INSERT INTO person(id, full_name)
+  values (25, 'Trevor Bream');
+
 INSERT INTO book(id, title, description, thumbnail, release_date)
   values (1, 'The Witch''s Throne', 'Once every ten years, a random girl awakens as a witch with immeasurable power that is destined to destroy the world. To prevent this calamity from happening, four sacred tournaments are held one year prior to her birth to train and select a party of heroes strong enough to slay her. 99 years have passed since the first witch was born and felled, and the next cycle of tournaments are soon to begin. Follow Agni, a young alchemist with a penchant for explosives and revelry as she gathers her own party of wannabe heroes to participate in the tournaments and uncover the mystery behind the witch''s true origins.', FILE_READ('classpath:/images/the-witchs-throne.jpg'), '2017-08-27');
 
@@ -135,6 +141,12 @@ INSERT INTO book(id, title, description, thumbnail, release_date)
 
 INSERT INTO book(id, title, description, thumbnail, release_date)
   values (18, 'Spinning', 'It was the same every morning. Wake up, grab the ice skates, and head to the rink while the world was still dark. Weekends were spent in glitter and tights at competitions. Perform. Smile. And do it again. She was good. She won. And she hated it. For ten years, figure skating was Tillie Walden''s life. She woke before dawn for morning lessons, went straight to group practice after school, and spent weekends competing at ice rinks across the state. It was a central piece of her identity, her safe haven from the stress of school, bullies, and family. But over time, as she switched schools, got into art, and fell in love with her first girlfriend, she began to question how the close-minded world of figure skating fit in with the rest of her life, and whether all the work was worth it given the reality: that she, and her friends on the figure skating team, were nowhere close to Olympic hopefuls. It all led to one question: What was the point? The more Tillie thought about it, the more Tillie realized she''d outgrown her passion-and she finally needed to find her own voice.', FILE_READ('classpath:/images/spinning.jpg'), '2017-09-12');
+
+INSERT INTO book(id, title, description, thumbnail, release_date)
+  values (19, 'Squad', 'When Becca transfers to a high school in an elite San Francisco suburb, she’s worried she’s not going to fit in. To her surprise, she’s immediately adopted by the most popular girls in school. At first glance, Marley, Arianna, and Mandy are perfect. But at a party under a full moon, Becca learns that they also have a big secret. Becca’s new friends are werewolves. Their prey? Slimy boys who take advantage of unsuspecting girls. Eager to be accepted, Becca allows her friends to turn her into a werewolf, and finally, for the first time in her life, she feels like she truly belongs. But things get complicated when Arianna’s predatory boyfriend is killed, and the cops begin searching for a serial killer. As their pack begins to buckle under the pressure—and their moral high ground gets muddier and muddier—Becca realizes that she might have feelings for one of her new best friends.', FILE_READ('classpath:/images/squad.jpg'), '2025-10-05');
+
+INSERT INTO book(id, title, description, thumbnail, release_date)
+  values (20, 'Another Kind', 'Tucked away in a government facility nicknamed the Playroom, six not-quite-human kids learn to control their strange and unpredictable abilities. Life is good--or safe, at least--hidden from the prying eyes of a judgmental world. That is, until a security breach forces them out of their home and into the path of the Collector, a mysterious being with leech-like powers. Can the group band together to thwart the Collector''s devious plan, or will they wind up the newest addition to his collection?', FILE_READ('classpath:/images/another-kind.jpg'), '2025-10-26');
 
 INSERT INTO creator(book_id, person_id)
   values (1, 1);
@@ -213,3 +225,9 @@ INSERT INTO creator(book_id, person_id)
 
 INSERT INTO creator(book_id, person_id)
   values (18, 23);
+
+INSERT INTO creator(book_id, person_id)
+  values (19, 24);
+
+INSERT INTO creator(book_id, person_id)
+  values (20, 25);

@@ -26,7 +26,7 @@ const parsePageParam = (page?: string | string[]) => {
   return 0;
 }
 
-const RecentBookPageContent = () => {
+const UpcomingBookPageContent = () => {
   const history = useHistory();
   const location = useLocation();
   const params = parse(location.search)
@@ -36,15 +36,15 @@ const RecentBookPageContent = () => {
   const { loading, data, error, execute } = useFindAll();
 
   const changePage = (newPage) => {
-    history.push(`/recent${newPage > 0 ? `?page=${newPage + 1}` : ''}`);
+    history.push(`/coming-soon${newPage > 0 ? `?page=${newPage + 1}` : ''}`);
   }
 
   useEffect(() => {
-    document.title = 'Recent Books | BookBrowser';
+    document.title = 'Coming Soon | BookBrowser';
   }, []);
 
   useEffect(() => {
-    execute({ page, endReleaseDate: new Date(Date.now()), limit: 15, order: 'desc', sort: 'releaseDate' })
+    execute({ page, startReleaseDate: new Date(Date.now()), limit: 15, order: 'asc', sort: 'releaseDate' })
   }, [page]);
 
   useEffect(() => {
@@ -80,17 +80,17 @@ const RecentBookPageContent = () => {
   return null;
 };
 
-const RecentBookPage = () => {
+const UpcomingBookPage = () => {
   return (
     <Container maxWidth="md" className="mt-3">
-      <h2>Recent Releases</h2>
+      <h2>Coming Soon</h2>
       <Breadcrumb className="mb-2">
         <Breadcrumb.Item linkAs={Link} linkProps={{to: "/home"}}>Home</Breadcrumb.Item>
-        <Breadcrumb.Item active>Recent Books</Breadcrumb.Item>
+        <Breadcrumb.Item active>Coming Soon</Breadcrumb.Item>
       </Breadcrumb>
-      <RecentBookPageContent />
+      <UpcomingBookPageContent />
     </Container>
   );
 };
 
-export default RecentBookPage;
+export default UpcomingBookPage;

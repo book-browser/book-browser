@@ -3,14 +3,24 @@ import BookCard from 'components/book-card/book-card';
 import { ErrorAlert } from 'components/error/error-alert';
 import Loading from 'components/loading/loading';
 import { useFindAll } from 'hooks/book.hook';
+import { useEmptyPromise } from 'hooks/promise.hook';
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { findAll } from 'services/book.service';
+
+const loadData = () => {
+  return Promise.all([
+    findAll({ page: 0, endReleaseDate: new Date(Date.now()), limit: 10, order: 'desc', sort: 'releaseDate' }),
+    findAll({ page: 0, startReleaseDate: new Date(Date.now()), limit: 10, order: 'asc', sort: 'releaseDate' }),
+  ]);
+};
+const useLoadData = () => useEmptyPromise(loadData);
 
 const HomepageContent = () => {
-  const { loading, data, error, execute } = useFindAll();
+  const { loading, data, error, execute } = useLoadData();
 
   useEffect(() => {
-    execute({ page: 0, endReleaseDate: new Date(Date.now()), limit: 10 });
+    execute();
   }, []);
 
   useEffect(() => {
@@ -25,13 +35,23 @@ const HomepageContent = () => {
     return (
       <div>
         <h3>Recent Releases</h3>
-        <div className="d-flex flex-wrap mb-3">
-          {data.items && data.items.map((book) => (
+        <div className="d-flex flex-wrap mb-2">
+          {data[0].items && data[0].items.map((book) => (
+            <BookCard book={book} key={book.id} />
+          ))}
+        </div>
+        <div className="d-flex mb-3">
+          <Link to="/recent">View More</Link>
+        </div>
+        <hr />
+        <h3>Coming Soon</h3>
+        <div className="d-flex flex-wrap mb-2">
+          {data[1].items && data[1].items.map((book) => (
             <BookCard book={book} key={book.id} />
           ))}
         </div>
         <div className="d-flex">
-          <Link to="recent">View More</Link>
+          <Link to="/coming-soon">View More</Link>
         </div>
       </div>
     );

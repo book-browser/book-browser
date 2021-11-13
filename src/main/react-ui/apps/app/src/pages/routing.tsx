@@ -12,6 +12,7 @@ import RecentBookPage from './recent-book-page';
 import RegisterPage from './register-page';
 import ResendVerificationEmailPage from './resend-verification-email-page';
 import SearchPage from './search-page';
+import UpcomingBookPage from './upcoming-book-page';
 import UsernameRecoveryPage from './username-recovery-page';
 import VerifyUserPage from './verify-user-page';
 
@@ -49,6 +50,9 @@ export const Routing = () => {
         </Route>
         <Route exact path="/recent">
           <RecentBookPage />
+        </Route>
+        <Route exact path="/coming-soon">
+          <UpcomingBookPage />
         </Route>
         <Route exact path="/book/new">
           <CreateBookPage />

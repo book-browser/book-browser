@@ -2,7 +2,7 @@ import HeaderModal, { HeaderModalTab } from 'components/modals/header-modal';
 import SearchBar from 'components/search-bar/search-bar';
 import { useLogout, useUser } from 'hooks/user.hook';
 import React, { useState } from 'react';
-import { Alert, Button, Container, Nav, Navbar } from 'react-bootstrap';
+import { Alert, Button, Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { useLocation, Link } from 'react-router-dom';
 
 const Header = () => {
@@ -30,6 +30,10 @@ const Header = () => {
           <Navbar.Toggle className="mb-2" aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="mr-auto">
+              <NavDropdown title="Books" id="test">
+                <NavDropdown.Item as={Link} to="/recent">Recent Releases</NavDropdown.Item>
+                <NavDropdown.Item as={Link} to="/coming-soon" >Coming Soon</NavDropdown.Item>
+              </NavDropdown>
               <Nav.Link as={Link} to="/random">Random</Nav.Link>
             </Nav>
             <SearchBar className="mr-2"/>
