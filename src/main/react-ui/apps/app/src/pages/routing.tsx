@@ -4,6 +4,7 @@ import { BookPage } from './book-page';
 import { CreateBookPage } from './create-book-page';
 import EditBookPage from './edit-book-page';
 import Header from './header';
+import Homepage from './homepage';
 import LoginPage from './login-page';
 import NotFoundPage from './not-found-page';
 import RandomBookPage from './random-book-page';
@@ -49,11 +50,14 @@ export const Routing = () => {
         <Route exact path="/recent">
           <RecentBookPage />
         </Route>
+        <Route exact path="/book/new">
+          <CreateBookPage />
+        </Route>
         <Route exact path="/home">
           <Redirect to="/" />
         </Route>
         <Route exact path="/">
-          <CreateBookPage />
+          <Homepage />
         </Route>
         <Route>
           <NotFoundPage />

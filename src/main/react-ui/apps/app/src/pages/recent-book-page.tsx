@@ -4,8 +4,8 @@ import { ErrorAlert } from 'components/error/error-alert';
 import Loading from 'components/loading/loading';
 import { useFindAll } from 'hooks/book.hook';
 import React, { useEffect, useState } from 'react';
-import { Pagination } from 'react-bootstrap';
-import { useLocation, useHistory } from 'react-router-dom';
+import { Breadcrumb, Pagination } from 'react-bootstrap';
+import { useLocation, useHistory, Link } from 'react-router-dom';
 import { parse } from 'query-string';
 
 const parsePageParam = (page?: string | string[]) => {
@@ -40,7 +40,11 @@ const RecentBookPageContent = () => {
   }
 
   useEffect(() => {
-    execute({ page, endReleaseDate: new Date(Date.now()), limit: 10 })
+    document.title = 'Recent Books | BookBrowser';
+  }, []);
+
+  useEffect(() => {
+    execute({ page, endReleaseDate: new Date(Date.now()), limit: 15 })
   }, [page]);
 
   useEffect(() => {
@@ -79,10 +83,14 @@ const RecentBookPageContent = () => {
 const RecentBookPage = () => {
   return (
     <Container maxWidth="md" className="mt-3">
-      <h2 className="mb-5">Recent Releases</h2>
+      <h2>Recent Releases</h2>
+      <Breadcrumb className="mb-2">
+        <Breadcrumb.Item linkAs={Link} linkProps={{to: "/home"}}>Home</Breadcrumb.Item>
+        <Breadcrumb.Item active>Recent Books</Breadcrumb.Item>
+      </Breadcrumb>
       <RecentBookPageContent />
     </Container>
-  )
+  );
 };
 
 export default RecentBookPage;

@@ -1,14 +1,12 @@
 import { Container } from '@material-ui/core';
+import BookCard from 'components/book-card/book-card';
+import { useSearch } from 'hooks/book.hook';
 import { useReferenceData } from 'hooks/reference-data.hook';
 import { parse } from 'query-string';
-import React, { useState } from 'react';
-import { useEffect } from 'react';
-import { Button, ButtonGroup, Form, FormControl, InputGroup, ToggleButton } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { ButtonGroup, FormControl, InputGroup, ToggleButton } from 'react-bootstrap';
 import { useLocation } from 'react-router-dom';
 import { Genre } from 'types/genre';
-import SearchIcon from '@material-ui/icons/Search';
-import { useSearch } from 'hooks/book.hook';
-import BookCard from 'components/book-card/book-card';
 
 const SearchPage = () => {
   const { data } = useReferenceData();
