@@ -4,8 +4,8 @@ import { useSearch } from 'hooks/book.hook';
 import { useReferenceData } from 'hooks/reference-data.hook';
 import { parse } from 'query-string';
 import React, { useEffect, useState } from 'react';
-import { ButtonGroup, FormControl, InputGroup, ToggleButton } from 'react-bootstrap';
-import { useLocation } from 'react-router-dom';
+import { Breadcrumb, ButtonGroup, FormControl, InputGroup, ToggleButton } from 'react-bootstrap';
+import { useLocation, Link } from 'react-router-dom';
 import { Genre } from 'types/genre';
 
 const SearchPage = () => {
@@ -55,8 +55,12 @@ const SearchPage = () => {
 
   return (
     <Container maxWidth="lg">
-      <h2 className="mb-5">Search</h2>
-
+      <Breadcrumb className="mb-1">
+        <Breadcrumb.Item linkAs={Link} linkProps={{to: "/home"}}>Home</Breadcrumb.Item>
+        <Breadcrumb.Item active>Search</Breadcrumb.Item>
+      </Breadcrumb>
+      <h2 className="mb-3">Search</h2>
+      
       <InputGroup className="mb-5">
         <FormControl size="lg" placeholder="Search..." value={query} onChange={(e) => setQuery(e.target.value)} />
       </InputGroup>

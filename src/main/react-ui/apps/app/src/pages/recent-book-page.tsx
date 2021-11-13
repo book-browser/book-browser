@@ -83,11 +83,11 @@ const RecentBookPageContent = () => {
 const RecentBookPage = () => {
   return (
     <Container maxWidth="md" className="mt-3">
-      <h2>Recent Releases</h2>
       <Breadcrumb className="mb-2">
         <Breadcrumb.Item linkAs={Link} linkProps={{to: "/home"}}>Home</Breadcrumb.Item>
         <Breadcrumb.Item active>Recent Books</Breadcrumb.Item>
       </Breadcrumb>
+      <h2>Recent Releases</h2>
       <RecentBookPageContent />
     </Container>
   );

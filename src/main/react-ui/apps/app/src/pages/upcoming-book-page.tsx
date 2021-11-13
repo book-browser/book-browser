@@ -83,11 +83,11 @@ const UpcomingBookPageContent = () => {
 const UpcomingBookPage = () => {
   return (
     <Container maxWidth="md" className="mt-3">
-      <h2>Coming Soon</h2>
-      <Breadcrumb className="mb-2">
+      <Breadcrumb>
         <Breadcrumb.Item linkAs={Link} linkProps={{to: "/home"}}>Home</Breadcrumb.Item>
         <Breadcrumb.Item active>Coming Soon</Breadcrumb.Item>
       </Breadcrumb>
+      <h2>Coming Soon</h2>
       <UpcomingBookPageContent />
     </Container>
   );

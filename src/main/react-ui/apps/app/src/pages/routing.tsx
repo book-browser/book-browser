@@ -21,6 +21,9 @@ export const Routing = () => {
     <BrowserRouter>
       <Header />
       <Switch>
+        <Route exact path="/book/new">
+          <CreateBookPage />
+        </Route>
         <Route exact path="/book/:id">
           <BookPage />
         </Route>
@@ -53,9 +56,6 @@ export const Routing = () => {
         </Route>
         <Route exact path="/coming-soon">
           <UpcomingBookPage />
-        </Route>
-        <Route exact path="/book/new">
-          <CreateBookPage />
         </Route>
         <Route exact path="/home">
           <Redirect to="/" />
