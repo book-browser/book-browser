@@ -4,6 +4,7 @@ import { useLogout, useUser } from 'hooks/user.hook';
 import React, { useState } from 'react';
 import { Alert, Button, Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { useLocation, Link } from 'react-router-dom';
+import AddIcon from '@material-ui/icons/Add';
 
 const Header = () => {
   const { user } = useUser();
@@ -41,9 +42,20 @@ const Header = () => {
             <Nav>
               <Nav.Link as={Link} to="/search">Filter</Nav.Link>
             </Nav>
-            {!user && !isAuthLocation && <Button variant="nav" onClick={() => openModal('login')}>Login</Button>}
-            {!user && !isAuthLocation && <Button variant="nav" onClick={() => openModal('register')}>Register</Button>}
-            {user && !isAuthLocation && <Button variant="nav" onClick={logout}>Logout</Button>}
+            {!user && (
+              !isAuthLocation && (
+                <>
+                  <Button variant="nav" onClick={() => openModal('login')}>Login</Button>
+                  <Button variant="nav" onClick={() => openModal('register')}>Register</Button>
+                </>
+              )
+            )}
+            {user && (
+              <>
+                <Nav><Nav.Link as={Link} to="/book/new"><AddIcon /></Nav.Link></Nav>
+                {!isAuthLocation && <Button variant="nav" onClick={logout}>Logout</Button>}
+              </>
+            )}
             
             <HeaderModal defaultTab={defaultTab} show={modalVisible} onHide={() => setModalVisible(false)} />
           </Navbar.Collapse>
