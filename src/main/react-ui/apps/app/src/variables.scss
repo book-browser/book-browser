@@ -1,2 +1,17 @@
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+
+@import '~bootstrap/scss/_variables.scss';
+
 // Spacing
 $margin-md: 10px;
+
+$margin-component-y: 15px; 
+$margin-component-x: 15px; 
+
+$heading-top-font-size: $h1-font-size;
+$heading-main-font-size: $h2-font-size;
+$heading-section-font-size: $h3-font-size;
+$heading-component-font-size: $h4-font-size;
+$heading-element-font-size: $h5-font-size;

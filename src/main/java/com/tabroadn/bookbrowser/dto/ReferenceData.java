@@ -8,4 +8,5 @@ import lombok.Data;
 public class ReferenceData {
 	private List<RoleDto> roles;
 	private List<GenreDto> genres;
+	private List<LetterDto> letters;
 }

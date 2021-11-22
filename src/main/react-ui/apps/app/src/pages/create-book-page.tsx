@@ -10,12 +10,13 @@ import { Prompt, Link } from 'react-router-dom';
 
 const AddBookForm = ({ loading, onChange, onSubmit, error }: { loading: boolean, onChange: () => void, onSubmit: (book: Book) => void, error: Error }) => {
   return (
-    <Card>
-      <Breadcrumb className="pl-3">
+    <div>
+      <Breadcrumb>
         <Breadcrumb.Item linkAs={Link} linkProps={{to: "/home"}}>Home</Breadcrumb.Item>
+        <Breadcrumb.Item linkAs={Link} linkProps={{to: "/books"}}>Books</Breadcrumb.Item>
         <Breadcrumb.Item active>Add Book</Breadcrumb.Item>
       </Breadcrumb>
-      <Card.Title className="mt-3 ml-3">Add a New Book</Card.Title>
+      <h1 className="heading-main">Add a New Book</h1>
       <BookForm
         onChange={onChange}
         onSubmit={onSubmit}
@@ -27,7 +28,7 @@ const AddBookForm = ({ loading, onChange, onSubmit, error }: { loading: boolean,
           </div>
         }
       />
-    </Card>
+    </div>
   )
 }
 
@@ -54,7 +55,7 @@ export const CreateBookPage = () => {
   }, [book])
 
   return (
-    <Container maxWidth="md" className="mt-3">
+    <Container maxWidth="md">
       {!book && <AddBookForm loading={loading} onChange={onChange} onSubmit={onSubmit} error={error} /> }
       {book && <Card><BookSubmissionSuccess book={book} /></Card>}
       <Prompt when={!saved} message="Are you sure to leave (all changes will be lost)?" />

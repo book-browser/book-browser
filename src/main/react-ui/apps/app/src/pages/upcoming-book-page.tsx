@@ -1,12 +1,13 @@
 import { Container } from '@material-ui/core';
-import BookCard from 'components/book-card/book-card';
 import { ErrorAlert } from 'components/error/error-alert';
 import Loading from 'components/loading/loading';
 import { useFindAll } from 'hooks/book.hook';
 import React, { useEffect, useState } from 'react';
-import { Breadcrumb, Pagination } from 'react-bootstrap';
+import { Breadcrumb } from 'react-bootstrap';
 import { useLocation, useHistory, Link } from 'react-router-dom';
 import { parse } from 'query-string';
+import BookList from 'components/book-list/book-list';
+import Pagination from 'components/pagination/pagination';
 
 const parsePageParam = (page?: string | string[]) => {
   if (page) {
@@ -58,22 +59,8 @@ const UpcomingBookPageContent = () => {
   } else if (data) {
     return (
       <div>
-        <div className="d-flex flex-wrap mb-4">
-          {data.items && data.items.map((book) => (
-            <BookCard book={book} key={book.id} />
-          ))}
-        </div>
-        <Pagination className="justify-content-center">
-          {page != 0 && <Pagination.First onClick={() => changePage(0)} />}
-          {page > 0 && page - 1 < data.totalPages && <Pagination.Prev onClick={() => changePage(page - 1)} />}
-          {page - 1 > 0 && page - 2 < data.totalPages && <Pagination.Item onClick={() => changePage(page - 2)}>{page - 1}</Pagination.Item>}
-          {page > 0 && page - 1 < data.totalPages && <Pagination.Item onClick={() => changePage(page - 1)}>{page}</Pagination.Item>}
-          {page < data.totalPages && <Pagination.Item active>{page + 1}</Pagination.Item>}
-          {page + 1 < data.totalPages && <Pagination.Item onClick={() => changePage(page + 1)}>{page + 2}</Pagination.Item>}
-          {page + 2 < data.totalPages && <Pagination.Item onClick={() => changePage(page + 2)}>{page + 3}</Pagination.Item>}
-          {page + 1 < data.totalPages && <Pagination.Next onClick={() => changePage(page + 1)} />}
-          {page != (data.totalPages - 1) && <Pagination.Last onClick={() => changePage(data.totalPages - 1)} />}
-        </Pagination>
+        {data.items && <BookList books={data.items} />}
+        <Pagination page={page} totalPages={data.totalPages} onPageChange={changePage} />
       </div>
     );
   }
@@ -87,7 +74,7 @@ const UpcomingBookPage = () => {
         <Breadcrumb.Item linkAs={Link} linkProps={{to: "/home"}}>Home</Breadcrumb.Item>
         <Breadcrumb.Item active>Coming Soon</Breadcrumb.Item>
       </Breadcrumb>
-      <h2>Coming Soon</h2>
+      <h1 className="heading-main">Coming Soon</h1>
       <UpcomingBookPageContent />
     </Container>
   );

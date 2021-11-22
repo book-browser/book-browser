@@ -33,6 +33,7 @@ const Header = () => {
               <NavDropdown title="Books" id="test">
                 <NavDropdown.Item as={Link} to="/recent">Recent Releases</NavDropdown.Item>
                 <NavDropdown.Item as={Link} to="/coming-soon" >Coming Soon</NavDropdown.Item>
+                <NavDropdown.Item as={Link} to="/books" >All Books</NavDropdown.Item>
               </NavDropdown>
               <Nav.Link as={Link} to="/random">Random</Nav.Link>
             </Nav>

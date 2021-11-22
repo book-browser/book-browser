@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tabroadn.bookbrowser.config.CaseInsensitiveEnumEditor;
+import com.tabroadn.bookbrowser.domain.LetterEnum;
 import com.tabroadn.bookbrowser.domain.OrderEnum;
 import com.tabroadn.bookbrowser.dto.BookDto;
 import com.tabroadn.bookbrowser.dto.BookSummaryDto;
@@ -47,9 +48,10 @@ public class BookController {
 			@RequestParam(required = false, defaultValue="id") String sort,
 			@RequestParam(required = false, defaultValue="DESC") OrderEnum order,
 			@RequestParam Optional<LocalDate> startReleaseDate,
-			@RequestParam Optional<LocalDate> endReleaseDate) {
+			@RequestParam Optional<LocalDate> endReleaseDate,
+			@RequestParam(required = false) LetterEnum titleStartsWith) {
 		return service.findAll(page, limit, sort, order,
-				startReleaseDate, endReleaseDate);
+				startReleaseDate, endReleaseDate, Optional.ofNullable(titleStartsWith));
 	}
 	
 	@GetMapping("/books/search")
@@ -78,5 +80,6 @@ public class BookController {
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		binder.registerCustomEditor(OrderEnum.class, new CaseInsensitiveEnumEditor(OrderEnum.class));
+		binder.registerCustomEditor(LetterEnum.class, new CaseInsensitiveEnumEditor(LetterEnum.class));
 	}
 }

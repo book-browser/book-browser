@@ -122,7 +122,7 @@ export const BookForm = (props: BookFormProps) => {
       return (
 
         <Form
-          className="m-3"
+          className="mb-3"
           noValidate
           onSubmit={handleSubmit}
         >

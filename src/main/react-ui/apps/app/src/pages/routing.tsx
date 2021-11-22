@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
+import BookListPage from './book-list-page';
 import { BookPage } from './book-page';
 import { CreateBookPage } from './create-book-page';
 import EditBookPage from './edit-book-page';
@@ -29,6 +30,9 @@ export const Routing = () => {
         </Route>
         <Route exact path="/book/:id/edit">
           <EditBookPage />
+        </Route>
+        <Route exact path="/books">
+          <BookListPage />
         </Route>
         <Route exact path="/search">
           <SearchPage />

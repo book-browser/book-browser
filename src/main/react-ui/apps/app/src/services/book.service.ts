@@ -1,5 +1,6 @@
 import { Book } from "types/book";
 import { Genre } from "types/genre";
+import { Letter } from "types/letter";
 import { mapPageItems, Page } from "types/page";
 import { handleResponse } from "./response.service";
 
@@ -48,14 +49,15 @@ export const search = async({ query, genres, page, limit }:
   return (await handleResponse<any[]>(response)).map(convertBookResponseToBook);
 }
 
-export const findAll = async({ limit, page, sort, order, startReleaseDate, endReleaseDate }: 
+export const findAll = async({ limit, page, sort, order, startReleaseDate, endReleaseDate, titleStartsWith }: 
   {
     page?: number,
     limit?: number,
     sort?: keyof Book,
     order?: 'asc' | 'desc',
     startReleaseDate?: Date,
-    endReleaseDate?: Date
+    endReleaseDate?: Date,
+    titleStartsWith?: Letter
   }) => {
 
   const params = new URLSearchParams();
@@ -78,6 +80,9 @@ export const findAll = async({ limit, page, sort, order, startReleaseDate, endRe
   }
   if (endReleaseDate) {
     params.append('endReleaseDate', endReleaseDate.toISOString().substring(0, 10));
+  }
+  if (titleStartsWith) {
+    params.append('titleStartsWith', titleStartsWith.value);
   }
 
   const response = await fetch('/api/books?' + params.toString());

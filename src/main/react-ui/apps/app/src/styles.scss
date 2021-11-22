@@ -1,7 +1,30 @@
-/* You can add global styles to this file, and also import other style files */
-
-@import '~bootstrap/dist/css/bootstrap.css';
+@import "~bootstrap/scss/bootstrap";
 @import '~react-datepicker/dist/react-datepicker.min.css';
+@import './variables.scss';
+
+.heading-top {
+  font-size: $heading-top-font-size; 
+}
+
+.heading-main {
+  font-size: $heading-main-font-size; 
+}
+
+.heading-section {
+  font-size: $heading-section-font-size; 
+}
+
+.heading-component {
+  font-size: $heading-component-font-size; 
+}
+
+.heading-element {
+  font-size: $heading-element-font-size; 
+}
+
+.breadcrumb {
+  margin-bottom: $margin-component-y !important;
+}
 
 .custom-file-label {
   z-index: 0;

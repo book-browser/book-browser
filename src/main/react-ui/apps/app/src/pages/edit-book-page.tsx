@@ -73,10 +73,11 @@ const EditBookPage = () => {
         <div>
           <Breadcrumb>
             <Breadcrumb.Item linkAs={Link} linkProps={{to: "/home"}}>Home</Breadcrumb.Item>
+            <Breadcrumb.Item linkAs={Link} linkProps={{to: "/books"}}>Books</Breadcrumb.Item>
             <Breadcrumb.Item linkAs={Link} linkProps={{to: `/book/${book!.id}`}}>{(savedBook || loadedBook)?.title}</Breadcrumb.Item>
             <Breadcrumb.Item active>Edit</Breadcrumb.Item>
           </Breadcrumb>
-          <h2>Edit Book</h2>
+          <h1 className="heading-main">Edit Book</h1>
           <BookForm
             value={book}
             onChange={onChange}

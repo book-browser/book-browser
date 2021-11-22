@@ -37,6 +37,7 @@
     "debounce": "^1.2.1",
     "document-register-element": "1.13.1",
     "formik": "^2.2.6",
+    "history": "^5.1.0",
     "query-string": "^7.0.1",
     "react": "17.0.1",
     "react-bootstrap": "1.5.2",

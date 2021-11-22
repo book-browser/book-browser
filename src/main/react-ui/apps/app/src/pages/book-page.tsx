@@ -1,14 +1,32 @@
 import { Container } from '@material-ui/core';
+import EditIcon from '@material-ui/icons/Edit';
 import { BookDetails } from 'components/book-details/book-details';
 import Loading from 'components/loading/loading';
 import { NotFound } from 'components/message/not-found/not-found';
 import { SomethingWentWrong } from 'components/message/something-went-wrong/something-went-wrong';
 import { useGetBook } from 'hooks/book.hook';
 import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { Breadcrumb, Button } from 'react-bootstrap';
+import { Link, useParams } from 'react-router-dom';
 import { ApiError } from 'types/api-error';
+import { Book } from 'types/book';
 
-export const BookPage = () => {
+const BookPageHeader = ({ book }: {
+  book: Book
+}) => {
+  return (
+    <div className="d-flex align-items-start">
+      <Breadcrumb>
+        <Breadcrumb.Item linkAs={Link} linkProps={{to: "/home"}}>Home</Breadcrumb.Item>
+        <Breadcrumb.Item linkAs={Link} linkProps={{to: "/books"}}>Books</Breadcrumb.Item>
+        <Breadcrumb.Item active>{book.title}</Breadcrumb.Item>
+      </Breadcrumb>
+      <Button as={Link} to={`/book/${book.id}/edit`} className="ml-auto" variant="primary"><EditIcon /> Edit</Button>
+    </div>
+  );
+}
+
+const BookPageContent = () => {
   const { data: book, execute, loading, error } = useGetBook();
   const { id } = useParams();
   const apiError = error?.name === 'ApiError' && error as ApiError;
@@ -26,12 +44,31 @@ export const BookPage = () => {
     }
   }, [book]);
 
+  if (loading) {
+    return <Loading />;
+  }
+  if (error) {
+    if (notFound) {
+      return <NotFound />;
+    }
+    return <SomethingWentWrong error={error}/>;
+  }
+  if (book) {
+    return (
+    <>
+      <BookPageHeader book={book} />
+      <BookDetails book={book} />
+    </>
+    );
+  }
+  return null;
+}
+
+
+export const BookPage = () => {
   return (
-    <Container maxWidth="lg" className="mt-3">
-      {loading ? <Loading /> :
-       error ? (notFound ? <NotFound /> : <SomethingWentWrong error={error}/>) :
-       book ? <BookDetails book={book} /> : <div />
-      }
+    <Container maxWidth="lg">
+      <BookPageContent />
     </Container>
   );
 };

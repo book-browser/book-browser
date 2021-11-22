@@ -1,18 +1,17 @@
+@import '../../variables.scss';
+
 .book-details-header {
   display: flex;
 }
 
-.book-details-body {
-  margin: 10px;
-  
+.book-details {
+  margin-bottom: $margin-component-y;
   display: flex;
-  > * {
-    margin: 10px;
-  }
+  gap: $margin-component-x;
 }
 
 @media screen and (max-width: 768px) {
-  .book-details-body {
+  .book-details {
     flex-wrap: wrap;
   }
 }
@@ -23,5 +22,5 @@
 }
 
 .side {
-  min-width: 300px;
+  min-width: 250px;
 }

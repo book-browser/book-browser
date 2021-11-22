@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
+import com.tabroadn.bookbrowser.domain.LetterEnum;
 import com.tabroadn.bookbrowser.domain.OrderEnum;
 import com.tabroadn.bookbrowser.domain.ReleaseTypeEnum;
 import com.tabroadn.bookbrowser.dto.BookDto;
@@ -100,7 +101,8 @@ public class BookService {
 	}
 
 	public PageDto<BookDto> findAll(Integer page, Integer size, String sort,
-			OrderEnum order, Optional<LocalDate> startReleaseDate, Optional<LocalDate> endReleaseDate) {
+			OrderEnum order, Optional<LocalDate> startReleaseDate, Optional<LocalDate> endReleaseDate,
+			Optional<LetterEnum> titleStartLetter) {
 		validateBookField(sort);
 
 		Pageable pageable = PageRequest.of(page, size);
@@ -113,6 +115,10 @@ public class BookService {
 		
 		if (endReleaseDate.isPresent()) {
 			specification = specification.and(BookSpecification.releaseDateLessThanOrEqual(endReleaseDate.get()));
+		}
+		
+		if (titleStartLetter.isPresent()) {
+			specification = specification.and(BookSpecification.titleStartsWith(titleStartLetter.get()));
 		}
 
 		return new PageDto<BookDto>(repository.findAll(specification, pageable)

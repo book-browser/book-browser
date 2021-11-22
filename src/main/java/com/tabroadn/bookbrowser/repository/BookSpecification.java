@@ -4,10 +4,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 
 import org.springframework.data.jpa.domain.Specification;
 
+import com.tabroadn.bookbrowser.domain.LetterEnum;
 import com.tabroadn.bookbrowser.domain.OrderEnum;
 import com.tabroadn.bookbrowser.entity.Book;
 import com.tabroadn.bookbrowser.entity.Genre;
@@ -54,15 +56,26 @@ public class BookSpecification {
 			 return cb.lessThanOrEqualTo(book.get("releaseDate"), date);
 		 };
 	  }
-	 
+
 	 public static Specification<Book> orderBy(String field, OrderEnum order) {
 		 return (book, cq, cb) -> {
+			 Expression<String> expression = book.get(field);
+			 if (field.equals("title")) {
+				 expression = cb.function("replace", String.class, cb.upper(book.get("title")), cb.literal("THE "), cb.literal(""));
+			 }
 			 if (order == OrderEnum.ASC) {
-				 cq.orderBy(cb.asc(book.get(field)));
+				 cq.orderBy(cb.asc(expression));
 			 } else {
-				 cq.orderBy(cb.desc(book.get(field)));
+				 cq.orderBy(cb.desc(expression));
 			 }
 			 return null;
+		 };
+	  }
+	 
+	 public static Specification<Book> titleStartsWith(LetterEnum letterEnum) {
+		 return (book, cq, cb) -> {	
+			 String pattern = String.format("^%s.*$", letterEnum.getGroup());
+			 return cb.equal(cb.function("regexp_like", String.class, cb.function("replace", String.class, cb.upper(book.get("title")), cb.literal("THE "), cb.literal("")), cb.literal(pattern)), 1);
 		 };
 	  }
 }

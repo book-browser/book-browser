@@ -1,7 +1,9 @@
 package com.tabroadn.bookbrowser.util;
 
+import com.tabroadn.bookbrowser.domain.LetterEnum;
 import com.tabroadn.bookbrowser.dto.BookLinkDto;
 import com.tabroadn.bookbrowser.dto.GenreDto;
+import com.tabroadn.bookbrowser.dto.LetterDto;
 import com.tabroadn.bookbrowser.entity.BookLink;
 import com.tabroadn.bookbrowser.entity.Genre;
 
@@ -18,5 +20,12 @@ public class DtoConversionUtils {
 		bookLinkDto.setDescription(bookLink.getDescription());
 		bookLinkDto.setUrl(bookLink.getId().getUrl());
 		return bookLinkDto;
+	}
+	
+	public static LetterDto convertLetterEnumToLetterDto(LetterEnum letterEnum) {
+		LetterDto letterDto = new LetterDto();
+		letterDto.setLabel(letterEnum.getLabel());
+		letterDto.setValue(letterEnum.name());
+		return letterDto;
 	}
 }
