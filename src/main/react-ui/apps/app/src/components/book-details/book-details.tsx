@@ -16,6 +16,9 @@ export const BookDetails = ({
       <img className="book-details-thumbnail" src={`/api/book/${book.id}/thumbnail`} />
       <div className="flex-grow-1">
         <h1 className="heading-main">{book.title}</h1>
+        {book.seriesId && (
+          <p><strong>Series: </strong> <Link to={`/series/${book.seriesId}`}>{book.seriesTitle}</Link></p>
+        )}
         <p>
           {book.creators.map((creator, index) => (
             <span key={creator.id}>

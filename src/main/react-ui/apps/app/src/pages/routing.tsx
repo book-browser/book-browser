@@ -4,15 +4,19 @@ import BookListPage from './book-list-page';
 import { BookPage } from './book-page';
 import { CreateBookPage } from './create-book-page';
 import EditBookPage from './edit-book-page';
+import EditSeriesPage from './edit-series-page';
 import Header from './header';
 import Homepage from './homepage';
 import LoginPage from './login-page';
+import NewSeriesPage from './new-series-page';
 import NotFoundPage from './not-found-page';
 import RandomBookPage from './random-book-page';
 import RecentBookPage from './recent-book-page';
 import RegisterPage from './register-page';
 import ResendVerificationEmailPage from './resend-verification-email-page';
 import SearchPage from './search-page';
+import SeriesListPage from './series-list-page';
+import SeriesPage from './series-page';
 import UpcomingBookPage from './upcoming-book-page';
 import UsernameRecoveryPage from './username-recovery-page';
 import VerifyUserPage from './verify-user-page';
@@ -33,6 +37,18 @@ export const Routing = () => {
         </Route>
         <Route exact path="/books">
           <BookListPage />
+        </Route>
+        <Route exact path="/series">
+          <SeriesListPage />
+        </Route>
+        <Route exact path="/series/new">
+          <NewSeriesPage />
+        </Route>
+        <Route exact path="/series/:id">
+          <SeriesPage />
+        </Route>
+        <Route exact path="/series/:id/edit">
+          <EditSeriesPage />
         </Route>
         <Route exact path="/search">
           <SearchPage />

@@ -16,14 +16,12 @@ import org.springframework.stereotype.Component;
 
 import com.tabroadn.bookbrowser.domain.LetterEnum;
 import com.tabroadn.bookbrowser.domain.OrderEnum;
-import com.tabroadn.bookbrowser.domain.ReleaseTypeEnum;
 import com.tabroadn.bookbrowser.dto.BookDto;
 import com.tabroadn.bookbrowser.dto.BookLinkDto;
 import com.tabroadn.bookbrowser.dto.BookSummaryDto;
 import com.tabroadn.bookbrowser.dto.GenreDto;
 import com.tabroadn.bookbrowser.dto.PageDto;
 import com.tabroadn.bookbrowser.dto.PersonCreatorDto;
-import com.tabroadn.bookbrowser.dto.ReleaseDto;
 import com.tabroadn.bookbrowser.entity.Book;
 import com.tabroadn.bookbrowser.entity.BookLink;
 import com.tabroadn.bookbrowser.entity.BookLinkId;
@@ -31,7 +29,6 @@ import com.tabroadn.bookbrowser.entity.Creator;
 import com.tabroadn.bookbrowser.entity.CreatorId;
 import com.tabroadn.bookbrowser.entity.Genre;
 import com.tabroadn.bookbrowser.entity.Person;
-import com.tabroadn.bookbrowser.entity.Release;
 import com.tabroadn.bookbrowser.exception.ImageUploadFailureException;
 import com.tabroadn.bookbrowser.exception.ResourceNotFoundException;
 import com.tabroadn.bookbrowser.repository.BookRepository;
@@ -52,7 +49,7 @@ public class BookService {
 	private PersonRepository personRepository;
 
 	public BookDto getById(Long id) {
-		return convertBookToBookDto(
+		return DtoConversionUtils.convertBookToBookDto(
 				repository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException(String.format("book with id %s not found", id))));
 	}	
@@ -68,7 +65,7 @@ public class BookService {
 			long count = repository.count();
 			int randomPage = (int) (Math.random() * count / size);
 			return repository.findAll(PageRequest.of(randomPage, size)).stream()
-					.map(BookService::convertBookToBookSummaryDto)
+					.map(DtoConversionUtils::convertBookToBookSummaryDto)
 					.collect(Collectors.toList());
 		}
 		
@@ -96,7 +93,7 @@ public class BookService {
 		}
 
 		return books.stream()
-					.map(BookService::convertBookToBookSummaryDto)
+					.map(DtoConversionUtils::convertBookToBookSummaryDto)
 					.collect(Collectors.toList());
 	}
 
@@ -122,7 +119,7 @@ public class BookService {
 		}
 
 		return new PageDto<BookDto>(repository.findAll(specification, pageable)
-			.map(BookService::convertBookToBookDto));
+			.map(DtoConversionUtils::convertBookToBookDto));
 	}
 	
 	private void validateBookField(String fieldName) {
@@ -135,46 +132,9 @@ public class BookService {
 
 	public BookDto save(BookDto bookDto) {
 		Book book = convertBookDtoToBook(bookDto);
-		return convertBookToBookDto(repository.save(book));
+		return DtoConversionUtils.convertBookToBookDto(repository.save(book));
 	}
-	
-	private static BookDto convertBookToBookDto(Book book) {
-		BookDto bookDto = new BookDto();
-		bookDto.setId(book.getId());
-		bookDto.setTitle(book.getTitle());
-		bookDto.setDescription(book.getDescription());
-		bookDto.setReleaseDate(Optional.ofNullable(book.getReleaseDate()));
-		bookDto.setCreators(book.getCreators().stream()
-			.map(BookService::convertCreatorToPersonCreatorDto)
-			.collect(Collectors.toList()));
-		bookDto.setIssues(book.getReleases().stream()
-			.map(BookService::convertReleaseToReleaseDto)
-			.filter((release) -> release.getReleaseType() == ReleaseTypeEnum.ISSUE)
-			.collect(Collectors.toList()));
-		bookDto.setVolumes(book.getReleases().stream()
-			.map(BookService::convertReleaseToReleaseDto)
-			.filter((release) -> release.getReleaseType() == ReleaseTypeEnum.VOLUME)
-			.collect(Collectors.toList()));
-		bookDto.setGenres(book.getGenres().stream()
-				.map(DtoConversionUtils::convertGenreToGenreDto)
-				.collect(Collectors.toList()));
-		bookDto.setLinks(book.getLinks().stream()
-				.map(DtoConversionUtils::convertBookLinkToBookLinkDto)
-				.collect(Collectors.toList()));
-		return bookDto;
-	}
-	
-	private static BookSummaryDto convertBookToBookSummaryDto(Book book) {
-		BookSummaryDto bookSummary = new BookSummaryDto();
-		bookSummary.setId(book.getId());
-		bookSummary.setTitle(book.getTitle());
-		bookSummary.setDescription(book.getDescription());
-		bookSummary.setCreators(book.getCreators().stream()
-			.map(BookService::convertCreatorToPersonCreatorDto)
-			.collect(Collectors.toList()));
-		return bookSummary;
-	}
-	
+
 	private Book convertBookDtoToBook(BookDto bookDto) {
 		Book book = bookDto.getId() != null
 				? repository.findById(bookDto.getId())
@@ -268,23 +228,6 @@ public class BookService {
 		return creator;
 	}
 	
-	private static PersonCreatorDto convertCreatorToPersonCreatorDto(Creator creator) {
-		PersonCreatorDto personCreatorDto = new PersonCreatorDto();
-		personCreatorDto.setId(creator.getPerson().getId());
-		personCreatorDto.setFullName(creator.getPerson().getFullName());
-		personCreatorDto.setRole(creator.getRole());
-		return personCreatorDto;
-	}
-	
-	private static ReleaseDto convertReleaseToReleaseDto(Release release) {
-		ReleaseDto releaseDto = new ReleaseDto();
-		releaseDto.setId(release.getId());
-		releaseDto.setPublishDate(release.getPublishDate());
-		releaseDto.setReleaseType(release.getReleaseType());
-		releaseDto.setReleaseNumber(release.getReleaseNumber());
-		releaseDto.setDescription(release.getDescription());
-		return releaseDto;
-	}
 	
 	private Genre convertGenreDtoToGenre(GenreDto genreDto) {
 		return genreRepository.findById(genreDto.getId())

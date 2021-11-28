@@ -1,5 +1,6 @@
 import { Container } from '@material-ui/core';
 import BookCard from 'components/book-card/book-card';
+import BookList from 'components/book-list/book-list';
 import { ErrorAlert } from 'components/error/error-alert';
 import Loading from 'components/loading/loading';
 import { useFindAll } from 'hooks/book.hook';
@@ -35,21 +36,13 @@ const HomepageContent = () => {
     return (
       <div>
         <h3>Recent Releases</h3>
-        <div className="d-flex flex-wrap mb-2">
-          {data[0].items && data[0].items.map((book) => (
-            <BookCard book={book} key={book.id} />
-          ))}
-        </div>
+        {data[0].items && <BookList books={data[0].items}/>}
         <div className="d-flex mb-3">
           <Link to="/recent">View More</Link>
         </div>
         <hr />
         <h3>Coming Soon</h3>
-        <div className="d-flex flex-wrap mb-2">
-          {data[1].items && data[1].items.map((book) => (
-            <BookCard book={book} key={book.id} />
-          ))}
-        </div>
+        {data[1].items && <BookList books={data[1].items}/>}
         <div className="d-flex">
           <Link to="/coming-soon">View More</Link>
         </div>

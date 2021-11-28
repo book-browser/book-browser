@@ -31,10 +31,20 @@ const Header = () => {
           <Navbar.Toggle className="mb-2" aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="mr-auto">
-              <NavDropdown title="Books" id="test">
-                <NavDropdown.Item as={Link} to="/recent">Recent Releases</NavDropdown.Item>
-                <NavDropdown.Item as={Link} to="/coming-soon" >Coming Soon</NavDropdown.Item>
-                <NavDropdown.Item as={Link} to="/books" >All Books</NavDropdown.Item>
+              <NavDropdown title="Browse" id="test">
+                <div className="d-flex ml-3 mr-3">
+                  <div>
+                    <div className="pl-4 mb-2"><strong>Books</strong></div>
+                    <NavDropdown.Item as={Link} to="/recent">Recent Releases</NavDropdown.Item>
+                    <NavDropdown.Item as={Link} to="/coming-soon" >Coming Soon</NavDropdown.Item>
+                    <NavDropdown.Item as={Link} to="/books" >All Books</NavDropdown.Item>
+                  </div>
+                  <div>
+                    <div className="pl-4 mb-2"><strong>Series</strong></div>
+                    <NavDropdown.Item as={Link} to="/series">All Series</NavDropdown.Item>
+                  </div>
+                </div>
+                
               </NavDropdown>
               <Nav.Link as={Link} to="/random">Random</Nav.Link>
             </Nav>
@@ -52,7 +62,12 @@ const Header = () => {
             )}
             {user && (
               <>
-                <Nav><Nav.Link as={Link} to="/book/new"><AddIcon /></Nav.Link></Nav>
+                <Nav>
+                  <NavDropdown title={<AddIcon />} id="test">
+                    <NavDropdown.Item as={Link} to="/book/new">New Book</NavDropdown.Item>
+                    <NavDropdown.Item as={Link} to="/series/new">New Series</NavDropdown.Item>
+                  </NavDropdown>
+                </Nav>
                 {!isAuthLocation && <Button variant="nav" onClick={logout}>Logout</Button>}
               </>
             )}

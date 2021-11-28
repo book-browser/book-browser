@@ -28,13 +28,13 @@ public class BookDto {
 	private String thumbnail;
 	
 	private Optional<LocalDate> releaseDate;
+	
+	private Long seriesId;
+	
+	private String seriesTitle;
 		
 	@Valid
 	private List<PersonCreatorDto> creators;
-	
-	private List<ReleaseDto> issues;
-	
-	private List<ReleaseDto> volumes;
 	
 	@Valid
 	private List<GenreDto> genres;

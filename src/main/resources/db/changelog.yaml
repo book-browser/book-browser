@@ -102,4 +102,12 @@ databaseChangeLog:
         - sqlFile:
             path: changelog/scripts/13-tabroadn-alter-book-add-release-date.sql
             relativeToChangelogFile: true
+
+    - changeSet:
+        id: createSertiesTable14
+        author: Tariq Broadnax
+        changes:
+        - sqlFile:
+            path: changelog/scripts/14-tabroadn-create-series-table.sql
+            relativeToChangelogFile: true
             

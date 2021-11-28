@@ -1,0 +1,11 @@
+@import '../../variables.scss';
+
+.series-list {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: $margin-component-y;
+
+  .series-card {
+    margin-left: 0;
+  }
+}

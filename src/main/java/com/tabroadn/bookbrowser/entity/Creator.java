@@ -14,6 +14,7 @@ import javax.persistence.MapsId;
 import com.tabroadn.bookbrowser.domain.RoleEnum;
 
 import lombok.Data;
+import lombok.ToString;
 
 @Data
 @Entity
@@ -29,6 +30,7 @@ public class Creator implements Serializable {
 	@MapsId("bookId")
 	@ManyToOne
 	@JoinColumn(name = "book_id")
+	@ToString.Exclude
 	private Book book;
 
 	@MapsId("personId")

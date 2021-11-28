@@ -11,7 +11,7 @@ const BookCard = ({
   book
 }: IBookCardProps) => {
   return (
-      <div className="m-2 book-card">
+      <div className="book-card">
         <Link to={`/book/${book.id}`}>
           <img className="book-card-img" src={`/api/book/${book.id}/thumbnail`} />
         </Link>

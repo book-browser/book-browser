@@ -1,0 +1,11 @@
+@import '../../variables.scss';
+
+.book-list {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: $margin-component-y;
+
+  .book-card {
+    margin-left: 0;
+  }
+}

@@ -13,12 +13,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 import lombok.Data;
+import lombok.ToString;
 
 @Data
 @Entity
@@ -36,11 +38,17 @@ public class Book {
 	private String description;
 
 	@NotEmpty
+	@ToString.Exclude
 	private byte[] thumbnail;
 	
 	private Integer pageViews;
 	
 	private LocalDate releaseDate;
+	
+	@ManyToOne
+	@JoinColumn(name="series_id")
+	@ToString.Exclude
+	private Series series;
 	
 	@NotEmpty
 	@OneToMany(
@@ -49,9 +57,6 @@ public class Book {
 		fetch = FetchType.LAZY,
 		orphanRemoval=true)
 	private List<Creator> creators = new ArrayList<>();
-	
-	@OneToMany(mappedBy="book", cascade = CascadeType.ALL, orphanRemoval=true)
-	private List<Release> releases = new ArrayList<>();
 	
 	@OneToMany(mappedBy="book", cascade = CascadeType.ALL, orphanRemoval=true)
 	private List<BookLink> links = new ArrayList<>();

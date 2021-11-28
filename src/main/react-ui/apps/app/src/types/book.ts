@@ -8,7 +8,10 @@ export interface Book {
   description: string;
   releaseDate?: Date;
   thumbnail?: string;
+  seriesId?: number;
+  seriesTitle?: string;
   genres: Genre[];
   creators: PersonCreator[];
   links: BookLink[]
+  
 }
