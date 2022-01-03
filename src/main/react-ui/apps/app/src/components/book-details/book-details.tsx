@@ -2,6 +2,7 @@ import GenreBadge from 'components/genre-badge/genre-badge';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Book } from 'types/book';
+import MDEditor from "@uiw/react-md-editor";
 import './book-details.scss';
 
 interface BookProps {
@@ -27,8 +28,7 @@ export const BookDetails = ({
             </span>
           ))}
         </p>
-        
-        {book.description.split('\n').map((part, index) => <p key={index}>{part}</p>)}
+        <MDEditor.Markdown source={book.description} />
       </div>
       <div className="side">
         <span><strong>Details</strong></span>

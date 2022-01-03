@@ -10,7 +10,7 @@ import { Series } from 'types/series';
 import * as yup from 'yup';
 import { RequiredFieldLegend } from '../required-field-legend';
 import { RequiredSymbol } from '../required-symbol';
-
+import MDEditor from '@uiw/react-md-editor';
 
 const schema = yup.object().shape({
   id: yup.number().nullable(),
@@ -124,14 +124,17 @@ const SeriesForm = (props: SeriesFormProps) => {
               </Form.Group>
               <Form.Group controlId="description-text-area">
                 <Form.Label>Description<RequiredSymbol /></Form.Label>
-                <Form.Control
-                  as="textarea"
-                  name="description"
-                  rows={6}
+                <MDEditor
+                  className={(touched.description  && !!errors.description) ? 'is-invalid' : undefined}
+                  height={500}
                   value={values.description}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  isInvalid={touched.description && !!errors.description}
+                  textareaProps={{
+                    name: "description",
+                    onBlur: handleBlur
+                  }}
+                  onChange={(value) => {
+                    setFieldValue('description', value);
+                  }}
                 />
                 <Form.Control.Feedback type="invalid">
                   {errors.description}

@@ -16,6 +16,7 @@ import Select from 'react-select';
 import { Genre } from 'types/genre';
 import { Book } from 'types/book';
 import DatePicker from "react-datepicker";
+import MDEditor from '@uiw/react-md-editor';
 
 const schema = yup.object().shape({
   id: yup.number().nullable(),
@@ -145,14 +146,17 @@ export const BookForm = (props: BookFormProps) => {
           </Form.Group>
           <Form.Group controlId="description-text-area">
             <Form.Label>Description<RequiredSymbol /></Form.Label>
-            <Form.Control
-              as="textarea"
-              name="description"
-              rows={6}
+            <MDEditor
+              className={(touched.description  && !!errors.description) ? 'is-invalid' : undefined}
+              height={500}
               value={values.description}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              isInvalid={touched.description && !!errors.description}
+              textareaProps={{
+                name: "description",
+                onBlur: handleBlur
+              }}
+              onChange={(value) => {
+                setFieldValue('description', value);
+              }}
             />
             <Form.Control.Feedback type="invalid">
               {errors.description}

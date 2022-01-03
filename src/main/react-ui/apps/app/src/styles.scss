@@ -1,6 +1,7 @@
 @import "~bootstrap/scss/bootstrap";
 @import '~react-datepicker/dist/react-datepicker.min.css';
 @import './variables.scss';
+@import './shim.scss';
 
 .heading-top {
   font-size: $heading-top-font-size; 
