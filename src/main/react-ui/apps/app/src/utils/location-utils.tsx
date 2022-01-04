@@ -6,10 +6,12 @@ export type ParamType = Record<string, string | string[] | number | number[]>
 
 export const parseParams = <E extends ParamType> (location: Location, schema: yup.SchemaOf<E>) =>  {
   const params: any = parse(location.search, { parseNumbers: true, parseBooleans: true });
-
   Object.entries(schema.fields).forEach(([fieldName, field]) => {
     if (field.type === 'array') {
-      if (!Array.isArray(params[fieldName])) {
+      if (!params[fieldName]) {
+        params[fieldName] = [];
+      }
+      else if (!Array.isArray(params[fieldName])) {
         params[fieldName] = [params[fieldName]];
       }
       

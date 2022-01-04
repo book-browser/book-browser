@@ -24,8 +24,8 @@ const Header = () => {
   const isAuthLocation = ['/login', '/login/', '/register', '/register/', '/username/recover', 'username/recover/'].includes(location.pathname);
 
   return (
-    <div className="mb-5">
-      <Navbar collapseOnSelect expand="md" bg="primary" variant="dark">
+    <div style={{ marginBottom: '80px' }}>
+      <Navbar fixed="top" collapseOnSelect expand="md" bg="primary" variant="dark">
         <Container fluid>
           <Navbar.Brand as={Link} to="/home">BookBrowser</Navbar.Brand>
           <Navbar.Toggle className="mb-2" aria-controls="responsive-navbar-nav" />

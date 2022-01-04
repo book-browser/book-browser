@@ -12,6 +12,7 @@ interface BookProps {
 export const BookDetails = ({
   book
 }: BookProps) => {
+  console.log(book.releaseDate);
   return (
     <div className="book-details">
       <img className="book-details-thumbnail" src={`/api/book/${book.id}/thumbnail`} />
@@ -34,11 +35,12 @@ export const BookDetails = ({
         <span><strong>Details</strong></span>
         <div className="mb-4">
           <div className="mb-2">
-            <div>{`Release Date: ${book.releaseDate.toLocaleDateString() || '-'}`}</div>
+            <div>{`Release Date: ${book.releaseDate?.toLocaleDateString() || 'N/A'}`}</div>
           </div>
           <hr />
           <div className="mb-2">
             Genres: 
+            {book.genres.length === 0 && ' N/A'}
             {book.genres.map((genre) => <GenreBadge key={genre.id} genre={genre} />)}
           </div>
         </div>

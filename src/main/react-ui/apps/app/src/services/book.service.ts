@@ -92,7 +92,7 @@ export const findAll = async({ limit, page, sort, order, startReleaseDate, endRe
 const convertBookResponseToBook = (data: any) => {
   return {
     ...data,
-    releaseDate: new Date(data.releaseDate)
+    releaseDate: data.releaseDate && new Date(data.releaseDate)
   } as Book;
 }
 

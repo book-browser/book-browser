@@ -38,7 +38,7 @@ const RecentBookPageContent = () => {
   }
 
   useEffect(() => {
-    document.title = 'Recent Books | BookBrowser';
+    document.title = 'Recent Releases | BookBrowser';
   }, []);
 
   useEffect(() => {
@@ -72,7 +72,7 @@ const RecentBookPage = () => {
     <Container maxWidth="md">
       <Breadcrumb>
         <Breadcrumb.Item linkAs={Link} linkProps={{to: "/home"}}>Home</Breadcrumb.Item>
-        <Breadcrumb.Item active>Recent Books</Breadcrumb.Item>
+        <Breadcrumb.Item active>Recent Releases</Breadcrumb.Item>
       </Breadcrumb>
       <h1 className="heading-main">Recent Releases</h1>
       <RecentBookPageContent />
