@@ -12,7 +12,11 @@ BookBrowser is website that functions of repository for graphic novels and provi
 1. `gradlew bootRun`
 
 ## Running Frontend
+
+This project requires Node 16.13.0 (using Node 17+ will make it not work)
+
 1. `cd src/main/react-ui`
+2. `npm install`
 2. `npm run start`
 
 ## Local Login Credentials

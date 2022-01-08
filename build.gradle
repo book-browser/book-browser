@@ -82,3 +82,8 @@ task installReact(type:Exec) {
 		commandLine "npm", "install"
 	}
 }
+
+bootRun {
+	systemProperty 'spring.output.ansi.enabled', 'ALWAYS'
+	systemProperty 'spring.profiles.active', 'local'
+}

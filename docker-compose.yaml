@@ -1,0 +1,10 @@
+version: '3'
+services:
+  db:
+    image: postgres
+    ports:
+      - "5532:5432"
+    environment:
+      - POSTGRES_PASSWORD=changeit
+      - POSTGRES_DB=accounts
+      - POSTGRES_USER=accounts-admin
