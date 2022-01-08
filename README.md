@@ -12,7 +12,7 @@ BookBrowser is website that functions of repository for graphic novels and provi
 1. `gradlew bootRun`
 
 ## Running Frontend
-1. `cd src/main/ui`
+1. `cd src/main/react-ui`
 2. `npm run start`
 
 ## Local Login Credentials
