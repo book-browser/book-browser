@@ -12,7 +12,6 @@ interface BookProps {
 export const BookDetails = ({
   book
 }: BookProps) => {
-  console.log(book.releaseDate);
   return (
     <div className="book-details">
       <img className="book-details-thumbnail" src={`/api/book/${book.id}/thumbnail`} />

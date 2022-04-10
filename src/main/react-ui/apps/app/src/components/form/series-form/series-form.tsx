@@ -188,7 +188,6 @@ const SeriesForm = (props: SeriesFormProps) => {
                   options={bookOptions}
                   value={values.books.map(convertBookToBookOption)}
                   onChange={(data, type) => {
-                    console.log(data, type);
                     if (type.action === 'select-option') {
                       const newBooks = values.books.slice();
                       newBooks.push(books.find((book) => book.id === type.option.value));
