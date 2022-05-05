@@ -14,17 +14,17 @@ import lombok.Data;
 @Data
 @Entity
 @Valid
-public class BookLink {
-	@EmbeddedId
+public class SeriesLink {
+  @EmbeddedId
 	@Valid
-	private BookLinkId id = new BookLinkId();
+	private SeriesLinkId id = new SeriesLinkId();
 	
 	@NotBlank
-	@Size(max = 100)
+	@Size(max = 50)
 	private String description;
 	
-	@MapsId("bookId")
+	@MapsId("seriesId")
 	@ManyToOne
 	@JoinColumn
-	private Book book;
+	private Series series;
 }

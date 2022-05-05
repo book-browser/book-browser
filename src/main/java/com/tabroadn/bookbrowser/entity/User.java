@@ -26,7 +26,7 @@ import lombok.Data;
 
 @Data
 @Entity
-public class User implements Serializable, UserDetails {
+public class User implements UserDetails {
 
 	private static final long serialVersionUID = 1L;
 
@@ -57,7 +57,7 @@ public class User implements Serializable, UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return roles.stream().map(role -> new SimpleGrantedAuthority(role)).collect(Collectors.toList());
+		return roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
 	}
 
 	@Override

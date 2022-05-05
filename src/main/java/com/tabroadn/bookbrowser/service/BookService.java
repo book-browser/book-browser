@@ -17,9 +17,9 @@ import org.springframework.stereotype.Component;
 import com.tabroadn.bookbrowser.domain.LetterEnum;
 import com.tabroadn.bookbrowser.domain.OrderEnum;
 import com.tabroadn.bookbrowser.dto.BookDto;
-import com.tabroadn.bookbrowser.dto.BookLinkDto;
 import com.tabroadn.bookbrowser.dto.BookSummaryDto;
 import com.tabroadn.bookbrowser.dto.GenreDto;
+import com.tabroadn.bookbrowser.dto.LinkDto;
 import com.tabroadn.bookbrowser.dto.PageDto;
 import com.tabroadn.bookbrowser.dto.PersonCreatorDto;
 import com.tabroadn.bookbrowser.entity.Book;
@@ -81,7 +81,7 @@ public class BookService {
 		if (genreNames.isPresent()) {
 			List<Genre> genres = genreRepository.findByNameInIgnoreCase(genreNames.get());
 			
-			if (genres.size() > 0) {
+			if (!genres.isEmpty()) {
 				specification = specification.and(BookSpecification.hasGenres(genres));
 			}
 		}
@@ -118,7 +118,7 @@ public class BookService {
 			specification = specification.and(BookSpecification.titleStartsWith(titleStartLetter.get()));
 		}
 
-		return new PageDto<BookDto>(repository.findAll(specification, pageable)
+		return new PageDto<>(repository.findAll(specification, pageable)
 			.map(DtoConversionUtils::convertBookToBookDto));
 	}
 	
@@ -164,14 +164,14 @@ public class BookService {
 		if (bookDto.getCreators() != null) {
 			book.getCreators().clear();
 			book.getCreators().addAll(bookDto.getCreators().stream()
-					.map((creator) -> convertPersonCreatorDtoToCreator(creator, book))
+					.map(creator -> convertPersonCreatorDtoToCreator(creator, book))
 					.collect(Collectors.toList()));
 		}
 
 		if (bookDto.getLinks() != null) {
 			book.getLinks().clear();
 			book.getLinks().addAll(bookDto.getLinks().stream()
-					.map((link) -> convertBookLinkDtoToBookLink(link, book))
+					.map(link -> convertLinkDtoToBookLink(link, book))
 					.collect(Collectors.toList()));
 		}
 		
@@ -187,7 +187,7 @@ public class BookService {
 		return book;
 	}
 	
-	private static BookLink convertBookLinkDtoToBookLink(BookLinkDto bookLinkDto, Book book) {
+	private static BookLink convertLinkDtoToBookLink(LinkDto bookLinkDto, Book book) {
 		BookLink bookLink = new BookLink();
 		
 		if (book.getId() != null) {

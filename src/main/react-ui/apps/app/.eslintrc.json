@@ -7,7 +7,7 @@
       "parserOptions": {
         "project": [
           "apps/app/tsconfig.*?.json",
-          "apps\\app\\.storybook\\tsconfig.json"
+          "apps/app/.storybook/tsconfig.json"
         ]
       },
       "rules": {}

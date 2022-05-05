@@ -154,8 +154,8 @@ export const BookForm = (props: BookFormProps) => {
                 name: "description",
                 onBlur: handleBlur
               }}
-              onChange={(value) => {
-                setFieldValue('description', value);
+              onChange={(newValue) => {
+                setFieldValue('description', newValue);
               }}
             />
             <Form.Control.Feedback type="invalid">

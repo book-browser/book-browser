@@ -40,7 +40,7 @@ public class BookDto {
 	private List<GenreDto> genres;
 	
 	@Valid
-	private List<BookLinkDto> links;
+	private List<LinkDto> links;
 	
 	@JsonIgnore
 	public byte[] getThumbnailBytes() {

@@ -3,11 +3,15 @@ package com.tabroadn.bookbrowser.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -31,10 +35,22 @@ public class Series {
 	@Size(max = 2000)
 	private String description;
 
-	@NotEmpty
 	@ToString.Exclude
 	private byte[] banner;
 
+	@ToString.Exclude
+	private byte[] thumbnail;
+
 	@OneToMany(mappedBy="series", fetch=FetchType.LAZY)
 	private List<Book> books = new ArrayList<>();
+
+	@OneToMany(mappedBy="series", cascade = CascadeType.ALL, orphanRemoval=true)
+	private List<SeriesLink> links = new ArrayList<>();
+
+	@ManyToMany
+	@JoinTable(
+		name = "series_genre",
+		joinColumns = @JoinColumn(name = "series_id"),
+		inverseJoinColumns = @JoinColumn(name = "genre_id"))
+	private List<Genre> genres = new ArrayList<>();
 }

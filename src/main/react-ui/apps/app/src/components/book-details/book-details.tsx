@@ -14,7 +14,7 @@ export const BookDetails = ({
 }: BookProps) => {
   return (
     <div className="book-details">
-      <img className="book-details-thumbnail" src={`/api/book/${book.id}/thumbnail`} />
+      <img className="book-details-thumbnail" alt="thumbnail" src={`/api/book/${book.id}/thumbnail`} />
       <div className="flex-grow-1">
         <h1 className="heading-main">{book.title}</h1>
         {book.seriesId && (

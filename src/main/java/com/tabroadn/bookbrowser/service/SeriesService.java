@@ -11,11 +11,15 @@ import org.springframework.stereotype.Component;
 
 import com.tabroadn.bookbrowser.domain.LetterEnum;
 import com.tabroadn.bookbrowser.domain.OrderEnum;
+import com.tabroadn.bookbrowser.dto.LinkDto;
 import com.tabroadn.bookbrowser.dto.PageDto;
 import com.tabroadn.bookbrowser.dto.SeriesDto;
 import com.tabroadn.bookbrowser.entity.Series;
+import com.tabroadn.bookbrowser.entity.SeriesLink;
+import com.tabroadn.bookbrowser.entity.SeriesLinkId;
 import com.tabroadn.bookbrowser.exception.ResourceNotFoundException;
 import com.tabroadn.bookbrowser.repository.BookRepository;
+import com.tabroadn.bookbrowser.repository.GenreRepository;
 import com.tabroadn.bookbrowser.repository.SeriesRepository;
 import com.tabroadn.bookbrowser.repository.SeriesSpecification;
 import com.tabroadn.bookbrowser.util.DtoConversionUtils;
@@ -26,11 +30,15 @@ public class SeriesService {
 	
 	private BookRepository bookRepository;
 
+	private GenreRepository genreRepository;
+
 	@Autowired
 	public SeriesService(SeriesRepository seriesRepository,
-			BookRepository bookRepository) {
+			BookRepository bookRepository,
+			GenreRepository genreRepository) {
 		this.seriesRepository = seriesRepository; 
 		this.bookRepository = bookRepository;
+		this.genreRepository = genreRepository;
 	}
 	
 	public SeriesDto getById(Long id) {
@@ -40,6 +48,10 @@ public class SeriesService {
 	public byte[] getSeriesBanner(Long id) {
 		return getSeriesById(id).getBanner();
 	}
+
+	public byte[] getSeriesThumbnail(Long id) {
+		return getSeriesById(id).getThumbnail();
+	}
 	
 	public SeriesDto save(SeriesDto seriesDto) {
 		Series series = convertSeriesDtoToSeries(seriesDto);
@@ -47,7 +59,7 @@ public class SeriesService {
 	}
 	
 	public PageDto<SeriesDto> findAll(Integer page, Integer size,
-			String sort, OrderEnum order,
+			String sort, Optional<String> link, OrderEnum order,
 			Optional<LetterEnum> titleStartLetter) {
 		validateSeriesField(sort);
 
@@ -59,7 +71,11 @@ public class SeriesService {
 			specification = specification.and(SeriesSpecification.titleStartsWith(titleStartLetter.get()));
 		}
 
-		return new PageDto<SeriesDto>(seriesRepository.findAll(specification, pageable)
+		if (link.isPresent()) {
+			specification = specification.and(SeriesSpecification.hasLink(link.get()));
+		}
+
+		return new PageDto<>(seriesRepository.findAll(specification, pageable)
 				.map(DtoConversionUtils::convertSeriesToSeriesDto));
 	}
 	
@@ -88,19 +104,54 @@ public class SeriesService {
 		if (seriesDto.getBanner() != null) {
 			series.setBanner(seriesDto.getBannerBytes());
 		}
+
+		if (seriesDto.getThumbnail() != null) {
+			series.setThumbnail(seriesDto.getThumbnailBytes());
+		}
+
+		if (seriesDto.getGenres() != null) {
+			series.setGenres(
+				seriesDto.getGenres()
+				.stream()
+				.map(genre -> genreRepository.findByNameIgnoreCase(genre).orElseThrow(() -> new ResourceNotFoundException(String.format("genre with name %s not found", genre))))
+				.collect(Collectors.toList())
+			);
+		}
+
+		if (seriesDto.getLinks() != null) {
+			series.getLinks().clear();
+			series.getLinks().addAll(seriesDto.getLinks().stream()
+					.map(link -> convertLinkDtoToBookLink(link, series))
+					.collect(Collectors.toList()));
+		}
 				
 		if (seriesDto.getBooks() != null) {
 			series.getBooks().clear();
 			series.getBooks().addAll(
 					seriesDto.getBooks().stream()
-						.filter((bookDto) -> bookDto.getId() != null)
-						.map((bookDto) -> bookRepository.findById(bookDto.getId()).orElseThrow(() -> new ResourceNotFoundException(String.format("book with id %s not found", bookDto.getId()))))
+						.filter(bookDto -> bookDto.getId() != null)
+						.map(bookDto -> bookRepository.findById(bookDto.getId()).orElseThrow(() -> new ResourceNotFoundException(String.format("book with id %s not found", bookDto.getId()))))
 						.collect(Collectors.toList()));			
 			series.getBooks()
-				.forEach((book) -> book.setSeries(series));
+				.forEach(book -> book.setSeries(series));
 		}
 		
 		return series;
+	}
+
+	private static SeriesLink convertLinkDtoToBookLink(LinkDto linkDto, Series series) {
+		SeriesLink seriesLink = new SeriesLink();
+		
+		if (series.getId() != null) {
+			SeriesLinkId seriesLinkId = new SeriesLinkId();
+			seriesLinkId.setSeriesId(series.getId());
+			seriesLink.setId(seriesLinkId);
+		}
+
+		seriesLink.getId().setUrl(linkDto.getUrl());
+		seriesLink.setDescription(linkDto.getDescription());
+		seriesLink.setSeries(series);
+		return seriesLink;
 	}
 	
 	private Series getSeriesById(Long id) {

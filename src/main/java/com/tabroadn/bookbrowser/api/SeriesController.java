@@ -49,15 +49,24 @@ public class SeriesController {
 	    response.addHeader("Cache-Control", "max-age=86400, must-revalidate, no-transform");
 		return seriesService.getSeriesBanner(id);
 	}
+
+	@GetMapping(
+			value = "/series/{id}/thumbnail",
+			produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
+	public byte[] getSeriesThumbnail(@PathVariable("id") Long id, HttpServletResponse response) {
+	    response.addHeader("Cache-Control", "max-age=86400, must-revalidate, no-transform");
+		return seriesService.getSeriesThumbnail(id);
+	}
 	
 	@GetMapping("/series")
 	public PageDto<SeriesDto> findAll(
 			@RequestParam(required = false, defaultValue="50") @Min(1) Integer limit,
 			@RequestParam(required = false, defaultValue="0") @Min(0) Integer page,
 			@RequestParam(required = false, defaultValue="id") String sort,
+			@RequestParam Optional<String> link,
 			@RequestParam(required = false, defaultValue="DESC") OrderEnum order,
 			@RequestParam(required = false) LetterEnum titleStartsWith) {
-		return seriesService.findAll(page, limit, sort, order, Optional.ofNullable(titleStartsWith));
+		return seriesService.findAll(page, limit, sort, link, order, Optional.ofNullable(titleStartsWith));
 	}
 	
 	@Valid

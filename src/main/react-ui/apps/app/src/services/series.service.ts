@@ -4,6 +4,7 @@ import { Series } from "types/series";
 import { handleResponse } from "./response.service";
 
 export const save = async (series: Series) => {
+  console.log(series, JSON.stringify(series));
   const response = await fetch('/api/series', {
     headers: {
       'Content-Type': 'application/json',

@@ -1,7 +1,6 @@
-import { BookLink } from "./book-link";
 import { Genre } from "./genre";
+import { Link } from "./link";
 import { PersonCreator } from "./person-creator";
-import { Release } from "./release";
 
 export class BookSubmission {
   id: number;
@@ -10,5 +9,5 @@ export class BookSubmission {
   creators: PersonCreator[];
   thumbnail: File;
   genres: Genre[];
-  links: BookLink[];
+  links: Link[];
 }

@@ -1,4 +1,4 @@
-import { BookLink } from "./book-link";
+import { Link } from "./link";
 import { Genre } from "./genre";
 import { PersonCreator } from "./person-creator";
 
@@ -12,6 +12,6 @@ export interface Book {
   seriesTitle?: string;
   genres: Genre[];
   creators: PersonCreator[];
-  links: BookLink[]
+  links: Link[]
   
 }

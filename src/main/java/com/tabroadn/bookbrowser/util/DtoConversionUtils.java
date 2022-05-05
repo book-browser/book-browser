@@ -5,10 +5,10 @@ import java.util.stream.Collectors;
 
 import com.tabroadn.bookbrowser.domain.LetterEnum;
 import com.tabroadn.bookbrowser.dto.BookDto;
-import com.tabroadn.bookbrowser.dto.BookLinkDto;
 import com.tabroadn.bookbrowser.dto.BookSummaryDto;
 import com.tabroadn.bookbrowser.dto.GenreDto;
 import com.tabroadn.bookbrowser.dto.LetterDto;
+import com.tabroadn.bookbrowser.dto.LinkDto;
 import com.tabroadn.bookbrowser.dto.PersonCreatorDto;
 import com.tabroadn.bookbrowser.dto.SeriesDto;
 import com.tabroadn.bookbrowser.entity.Book;
@@ -16,6 +16,7 @@ import com.tabroadn.bookbrowser.entity.BookLink;
 import com.tabroadn.bookbrowser.entity.Creator;
 import com.tabroadn.bookbrowser.entity.Genre;
 import com.tabroadn.bookbrowser.entity.Series;
+import com.tabroadn.bookbrowser.entity.SeriesLink;
 
 public class DtoConversionUtils {
 	public static GenreDto convertGenreToGenreDto(Genre genre) {
@@ -25,11 +26,18 @@ public class DtoConversionUtils {
 		return genreDto;
 	}
 	
-	public static BookLinkDto convertBookLinkToBookLinkDto(BookLink bookLink) {
-		BookLinkDto bookLinkDto = new BookLinkDto();
+	public static LinkDto convertBookLinkToBookLinkDto(BookLink bookLink) {
+		LinkDto bookLinkDto = new LinkDto();
 		bookLinkDto.setDescription(bookLink.getDescription());
 		bookLinkDto.setUrl(bookLink.getId().getUrl());
 		return bookLinkDto;
+	}
+
+	public static LinkDto convertBookLinkToBookLinkDto(SeriesLink seriesLink) {
+		LinkDto seriesLinkDto = new LinkDto();
+		seriesLinkDto.setDescription(seriesLink.getDescription());
+		seriesLinkDto.setUrl(seriesLink.getId().getUrl());
+		return seriesLinkDto;
 	}
 	
 	public static LetterDto convertLetterEnumToLetterDto(LetterEnum letterEnum) {
@@ -44,8 +52,15 @@ public class DtoConversionUtils {
 		seriesDto.setId(series.getId());
 		seriesDto.setTitle(series.getTitle());
 		seriesDto.setDescription(series.getDescription());
+		seriesDto.setHasBanner(series.getBanner() != null);
+		seriesDto.setHasThumbnail(series.getThumbnail() != null);
 		seriesDto.setBooks(series.getBooks().stream()
 				.map(DtoConversionUtils::convertBookToBookDto)
+				.collect(Collectors.toList()));
+		seriesDto.setGenres(series.getGenres().stream().map(Genre::getName)
+				.collect(Collectors.toList()));
+		seriesDto.setLinks(series.getLinks().stream()
+				.map(DtoConversionUtils::convertBookLinkToBookLinkDto)
 				.collect(Collectors.toList()));
 		return seriesDto;
 	}
