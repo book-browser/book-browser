@@ -47,11 +47,13 @@ public class BookController {
 			@RequestParam(required = false, defaultValue="0") @Min(0) Integer page,
 			@RequestParam(required = false, defaultValue="id") String sort,
 			@RequestParam(required = false, defaultValue="DESC") OrderEnum order,
+			@RequestParam Optional<String> query,
 			@RequestParam Optional<LocalDate> startReleaseDate,
 			@RequestParam Optional<LocalDate> endReleaseDate,
+			@RequestParam Optional<List<String>> genres,
 			@RequestParam(required = false) LetterEnum titleStartsWith) {
 		return service.findAll(page, limit, sort, order,
-				startReleaseDate, endReleaseDate, Optional.ofNullable(titleStartsWith));
+				query, startReleaseDate, endReleaseDate, genres, Optional.ofNullable(titleStartsWith));
 	}
 	
 	@GetMapping("/books/search")

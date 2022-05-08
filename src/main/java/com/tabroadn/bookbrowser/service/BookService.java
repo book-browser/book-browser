@@ -97,21 +97,36 @@ public class BookService {
 					.collect(Collectors.toList());
 	}
 
-	public PageDto<BookDto> findAll(Integer page, Integer size, String sort,
-			OrderEnum order, Optional<LocalDate> startReleaseDate, Optional<LocalDate> endReleaseDate,
-			Optional<LetterEnum> titleStartLetter) {
+	public PageDto<BookDto> findAll(
+		Integer page, Integer size, String sort, OrderEnum order,
+		Optional<String> query,
+		Optional<LocalDate> startReleaseDate, Optional<LocalDate> endReleaseDate,
+		Optional<List<String>> genreNames,
+		Optional<LetterEnum> titleStartLetter) {
 		validateBookField(sort);
 
 		Pageable pageable = PageRequest.of(page, size);
 		
 		Specification<Book> specification = BookSpecification.orderBy(sort, order);
 		
+		if (query.isPresent()) {
+			specification = specification.and(BookSpecification.hasText(query.get()));
+		}
+	
 		if (startReleaseDate.isPresent()) {
 			specification = specification.and(BookSpecification.releaseDateGreaterThanOrEqual(startReleaseDate.get()));
 		}
 		
 		if (endReleaseDate.isPresent()) {
 			specification = specification.and(BookSpecification.releaseDateLessThanOrEqual(endReleaseDate.get()));
+		}
+
+		if (genreNames.isPresent()) {
+			List<Genre> genres = genreRepository.findByNameInIgnoreCase(genreNames.get());
+			
+			if (!genres.isEmpty()) {
+				specification = specification.and(BookSpecification.hasGenres(genres));
+			}
 		}
 		
 		if (titleStartLetter.isPresent()) {

@@ -1,5 +1,6 @@
+import { Card } from 'components/card/card';
+import { ImgLink } from 'components/img-link/img-link';
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { Book } from 'types/book';
 import './book-card.scss';
 
@@ -11,16 +12,12 @@ const BookCard = ({
   book
 }: IBookCardProps) => {
   return (
-      <div className="book-card">
-        <Link to={`/book/${book.id}`}>
-          <img className="book-card-img" src={`/api/book/${book.id}/thumbnail`} />
-        </Link>
-
-        <div className="book-card-title">
-          <Link to={`/book/${book.id}`}>{book.title}</Link>
-        </div>
-      </div>
-  )
+    <Card className="book-card">
+      <Card.Thumbnail>
+        <ImgLink to={`/book/${book.id}`} imgProps={{alt: "thumbnail", src: `/api/book/${book.id}/thumbnail`}}/>
+      </Card.Thumbnail>
+    </Card>
+  );
 }
 
 export default BookCard;

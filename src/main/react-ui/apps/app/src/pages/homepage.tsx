@@ -54,7 +54,7 @@ const HomepageContent = () => {
 
 const Homepage = () => {
   return (
-    <Container maxWidth="md" className="mt-3">
+    <Container maxWidth="lg" className="mt-3">
       <HomepageContent />
     </Container>
   );

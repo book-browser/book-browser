@@ -4,20 +4,12 @@ import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import BookCard from './book-card';
 
-export default { title: 'Book Card' };
+export default { title: 'Components/Cards/Book Card' };
 
 export const Example = () => {
   return (
     <BrowserRouter>
       <BookCard book={BOOK_EXAMPLE} />
-    </BrowserRouter>
-  );
-}
-
-export const LongTitle = () => {
-  return (
-    <BrowserRouter>
-      <BookCard book={BOOK_LONG_TITLE} />
     </BrowserRouter>
   );
 }

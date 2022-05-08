@@ -63,10 +63,11 @@ public class SeriesController {
 			@RequestParam(required = false, defaultValue="50") @Min(1) Integer limit,
 			@RequestParam(required = false, defaultValue="0") @Min(0) Integer page,
 			@RequestParam(required = false, defaultValue="id") String sort,
-			@RequestParam Optional<String> link,
 			@RequestParam(required = false, defaultValue="DESC") OrderEnum order,
+			@RequestParam Optional<String> query,
+			@RequestParam Optional<String> link,
 			@RequestParam(required = false) LetterEnum titleStartsWith) {
-		return seriesService.findAll(page, limit, sort, link, order, Optional.ofNullable(titleStartsWith));
+		return seriesService.findAll(page, limit, sort, order, query, link, Optional.ofNullable(titleStartsWith));
 	}
 	
 	@Valid

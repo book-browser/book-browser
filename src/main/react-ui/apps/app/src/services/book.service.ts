@@ -49,8 +49,9 @@ export const search = async({ query, genres, page, limit }:
   return (await handleResponse<any[]>(response)).map(convertBookResponseToBook);
 }
 
-export const findAll = async({ limit, page, sort, order, startReleaseDate, endReleaseDate, titleStartsWith }: 
+export const findAll = async({ query, limit, page, sort, order, startReleaseDate, endReleaseDate, titleStartsWith }: 
   {
+    query?: string,
     page?: number,
     limit?: number,
     sort?: keyof Book,
@@ -62,7 +63,9 @@ export const findAll = async({ limit, page, sort, order, startReleaseDate, endRe
 
   const params = new URLSearchParams();
 
- 
+  if (query) {
+    params.append('query', `${query}`);
+  }
   if (page) {
     params.append('page', `${page}`);
   }

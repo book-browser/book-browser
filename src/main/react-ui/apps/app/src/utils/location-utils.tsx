@@ -38,3 +38,27 @@ export const parseParams = <E extends ParamType> (location: Location, schema: yu
 
   return params as E;
 }
+
+export const generateEncodedUrl = (url: string, params: ParamType) => {
+  let joinedUrl = `${url}`;
+  let paramAdded = false;
+
+  Object.entries(params).forEach(([paramName, paramVal]) => {
+    if (Array.isArray(paramVal)) {
+      Object.values(paramVal).forEach((val) => {
+        const joinKey = paramAdded ? '&' : '?';
+        joinedUrl = `${joinedUrl}${joinKey}${paramName}=${val}`;
+        paramAdded = true;
+
+      });
+    } else {
+      const joinKey = paramAdded ? '&' : '?';
+      if (paramVal !== '') {
+        joinedUrl = `${joinedUrl}${joinKey}${paramName}=${paramVal}`;
+        paramAdded = true;
+      }
+    }
+  });
+
+  return joinedUrl;
+}

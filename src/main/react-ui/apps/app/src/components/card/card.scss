@@ -1,0 +1,14 @@
+.card-horizontal {
+  flex-direction: row !important;
+  .card-img, .card-thumbnail {
+    width: auto;
+  }
+}
+
+.card-thumbnail {
+  border-bottom-right-radius: calc(0.25rem - 1px);
+  border-bottom-left-radius: calc(0.25rem - 1px);
+  border-top-left-radius: calc(0.25rem - 1px);
+  border-top-right-radius: calc(0.25rem - 1px);
+  flex-shrink: 0;
+}

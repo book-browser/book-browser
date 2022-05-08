@@ -58,15 +58,20 @@ public class SeriesService {
 		return DtoConversionUtils.convertSeriesToSeriesDto(seriesRepository.save(series));
 	}
 	
-	public PageDto<SeriesDto> findAll(Integer page, Integer size,
-			String sort, Optional<String> link, OrderEnum order,
-			Optional<LetterEnum> titleStartLetter) {
+	public PageDto<SeriesDto> findAll(
+		Integer page, Integer size, String sort, OrderEnum order,
+		Optional<String> query, Optional<String> link,
+		Optional<LetterEnum> titleStartLetter) {
 		validateSeriesField(sort);
 
 		Pageable pageable = PageRequest.of(page, size);
 		
 		Specification<Series> specification = SeriesSpecification.orderBy(sort, order);
 		
+		if (query.isPresent()) {
+			specification = specification.and(SeriesSpecification.hasText(query.get()));
+		}
+
 		if (titleStartLetter.isPresent()) {
 			specification = specification.and(SeriesSpecification.titleStartsWith(titleStartLetter.get()));
 		}

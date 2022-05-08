@@ -1,20 +1,21 @@
 import BookCard from 'components/book-card/book-card';
+import { CardList } from 'components/card-list/card-list';
 import React from 'react';
 import { Book } from 'types/book';
 import './book-list.scss';
 
 export interface BookListProps {
-  books: Book[]
-} 
+  books: Book[];
+}
 
 const BookList = ({ books }: BookListProps) => {
   return (
-    <div className="book-list">
+    <CardList>
       {books.map((book) => (
         <BookCard book={book} key={book.id} />
       ))}
-    </div>
+    </CardList>
   );
-}
+};
 
 export default BookList;

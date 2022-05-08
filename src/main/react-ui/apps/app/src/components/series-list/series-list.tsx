@@ -1,3 +1,4 @@
+import CardList from 'components/card-list/card-list';
 import SeriesCard from 'components/series-card/series-card';
 import React from 'react';
 import { Series } from 'types/series';
@@ -11,11 +12,11 @@ const SeriesList = ({
   seriesList
 }: SeriesListProps) => {
   return (
-    <div className="series-list">
+    <CardList>
       {seriesList.map((series) => (
         <SeriesCard series={series} key={series.id} />
       ))}
-    </div>
+    </CardList>
   );
 };
 

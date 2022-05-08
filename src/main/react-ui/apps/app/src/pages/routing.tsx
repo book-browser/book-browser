@@ -14,7 +14,9 @@ import RandomBookPage from './random-book-page';
 import RecentBookPage from './recent-book-page';
 import RegisterPage from './register-page';
 import ResendVerificationEmailPage from './resend-verification-email-page';
-import SearchPage from './search-page';
+import SearchBookPage from './search-book-page';
+import SearchResultPage from './search-result-page';
+import SearchSeriesPage from './search-series-page';
 import SeriesListPage from './series-list-page';
 import SeriesPage from './series-page';
 import UpcomingBookPage from './upcoming-book-page';
@@ -29,6 +31,9 @@ export const Routing = () => {
         <Route exact path="/book/new">
           <CreateBookPage />
         </Route>
+        <Route exact path="/books/search">
+          <SearchBookPage />
+        </Route>
         <Route exact path="/book/:id">
           <BookPage />
         </Route>
@@ -41,6 +46,9 @@ export const Routing = () => {
         <Route exact path="/series">
           <SeriesListPage />
         </Route>
+        <Route exact path="/series/search">
+          <SearchSeriesPage />
+        </Route>
         <Route exact path="/series/new">
           <NewSeriesPage />
         </Route>
@@ -51,7 +59,7 @@ export const Routing = () => {
           <EditSeriesPage />
         </Route>
         <Route exact path="/search">
-          <SearchPage />
+          <SearchResultPage />
         </Route>
         <Route exact path="/login">
           <LoginPage />

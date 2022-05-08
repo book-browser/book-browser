@@ -1,18 +1,10 @@
 @import '../../variables.scss';
 
 .book-card {
-  margin: $margin-md;
-  max-width: 150px;
-  * {
-    white-space: nowrap; 
-    overflow: hidden;
-    text-overflow: ellipsis; 
-  }
+  // margin: $margin-md;
+  
   img {
     width: 100%;
-    height: 250px;
-    &:hover {
-      filter: brightness(80%);
-    }
+    height: 275px;
   }
 }

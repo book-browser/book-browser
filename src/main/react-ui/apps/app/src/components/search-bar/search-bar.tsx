@@ -1,4 +1,5 @@
-import { useSearch } from 'hooks/book.hook';
+import { useFindAll as useFindAllBooks } from 'hooks/book.hook';
+import { useFindAll as useFindAllSeries } from 'hooks/series.hook';
 import React, { useCallback, useRef, useState } from 'react';
 import { AsyncTypeahead, Menu, useItem } from 'react-bootstrap-typeahead';
 import { Book } from 'types/book';
@@ -7,9 +8,18 @@ import { Link, useHistory } from 'react-router-dom';
 import { useEffect } from 'react';
 import { Button, InputGroup } from 'react-bootstrap';
 import SearchIcon from '@material-ui/icons/Search';
+import { Series } from 'types/series';
 
+import { findAll as findAllBooks } from "services/book.service";
+import { findAll as findAllSeries } from "services/series.service";
+import { usePromise } from 'hooks/promise.hook';
+import { generateEncodedUrl } from 'utils/location-utils';
 
-const SearchBarOption =({ option, position }: {
+const findAll = async (arg: { query: string, limit: number }) => {
+  return await Promise.all([findAllBooks(arg), findAllSeries(arg)]);
+}
+
+const BookSearchBarOption =({ option, position }: {
   option: Book,
   position: number
 }) => {
@@ -23,16 +33,36 @@ const SearchBarOption =({ option, position }: {
     <Link to={`/book/${option.id}`} className={`dropdown-item ${newProps.active ? 'active' : ''}`} {...props}>
       <div className="search-option">
         <img className="search-option-thumbnail" src={`/api/book/${option.id}/thumbnail`} />
-        <div>
-          <strong>{option.title}</strong>
-        </div>
+        <div>{option.title}</div>
+      </div>
+    </Link>
+  )
+}
+
+declare type Content = Book | Series;
+
+const SeriesSearchBarOption =({ option, position }: {
+  option: Series,
+  position: number
+}) => {
+  const newProps = useItem({ option, position});
+  const props = {
+    ...newProps,
+    active: undefined,
+  }
+  
+  return (
+    <Link to={`/series/${option.id}`} className={`dropdown-item ${newProps.active ? 'active' : ''}`} {...props}>
+      <div className="search-option">
+        <img className="search-option-thumbnail" src={`/api/series/${option.id}/thumbnail`} />
+        <div>{option.title}</div>
       </div>
     </Link>
   )
 }
 
 const SearchBar = ({ className }: { className?: string }) => {
-  const { data, loading, execute } = useSearch();
+  const { data, loading, execute } = usePromise(findAll);
   const history = useHistory();
   const [activeIndex, setActiveIndex] = useState(-1);
   const [text, setText] = useState('');
@@ -43,7 +73,12 @@ const SearchBar = ({ className }: { className?: string }) => {
   const onKeyDown = (event: KeyboardEvent) => {
     if (event.key === 'Enter') {
       if (activeIndex != -1) {
-        history.push(`/book/${data[activeIndex].id}`)
+        if (activeIndex < data[0].items.length) {
+          history.push(`/book/${data[0].items[activeIndex].id}`)
+        } else {
+          history.push(`/series/${data[1].items[data[0].items.length - activeIndex].id}`)
+        }
+        
       } else if (text.length > 0) {
         history.push(`/search?query=${encodeURIComponent(text)}`)
       } else {
@@ -73,17 +108,23 @@ const SearchBar = ({ className }: { className?: string }) => {
         id='search-bar'
         isLoading={loading}
         labelKey={() => text}
-        onSearch={useCallback((query) => execute({ query }), [])}
+        onSearch={useCallback((query) => execute({ query, limit: 4 }), [])}
         onFocus={onFocus}
         onKeyDown={onKeyDown}
         onInputChange={onInputChange}
         onChange={onChange}
-        options={data ? data : []}
-        renderMenu={(results, menuProps) => (
+        options={data ? [...data[0].items, ...data[1].items] : []}
+        renderMenu={(results, menuProps) => {
+          console.log(menuProps);
+          return (
           <Menu {...menuProps}>
-            {results.map((result, index) => <SearchBarOption key={index} option={result} position={index} />)}
+            {data && data[0].items.length > 0 && <div className="search-bar-result-header">Books <Link className="float-right" to={generateEncodedUrl('/books/search', { query: text })} onClick={() => ref.current.clear()}>View More</Link></div>}
+            {data && results.slice(0, data[0].items.length).map((result, index) => <BookSearchBarOption key={index} option={result as Book} position={index} />)}
+            {data && data[1].items.length > 0 && <div className="search-bar-result-header">Series <Link className="float-right" to={generateEncodedUrl('/series/search', { query: text })} onClick={() => ref.current.clear()}>View More</Link></div>}
+            {data && results.slice(data[0].items.length, data[0].items.length + data[1].items.length).map((result, index) => <SeriesSearchBarOption key={data[0].items.length + index} option={result as Series} position={data[0].items.length + index} />)}
+            {results.length > 0 &&<div className="search-bar-result-footer"><Link to={generateEncodedUrl('/search', { query: text })} onClick={() => ref.current.clear()}>View All</Link></div>}
           </Menu>
-        )}
+        )}}
       >
         {(state) => {
           useEffect(() => setActiveIndex(state.activeIndex), [state.activeIndex])

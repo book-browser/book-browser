@@ -9,8 +9,9 @@ import { Genre } from 'types/genre';
 import * as yup from 'yup';
 import { parseParams } from 'utils/location-utils';
 import { ReferenceData } from 'types/reference-data';
+import BookList from 'components/book-list/book-list';
 
-interface SearchPageParams {
+interface SearchBookPageParams {
   query: string,
   genres: string[],
 }
@@ -23,12 +24,12 @@ const readParams = (location: Location, referenceData: ReferenceData) => {
     genres: yup.array(yup.string().test({
       test: (val) => genreNames.includes(val.toLocaleLowerCase())
     }))
-  }) as yup.SchemaOf<SearchPageParams>;
+  }) as yup.SchemaOf<SearchBookPageParams>;
 
-  return parseParams(location, schema) as SearchPageParams;
+  return parseParams(location, schema) as SearchBookPageParams;
 };
 
-const SearchPage = () => {
+const SearchBookPage = () => {
   const { data } = useReferenceData();
   const location = useLocation();
   const history = useHistory();
@@ -41,7 +42,7 @@ const SearchPage = () => {
   const { data: books, execute } = useSearch();
 
   const createNewUrl = (newQuery, newGenres) => {
-    let url = '/search?'
+    let url = '/books/search?'
     if (query.length > 0) {
       url = `${url}query=${newQuery}&`;
     }
@@ -75,7 +76,7 @@ const SearchPage = () => {
 
   useEffect(() => {
     execute({ query: activeQuery, genres: selectedGenres });
-  }, [selectedGenres, activeQuery]);
+  }, [selectedGenres, activeQuery, execute]);
 
   useEffect(() => {
     if (params.query !== activeQuery) {
@@ -88,16 +89,18 @@ const SearchPage = () => {
   }, [params]);
 
   useEffect(() => {
-    document.title = 'Search | BookBrowser';
+    document.title = 'Search | Books | BookBrowser';
   }, []);
 
   return (
     <Container maxWidth="lg">
       <Breadcrumb className="mb-1">
         <Breadcrumb.Item linkAs={Link} linkProps={{to: "/home"}}>Home</Breadcrumb.Item>
+        <Breadcrumb.Item linkAs={Link} linkProps={{to: "/books"}}>Books</Breadcrumb.Item>
         <Breadcrumb.Item active>Search</Breadcrumb.Item>
       </Breadcrumb>
-      <h2 className="mb-3">Search</h2>
+
+      <h2 className="mb-3">Search Books</h2>
       
       <InputGroup className="mb-5">
         <FormControl
@@ -129,13 +132,9 @@ const SearchPage = () => {
       </div>
 
       <h3 className="mb-4">Results</h3>
-      <div className="d-flex flex-wrap mb-4">
-        {books && books.map((book) => (
-          <BookCard book={book} key={book.id} />
-        ))}
-      </div>
+      {books && <BookList books={books} />}
     </Container>
   )
 };
 
-export default SearchPage;
+export default SearchBookPage;
