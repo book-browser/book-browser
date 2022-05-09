@@ -4,17 +4,22 @@ import { Link } from 'react-router-dom';
 import { Badge } from 'react-bootstrap';
 
 export interface IGenreBadgeProps {
-  genre: Genre
+  genre: Genre;
+  variant?: 'series' | 'book';
 }
 
-const GenreBadge = ({
-  genre
-}: IGenreBadgeProps) => {
+const GenreBadge = ({ genre, variant = 'book' }: IGenreBadgeProps) => {
   return (
-    <Badge as={Link} to={`/search?genres=${genre.name.toLowerCase().replace(' ', '+')}`} className="border m-1">
+    <Badge
+      as={Link}
+      to={`/${variant}/search?genres=${genre.name
+        .toLowerCase()
+        .replace(' ', '+')}`}
+      className="border m-1"
+    >
       {genre.name}
     </Badge>
-  )
-}
+  );
+};
 
 export default GenreBadge;

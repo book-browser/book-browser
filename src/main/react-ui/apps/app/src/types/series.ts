@@ -1,5 +1,6 @@
 import { Book } from "./book";
 import { Link } from "./link";
+import { PersonCreator } from "./person-creator";
 
 export interface Series {
   id: number
@@ -10,6 +11,7 @@ export interface Series {
   books: Book[]
   genres: string[]
   links: Link[]
-  hasThumbnail: boolean
-  hasBanner: boolean
+  creators: PersonCreator[]
+  hasThumbnail?: boolean
+  hasBanner?: boolean
 }

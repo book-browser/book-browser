@@ -47,6 +47,14 @@ public class Series {
 	@OneToMany(mappedBy="series", cascade = CascadeType.ALL, orphanRemoval=true)
 	private List<SeriesLink> links = new ArrayList<>();
 
+	@NotEmpty
+	@OneToMany(
+		mappedBy="series",
+		cascade = CascadeType.ALL,
+		fetch = FetchType.LAZY,
+		orphanRemoval=true)
+	private List<SeriesCreator> creators = new ArrayList<>();
+
 	@ManyToMany
 	@JoinTable(
 		name = "series_genre",

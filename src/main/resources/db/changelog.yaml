@@ -142,4 +142,12 @@ databaseChangeLog:
         - sqlFile:
             path: changelog/scripts/18-tabroadn-alter-series-table-add-thumbnail.sql
             relativeToChangelogFile: true
+
+    - changeSet:
+        id: createSeriesCreatorTable
+        author: Tariq Broadnax
+        changes:
+        - sqlFile:
+            path: changelog/scripts/19-tabroadn-create-series-creator-table.sql
+            relativeToChangelogFile: true
             

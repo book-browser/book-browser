@@ -16,6 +16,7 @@ import com.tabroadn.bookbrowser.entity.BookLink;
 import com.tabroadn.bookbrowser.entity.Creator;
 import com.tabroadn.bookbrowser.entity.Genre;
 import com.tabroadn.bookbrowser.entity.Series;
+import com.tabroadn.bookbrowser.entity.SeriesCreator;
 import com.tabroadn.bookbrowser.entity.SeriesLink;
 
 public class DtoConversionUtils {
@@ -56,6 +57,9 @@ public class DtoConversionUtils {
 		seriesDto.setHasThumbnail(series.getThumbnail() != null);
 		seriesDto.setBooks(series.getBooks().stream()
 				.map(DtoConversionUtils::convertBookToBookDto)
+				.collect(Collectors.toList()));
+		seriesDto.setCreators(series.getCreators().stream()
+				.map(DtoConversionUtils::convertSeriesCreatorToPersonCreatorDto)
 				.collect(Collectors.toList()));
 		seriesDto.setGenres(series.getGenres().stream().map(Genre::getName)
 				.collect(Collectors.toList()));
@@ -100,6 +104,14 @@ public class DtoConversionUtils {
 	}
 	
 	public static PersonCreatorDto convertCreatorToPersonCreatorDto(Creator creator) {
+		PersonCreatorDto personCreatorDto = new PersonCreatorDto();
+		personCreatorDto.setId(creator.getPerson().getId());
+		personCreatorDto.setFullName(creator.getPerson().getFullName());
+		personCreatorDto.setRole(creator.getRole());
+		return personCreatorDto;
+	}
+
+	public static PersonCreatorDto convertSeriesCreatorToPersonCreatorDto(SeriesCreator creator) {
 		PersonCreatorDto personCreatorDto = new PersonCreatorDto();
 		personCreatorDto.setId(creator.getPerson().getId());
 		personCreatorDto.setFullName(creator.getPerson().getFullName());

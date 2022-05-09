@@ -13,13 +13,18 @@ import com.tabroadn.bookbrowser.domain.LetterEnum;
 import com.tabroadn.bookbrowser.domain.OrderEnum;
 import com.tabroadn.bookbrowser.dto.LinkDto;
 import com.tabroadn.bookbrowser.dto.PageDto;
+import com.tabroadn.bookbrowser.dto.PersonCreatorDto;
 import com.tabroadn.bookbrowser.dto.SeriesDto;
+import com.tabroadn.bookbrowser.entity.Person;
 import com.tabroadn.bookbrowser.entity.Series;
+import com.tabroadn.bookbrowser.entity.SeriesCreator;
+import com.tabroadn.bookbrowser.entity.SeriesCreatorId;
 import com.tabroadn.bookbrowser.entity.SeriesLink;
 import com.tabroadn.bookbrowser.entity.SeriesLinkId;
 import com.tabroadn.bookbrowser.exception.ResourceNotFoundException;
 import com.tabroadn.bookbrowser.repository.BookRepository;
 import com.tabroadn.bookbrowser.repository.GenreRepository;
+import com.tabroadn.bookbrowser.repository.PersonRepository;
 import com.tabroadn.bookbrowser.repository.SeriesRepository;
 import com.tabroadn.bookbrowser.repository.SeriesSpecification;
 import com.tabroadn.bookbrowser.util.DtoConversionUtils;
@@ -32,13 +37,17 @@ public class SeriesService {
 
 	private GenreRepository genreRepository;
 
+	private PersonRepository personRepository;
+
 	@Autowired
 	public SeriesService(SeriesRepository seriesRepository,
 			BookRepository bookRepository,
-			GenreRepository genreRepository) {
+			GenreRepository genreRepository,
+			PersonRepository personRepository) {
 		this.seriesRepository = seriesRepository; 
 		this.bookRepository = bookRepository;
 		this.genreRepository = genreRepository;
+		this.personRepository = personRepository;
 	}
 	
 	public SeriesDto getById(Long id) {
@@ -123,6 +132,13 @@ public class SeriesService {
 			);
 		}
 
+		if (seriesDto.getCreators() != null) {
+			series.getCreators().clear();
+			series.getCreators().addAll(seriesDto.getCreators().stream()
+					.map(creator -> convertPersonCreatorDtoToSeriesCreator(creator, series))
+					.collect(Collectors.toList()));
+		}
+
 		if (seriesDto.getLinks() != null) {
 			series.getLinks().clear();
 			series.getLinks().addAll(seriesDto.getLinks().stream()
@@ -157,6 +173,31 @@ public class SeriesService {
 		seriesLink.setDescription(linkDto.getDescription());
 		seriesLink.setSeries(series);
 		return seriesLink;
+	}
+
+	private SeriesCreator convertPersonCreatorDtoToSeriesCreator(PersonCreatorDto personCreatorDto, Series series) {
+		SeriesCreator creator = new SeriesCreator();
+		
+		Person person = null;
+		if (personCreatorDto.getId() == null) {
+			person = new Person();
+			person.setFullName(personCreatorDto.getFullName());
+		} else {
+			person = personRepository.findById(personCreatorDto.getId())
+					.orElseThrow(() -> new ResourceNotFoundException(String.format("person with id %s not found", personCreatorDto.getId())));
+			
+			if (series.getId() != null) {
+				SeriesCreatorId creatorId = new SeriesCreatorId();
+				creatorId.setSeriesId(series.getId());
+				creatorId.setPersonId(person.getId());
+				creator.setId(creatorId);
+			}
+		}
+
+		creator.setPerson(person);
+		creator.setRole(personCreatorDto.getRole());
+		creator.setSeries(series);
+		return creator;
 	}
 	
 	private Series getSeriesById(Long id) {

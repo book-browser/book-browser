@@ -1,19 +1,24 @@
 import DeleteIcon from '@material-ui/icons/Delete';
 import MDEditor from '@uiw/react-md-editor';
 import { debounce } from 'debounce';
-import { Formik } from 'formik';
+import { Formik, FormikErrors } from 'formik';
 import { useSearch } from 'hooks/book.hook';
+import { useSearchForPerson } from 'hooks/person.hook';
 import { useReferenceData } from 'hooks/reference-data.hook';
 import React, { ChangeEvent, ReactNode, useEffect, useRef, useState } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import Feedback from 'react-bootstrap/esm/Feedback';
 import Select from 'react-select';
+import CreatableSelect from 'react-select/creatable';
 import { Book } from 'types/book';
 import { Genre } from 'types/genre';
+import { Person } from 'types/person';
+import { PersonCreator } from 'types/person-creator';
 import { Series } from 'types/series';
 import * as yup from 'yup';
 import { RequiredFieldLegend } from '../required-field-legend';
 import { RequiredSymbol } from '../required-symbol';
+
 
 const schema = yup.object().shape({
   id: yup.number().nullable(),
@@ -29,6 +34,10 @@ const schema = yup.object().shape({
     .test('fileSize', 'The file is too large', (file?: File) => {
       return !(file && file.size > 1024 * 1024);
     }),
+  creators: yup.array(yup.object().shape({
+    fullName: yup.string().required().label('name'),
+    role: yup.string().nullable(),
+  })),
   links: yup.array(
     yup.object().shape({
       url: yup.string().required().max(100).label('url'),
@@ -60,8 +69,10 @@ const defaultSeries = {
   description: '',
   banner: undefined,
   thumbnail: undefined,
-  books: [],
+  creators: [{ }],
+  genres: [],
   links: [{}],
+  books: [],
 } as Series;
 
 const convertBookToBookOption = (book: Book) => {
@@ -85,8 +96,12 @@ const SeriesForm = (props: SeriesFormProps) => {
 
   const [books, setBooks] = useState<Book[]>([]);
   const bookOptions = books.map(convertBookToBookOption);
+
+  const [people, setPeople] = useState<Person[]>([]);
+  const { data: fetchedPeople, execute } = useSearchForPerson();
   const { data: referenceData } = useReferenceData();
 
+  const selectOptions = people?.map(({ id, fullName }) => ({ value: id, label: fullName }));
   const genreOptions = referenceData
     ? convertGenreToSelectOptions(referenceData.genres)
     : [];
@@ -99,11 +114,19 @@ const SeriesForm = (props: SeriesFormProps) => {
 
   const actualValue = props.value || value;
 
+  const roles = referenceData ? referenceData.roles : [];
+  
   useEffect(() => {
     if (fetchedBooks) {
       setBooks(fetchedBooks);
     }
   }, [fetchedBooks]);
+
+  useEffect(() => {
+    if (fetchedPeople) {
+      setPeople(fetchedPeople);
+    }
+  }, [fetchedPeople]);
 
   useEffect(() => {
     if (
@@ -376,6 +399,117 @@ const SeriesForm = (props: SeriesFormProps) => {
                   setFieldValue('genres', genres);
                 }}
               />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Creators</Form.Label>
+              <Form.Group>
+                <Row>
+                  <Col xs={12} sm={7}>
+                    <Form.Label htmlFor={`creator0-name-select`}>Name<RequiredSymbol /></Form.Label>
+                  </Col>
+                  <Col xs={12} sm={3}>
+                    <Form.Label htmlFor={`creator0-role-select`}>Role</Form.Label>
+                  </Col>
+                  <Col xs={2} />
+                </Row>
+                {values.creators.map((creator, index) => (
+                  <Row key={index} className="mb-2">
+                    <Col xs={12} sm={7} className="mb-2 mb-sm-0">
+                      <CreatableSelect
+                        defaultValue={creator.fullName && { label: creator.fullName, value: creator.id }}
+                        inputId={`creator${index}-name-select`}
+                        name={`creators[${index}].fullName`}
+                        options={selectOptions}
+                        onChange={(data) => {
+                          let newCreator;
+                          if (data.__isNew__) {
+                            newCreator = {
+                              ...creator,
+                              id: undefined, 
+                              fullName: data.label
+                            }
+                          } else {
+                            newCreator = {
+                              ...creator,
+                              id: data.value,
+                              fullName: data.label
+                            }
+                          }
+                          setFieldValue(`creators[${index}]`, newCreator);
+                        }}
+                        onInputChange={(data) => {
+                          if (data.length > 0) {
+                            debounce(execute, 200)(data);
+                          }
+                        }}
+                        onBlur={() => {
+                          setPeople([]);
+                          setFieldTouched(`creators[${index}].fullName`, true, true);
+                        }}
+                        styles={{
+                          control: styles => ({
+                            ...styles,
+                            borderColor: touched?.creators?.[index]?.fullName && (errors?.creators as FormikErrors<PersonCreator>[])?.[index]?.fullName ? '#dc3545' : styles.borderColor,
+                            '&:hover': {
+                              borderColor: touched?.creators?.[index]?.fullName && (errors?.creators as FormikErrors<PersonCreator>[])?.[index]?.fullName ? '#dc3545': styles['&:hover'].borderColor,
+                            }
+                          })
+                        }}
+                      
+                      />
+                      {touched?.creators?.[index]?.fullName && (errors?.creators as FormikErrors<PersonCreator>[])?.[index]?.fullName && <div className="invalid-feedback d-block">{(errors?.creators as FormikErrors<PersonCreator>[])?.[index]?.fullName}</div>}
+                    </Col>
+                    <Col xs={12} sm={3} className="mb-2 mb-sm-0">
+                      <Form.Control
+                        id={`creator${index}-role-select`}
+                        as="select"
+                        custom
+                        name={`creators[${index}].role`}
+                        value={actualValue.creators[index]?.role || ''}
+                        onChange={(e) => {
+                          const newCreator = {
+                            ...creator,
+                            role: e.target.value ? roles[e.target.value].value : null 
+                          }
+                          
+                          setFieldValue(`creators[${index}]`, newCreator);
+                        }}
+                      >
+                        <option value='-1'></option>
+                        {roles.map((role) => (
+                          <option key={role.value} value={role.value}>{role.title}</option>
+                        ))}
+                      </Form.Control>
+                    </Col>
+                    <Col xs={2}>
+                      <Button
+                        id={`remove-creator${index}-button`}
+                        variant="danger"
+                        type="button"
+                        disabled={values.creators.length === 1}
+                        onClick={() => {
+                          const newCreators = values.creators.filter((item) => item !== creator);
+                          setFieldValue('creators', newCreators);
+                        }}
+                      >
+                        <DeleteIcon />
+                      </Button>
+                    </Col>
+                  </Row>
+                ))}
+                <div className="mt-2">
+                  <Button
+                    variant="link"
+                    className="pl-0"
+                    onClick={() => {
+                      const newCreators = [].concat(values.creators).concat([{ }]);
+                      setFieldValue('creators', newCreators);
+                    }}
+                  >
+                    Add new Creator
+                  </Button>
+                </div>
+              </Form.Group>
             </Form.Group>
             <hr className="mb-4" />
             <h4 className="mb-3">Relevant Links</h4>

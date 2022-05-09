@@ -35,7 +35,10 @@ public class SeriesDto {
 	@Valid
 	private List<LinkDto> links = new ArrayList<>();
 
-	private List<BookDto> books;
+	@Valid
+	private List<PersonCreatorDto> creators = new ArrayList<>();
+
+	private List<BookDto> books = new ArrayList<>();
 	
 	@JsonIgnore
 	public byte[] getBannerBytes() {

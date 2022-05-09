@@ -19,6 +19,14 @@ const SeriesDetails = ({
       {series.hasBanner && <img className="details-banner" alt="banner" src={`/api/series/${series.id}/banner`} />}
       {!series.hasBanner && series.hasThumbnail && <div className="d-flex"><img className="details-thumbnail m-auto" alt="banner" src={`/api/series/${series.id}/thumbnail`} /></div>}
       <h1 className="heading-main">{series.title}</h1>
+      <p>
+        {series.creators.map((creator, index) => (
+          <span key={creator.id}>
+            <Link to={`/creator/${creator.id}`}>{creator.fullName}</Link>
+            {index !== series.creators.length - 1 && ', '}
+          </span>
+        ))}
+      </p>
       <MDEditor.Markdown source={series.description} />
       <div className="side mt-3">
         <span><strong>Details</strong></span>
@@ -27,7 +35,7 @@ const SeriesDetails = ({
           <div className="mb-2">
             Genres: 
             {series.genres.length === 0 && ' N/A'}
-            {series.genres.map((genre) => <GenreBadge key={genre} genre={{ name: genre } as Genre} />)}
+            {series.genres.map((genre) => <GenreBadge key={genre} genre={{ name: genre } as Genre} variant="series" />)}
           </div>
           {series.links.length > 0 && (
           <>
