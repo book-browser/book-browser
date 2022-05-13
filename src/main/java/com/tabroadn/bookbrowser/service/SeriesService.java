@@ -142,7 +142,7 @@ public class SeriesService {
 		if (seriesDto.getLinks() != null) {
 			series.getLinks().clear();
 			series.getLinks().addAll(seriesDto.getLinks().stream()
-					.map(link -> convertLinkDtoToBookLink(link, series))
+					.map(link -> convertLinkDtoToSeriesLink(link, series))
 					.collect(Collectors.toList()));
 		}
 				
@@ -160,7 +160,7 @@ public class SeriesService {
 		return series;
 	}
 
-	private static SeriesLink convertLinkDtoToBookLink(LinkDto linkDto, Series series) {
+	private static SeriesLink convertLinkDtoToSeriesLink(LinkDto linkDto, Series series) {
 		SeriesLink seriesLink = new SeriesLink();
 		
 		if (series.getId() != null) {

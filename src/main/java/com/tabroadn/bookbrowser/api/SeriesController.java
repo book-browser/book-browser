@@ -69,7 +69,7 @@ public class SeriesController {
 			@RequestParam(required = false) LetterEnum titleStartsWith) {
 		return seriesService.findAll(page, limit, sort, order, query, link, Optional.ofNullable(titleStartsWith));
 	}
-	
+
 	@Valid
 	@PatchMapping("series")
 	public SeriesDto save(@Valid @RequestBody SeriesDto seriesDto) {

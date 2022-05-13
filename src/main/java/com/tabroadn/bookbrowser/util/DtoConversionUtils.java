@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import com.tabroadn.bookbrowser.domain.LetterEnum;
 import com.tabroadn.bookbrowser.dto.BookDto;
 import com.tabroadn.bookbrowser.dto.BookSummaryDto;
+import com.tabroadn.bookbrowser.dto.EpisodeDto;
 import com.tabroadn.bookbrowser.dto.GenreDto;
 import com.tabroadn.bookbrowser.dto.LetterDto;
 import com.tabroadn.bookbrowser.dto.LinkDto;
@@ -14,6 +15,8 @@ import com.tabroadn.bookbrowser.dto.SeriesDto;
 import com.tabroadn.bookbrowser.entity.Book;
 import com.tabroadn.bookbrowser.entity.BookLink;
 import com.tabroadn.bookbrowser.entity.Creator;
+import com.tabroadn.bookbrowser.entity.Episode;
+import com.tabroadn.bookbrowser.entity.EpisodeLink;
 import com.tabroadn.bookbrowser.entity.Genre;
 import com.tabroadn.bookbrowser.entity.Series;
 import com.tabroadn.bookbrowser.entity.SeriesCreator;
@@ -28,17 +31,24 @@ public class DtoConversionUtils {
 	}
 	
 	public static LinkDto convertBookLinkToBookLinkDto(BookLink bookLink) {
-		LinkDto bookLinkDto = new LinkDto();
-		bookLinkDto.setDescription(bookLink.getDescription());
-		bookLinkDto.setUrl(bookLink.getId().getUrl());
-		return bookLinkDto;
+		LinkDto linkDto = new LinkDto();
+		linkDto.setDescription(bookLink.getDescription());
+		linkDto.setUrl(bookLink.getId().getUrl());
+		return linkDto;
 	}
 
-	public static LinkDto convertBookLinkToBookLinkDto(SeriesLink seriesLink) {
-		LinkDto seriesLinkDto = new LinkDto();
-		seriesLinkDto.setDescription(seriesLink.getDescription());
-		seriesLinkDto.setUrl(seriesLink.getId().getUrl());
-		return seriesLinkDto;
+	public static LinkDto convertSeriesLinkToLinkDto(SeriesLink seriesLink) {
+		LinkDto linkDto = new LinkDto();
+		linkDto.setDescription(seriesLink.getDescription());
+		linkDto.setUrl(seriesLink.getId().getUrl());
+		return linkDto;
+	}
+
+	public static LinkDto convertEpisodeLinkToLinkDto(EpisodeLink episodeLink) {
+		LinkDto linkDto = new LinkDto();
+		linkDto.setDescription(episodeLink.getDescription());
+		linkDto.setUrl(episodeLink.getId().getUrl());
+		return linkDto;
 	}
 	
 	public static LetterDto convertLetterEnumToLetterDto(LetterEnum letterEnum) {
@@ -64,8 +74,11 @@ public class DtoConversionUtils {
 		seriesDto.setGenres(series.getGenres().stream().map(Genre::getName)
 				.collect(Collectors.toList()));
 		seriesDto.setLinks(series.getLinks().stream()
-				.map(DtoConversionUtils::convertBookLinkToBookLinkDto)
+				.map(DtoConversionUtils::convertSeriesLinkToLinkDto)
 				.collect(Collectors.toList()));
+		seriesDto.setEpisodes(series.getEpisodes().stream()
+				.map(DtoConversionUtils::convertEpisodeToEpisodeDto)
+				.collect(Collectors.toList()));;
 		return seriesDto;
 	}
 
@@ -117,5 +130,19 @@ public class DtoConversionUtils {
 		personCreatorDto.setFullName(creator.getPerson().getFullName());
 		personCreatorDto.setRole(creator.getRole());
 		return personCreatorDto;
+	}
+
+	public static EpisodeDto convertEpisodeToEpisodeDto(Episode episode) {
+		EpisodeDto episodeDto = new EpisodeDto();
+		episodeDto.setSeriesId(Optional.ofNullable(episode.getSeries().getId()));
+		episodeDto.setSeriesTitle(Optional.ofNullable(episode.getSeries().getTitle()));
+		episodeDto.setId(episode.getId());
+		episodeDto.setTitle(Optional.ofNullable(episode.getTitle()));
+		episodeDto.setDescription(Optional.ofNullable(episode.getDescription()));
+		episodeDto.setReleaseDate(Optional.ofNullable(episode.getReleaseDate()));
+		episodeDto.setLinks(Optional.ofNullable(episode.getLinks().stream()
+				.map(DtoConversionUtils::convertEpisodeLinkToLinkDto)
+				.collect(Collectors.toList())));
+		return episodeDto;
 	}
 }

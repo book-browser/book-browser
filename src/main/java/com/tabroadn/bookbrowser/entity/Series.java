@@ -44,6 +44,9 @@ public class Series {
 	@OneToMany(mappedBy="series", fetch=FetchType.LAZY)
 	private List<Book> books = new ArrayList<>();
 
+	@OneToMany(mappedBy="series", fetch=FetchType.LAZY)
+	private List<Episode> episodes = new ArrayList<>();
+
 	@OneToMany(mappedBy="series", cascade = CascadeType.ALL, orphanRemoval=true)
 	private List<SeriesLink> links = new ArrayList<>();
 

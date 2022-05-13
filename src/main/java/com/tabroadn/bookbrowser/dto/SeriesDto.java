@@ -39,6 +39,8 @@ public class SeriesDto {
 	private List<PersonCreatorDto> creators = new ArrayList<>();
 
 	private List<BookDto> books = new ArrayList<>();
+
+	private List<EpisodeDto> episodes = new ArrayList<>();
 	
 	@JsonIgnore
 	public byte[] getBannerBytes() {

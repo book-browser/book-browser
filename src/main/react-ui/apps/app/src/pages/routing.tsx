@@ -4,10 +4,13 @@ import BookListPage from './book-list-page';
 import { BookPage } from './book-page';
 import { CreateBookPage } from './create-book-page';
 import EditBookPage from './edit-book-page';
+import EditEpisodePage from './edit-episode-page';
 import EditSeriesPage from './edit-series-page';
+import EpisodePage from './episode-page';
 import Header from './header';
 import Homepage from './homepage';
 import LoginPage from './login-page';
+import NewEpisodePage from './new-episode-page';
 import NewSeriesPage from './new-series-page';
 import NotFoundPage from './not-found-page';
 import RandomBookPage from './random-book-page';
@@ -17,6 +20,7 @@ import ResendVerificationEmailPage from './resend-verification-email-page';
 import SearchBookPage from './search-book-page';
 import SearchResultPage from './search-result-page';
 import SearchSeriesPage from './search-series-page';
+import SeriesEpisodesPage from './series-episodes-page';
 import SeriesListPage from './series-list-page';
 import SeriesPage from './series-page';
 import UpcomingBookPage from './upcoming-book-page';
@@ -55,8 +59,20 @@ export const Routing = () => {
         <Route exact path="/series/:id">
           <SeriesPage />
         </Route>
+        <Route exact path="/series/:id/episodes">
+          <SeriesEpisodesPage />
+        </Route>
         <Route exact path="/series/:id/edit">
           <EditSeriesPage />
+        </Route>
+        <Route exact path="/episode/new">
+          <NewEpisodePage />
+        </Route>
+        <Route exact path="/episode/:id">
+          <EpisodePage />
+        </Route>
+        <Route exact path="/episode/:id/edit">
+          <EditEpisodePage />
         </Route>
         <Route exact path="/search">
           <SearchResultPage />

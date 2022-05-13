@@ -150,4 +150,19 @@ databaseChangeLog:
         - sqlFile:
             path: changelog/scripts/19-tabroadn-create-series-creator-table.sql
             relativeToChangelogFile: true
-            
+
+    - changeSet:
+        id: createEpisodeTable
+        author: Tariq Broadnax
+        changes:
+        - sqlFile:
+            path: changelog/scripts/20-tabroadn-create-episode-table.sql
+            relativeToChangelogFile: true
+
+    - changeSet:
+        id: createEpisodeLinkTable
+        author: Tariq Broadnax
+        changes:
+        - sqlFile:
+            path: changelog/scripts/21-tabroadn-create-episode-link-table.sql
+            relativeToChangelogFile: true

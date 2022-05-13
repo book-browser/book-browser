@@ -10,4 +10,6 @@ export const SERIES_EXAMPLE: Series = {
   genres: [],
   links: [],
   books: [],
+  creators: [],
+  episodes: []
 };

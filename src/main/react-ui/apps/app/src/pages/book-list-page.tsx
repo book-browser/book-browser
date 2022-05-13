@@ -96,7 +96,7 @@ const BookListPageContent = () => {
 
 const BookListPage = () => {
   return (
-    <Container maxWidth="md">
+    <Container maxWidth="lg">
       <Breadcrumb>
         <Breadcrumb.Item linkAs={Link} linkProps={{to: "/home"}}>Home</Breadcrumb.Item>
         <Breadcrumb.Item active>Books</Breadcrumb.Item>

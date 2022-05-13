@@ -1,0 +1,11 @@
+@import '../../variables.scss';
+
+.episode-list {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: $margin-component-y;
+
+  .episode-card {
+    margin-left: 0;
+  }
+}

@@ -6,6 +6,7 @@ import './series-details.scss';
 import GenreBadge from 'components/genre-badge/genre-badge';
 import { Genre } from 'types/genre';
 import { Link } from 'react-router-dom';
+import EpisodeList from 'components/episode-list/episode-list';
 
 interface SeriesDetailsProps {
   series: Series
@@ -16,8 +17,10 @@ const SeriesDetails = ({
 }: SeriesDetailsProps) => {
   return (
     <div className="series-details">
+      <div className="mb-5">
       {series.hasBanner && <img className="details-banner" alt="banner" src={`/api/series/${series.id}/banner`} />}
       {!series.hasBanner && series.hasThumbnail && <div className="d-flex"><img className="details-thumbnail m-auto" alt="banner" src={`/api/series/${series.id}/thumbnail`} /></div>}
+      </div>
       <h1 className="heading-main">{series.title}</h1>
       <p>
         {series.creators.map((creator, index) => (
@@ -53,12 +56,24 @@ const SeriesDetails = ({
       </div>
 
       {series.books.length > 0 && (
-        <>
+        <div className="mb-3">
           <h2 className="heading-section">Books</h2>
           <BookList books={series.books} />
-        </>
+        </div>
       )}
-      
+
+      {series.episodes.length > 0 && (
+        <div className="mb-3">
+          <h2 className="heading-section">Episodes</h2>
+          <EpisodeList episodes={series.episodes.slice(0, 12)} />
+          {series.episodes.length > 12 && (
+            <div>
+              <Link to={`/series/${series.id}/episodes`}>View More</Link>
+            </div>
+          )}
+        </div>
+      )}
+
     </div>
   );
 }

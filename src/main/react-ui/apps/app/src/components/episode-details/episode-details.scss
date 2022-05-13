@@ -1,0 +1,23 @@
+@import '../../variables.scss';
+
+.episode-details-header {
+  display: flex;
+}
+
+.episode-details {
+  margin-bottom: $margin-component-y;
+  display: flex;
+  gap: $margin-component-x;
+}
+
+@media screen and (max-width: 768px) {
+  .episode-details {
+    flex-wrap: wrap;
+  }
+}
+
+.episode-details-thumbnail {
+  width: 300px;
+  height: 400px;
+}
+

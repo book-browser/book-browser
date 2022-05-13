@@ -18,7 +18,6 @@ interface SeriesListPageParams {
   letter: string,
 }
 
-
 const readParams = (location: Location, referenceData: ReferenceData) => {
   const letterValues = referenceData.letters.map((letter) => letter.value);
 
@@ -56,7 +55,7 @@ const SeriesListPageContent = () => {
 
   useEffect(() => {
     const actualLetter = letter && referenceData.letters.find(({ value }) => value === letter);
-    findAll({ titleStartsWith: actualLetter, page, order: 'asc', sort: 'title' });
+    findAll({ titleStartsWith: actualLetter, page, order: 'asc', sort: 'title', limit: 48 });
   }, [page, letter]);
 
   useEffect(() => {
@@ -85,7 +84,9 @@ const SeriesListPageContent = () => {
               </Button>
             ))}
         </div>
-        <SeriesList seriesList={seriesList.items} />
+        <div className="mb-3">
+          <SeriesList seriesList={seriesList.items} />
+        </div>
         <Pagination page={page} totalPages={seriesList.totalPages} onPageChange={onPageChange} />
       </>
     )
@@ -96,7 +97,7 @@ const SeriesListPageContent = () => {
 
 const SeriesListPage = () => {
   return (
-    <Container maxWidth="md">
+    <Container maxWidth="lg">
       <Breadcrumb>
         <Breadcrumb.Item linkAs={Link} linkProps={{to: "/home"}}>Home</Breadcrumb.Item>
         <Breadcrumb.Item active>Series</Breadcrumb.Item>

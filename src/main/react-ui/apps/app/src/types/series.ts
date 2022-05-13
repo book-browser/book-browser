@@ -1,4 +1,5 @@
 import { Book } from "./book";
+import { Episode } from "./episode";
 import { Link } from "./link";
 import { PersonCreator } from "./person-creator";
 
@@ -8,10 +9,11 @@ export interface Series {
   description: string
   banner?: string
   thumbnail?: string
-  books: Book[]
   genres: string[]
   links: Link[]
   creators: PersonCreator[]
+  books: Book[]
+  episodes: Episode[]
   hasThumbnail?: boolean
   hasBanner?: boolean
 }
