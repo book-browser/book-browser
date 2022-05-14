@@ -29,7 +29,7 @@ public class DtoConversionUtils {
 		genreDto.setName(genre.getName());
 		return genreDto;
 	}
-	
+
 	public static LinkDto convertBookLinkToBookLinkDto(BookLink bookLink) {
 		LinkDto linkDto = new LinkDto();
 		linkDto.setDescription(bookLink.getDescription());
@@ -50,14 +50,14 @@ public class DtoConversionUtils {
 		linkDto.setUrl(episodeLink.getId().getUrl());
 		return linkDto;
 	}
-	
+
 	public static LetterDto convertLetterEnumToLetterDto(LetterEnum letterEnum) {
 		LetterDto letterDto = new LetterDto();
 		letterDto.setLabel(letterEnum.getLabel());
 		letterDto.setValue(letterEnum.name());
 		return letterDto;
 	}
-	
+
 	public static SeriesDto convertSeriesToSeriesDto(Series series) {
 		SeriesDto seriesDto = new SeriesDto();
 		seriesDto.setId(series.getId());
@@ -65,6 +65,7 @@ public class DtoConversionUtils {
 		seriesDto.setDescription(series.getDescription());
 		seriesDto.setHasBanner(series.getBanner() != null);
 		seriesDto.setHasThumbnail(series.getThumbnail() != null);
+		seriesDto.setLastUpdated(series.getLastUpdated());
 		seriesDto.setBooks(series.getBooks().stream()
 				.map(DtoConversionUtils::convertBookToBookDto)
 				.collect(Collectors.toList()));
@@ -78,7 +79,8 @@ public class DtoConversionUtils {
 				.collect(Collectors.toList()));
 		seriesDto.setEpisodes(series.getEpisodes().stream()
 				.map(DtoConversionUtils::convertEpisodeToEpisodeDto)
-				.collect(Collectors.toList()));;
+				.collect(Collectors.toList()));
+		;
 		return seriesDto;
 	}
 
@@ -94,8 +96,8 @@ public class DtoConversionUtils {
 		bookDto.setDescription(book.getDescription());
 		bookDto.setReleaseDate(Optional.ofNullable(book.getReleaseDate()));
 		bookDto.setCreators(book.getCreators().stream()
-			.map(DtoConversionUtils::convertCreatorToPersonCreatorDto)
-			.collect(Collectors.toList()));
+				.map(DtoConversionUtils::convertCreatorToPersonCreatorDto)
+				.collect(Collectors.toList()));
 		bookDto.setGenres(book.getGenres().stream()
 				.map(DtoConversionUtils::convertGenreToGenreDto)
 				.collect(Collectors.toList()));
@@ -104,18 +106,18 @@ public class DtoConversionUtils {
 				.collect(Collectors.toList()));
 		return bookDto;
 	}
-	
+
 	public static BookSummaryDto convertBookToBookSummaryDto(Book book) {
 		BookSummaryDto bookSummary = new BookSummaryDto();
 		bookSummary.setId(book.getId());
 		bookSummary.setTitle(book.getTitle());
 		bookSummary.setDescription(book.getDescription());
 		bookSummary.setCreators(book.getCreators().stream()
-			.map(DtoConversionUtils::convertCreatorToPersonCreatorDto)
-			.collect(Collectors.toList()));
+				.map(DtoConversionUtils::convertCreatorToPersonCreatorDto)
+				.collect(Collectors.toList()));
 		return bookSummary;
 	}
-	
+
 	public static PersonCreatorDto convertCreatorToPersonCreatorDto(Creator creator) {
 		PersonCreatorDto personCreatorDto = new PersonCreatorDto();
 		personCreatorDto.setId(creator.getPerson().getId());

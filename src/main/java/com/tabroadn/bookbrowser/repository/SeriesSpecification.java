@@ -13,7 +13,8 @@ import com.tabroadn.bookbrowser.domain.OrderEnum;
 import com.tabroadn.bookbrowser.entity.Series;
 
 public class SeriesSpecification {
-	private SeriesSpecification() {}
+	private SeriesSpecification() {
+	}
 
 	public static Specification<Series> hasText(String text) {
 		String[] parts = text.split(" ");
@@ -25,7 +26,8 @@ public class SeriesSpecification {
 				String pattern = "%" + part.toUpperCase() + "%";
 				predicates.add(cb.like(cb.upper(series.get("title")), pattern));
 				predicates.add(cb.like(cb.upper(series.get("description")), pattern));
-				// predicates.add(cb.like(cb.upper(series.join("creators").join("person").get("fullName")), pattern));
+				// predicates.add(cb.like(cb.upper(series.join("creators").join("person").get("fullName")),
+				// pattern));
 			}
 
 			return cb.or(predicates.toArray(Predicate[]::new));

@@ -1,5 +1,6 @@
 package com.tabroadn.bookbrowser.dto;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -26,6 +27,8 @@ public class SeriesDto {
 
 	private Optional<String> thumbnail;
 
+	private LocalDate lastUpdated;
+
 	private boolean hasThumbnail;
 
 	private boolean hasBanner;
@@ -41,7 +44,7 @@ public class SeriesDto {
 	private List<BookDto> books = new ArrayList<>();
 
 	private List<EpisodeDto> episodes = new ArrayList<>();
-	
+
 	@JsonIgnore
 	public byte[] getBannerBytes() {
 		if (!(banner == null || banner.isEmpty())) {

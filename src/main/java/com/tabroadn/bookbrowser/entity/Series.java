@@ -1,5 +1,6 @@
 package com.tabroadn.bookbrowser.entity;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +18,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.Formula;
+
 import lombok.Data;
 import lombok.ToString;
 
@@ -24,7 +27,7 @@ import lombok.ToString;
 @Entity
 public class Series {
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@NotBlank
@@ -41,27 +44,23 @@ public class Series {
 	@ToString.Exclude
 	private byte[] thumbnail;
 
-	@OneToMany(mappedBy="series", fetch=FetchType.LAZY)
+	@Formula("select max(e.release_date) from Episode e where e.series_id = id")
+	private LocalDate lastUpdated;
+
+	@OneToMany(mappedBy = "series", fetch = FetchType.LAZY)
 	private List<Book> books = new ArrayList<>();
 
-	@OneToMany(mappedBy="series", fetch=FetchType.LAZY)
+	@OneToMany(mappedBy = "series", fetch = FetchType.LAZY)
 	private List<Episode> episodes = new ArrayList<>();
 
-	@OneToMany(mappedBy="series", cascade = CascadeType.ALL, orphanRemoval=true)
+	@OneToMany(mappedBy = "series", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<SeriesLink> links = new ArrayList<>();
 
 	@NotEmpty
-	@OneToMany(
-		mappedBy="series",
-		cascade = CascadeType.ALL,
-		fetch = FetchType.LAZY,
-		orphanRemoval=true)
+	@OneToMany(mappedBy = "series", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 	private List<SeriesCreator> creators = new ArrayList<>();
 
 	@ManyToMany
-	@JoinTable(
-		name = "series_genre",
-		joinColumns = @JoinColumn(name = "series_id"),
-		inverseJoinColumns = @JoinColumn(name = "genre_id"))
+	@JoinTable(name = "series_genre", joinColumns = @JoinColumn(name = "series_id"), inverseJoinColumns = @JoinColumn(name = "genre_id"))
 	private List<Genre> genres = new ArrayList<>();
 }

@@ -38,151 +38,152 @@ import com.tabroadn.bookbrowser.exception.VerificationTokenExpiredException;
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 	private static Logger logger = LogManager.getLogger();
-	
-    @ExceptionHandler(value = { 
-    		UserAlreadyExistException.class, 
-    		VerificationTokenExpiredException.class, 
-    		MultipartException.class })
-    protected ResponseEntity<ApiError> handleConflict(RuntimeException exception, HttpServletRequest request) {
-    	Throwable cause = getRootCause(exception);
-    	
-    	ApiError apiError = new ApiError(
-    			Instant.now(),
-    			HttpStatus.BAD_REQUEST,
-    			cause.getLocalizedMessage(),
-    			request.getRequestURI().toString());
 
-        return ResponseEntity.badRequest().body(apiError);
-    }
+	@ExceptionHandler(value = {
+			UserAlreadyExistException.class,
+			VerificationTokenExpiredException.class,
+			MultipartException.class,
+			IllegalArgumentException.class })
+	protected ResponseEntity<ApiError> handleConflict(RuntimeException exception, HttpServletRequest request) {
+		Throwable cause = getRootCause(exception);
 
-    @ExceptionHandler(ResourceNotFoundException.class)
-    protected ResponseEntity<ApiError> handleUserNotFound(ResourceNotFoundException exception, HttpServletRequest request) {
-    	ApiError apiError = new ApiError(
-    			Instant.now(),
-    			HttpStatus.NOT_FOUND,
-    			exception.getLocalizedMessage(),
-    			request.getRequestURI().toString());
-    	return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiError);
-    }
-    
-    @ExceptionHandler(IncorrectPasswordException.class)
-    protected ResponseEntity<ApiError> handleIncorrectPassword(IncorrectPasswordException exception, HttpServletRequest request) {
-    	ApiError apiError = new ApiError(
-    			Instant.now(),
-    			HttpStatus.UNAUTHORIZED,
-    			exception.getLocalizedMessage(),
-    			Arrays.asList(exception.getLocalizedMessage()),
-    			request.getRequestURI().toString());
-    	return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(apiError);
-    }
-    
-    @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(
-      MethodArgumentNotValidException exception, 
-      HttpHeaders headers, 
-      HttpStatus status, 
-      WebRequest request)  {
-    	List<String> errors = new ArrayList<String>();
+		ApiError apiError = new ApiError(
+				Instant.now(),
+				HttpStatus.BAD_REQUEST,
+				cause.getLocalizedMessage(),
+				request.getRequestURI().toString());
 
-    	for (FieldError error : exception.getBindingResult().getFieldErrors()) {
-            errors.add(error.getField() + ": " + error.getDefaultMessage());
-        }
-        for (ObjectError error : exception.getBindingResult().getGlobalErrors()) {
-            errors.add(error.getObjectName() + ": " + error.getDefaultMessage());
-        }
-        
-        ApiError apiError = new ApiError(
-    			Instant.now(),
-    			HttpStatus.BAD_REQUEST,
-    			"Validation failed for payload",
-    			errors,
-    			((ServletWebRequest)request).getRequest().getRequestURI().toString());
-        
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
-    }
-    
-    @Override
-    protected ResponseEntity<Object> handleBindException(
+		return ResponseEntity.badRequest().body(apiError);
+	}
+
+	@ExceptionHandler(ResourceNotFoundException.class)
+	protected ResponseEntity<ApiError> handleUserNotFound(ResourceNotFoundException exception,
+			HttpServletRequest request) {
+		ApiError apiError = new ApiError(
+				Instant.now(),
+				HttpStatus.NOT_FOUND,
+				exception.getLocalizedMessage(),
+				request.getRequestURI().toString());
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiError);
+	}
+
+	@ExceptionHandler(IncorrectPasswordException.class)
+	protected ResponseEntity<ApiError> handleIncorrectPassword(IncorrectPasswordException exception,
+			HttpServletRequest request) {
+		ApiError apiError = new ApiError(
+				Instant.now(),
+				HttpStatus.UNAUTHORIZED,
+				exception.getLocalizedMessage(),
+				Arrays.asList(exception.getLocalizedMessage()),
+				request.getRequestURI().toString());
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(apiError);
+	}
+
+	@Override
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(
+			MethodArgumentNotValidException exception,
+			HttpHeaders headers,
+			HttpStatus status,
+			WebRequest request) {
+		List<String> errors = new ArrayList<String>();
+
+		for (FieldError error : exception.getBindingResult().getFieldErrors()) {
+			errors.add(error.getField() + ": " + error.getDefaultMessage());
+		}
+		for (ObjectError error : exception.getBindingResult().getGlobalErrors()) {
+			errors.add(error.getObjectName() + ": " + error.getDefaultMessage());
+		}
+
+		ApiError apiError = new ApiError(
+				Instant.now(),
+				HttpStatus.BAD_REQUEST,
+				"Validation failed for payload",
+				errors,
+				((ServletWebRequest) request).getRequest().getRequestURI().toString());
+
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
+	}
+
+	@Override
+	protected ResponseEntity<Object> handleBindException(
 			BindException exception, HttpHeaders headers, HttpStatus status, WebRequest request) {
 
-    	List<String> errors = new ArrayList<String>();
-    	
-    	for (FieldError error : exception.getBindingResult().getFieldErrors()) {
-            errors.add(error.getField() + ": " + error.getDefaultMessage());
-        }
-        for (ObjectError error : exception.getBindingResult().getGlobalErrors()) {
-            errors.add(error.getObjectName() + ": " + error.getDefaultMessage());
-        }
-        
-        ApiError apiError = new ApiError(
-    			Instant.now(),
-    			HttpStatus.BAD_REQUEST,
-    			"Validation failed for payload",
-    			errors,
-    			((ServletWebRequest)request).getRequest().getRequestURI().toString());
-        
-        return new ResponseEntity<Object>(apiError, HttpStatus.BAD_REQUEST);
+		List<String> errors = new ArrayList<String>();
+
+		for (FieldError error : exception.getBindingResult().getFieldErrors()) {
+			errors.add(error.getField() + ": " + error.getDefaultMessage());
+		}
+		for (ObjectError error : exception.getBindingResult().getGlobalErrors()) {
+			errors.add(error.getObjectName() + ": " + error.getDefaultMessage());
+		}
+
+		ApiError apiError = new ApiError(
+				Instant.now(),
+				HttpStatus.BAD_REQUEST,
+				"Validation failed for payload",
+				errors,
+				((ServletWebRequest) request).getRequest().getRequestURI().toString());
+
+		return new ResponseEntity<Object>(apiError, HttpStatus.BAD_REQUEST);
 	}
-    
-    @Override
-    protected ResponseEntity<Object> handleMissingServletRequestParameter(
-      MissingServletRequestParameterException exception, HttpHeaders headers, 
-      HttpStatus status, WebRequest request) {
-        String error = exception.getParameterName() + " parameter is missing";
-       
-        ApiError apiError = new ApiError(
-    			Instant.now(),
-    			HttpStatus.BAD_REQUEST,
-    			error,
-    			((ServletWebRequest)request).getRequest().getRequestURI().toString());
-        
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
-    }
-    
-    @ExceptionHandler({ ConstraintViolationException.class })
-    public ResponseEntity<Object> handleConstraintViolation(
-      ConstraintViolationException exception, WebRequest request) {
-        List<String> errors = new ArrayList<String>();
-        for (ConstraintViolation<?> violation : exception.getConstraintViolations()) {
-        	errors.add(violation.getPropertyPath() + ": " + violation.getMessage());
-        }
 
-        ApiError apiError = new ApiError(
-    			Instant.now(),
-    			HttpStatus.BAD_REQUEST,
-    			"Validation failed for payload",
-    			errors,
-    			((ServletWebRequest)request).getRequest().getRequestURI().toString());
-       
-        
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
-    }
-    
-    @ExceptionHandler({ MethodArgumentTypeMismatchException.class })
-    public ResponseEntity<Object> handleMethodArgumentTypeMismatch(
-      MethodArgumentTypeMismatchException ex, WebRequest request) {
-        String error = 
-          ex.getName() + " should be of type " + ex.getRequiredType().getName();
+	@Override
+	protected ResponseEntity<Object> handleMissingServletRequestParameter(
+			MissingServletRequestParameterException exception, HttpHeaders headers,
+			HttpStatus status, WebRequest request) {
+		String error = exception.getParameterName() + " parameter is missing";
 
-        ApiError apiError = new ApiError(
-    			Instant.now(),
-    			HttpStatus.BAD_REQUEST,
-    			error,
-    			((ServletWebRequest)request).getRequest().getRequestURI().toString());
-        
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
-    }
+		ApiError apiError = new ApiError(
+				Instant.now(),
+				HttpStatus.BAD_REQUEST,
+				error,
+				((ServletWebRequest) request).getRequest().getRequestURI().toString());
 
-    @Override
-    protected ResponseEntity<Object> handleExceptionInternal(
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
+	}
+
+	@ExceptionHandler({ ConstraintViolationException.class })
+	public ResponseEntity<Object> handleConstraintViolation(
+			ConstraintViolationException exception, WebRequest request) {
+		List<String> errors = new ArrayList<String>();
+		for (ConstraintViolation<?> violation : exception.getConstraintViolations()) {
+			errors.add(violation.getPropertyPath() + ": " + violation.getMessage());
+		}
+
+		ApiError apiError = new ApiError(
+				Instant.now(),
+				HttpStatus.BAD_REQUEST,
+				"Validation failed for payload",
+				errors,
+				((ServletWebRequest) request).getRequest().getRequestURI().toString());
+
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
+	}
+
+	@ExceptionHandler({ MethodArgumentTypeMismatchException.class })
+	public ResponseEntity<Object> handleMethodArgumentTypeMismatch(
+			MethodArgumentTypeMismatchException ex, WebRequest request) {
+		String error = ex.getName() + " should be of type " + ex.getRequiredType().getName();
+
+		ApiError apiError = new ApiError(
+				Instant.now(),
+				HttpStatus.BAD_REQUEST,
+				error,
+				((ServletWebRequest) request).getRequest().getRequestURI().toString());
+
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
+	}
+
+	@Override
+	protected ResponseEntity<Object> handleExceptionInternal(
 			Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
 		ApiError apiError = new ApiError(
-    			Instant.now(),
-    			status,
-    			ex.getMessage(),
-    			((ServletWebRequest)request).getRequest().getRequestURI().toString());
-		
-        return ResponseEntity.status(status).headers(headers).body(apiError);
+				Instant.now(),
+				status,
+				ex.getMessage(),
+				((ServletWebRequest) request).getRequest().getRequestURI().toString());
+
+		return ResponseEntity.status(status).headers(headers).body(apiError);
 	}
 
 	@ExceptionHandler(Exception.class)
@@ -200,9 +201,9 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 	}
 
 	public static Throwable getRootCause(Throwable throwable) {
-	    if (throwable.getCause() != null)
-	        return getRootCause(throwable.getCause());
-	
-	    return throwable;
+		if (throwable.getCause() != null)
+			return getRootCause(throwable.getCause());
+
+		return throwable;
 	}
 }
