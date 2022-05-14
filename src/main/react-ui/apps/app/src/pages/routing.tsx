@@ -15,6 +15,7 @@ import NewSeriesPage from './new-series-page';
 import NotFoundPage from './not-found-page';
 import RandomBookPage from './random-book-page';
 import RecentBookPage from './recent-book-page';
+import RecentlyUpdatedSeriesPage from './recently-updated-series-page';
 import RegisterPage from './register-page';
 import ResendVerificationEmailPage from './resend-verification-email-page';
 import SearchBookPage from './search-book-page';
@@ -49,6 +50,9 @@ export const Routing = () => {
         </Route>
         <Route exact path="/series">
           <SeriesListPage />
+        </Route>
+        <Route exact path="/series/recently-updated">
+          <RecentlyUpdatedSeriesPage />
         </Route>
         <Route exact path="/series/search">
           <SearchSeriesPage />
@@ -112,5 +116,5 @@ export const Routing = () => {
         </Route>
       </Switch>
     </BrowserRouter>
-  )
-}
+  );
+};
