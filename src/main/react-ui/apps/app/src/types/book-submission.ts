@@ -1,12 +1,12 @@
-import { Genre } from "./genre";
-import { Link } from "./link";
-import { PersonCreator } from "./person-creator";
+import { Genre } from './genre';
+import { Link } from './link';
+import { PartyCreator } from './party-creator';
 
 export class BookSubmission {
   id: number;
   title: string;
   description: string;
-  creators: PersonCreator[];
+  creators: PartyCreator[];
   thumbnail: File;
   genres: Genre[];
   links: Link[];

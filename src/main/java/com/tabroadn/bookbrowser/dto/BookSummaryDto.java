@@ -7,10 +7,10 @@ import lombok.Data;
 @Data
 public class BookSummaryDto {
 	private Long id;
-	
+
 	private String title;
-	
+
 	private String description;
-	
-	private List<PersonCreatorDto> creators;
+
+	private List<PartyCreatorDto> creators;
 }

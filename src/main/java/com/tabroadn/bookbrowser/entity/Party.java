@@ -16,16 +16,16 @@ import lombok.ToString;
 
 @Data
 @Entity
-public class Person {
+public class Party {
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@Size(max = 150)
 	@NotBlank
 	private String fullName;
-	
-	@OneToMany(mappedBy="person")
+
+	@OneToMany(mappedBy = "party")
 	@ToString.Exclude
-	private List<Creator> creators = new ArrayList<>();
+	private List<BookCreator> creators = new ArrayList<>();
 }

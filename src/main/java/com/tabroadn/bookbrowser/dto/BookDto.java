@@ -18,30 +18,30 @@ import lombok.Data;
 @JsonInclude(Include.NON_NULL)
 public class BookDto {
 	private Long id;
-	
+
 	@Size(max = 50)
 	private String title;
-	
+
 	@Size(max = 2000)
 	private String description;
-	
+
 	private String thumbnail;
-	
+
 	private Optional<LocalDate> releaseDate;
-	
+
 	private Long seriesId;
-	
+
 	private String seriesTitle;
-		
+
 	@Valid
-	private List<PersonCreatorDto> creators;
-	
+	private List<PartyCreatorDto> creators;
+
 	@Valid
 	private List<GenreDto> genres;
-	
+
 	@Valid
 	private List<LinkDto> links;
-	
+
 	@JsonIgnore
 	public byte[] getThumbnailBytes() {
 		return Base64.getDecoder().decode(thumbnail);

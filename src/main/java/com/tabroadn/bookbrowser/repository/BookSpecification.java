@@ -25,7 +25,7 @@ public class BookSpecification {
 				String pattern = "%" + part.toUpperCase() + "%";
 				predicates.add(cb.like(cb.upper(book.get("title")), pattern));
 				predicates.add(cb.like(cb.upper(book.get("description")), pattern));
-				predicates.add(cb.like(cb.upper(book.join("creators").join("person").get("fullName")), pattern));
+				predicates.add(cb.like(cb.upper(book.join("creators").join("party").get("fullName")), pattern));
 			}
 
 			return cb.or(predicates.toArray(Predicate[]::new));

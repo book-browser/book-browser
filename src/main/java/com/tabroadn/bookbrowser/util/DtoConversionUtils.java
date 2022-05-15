@@ -10,11 +10,11 @@ import com.tabroadn.bookbrowser.dto.EpisodeDto;
 import com.tabroadn.bookbrowser.dto.GenreDto;
 import com.tabroadn.bookbrowser.dto.LetterDto;
 import com.tabroadn.bookbrowser.dto.LinkDto;
-import com.tabroadn.bookbrowser.dto.PersonCreatorDto;
+import com.tabroadn.bookbrowser.dto.PartyCreatorDto;
 import com.tabroadn.bookbrowser.dto.SeriesDto;
 import com.tabroadn.bookbrowser.entity.Book;
+import com.tabroadn.bookbrowser.entity.BookCreator;
 import com.tabroadn.bookbrowser.entity.BookLink;
-import com.tabroadn.bookbrowser.entity.Creator;
 import com.tabroadn.bookbrowser.entity.Episode;
 import com.tabroadn.bookbrowser.entity.EpisodeLink;
 import com.tabroadn.bookbrowser.entity.Genre;
@@ -23,6 +23,10 @@ import com.tabroadn.bookbrowser.entity.SeriesCreator;
 import com.tabroadn.bookbrowser.entity.SeriesLink;
 
 public class DtoConversionUtils {
+
+	private DtoConversionUtils() {
+	}
+
 	public static GenreDto convertGenreToGenreDto(Genre genre) {
 		GenreDto genreDto = new GenreDto();
 		genreDto.setId(genre.getId());
@@ -70,7 +74,7 @@ public class DtoConversionUtils {
 				.map(DtoConversionUtils::convertBookToBookDto)
 				.collect(Collectors.toList()));
 		seriesDto.setCreators(series.getCreators().stream()
-				.map(DtoConversionUtils::convertSeriesCreatorToPersonCreatorDto)
+				.map(DtoConversionUtils::convertSeriesCreatorToPartyCreatorDto)
 				.collect(Collectors.toList()));
 		seriesDto.setGenres(series.getGenres().stream().map(Genre::getName)
 				.collect(Collectors.toList()));
@@ -96,7 +100,7 @@ public class DtoConversionUtils {
 		bookDto.setDescription(book.getDescription());
 		bookDto.setReleaseDate(Optional.ofNullable(book.getReleaseDate()));
 		bookDto.setCreators(book.getCreators().stream()
-				.map(DtoConversionUtils::convertCreatorToPersonCreatorDto)
+				.map(DtoConversionUtils::convertBookCreatorToPartyCreatorDto)
 				.collect(Collectors.toList()));
 		bookDto.setGenres(book.getGenres().stream()
 				.map(DtoConversionUtils::convertGenreToGenreDto)
@@ -113,25 +117,25 @@ public class DtoConversionUtils {
 		bookSummary.setTitle(book.getTitle());
 		bookSummary.setDescription(book.getDescription());
 		bookSummary.setCreators(book.getCreators().stream()
-				.map(DtoConversionUtils::convertCreatorToPersonCreatorDto)
+				.map(DtoConversionUtils::convertBookCreatorToPartyCreatorDto)
 				.collect(Collectors.toList()));
 		return bookSummary;
 	}
 
-	public static PersonCreatorDto convertCreatorToPersonCreatorDto(Creator creator) {
-		PersonCreatorDto personCreatorDto = new PersonCreatorDto();
-		personCreatorDto.setId(creator.getPerson().getId());
-		personCreatorDto.setFullName(creator.getPerson().getFullName());
-		personCreatorDto.setRole(creator.getRole());
-		return personCreatorDto;
+	public static PartyCreatorDto convertBookCreatorToPartyCreatorDto(BookCreator creator) {
+		PartyCreatorDto partyCreatorDto = new PartyCreatorDto();
+		partyCreatorDto.setId(creator.getParty().getId());
+		partyCreatorDto.setFullName(creator.getParty().getFullName());
+		partyCreatorDto.setRole(creator.getRole());
+		return partyCreatorDto;
 	}
 
-	public static PersonCreatorDto convertSeriesCreatorToPersonCreatorDto(SeriesCreator creator) {
-		PersonCreatorDto personCreatorDto = new PersonCreatorDto();
-		personCreatorDto.setId(creator.getPerson().getId());
-		personCreatorDto.setFullName(creator.getPerson().getFullName());
-		personCreatorDto.setRole(creator.getRole());
-		return personCreatorDto;
+	public static PartyCreatorDto convertSeriesCreatorToPartyCreatorDto(SeriesCreator creator) {
+		PartyCreatorDto partyCreatorDto = new PartyCreatorDto();
+		partyCreatorDto.setId(creator.getParty().getId());
+		partyCreatorDto.setFullName(creator.getParty().getFullName());
+		partyCreatorDto.setRole(creator.getRole());
+		return partyCreatorDto;
 	}
 
 	public static EpisodeDto convertEpisodeToEpisodeDto(Episode episode) {

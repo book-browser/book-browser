@@ -14,5 +14,5 @@ public class SeriesCreatorId implements Serializable {
 	@Column
 	private Long seriesId;
 	@Column
-	private Long personId;
+	private Long partyId;
 }

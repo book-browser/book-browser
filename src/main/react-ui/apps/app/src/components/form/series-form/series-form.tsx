@@ -3,7 +3,7 @@ import MDEditor from '@uiw/react-md-editor';
 import { debounce } from 'debounce';
 import { Formik, FormikErrors } from 'formik';
 import { useSearch } from 'hooks/book.hook';
-import { useSearchForPerson } from 'hooks/person.hook';
+import { useSearchForParty } from 'hooks/party.hook';
 import { useReferenceData } from 'hooks/reference-data.hook';
 import React, { ChangeEvent, ReactNode, useEffect, useRef, useState } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
@@ -12,48 +12,41 @@ import Select from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 import { Book } from 'types/book';
 import { Genre } from 'types/genre';
-import { Person } from 'types/person';
-import { PersonCreator } from 'types/person-creator';
+import { Party } from 'types/party';
+import { PartyCreator } from 'types/party-creator';
 import { Series } from 'types/series';
 import * as yup from 'yup';
 import { RequiredFieldLegend } from '../required-field-legend';
 import { RequiredSymbol } from '../required-symbol';
 
-
 const schema = yup.object().shape({
   id: yup.number().nullable(),
   title: yup.string().required().max(50),
   description: yup.string().required().max(2000),
-  banner: yup
-    .mixed()
-    .test('fileSize', 'The file is too large', (file?: File) => {
-      return !(file && file.size > 1024 * 1024);
-    }),
-  thumbnail: yup
-    .mixed()
-    .test('fileSize', 'The file is too large', (file?: File) => {
-      return !(file && file.size > 1024 * 1024);
-    }),
-  creators: yup.array(yup.object().shape({
-    fullName: yup.string().required().label('name'),
-    role: yup.string().nullable(),
-  })),
+  banner: yup.mixed().test('fileSize', 'The file is too large', (file?: File) => {
+    return !(file && file.size > 1024 * 1024);
+  }),
+  thumbnail: yup.mixed().test('fileSize', 'The file is too large', (file?: File) => {
+    return !(file && file.size > 1024 * 1024);
+  }),
+  creators: yup.array(
+    yup.object().shape({
+      fullName: yup.string().required().label('name'),
+      role: yup.string().nullable()
+    })
+  ),
   links: yup.array(
     yup.object().shape({
       url: yup.string().required().max(100).label('url'),
-      description: yup
-        .string()
-        .required('description is a required field')
-        .max(50)
-        .label('description'),
+      description: yup.string().required('description is a required field').max(50).label('description')
     })
   ),
   genres: yup.array(yup.string()),
   books: yup.array(
     yup.object().shape({
-      id: yup.number().required(),
+      id: yup.number().required()
     })
-  ),
+  )
 });
 
 interface SeriesFormProps {
@@ -69,10 +62,10 @@ const defaultSeries = {
   description: '',
   banner: undefined,
   thumbnail: undefined,
-  creators: [{ }],
+  creators: [{}],
   genres: [],
   links: [{}],
-  books: [],
+  books: []
 } as Series;
 
 const convertBookToBookOption = (book: Book) => {
@@ -84,9 +77,7 @@ const convertGenreToSelectOptions = (genres: Genre[]) => {
 };
 
 const SeriesForm = (props: SeriesFormProps) => {
-  const [value, setValue] = useState<Series>(
-    props.initialValue || defaultSeries
-  );
+  const [value, setValue] = useState<Series>(props.initialValue || defaultSeries);
   const [bannerFile, setBannerFile] = useState<File>();
   const [bannerUrl, setBannerUrl] = useState<string>();
   const bannerFileInputRef = useRef<HTMLInputElement>();
@@ -97,25 +88,19 @@ const SeriesForm = (props: SeriesFormProps) => {
   const [books, setBooks] = useState<Book[]>([]);
   const bookOptions = books.map(convertBookToBookOption);
 
-  const [people, setPeople] = useState<Person[]>([]);
-  const { data: fetchedPeople, execute } = useSearchForPerson();
+  const [people, setPeople] = useState<Party[]>([]);
+  const { data: fetchedPeople, execute } = useSearchForParty();
   const { data: referenceData } = useReferenceData();
 
   const selectOptions = people?.map(({ id, fullName }) => ({ value: id, label: fullName }));
-  const genreOptions = referenceData
-    ? convertGenreToSelectOptions(referenceData.genres)
-    : [];
+  const genreOptions = referenceData ? convertGenreToSelectOptions(referenceData.genres) : [];
 
-  const {
-    data: fetchedBooks,
-    execute: search,
-    loading: searching,
-  } = useSearch();
+  const { data: fetchedBooks, execute: search, loading: searching } = useSearch();
 
   const actualValue = props.value || value;
 
   const roles = referenceData ? referenceData.roles : [];
-  
+
   useEffect(() => {
     if (fetchedBooks) {
       setBooks(fetchedBooks);
@@ -129,19 +114,11 @@ const SeriesForm = (props: SeriesFormProps) => {
   }, [fetchedPeople]);
 
   useEffect(() => {
-    if (
-      actualValue.banner === undefined &&
-      actualValue.hasBanner &&
-      actualValue.id
-    ) {
+    if (actualValue.banner === undefined && actualValue.hasBanner && actualValue.id) {
       setBannerFile(null);
       setBannerUrl(`/api/series/${actualValue.id}/banner`);
     }
-    if (
-      actualValue.thumbnail === undefined &&
-      actualValue.hasThumbnail &&
-      actualValue.id
-    ) {
+    if (actualValue.thumbnail === undefined && actualValue.hasThumbnail && actualValue.id) {
       setThumbnailFile(null);
       setThumbnailUrl(`/api/series/${actualValue.id}/thumbnail`);
     }
@@ -167,7 +144,7 @@ const SeriesForm = (props: SeriesFormProps) => {
         values,
         touched,
         isValid,
-        errors,
+        errors
       }) => {
         // eslint-disable-next-line react-hooks/rules-of-hooks
         useEffect(() => {
@@ -194,9 +171,7 @@ const SeriesForm = (props: SeriesFormProps) => {
                 onBlur={handleBlur}
                 isInvalid={touched.title && !!errors.title}
               />
-              <Form.Control.Feedback type="invalid">
-                {errors.title}
-              </Form.Control.Feedback>
+              <Form.Control.Feedback type="invalid">{errors.title}</Form.Control.Feedback>
             </Form.Group>
             <Form.Group controlId="description-text-area">
               <Form.Label>
@@ -204,24 +179,18 @@ const SeriesForm = (props: SeriesFormProps) => {
                 <RequiredSymbol />
               </Form.Label>
               <MDEditor
-                className={
-                  touched.description && !!errors.description
-                    ? 'is-invalid'
-                    : undefined
-                }
+                className={touched.description && !!errors.description ? 'is-invalid' : undefined}
                 height={500}
                 value={values.description}
                 textareaProps={{
                   name: 'description',
-                  onBlur: handleBlur,
+                  onBlur: handleBlur
                 }}
                 onChange={(newValue) => {
                   setFieldValue('description', newValue);
                 }}
               />
-              <Form.Control.Feedback type="invalid">
-                {errors.description}
-              </Form.Control.Feedback>
+              <Form.Control.Feedback type="invalid">{errors.description}</Form.Control.Feedback>
             </Form.Group>
             <Form.Group>
               <Form.Label>Banner</Form.Label>
@@ -241,10 +210,7 @@ const SeriesForm = (props: SeriesFormProps) => {
                           reader.onload = function () {
                             setBannerFile(file);
                             setBannerUrl(URL.createObjectURL(file));
-                            setFieldValue(
-                              'banner',
-                              (reader.result as string).split(',')[1]
-                            );
+                            setFieldValue('banner', (reader.result as string).split(',')[1]);
                           };
                         }
                         // } else {
@@ -258,9 +224,7 @@ const SeriesForm = (props: SeriesFormProps) => {
                     />
                     <Form.File.Label>
                       {bannerFile?.name ||
-                        (actualValue.banner === undefined &&
-                        actualValue.hasBanner &&
-                        actualValue.id
+                        (actualValue.banner === undefined && actualValue.hasBanner && actualValue.id
                           ? `${window.location.origin}/series/${actualValue.id}/banner`
                           : 'Browse')}
                     </Form.File.Label>
@@ -296,19 +260,10 @@ const SeriesForm = (props: SeriesFormProps) => {
                 </Col>
               </Row>
 
-              {bannerUrl && (
-                <img
-                  src={bannerUrl}
-                  alt="Banner"
-                  className="mt-3"
-                  style={{ maxWidth: '100%' }}
-                />
-              )}
+              {bannerUrl && <img src={bannerUrl} alt="Banner" className="mt-3" style={{ maxWidth: '100%' }} />}
             </Form.Group>
             <Form.Group>
-              <Form.Label>
-                Thumbnail
-              </Form.Label>
+              <Form.Label>Thumbnail</Form.Label>
               <Row>
                 <Col>
                   <Form.File custom>
@@ -325,10 +280,7 @@ const SeriesForm = (props: SeriesFormProps) => {
                           reader.onload = () => {
                             setThumbnailFile(file);
                             setThumbnailUrl(URL.createObjectURL(file));
-                            setFieldValue(
-                              'thumbnail',
-                              (reader.result as string).split(',')[1]
-                            );
+                            setFieldValue('thumbnail', (reader.result as string).split(',')[1]);
                           };
                         }
                       }}
@@ -337,9 +289,7 @@ const SeriesForm = (props: SeriesFormProps) => {
                     />
                     <Form.File.Label>
                       {thumbnailFile?.name ||
-                        (actualValue.thumbnail === undefined &&
-                        actualValue.hasThumbnail &&
-                        actualValue.id
+                        (actualValue.thumbnail === undefined && actualValue.hasThumbnail && actualValue.id
                           ? `${window.location.origin}/series/${actualValue.id}/thumbnail`
                           : 'Browse')}
                     </Form.File.Label>
@@ -350,7 +300,9 @@ const SeriesForm = (props: SeriesFormProps) => {
                 <Col xs="auto">
                   <Button
                     variant="link"
-                    disabled={!((actualValue.hasThumbnail && actualValue.thumbnail === undefined) || actualValue.thumbnail)}
+                    disabled={
+                      !((actualValue.hasThumbnail && actualValue.thumbnail === undefined) || actualValue.thumbnail)
+                    }
                     onClick={() => {
                       setFieldValue('thumbnail', null);
                       setThumbnailFile(null);
@@ -366,7 +318,9 @@ const SeriesForm = (props: SeriesFormProps) => {
                 <Col xs="auto">
                   <Button
                     variant="link"
-                    disabled={!actualValue.hasThumbnail || (actualValue.hasThumbnail && actualValue.thumbnail === undefined)}
+                    disabled={
+                      !actualValue.hasThumbnail || (actualValue.hasThumbnail && actualValue.thumbnail === undefined)
+                    }
                     onClick={() => setFieldValue('thumbnail', undefined)}
                   >
                     Reset
@@ -374,14 +328,7 @@ const SeriesForm = (props: SeriesFormProps) => {
                 </Col>
               </Row>
 
-              {thumbnailUrl && (
-                <img
-                  src={thumbnailUrl}
-                  alt="Thumbnail"
-                  className="mt-3"
-                  style={{ maxWidth: '100%' }}
-                />
-              )}
+              {thumbnailUrl && <img src={thumbnailUrl} alt="Thumbnail" className="mt-3" style={{ maxWidth: '100%' }} />}
             </Form.Group>
             <Form.Group controlId="genre-select">
               <Form.Label>Genres</Form.Label>
@@ -392,7 +339,7 @@ const SeriesForm = (props: SeriesFormProps) => {
                 options={genreOptions}
                 value={actualValue.genres.map((genre) => ({
                   value: genre,
-                  label: genre,
+                  label: genre
                 }))}
                 onChange={(data) => {
                   const genres = data.map((item) => item.value);
@@ -405,7 +352,10 @@ const SeriesForm = (props: SeriesFormProps) => {
               <Form.Group>
                 <Row>
                   <Col xs={12} sm={7}>
-                    <Form.Label htmlFor={`creator0-name-select`}>Name<RequiredSymbol /></Form.Label>
+                    <Form.Label htmlFor={`creator0-name-select`}>
+                      Name
+                      <RequiredSymbol />
+                    </Form.Label>
                   </Col>
                   <Col xs={12} sm={3}>
                     <Form.Label htmlFor={`creator0-role-select`}>Role</Form.Label>
@@ -425,15 +375,15 @@ const SeriesForm = (props: SeriesFormProps) => {
                           if (data.__isNew__) {
                             newCreator = {
                               ...creator,
-                              id: undefined, 
+                              id: undefined,
                               fullName: data.label
-                            }
+                            };
                           } else {
                             newCreator = {
                               ...creator,
                               id: data.value,
                               fullName: data.label
-                            }
+                            };
                           }
                           setFieldValue(`creators[${index}]`, newCreator);
                         }}
@@ -447,17 +397,29 @@ const SeriesForm = (props: SeriesFormProps) => {
                           setFieldTouched(`creators[${index}].fullName`, true, true);
                         }}
                         styles={{
-                          control: styles => ({
+                          control: (styles) => ({
                             ...styles,
-                            borderColor: touched?.creators?.[index]?.fullName && (errors?.creators as FormikErrors<PersonCreator>[])?.[index]?.fullName ? '#dc3545' : styles.borderColor,
+                            borderColor:
+                              touched?.creators?.[index]?.fullName &&
+                              (errors?.creators as FormikErrors<PartyCreator>[])?.[index]?.fullName
+                                ? '#dc3545'
+                                : styles.borderColor,
                             '&:hover': {
-                              borderColor: touched?.creators?.[index]?.fullName && (errors?.creators as FormikErrors<PersonCreator>[])?.[index]?.fullName ? '#dc3545': styles['&:hover'].borderColor,
+                              borderColor:
+                                touched?.creators?.[index]?.fullName &&
+                                (errors?.creators as FormikErrors<PartyCreator>[])?.[index]?.fullName
+                                  ? '#dc3545'
+                                  : styles['&:hover'].borderColor
                             }
                           })
                         }}
-                      
                       />
-                      {touched?.creators?.[index]?.fullName && (errors?.creators as FormikErrors<PersonCreator>[])?.[index]?.fullName && <div className="invalid-feedback d-block">{(errors?.creators as FormikErrors<PersonCreator>[])?.[index]?.fullName}</div>}
+                      {touched?.creators?.[index]?.fullName &&
+                        (errors?.creators as FormikErrors<PartyCreator>[])?.[index]?.fullName && (
+                          <div className="invalid-feedback d-block">
+                            {(errors?.creators as FormikErrors<PartyCreator>[])?.[index]?.fullName}
+                          </div>
+                        )}
                     </Col>
                     <Col xs={12} sm={3} className="mb-2 mb-sm-0">
                       <Form.Control
@@ -469,15 +431,17 @@ const SeriesForm = (props: SeriesFormProps) => {
                         onChange={(e) => {
                           const newCreator = {
                             ...creator,
-                            role: e.target.value ? roles[e.target.value].value : null 
-                          }
-                          
+                            role: e.target.value ? roles[e.target.value].value : null
+                          };
+
                           setFieldValue(`creators[${index}]`, newCreator);
                         }}
                       >
-                        <option value='-1'></option>
+                        <option value="-1"></option>
                         {roles.map((role) => (
-                          <option key={role.value} value={role.value}>{role.title}</option>
+                          <option key={role.value} value={role.value}>
+                            {role.title}
+                          </option>
                         ))}
                       </Form.Control>
                     </Col>
@@ -502,7 +466,7 @@ const SeriesForm = (props: SeriesFormProps) => {
                     variant="link"
                     className="pl-0"
                     onClick={() => {
-                      const newCreators = [].concat(values.creators).concat([{ }]);
+                      const newCreators = [].concat(values.creators).concat([{}]);
                       setFieldValue('creators', newCreators);
                     }}
                   >
@@ -541,14 +505,9 @@ const SeriesForm = (props: SeriesFormProps) => {
                       value={values.links[index].url}
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      isInvalid={
-                        touched.links?.[index]?.url &&
-                        !!(errors as any).links?.[index]?.url
-                      }
+                      isInvalid={touched.links?.[index]?.url && !!(errors as any).links?.[index]?.url}
                     />
-                    <Form.Control.Feedback type="invalid">
-                      {(errors as any).links?.[index]?.url}
-                    </Form.Control.Feedback>
+                    <Form.Control.Feedback type="invalid">{(errors as any).links?.[index]?.url}</Form.Control.Feedback>
                   </Col>
                   <Col xs={12} sm={3} className="mb-2 mb-sm-0">
                     <Form.Control
@@ -558,10 +517,7 @@ const SeriesForm = (props: SeriesFormProps) => {
                       value={values.links[index].description}
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      isInvalid={
-                        touched.links?.[index]?.description &&
-                        !!(errors as any).links?.[index]?.description
-                      }
+                      isInvalid={touched.links?.[index]?.description && !!(errors as any).links?.[index]?.description}
                     />
                     <Form.Control.Feedback type="invalid">
                       {(errors as any).links?.[index]?.description}
@@ -573,9 +529,7 @@ const SeriesForm = (props: SeriesFormProps) => {
                       variant="danger"
                       type="button"
                       onClick={() => {
-                        const newLinks = values.links.filter(
-                          (item) => item !== link
-                        );
+                        const newLinks = values.links.filter((item) => item !== link);
                         setFieldValue('links', newLinks);
                       }}
                     >
@@ -589,9 +543,7 @@ const SeriesForm = (props: SeriesFormProps) => {
                   variant="link"
                   className="pl-0"
                   onClick={() => {
-                    const newLinks = []
-                      .concat(values.links)
-                      .concat([{ description: '', url: '' }]);
+                    const newLinks = [].concat(values.links).concat([{ description: '', url: '' }]);
                     setFieldValue('links', newLinks);
                   }}
                 >
@@ -612,14 +564,10 @@ const SeriesForm = (props: SeriesFormProps) => {
                 onChange={(data, type) => {
                   if (type.action === 'select-option') {
                     const newBooks = values.books.slice();
-                    newBooks.push(
-                      books.find((book) => book.id === type.option.value)
-                    );
+                    newBooks.push(books.find((book) => book.id === type.option.value));
                     setFieldValue('books', newBooks);
                   } else if (type.action === 'remove-value') {
-                    const index = values.books.findIndex(
-                      (book) => book.id === type.removedValue.value
-                    );
+                    const index = values.books.findIndex((book) => book.id === type.removedValue.value);
                     const newBooks = values.books.slice();
                     newBooks.splice(index, 1);
                     setFieldValue('books', newBooks);
@@ -633,9 +581,7 @@ const SeriesForm = (props: SeriesFormProps) => {
                   }
                 }, 500)}
               />
-              <Form.Control.Feedback type="invalid">
-                {errors.title}
-              </Form.Control.Feedback>
+              <Form.Control.Feedback type="invalid">{errors.title}</Form.Control.Feedback>
             </Form.Group>
 
             <hr className="mb-4" />

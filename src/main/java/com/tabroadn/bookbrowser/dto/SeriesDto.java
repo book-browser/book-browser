@@ -39,7 +39,7 @@ public class SeriesDto {
 	private List<LinkDto> links = new ArrayList<>();
 
 	@Valid
-	private List<PersonCreatorDto> creators = new ArrayList<>();
+	private List<PartyCreatorDto> creators = new ArrayList<>();
 
 	private List<BookDto> books = new ArrayList<>();
 

@@ -7,9 +7,9 @@ import com.tabroadn.bookbrowser.domain.RoleEnum;
 import lombok.Data;
 
 @Data
-public class PersonCreatorDto {
+public class PartyCreatorDto {
 	private Long id;
-	
+
 	@Size(max = 150)
 	private String fullName;
 

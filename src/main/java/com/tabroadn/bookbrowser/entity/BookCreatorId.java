@@ -9,10 +9,10 @@ import lombok.Data;
 
 @Data
 @Embeddable
-public class CreatorId implements Serializable {
+public class BookCreatorId implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Column
 	private Long bookId;
 	@Column
-	private Long personId;
+	private Long partyId;
 }

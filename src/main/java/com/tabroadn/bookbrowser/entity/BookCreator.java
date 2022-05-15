@@ -18,11 +18,11 @@ import lombok.ToString;
 
 @Data
 @Entity
-public class Creator implements Serializable {
+public class BookCreator implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@EmbeddedId
-	private CreatorId id = new CreatorId();
+	private BookCreatorId id = new BookCreatorId();
 
 	@Enumerated(EnumType.STRING)
 	private RoleEnum role;
@@ -33,8 +33,8 @@ public class Creator implements Serializable {
 	@ToString.Exclude
 	private Book book;
 
-	@MapsId("personId")
+	@MapsId("partyId")
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn
-	private Person person;
+	private Party party;
 }

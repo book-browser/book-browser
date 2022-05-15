@@ -5,9 +5,9 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.tabroadn.bookbrowser.entity.Person;
+import com.tabroadn.bookbrowser.entity.Party;
 
 @Repository
-public interface PersonRepository extends JpaRepository<Person, Long> {
-	public List<Person> findByFullNameContainingIgnoreCase(String fullName);
+public interface PartyRepository extends JpaRepository<Party, Long> {
+	public List<Party> findByFullNameContainingIgnoreCase(String fullName);
 }

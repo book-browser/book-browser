@@ -10,8 +10,8 @@ import javax.validation.Payload;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = {PersonCreatorDtoValidator.class})
-public @interface ValidPersonCreatorDto {
+@Constraint(validatedBy = { PartyCreatorDtoValidator.class })
+public @interface ValidPartyCreatorDto {
     String message() default "Invalid creator";
 
     Class<?>[] groups() default {};

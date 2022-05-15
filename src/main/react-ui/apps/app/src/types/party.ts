@@ -1,4 +1,4 @@
-export interface Person {
+export interface Party {
   id: number;
   fullName: string;
 }

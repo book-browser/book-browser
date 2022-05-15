@@ -26,13 +26,13 @@ import lombok.ToString;
 @Entity
 public class Book {
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@NotBlank
 	@Size(max = 50)
 	private String title;
-	
+
 	@NotBlank
 	@Size(max = 2000)
 	private String description;
@@ -40,31 +40,24 @@ public class Book {
 	@NotEmpty
 	@ToString.Exclude
 	private byte[] thumbnail;
-	
+
 	private Integer pageViews;
-	
+
 	private LocalDate releaseDate;
-	
+
 	@ManyToOne
-	@JoinColumn(name="series_id")
+	@JoinColumn(name = "series_id")
 	@ToString.Exclude
 	private Series series;
-	
+
 	@NotEmpty
-	@OneToMany(
-		mappedBy="book",
-		cascade = CascadeType.ALL,
-		fetch = FetchType.LAZY,
-		orphanRemoval=true)
-	private List<Creator> creators = new ArrayList<>();
-	
-	@OneToMany(mappedBy="book", cascade = CascadeType.ALL, orphanRemoval=true)
+	@OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+	private List<BookCreator> creators = new ArrayList<>();
+
+	@OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<BookLink> links = new ArrayList<>();
-	
+
 	@ManyToMany
-	@JoinTable(
-		name = "book_genre",
-		joinColumns = @JoinColumn(name = "book_id"),
-		inverseJoinColumns = @JoinColumn(name = "genre_id"))
+	@JoinTable(name = "book_genre", joinColumns = @JoinColumn(name = "book_id"), inverseJoinColumns = @JoinColumn(name = "genre_id"))
 	private List<Genre> genres = new ArrayList<>();
 }

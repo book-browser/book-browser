@@ -7,13 +7,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Component;
-
 import com.tabroadn.bookbrowser.domain.LetterEnum;
 import com.tabroadn.bookbrowser.domain.OrderEnum;
 import com.tabroadn.bookbrowser.dto.BookDto;
@@ -21,39 +14,46 @@ import com.tabroadn.bookbrowser.dto.BookSummaryDto;
 import com.tabroadn.bookbrowser.dto.GenreDto;
 import com.tabroadn.bookbrowser.dto.LinkDto;
 import com.tabroadn.bookbrowser.dto.PageDto;
-import com.tabroadn.bookbrowser.dto.PersonCreatorDto;
+import com.tabroadn.bookbrowser.dto.PartyCreatorDto;
 import com.tabroadn.bookbrowser.entity.Book;
+import com.tabroadn.bookbrowser.entity.BookCreator;
+import com.tabroadn.bookbrowser.entity.BookCreatorId;
 import com.tabroadn.bookbrowser.entity.BookLink;
 import com.tabroadn.bookbrowser.entity.BookLinkId;
-import com.tabroadn.bookbrowser.entity.Creator;
-import com.tabroadn.bookbrowser.entity.CreatorId;
 import com.tabroadn.bookbrowser.entity.Genre;
-import com.tabroadn.bookbrowser.entity.Person;
+import com.tabroadn.bookbrowser.entity.Party;
 import com.tabroadn.bookbrowser.exception.ImageUploadFailureException;
 import com.tabroadn.bookbrowser.exception.ResourceNotFoundException;
 import com.tabroadn.bookbrowser.repository.BookRepository;
 import com.tabroadn.bookbrowser.repository.BookSpecification;
 import com.tabroadn.bookbrowser.repository.GenreRepository;
-import com.tabroadn.bookbrowser.repository.PersonRepository;
+import com.tabroadn.bookbrowser.repository.PartyRepository;
 import com.tabroadn.bookbrowser.util.DtoConversionUtils;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Component;
 
 @Component
 public class BookService {
 	@Autowired
 	private BookRepository repository;
-	
+
 	@Autowired
 	private GenreRepository genreRepository;
-	
+
 	@Autowired
-	private PersonRepository personRepository;
+	private PartyRepository partyRepository;
 
 	public BookDto getById(Long id) {
 		return DtoConversionUtils.convertBookToBookDto(
 				repository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException(String.format("book with id %s not found", id))));
-	}	
-	
+						.orElseThrow(() -> new ResourceNotFoundException(String.format("book with id %s not found", id))));
+	}
+
 	public byte[] findBookThumbnail(Long id) {
 		return repository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException(String.format("book with id %s not found", id)))
@@ -68,24 +68,24 @@ public class BookService {
 					.map(DtoConversionUtils::convertBookToBookSummaryDto)
 					.collect(Collectors.toList());
 		}
-		
+
 		Pageable pageable = PageRequest.of(page, size);
-		
+
 		Specification<Book> emptySpecification = Specification.where(null);
 		Specification<Book> specification = emptySpecification;
-		
+
 		if (query.isPresent()) {
 			specification = specification.and(BookSpecification.hasText(query.get()));
 		}
-		
+
 		if (genreNames.isPresent()) {
 			List<Genre> genres = genreRepository.findByNameInIgnoreCase(genreNames.get());
-			
+
 			if (!genres.isEmpty()) {
 				specification = specification.and(BookSpecification.hasGenres(genres));
 			}
 		}
-		
+
 		Page<Book> books = repository.findAll(specification, pageable);
 
 		if (specification == emptySpecification) {
@@ -93,50 +93,50 @@ public class BookService {
 		}
 
 		return books.stream()
-					.map(DtoConversionUtils::convertBookToBookSummaryDto)
-					.collect(Collectors.toList());
+				.map(DtoConversionUtils::convertBookToBookSummaryDto)
+				.collect(Collectors.toList());
 	}
 
 	public PageDto<BookDto> findAll(
-		Integer page, Integer size, String sort, OrderEnum order,
-		Optional<String> query,
-		Optional<LocalDate> startReleaseDate, Optional<LocalDate> endReleaseDate,
-		Optional<List<String>> genreNames,
-		Optional<LetterEnum> titleStartLetter) {
+			Integer page, Integer size, String sort, OrderEnum order,
+			Optional<String> query,
+			Optional<LocalDate> startReleaseDate, Optional<LocalDate> endReleaseDate,
+			Optional<List<String>> genreNames,
+			Optional<LetterEnum> titleStartLetter) {
 		validateBookField(sort);
 
 		Pageable pageable = PageRequest.of(page, size);
-		
+
 		Specification<Book> specification = BookSpecification.orderBy(sort, order);
-		
+
 		if (query.isPresent()) {
 			specification = specification.and(BookSpecification.hasText(query.get()));
 		}
-	
+
 		if (startReleaseDate.isPresent()) {
 			specification = specification.and(BookSpecification.releaseDateGreaterThanOrEqual(startReleaseDate.get()));
 		}
-		
+
 		if (endReleaseDate.isPresent()) {
 			specification = specification.and(BookSpecification.releaseDateLessThanOrEqual(endReleaseDate.get()));
 		}
 
 		if (genreNames.isPresent()) {
 			List<Genre> genres = genreRepository.findByNameInIgnoreCase(genreNames.get());
-			
+
 			if (!genres.isEmpty()) {
 				specification = specification.and(BookSpecification.hasGenres(genres));
 			}
 		}
-		
+
 		if (titleStartLetter.isPresent()) {
 			specification = specification.and(BookSpecification.titleStartsWith(titleStartLetter.get()));
 		}
 
 		return new PageDto<>(repository.findAll(specification, pageable)
-			.map(DtoConversionUtils::convertBookToBookDto));
+				.map(DtoConversionUtils::convertBookToBookDto));
 	}
-	
+
 	private void validateBookField(String fieldName) {
 		try {
 			Book.class.getDeclaredField(fieldName);
@@ -153,7 +153,8 @@ public class BookService {
 	private Book convertBookDtoToBook(BookDto bookDto) {
 		Book book = bookDto.getId() != null
 				? repository.findById(bookDto.getId())
-						.orElseThrow(() -> new ResourceNotFoundException(String.format("book with id %s not found", bookDto.getId())))
+						.orElseThrow(
+								() -> new ResourceNotFoundException(String.format("book with id %s not found", bookDto.getId())))
 				: new Book();
 
 		if (bookDto.getTitle() != null) {
@@ -163,7 +164,7 @@ public class BookService {
 		if (bookDto.getDescription() != null) {
 			book.setDescription(bookDto.getDescription());
 		}
-		
+
 		if (bookDto.getReleaseDate() != null) {
 			book.setReleaseDate(bookDto.getReleaseDate().orElse(null));
 		}
@@ -179,7 +180,7 @@ public class BookService {
 		if (bookDto.getCreators() != null) {
 			book.getCreators().clear();
 			book.getCreators().addAll(bookDto.getCreators().stream()
-					.map(creator -> convertPersonCreatorDtoToCreator(creator, book))
+					.map(creator -> convertPartyCreatorDtoToBookCreator(creator, book))
 					.collect(Collectors.toList()));
 		}
 
@@ -189,7 +190,6 @@ public class BookService {
 					.map(link -> convertLinkDtoToBookLink(link, book))
 					.collect(Collectors.toList()));
 		}
-		
 
 		if (bookDto.getGenres() != null) {
 			book.getGenres().clear();
@@ -201,10 +201,10 @@ public class BookService {
 
 		return book;
 	}
-	
+
 	private static BookLink convertLinkDtoToBookLink(LinkDto bookLinkDto, Book book) {
 		BookLink bookLink = new BookLink();
-		
+
 		if (book.getId() != null) {
 			BookLinkId bookLinkId = new BookLinkId();
 			bookLinkId.setBookId(book.getId());
@@ -217,35 +217,36 @@ public class BookService {
 		return bookLink;
 	}
 
-	private Creator convertPersonCreatorDtoToCreator(PersonCreatorDto personCreatorDto, Book book) {
-		Creator creator = new Creator();
-		
-		Person person = null;
-		if (personCreatorDto.getId() == null) {
-			person = new Person();
-			person.setFullName(personCreatorDto.getFullName());
+	private BookCreator convertPartyCreatorDtoToBookCreator(PartyCreatorDto partyCreatorDto, Book book) {
+		BookCreator creator = new BookCreator();
+
+		Party party = null;
+		if (partyCreatorDto.getId() == null) {
+			party = new Party();
+			party.setFullName(partyCreatorDto.getFullName());
 		} else {
-			person = personRepository.findById(personCreatorDto.getId())
-					.orElseThrow(() -> new ResourceNotFoundException(String.format("person with id %s not found", personCreatorDto.getId())));
-			
+			party = partyRepository.findById(partyCreatorDto.getId())
+					.orElseThrow(() -> new ResourceNotFoundException(
+							String.format("party with id %s not found", partyCreatorDto.getId())));
+
 			if (book.getId() != null) {
-				CreatorId creatorId = new CreatorId();
+				BookCreatorId creatorId = new BookCreatorId();
 				creatorId.setBookId(book.getId());
-				creatorId.setPersonId(person.getId());
+				creatorId.setPartyId(party.getId());
 				creator.setId(creatorId);
 			}
 		}
 
-		creator.setPerson(person);
-		creator.setRole(personCreatorDto.getRole());
+		creator.setParty(party);
+		creator.setRole(partyCreatorDto.getRole());
 		creator.setBook(book);
 
 		return creator;
 	}
-	
-	
+
 	private Genre convertGenreDtoToGenre(GenreDto genreDto) {
 		return genreRepository.findById(genreDto.getId())
-				.orElseThrow(() -> new ResourceNotFoundException(String.format("genre with id %s not found", genreDto.getId())));
+				.orElseThrow(
+						() -> new ResourceNotFoundException(String.format("genre with id %s not found", genreDto.getId())));
 	}
 }

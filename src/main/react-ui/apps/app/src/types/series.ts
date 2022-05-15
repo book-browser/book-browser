@@ -1,7 +1,7 @@
 import { Book } from './book';
 import { Episode } from './episode';
 import { Link } from './link';
-import { PersonCreator } from './person-creator';
+import { PartyCreator } from './party-creator';
 
 export interface Series {
   id: number;
@@ -12,7 +12,7 @@ export interface Series {
   thumbnail?: string;
   genres: string[];
   links: Link[];
-  creators: PersonCreator[];
+  creators: PartyCreator[];
   books: Book[];
   episodes: Episode[];
   hasThumbnail?: boolean;

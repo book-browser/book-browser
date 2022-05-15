@@ -9,79 +9,79 @@ INSERT INTO user (id, username, email, password, enabled)
 INSERT INTO authority (username, role)
   values ('admin', 'ROLE_USER');
 
-INSERT INTO person(id, full_name)
+INSERT INTO party(id, full_name)
   values (1, 'Cedric Caballes');
 
-INSERT INTO person(id, full_name)
+INSERT INTO party(id, full_name)
   values (2, 'Niki Smith');
 
-INSERT INTO person(id, full_name)
+INSERT INTO party(id, full_name)
   values (3, 'Ariel Slamet Ries');
 
-INSERT INTO person(id, full_name)
+INSERT INTO party(id, full_name)
   values (4, 'Kat Leyh');
 
-INSERT INTO person(id, full_name)
+INSERT INTO party(id, full_name)
   values (5, 'Emma Steinkellner');
 
-INSERT INTO person(id, full_name)
+INSERT INTO party(id, full_name)
   values (6, 'Jen Wang');
 
-INSERT INTO person(id, full_name)
+INSERT INTO party(id, full_name)
   values (7, 'Cory Doctorow');
 
-INSERT INTO person(id, full_name)
+INSERT INTO party(id, full_name)
   values (8, 'Noelle Stevenson');
 
-INSERT INTO person(id, full_name)
+INSERT INTO party(id, full_name)
   values (9, 'Vera Brosgol');
 
-INSERT INTO person(id, full_name)
+INSERT INTO party(id, full_name)
   values (10, 'Bryan Lee O''Malley');
 
-INSERT INTO person(id, full_name)
+INSERT INTO party(id, full_name)
   values (11, 'Nathan Fairbairn');
 
-INSERT INTO person(id, full_name)
+INSERT INTO party(id, full_name)
   values (12, 'Kerascoët');
 
-INSERT INTO person(id, full_name)
+INSERT INTO party(id, full_name)
   values (13, 'Hubert');
 
-INSERT INTO person(id, full_name)
+INSERT INTO party(id, full_name)
   values (14, 'Fabien Vehlmann');
 
-INSERT INTO person(id, full_name)
+INSERT INTO party(id, full_name)
   values (15, 'Helge Dascher');
 
-INSERT INTO person(id, full_name)
+INSERT INTO party(id, full_name)
   values (16, 'Jennifer Muro');
 
-INSERT INTO person(id, full_name)
+INSERT INTO party(id, full_name)
   values (17, 'Thomas Krajewski');
 
-INSERT INTO person(id, full_name)
+INSERT INTO party(id, full_name)
   values (18, 'Gretel Lusky');
 
-INSERT INTO person(id, full_name)
+INSERT INTO party(id, full_name)
   values (19, 'Debbie Tung');
 
-INSERT INTO person(id, full_name)
+INSERT INTO party(id, full_name)
   values (20, 'Laurie Halse Anderson');
 
-INSERT INTO person(id, full_name)
+INSERT INTO party(id, full_name)
   values (21, 'Leila del Duca');
 
-INSERT INTO person(id, full_name)
+INSERT INTO party(id, full_name)
   values (22, 'Scott McCloud');
 
-INSERT INTO person(id, full_name)
+INSERT INTO party(id, full_name)
   values (23, 'Tillie Wallen');
 
-INSERT INTO person(id, full_name)
+INSERT INTO party(id, full_name)
   values (24, 'Maggie Tokuda-Hall');
 
-INSERT INTO person(id, full_name)
+INSERT INTO party(id, full_name)
   values (25, 'Trevor Bream');
 
 INSERT INTO book(id, title, description, thumbnail, release_date)
@@ -110,7 +110,7 @@ INSERT INTO book(id, title, description, thumbnail, release_date)
   values (7, 'The Prince and the Dressmaker', 'Paris, at the dawn of the modern age: Prince Sebastian is looking for a bride―or rather, his parents are looking for one for him. Sebastian is too busy hiding his secret life from everyone. At night he puts on daring dresses and takes Paris by storm as the fabulous Lady Crystallia―the hottest fashion icon in the world capital of fashion! Sebastian’s secret weapon (and best friend) is the brilliant dressmaker Frances―one of only two people who know the truth: sometimes this boy wears dresses. But Frances dreams of greatness, and being someone’s secret weapon means being a secret. Forever. How long can Frances defer her dreams to protect a friend? Jen Wang weaves an exuberantly romantic tale of identity, young love, art, and family. A fairy tale for any age, The Prince and the Dressmaker will steal your heart.', FILE_READ('classpath:/images/the-prince-and-the-dressmaker.jpg'), '2018-02-13');
 
 INSERT INTO book(id, title, description, thumbnail, release_date)
-  values (8, 'In Real Life', 'Anda loves Coarsegold Online, the massively-multiplayer role-playing game where she spends most of her free time. It''s a place where she can be a leader, a fighter, a hero. It''s a place where she can meet people from all over the world, and make friends. But things become a lot more complicated when Anda befriends a gold farmer--a poor Chinese kid whose avatar in the game illegally collects valuable objects and then sells them to players from developed countries with money to burn. This behavior is strictly against the rules in Coarsegold, but Anda soon comes to realize that questions of right and wrong are a lot less straightforward when a real person''s real livelihood is at stake.', FILE_READ('classpath:/images/in-real-life.jpg'), '2014-10-14');
+  values (8, 'In Real Life', 'Anda loves Coarsegold Online, the massively-multiplayer role-playing game where she spends most of her free time. It''s a place where she can be a leader, a fighter, a hero. It''s a place where she can meet people from all over the world, and make friends. But things become a lot more complicated when Anda befriends a gold farmer--a poor Chinese kid whose avatar in the game illegally collects valuable objects and then sells them to players from developed countries with money to burn. This behavior is strictly against the rules in Coarsegold, but Anda soon comes to realize that questions of right and wrong are a lot less straightforward when a real perzon''s real livelihood is at stake.', FILE_READ('classpath:/images/in-real-life.jpg'), '2014-10-14');
 
 INSERT INTO book(id, title, description, thumbnail, release_date)
   values (9, 'Nimona', 'Nemeses! Dragons! Science! Symbolism! All these and more await in this brilliantly subversive, sharply irreverent epic from Noele Stevenson. Featuring an exclusive epilogue not seen in the web comic, along with bonus conceptual sketches and revised pages throughout, this gorgeous full-color graphic novel is perfect for the legions of fans of the web comic and is sure to win Noelle many new ones. Nimona is an impulsive young shapeshifter with a knack for villainy. Lord Ballister Blackheart is a villain with a vendetta. As sidekick and supervillain, Nimona and Lord Blackheart are about to wreak some serious havoc. Their mission: prove to the kingdom that Sir Ambrosius Goldenloin and his buddies at the Institution of Law Enforcement and Heroics aren''t the heroes everyone thinks they are. But as small acts of mischief escalate into a vicious battle, Lord Blackheart realizes that Nimona''s powers are as murky and mysterious as her past. And her unpredictable wild side might be more dangerous than he is willing to admit.', FILE_READ('classpath:/images/nimona.jpg'), '2015-05-12');
@@ -148,92 +148,92 @@ INSERT INTO book(id, title, description, thumbnail, release_date)
 INSERT INTO book(id, title, description, thumbnail, release_date)
   values (20, 'Another Kind', 'Tucked away in a government facility nicknamed the Playroom, six not-quite-human kids learn to control their strange and unpredictable abilities. Life is good--or safe, at least--hidden from the prying eyes of a judgmental world. That is, until a security breach forces them out of their home and into the path of the Collector, a mysterious being with leech-like powers. Can the group band together to thwart the Collector''s devious plan, or will they wind up the newest addition to his collection?', FILE_READ('classpath:/images/another-kind.jpg'), '2025-10-26');
 
-INSERT INTO creator(book_id, person_id)
+INSERT INTO book_creator(book_id, party_id)
   values (1, 1);
 
-INSERT INTO creator(book_id, person_id)
+INSERT INTO book_creator(book_id, party_id)
   values (2, 2);
 
-INSERT INTO creator(book_id, person_id)
+INSERT INTO book_creator(book_id, party_id)
   values (3, 3);
 
-INSERT INTO creator(book_id, person_id)
+INSERT INTO book_creator(book_id, party_id)
   values (4, 3);
 
-INSERT INTO creator(book_id, person_id)
+INSERT INTO book_creator(book_id, party_id)
   values (5, 4);
 
-INSERT INTO creator(book_id, person_id)
+INSERT INTO book_creator(book_id, party_id)
   values (6, 5);
 
-INSERT INTO creator(book_id, person_id)
+INSERT INTO book_creator(book_id, party_id)
   values (7, 6);
 
-INSERT INTO creator(book_id, person_id)
+INSERT INTO book_creator(book_id, party_id)
   values (8, 7);
 
-INSERT INTO creator(book_id, person_id, role)
+INSERT INTO book_creator(book_id, party_id, role)
   values (8, 6, 'ILLUSTRATOR');
 
-INSERT INTO creator(book_id, person_id)
+INSERT INTO book_creator(book_id, party_id)
   values (9, 8);
 
-INSERT INTO creator(book_id, person_id)
+INSERT INTO book_creator(book_id, party_id)
   values (10, 9);
 
-INSERT INTO creator(book_id, person_id)
+INSERT INTO book_creator(book_id, party_id)
   values (11, 10);
 
-INSERT INTO creator(book_id, person_id, role)
+INSERT INTO book_creator(book_id, party_id, role)
   values (11, 11, 'COLORIST');
 
-INSERT INTO creator(book_id, person_id, role)
+INSERT INTO book_creator(book_id, party_id, role)
   values (12, 12, 'ILLUSTRATOR');
 
-INSERT INTO creator(book_id, person_id)
+INSERT INTO book_creator(book_id, party_id)
   values (12, 13);
   
-INSERT INTO creator(book_id, person_id)
+INSERT INTO book_creator(book_id, party_id)
   values (13, 12);
 
-INSERT INTO creator(book_id, person_id, role)
+INSERT INTO book_creator(book_id, party_id, role)
   values (13, 14, 'ILLUSTRATOR');
 
-INSERT INTO creator(book_id, person_id, role)
+INSERT INTO book_creator(book_id, party_id, role)
   values (13, 15, 'TRANSLATOR');
 
-INSERT INTO creator(book_id, person_id, role)
+INSERT INTO book_creator(book_id, party_id, role)
   values (14, 16, 'AUTHOR');
 
-INSERT INTO creator(book_id, person_id, role)
+INSERT INTO book_creator(book_id, party_id, role)
   values (14, 17, 'AUTHOR');
 
-INSERT INTO creator(book_id, person_id, role)
+INSERT INTO book_creator(book_id, party_id, role)
   values (14, 18, 'ILLUSTRATOR');
 
-INSERT INTO creator(book_id, person_id)
+INSERT INTO book_creator(book_id, party_id)
   values (15, 19);
 
-INSERT INTO creator(book_id, person_id)
+INSERT INTO book_creator(book_id, party_id)
   values (16, 20);
 
-INSERT INTO creator(book_id, person_id)
+INSERT INTO book_creator(book_id, party_id)
   values (16, 21);
 
-INSERT INTO creator(book_id, person_id)
+INSERT INTO book_creator(book_id, party_id)
   values (17, 22);
 
-INSERT INTO creator(book_id, person_id)
+INSERT INTO book_creator(book_id, party_id)
   values (18, 23);
 
-INSERT INTO creator(book_id, person_id)
+INSERT INTO book_creator(book_id, party_id)
   values (19, 24);
 
-INSERT INTO creator(book_id, person_id)
+INSERT INTO book_creator(book_id, party_id)
   values (20, 25);
 
 INSERT INTO series(id, title, description, banner)
-  values (1, 'Sweet Paprika', 'Paprika is a successful businesswoman, a New Yorker of Italian origin. Job and career consume her, forcing her to neglect her personal needs as well as her friends and family. Her heart is broken from a previous relationship and its consequences, and a rigid upbringing has made her a very introverted person. She wants a romantic relationship, but she doesn’t know what she’s doing. Not like Dill, a naïve and suave delivery boy with an angelic attitude, handsome, and always surrounded by beautiful women falling for him. He doesn’t have a worry in the world, and this makes Paprika very nervous. But he''s the guy who could help her with her feelings (and with...sex).', FILE_READ('classpath:/images/series/sweet-paprika.jpg'));
+  values (1, 'Sweet Paprika', 'Paprika is a successful businesswoman, a New Yorker of Italian origin. Job and career consume her, forcing her to neglect her partyal needs as well as her friends and family. Her heart is broken from a previous relationship and its consequences, and a rigid upbringing has made her a very introverted party. She wants a romantic relationship, but she doesn’t know what she’s doing. Not like Dill, a naïve and suave delivery boy with an angelic attitude, handsome, and always surrounded by beautiful women falling for him. He doesn’t have a worry in the world, and this makes Paprika very nervous. But he''s the guy who could help her with her feelings (and with...sex).', FILE_READ('classpath:/images/series/sweet-paprika.jpg'));
 
 INSERT INTO series(id, title, description, banner)
   values (2, 'Rat Queens', 'The Rat Queens are back! Betty, Violet, Dee, Braga, and Hannah return! Palisade is still a rat-infested troll’s ass, and everyone still hates Gary. It’s been a while since the Queens have done a good slaughter, so join them as they get back to the basics of killing monsters and drinking away the profits!', FILE_READ('classpath:/images/series/rat-queens.jpg'));

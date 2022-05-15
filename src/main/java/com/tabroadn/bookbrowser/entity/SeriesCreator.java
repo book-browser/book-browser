@@ -33,8 +33,8 @@ public class SeriesCreator implements Serializable {
 	@ToString.Exclude
 	private Series series;
 
-	@MapsId("personId")
+	@MapsId("partyId")
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn
-	private Person person;
+	private Party party;
 }

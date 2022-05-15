@@ -1,6 +1,6 @@
-import { Link } from "./link";
-import { Genre } from "./genre";
-import { PersonCreator } from "./person-creator";
+import { Link } from './link';
+import { Genre } from './genre';
+import { PartyCreator } from './party-creator';
 
 export interface Book {
   id: number;
@@ -11,7 +11,6 @@ export interface Book {
   seriesId?: number;
   seriesTitle?: string;
   genres: Genre[];
-  creators: PersonCreator[];
-  links: Link[]
-  
+  creators: PartyCreator[];
+  links: Link[];
 }
