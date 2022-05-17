@@ -3,24 +3,20 @@ package com.tabroadn.bookbrowser.service;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Component;
-
 import com.tabroadn.bookbrowser.domain.LetterEnum;
 import com.tabroadn.bookbrowser.domain.OrderEnum;
+import com.tabroadn.bookbrowser.dto.CreatorDto;
 import com.tabroadn.bookbrowser.dto.LinkDto;
 import com.tabroadn.bookbrowser.dto.PageDto;
-import com.tabroadn.bookbrowser.dto.PartyCreatorDto;
+import com.tabroadn.bookbrowser.dto.PublisherDto;
 import com.tabroadn.bookbrowser.dto.SeriesDto;
 import com.tabroadn.bookbrowser.entity.Party;
 import com.tabroadn.bookbrowser.entity.Series;
 import com.tabroadn.bookbrowser.entity.SeriesCreator;
-import com.tabroadn.bookbrowser.entity.SeriesCreatorId;
 import com.tabroadn.bookbrowser.entity.SeriesLink;
 import com.tabroadn.bookbrowser.entity.SeriesLinkId;
+import com.tabroadn.bookbrowser.entity.SeriesPartyId;
+import com.tabroadn.bookbrowser.entity.SeriesPublisher;
 import com.tabroadn.bookbrowser.exception.ResourceNotFoundException;
 import com.tabroadn.bookbrowser.repository.BookRepository;
 import com.tabroadn.bookbrowser.repository.GenreRepository;
@@ -28,6 +24,12 @@ import com.tabroadn.bookbrowser.repository.PartyRepository;
 import com.tabroadn.bookbrowser.repository.SeriesRepository;
 import com.tabroadn.bookbrowser.repository.SeriesSpecification;
 import com.tabroadn.bookbrowser.util.DtoConversionUtils;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Component;
 
 @Component
 public class SeriesService {
@@ -130,6 +132,14 @@ public class SeriesService {
 					.collect(Collectors.toList()));
 		}
 
+		if (seriesDto.getPublishers() != null) {
+			series.getPublishers().clear();
+			series.getPublishers().addAll(seriesDto.getPublishers().stream()
+					.map(publisher -> convertPublisherDtoToSeriesPublisher(
+							publisher, series))
+					.collect(Collectors.toList()));
+		}
+
 		if (seriesDto.getLinks() != null) {
 			series.getLinks().clear();
 			series.getLinks().addAll(seriesDto.getLinks().stream()
@@ -167,20 +177,20 @@ public class SeriesService {
 		return seriesLink;
 	}
 
-	private SeriesCreator convertPartyCreatorDtoToSeriesCreator(PartyCreatorDto partyCreatorDto, Series series) {
+	private SeriesCreator convertPartyCreatorDtoToSeriesCreator(CreatorDto creatorDto, Series series) {
 		SeriesCreator creator = new SeriesCreator();
 
 		Party party = null;
-		if (partyCreatorDto.getId() == null) {
+		if (creatorDto.getPartyId() == null) {
 			party = new Party();
-			party.setFullName(partyCreatorDto.getFullName());
+			party.setFullName(creatorDto.getFullName());
 		} else {
-			party = partyRepository.findById(partyCreatorDto.getId())
+			party = partyRepository.findById(creatorDto.getPartyId())
 					.orElseThrow(() -> new ResourceNotFoundException(
-							String.format("party with id %s not found", partyCreatorDto.getId())));
+							String.format("party with id %s not found", creatorDto.getPartyId())));
 
 			if (series.getId() != null) {
-				SeriesCreatorId creatorId = new SeriesCreatorId();
+				SeriesPartyId creatorId = new SeriesPartyId();
 				creatorId.setSeriesId(series.getId());
 				creatorId.setPartyId(party.getId());
 				creator.setId(creatorId);
@@ -188,9 +198,41 @@ public class SeriesService {
 		}
 
 		creator.setParty(party);
-		creator.setRole(partyCreatorDto.getRole());
+		creator.setRole(creatorDto.getRole());
 		creator.setSeries(series);
 		return creator;
+	}
+
+	private SeriesPublisher convertPublisherDtoToSeriesPublisher(PublisherDto publisherDto, Series series) {
+		SeriesPublisher publisher = new SeriesPublisher();
+
+		Party party = null;
+		if (publisherDto.getPartyId() == null) {
+			party = new Party();
+			if (publisherDto.getFullName() != null && publisherDto.getFullName().isPresent()) {
+				party.setFullName(publisherDto.getFullName().get());
+			}
+		} else {
+			party = partyRepository.findById(publisherDto.getPartyId().get())
+					.orElseThrow(() -> new ResourceNotFoundException(
+							String.format("party with id %s not found", publisherDto.getPartyId().get())));
+
+			if (series.getId() != null) {
+				SeriesPartyId creatorId = new SeriesPartyId();
+				creatorId.setSeriesId(series.getId());
+				creatorId.setPartyId(party.getId());
+				publisher.setId(creatorId);
+			}
+		}
+
+		if (publisherDto.getUrl() != null) {
+			publisher.setUrl(publisherDto.getUrl().get());
+		}
+
+		publisher.setParty(party);
+		publisher.setSeries(series);
+
+		return publisher;
 	}
 
 	private Series getSeriesById(Long id) {

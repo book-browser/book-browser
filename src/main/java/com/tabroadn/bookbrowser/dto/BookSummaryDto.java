@@ -12,5 +12,5 @@ public class BookSummaryDto {
 
 	private String description;
 
-	private List<PartyCreatorDto> creators;
+	private List<CreatorDto> creators;
 }

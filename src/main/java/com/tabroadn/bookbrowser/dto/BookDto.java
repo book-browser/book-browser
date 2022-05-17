@@ -34,7 +34,7 @@ public class BookDto {
 	private String seriesTitle;
 
 	@Valid
-	private List<PartyCreatorDto> creators;
+	private List<CreatorDto> creators;
 
 	@Valid
 	private List<GenreDto> genres;

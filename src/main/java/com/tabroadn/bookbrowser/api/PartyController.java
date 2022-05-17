@@ -1,14 +1,19 @@
 package com.tabroadn.bookbrowser.api;
 
-import java.util.List;
+import javax.validation.Valid;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import com.tabroadn.bookbrowser.config.CaseInsensitiveEnumEditor;
+import com.tabroadn.bookbrowser.domain.LetterEnum;
+import com.tabroadn.bookbrowser.domain.OrderEnum;
+import com.tabroadn.bookbrowser.dto.PageDto;
 import com.tabroadn.bookbrowser.dto.PartyDto;
+import com.tabroadn.bookbrowser.dto.PartySearchCriteriaDto;
 import com.tabroadn.bookbrowser.service.PartyService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,9 +23,19 @@ public class PartyController {
 	@Autowired
 	private PartyService partyService;
 
-	@PostMapping("/party/search")
-	public List<PartyDto> search(@RequestBody JsonNode node) {
-		String query = node.get("query").asText();
-		return partyService.search(query);
+	@GetMapping("/parties")
+	public PageDto<PartyDto> search(@Valid PartySearchCriteriaDto partySearchCriteriaDto) {
+		return partyService.findAll(partySearchCriteriaDto);
+	}
+
+	@GetMapping("/parties/publisher")
+	public PageDto<PartyDto> getPublisherParties(@Valid PartySearchCriteriaDto partySearchCriteriaDto) {
+		return partyService.findAllPublishers(partySearchCriteriaDto);
+	}
+
+	@InitBinder
+	public void initBinder(WebDataBinder binder) {
+		binder.registerCustomEditor(OrderEnum.class, new CaseInsensitiveEnumEditor(OrderEnum.class));
+		binder.registerCustomEditor(LetterEnum.class, new CaseInsensitiveEnumEditor(LetterEnum.class));
 	}
 }

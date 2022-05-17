@@ -22,7 +22,7 @@ public class SeriesCreator implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@EmbeddedId
-	private SeriesCreatorId id = new SeriesCreatorId();
+	private SeriesPartyId id = new SeriesPartyId();
 
 	@Enumerated(EnumType.STRING)
 	private RoleEnum role;

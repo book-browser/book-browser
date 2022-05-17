@@ -1,4 +1,6 @@
-import { searchForParty } from 'services/party.service';
+import { findAllParties, findAllPublishers } from 'services/party.service';
 import { usePromise } from './promise.hook';
 
-export const useSearchForParty = () => usePromise(searchForParty);
+export const useFindAllParties = () => usePromise(findAllParties);
+
+export const useFindAllPublisher = () => usePromise(findAllPublishers);

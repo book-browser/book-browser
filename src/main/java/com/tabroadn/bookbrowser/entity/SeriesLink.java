@@ -15,14 +15,14 @@ import lombok.Data;
 @Entity
 @Valid
 public class SeriesLink {
-  @EmbeddedId
+	@EmbeddedId
 	@Valid
 	private SeriesLinkId id = new SeriesLinkId();
-	
+
 	@NotBlank
 	@Size(max = 50)
 	private String description;
-	
+
 	@MapsId("seriesId")
 	@ManyToOne
 	@JoinColumn

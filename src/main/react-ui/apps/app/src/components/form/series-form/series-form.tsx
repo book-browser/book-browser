@@ -1,21 +1,14 @@
-import DeleteIcon from '@material-ui/icons/Delete';
-import MDEditor from '@uiw/react-md-editor';
+/* eslint-disable prefer-spread */
 import { debounce } from 'debounce';
-import { Formik, FormikErrors } from 'formik';
 import { useSearch } from 'hooks/book.hook';
-import { useSearchForParty } from 'hooks/party.hook';
 import { useReferenceData } from 'hooks/reference-data.hook';
-import React, { ChangeEvent, ReactNode, useEffect, useRef, useState } from 'react';
-import { Button, Col, Form, Row } from 'react-bootstrap';
-import Feedback from 'react-bootstrap/esm/Feedback';
+import React, { ReactNode, useEffect, useState } from 'react';
 import Select from 'react-select';
-import CreatableSelect from 'react-select/creatable';
 import { Book } from 'types/book';
 import { Genre } from 'types/genre';
-import { Party } from 'types/party';
-import { PartyCreator } from 'types/party-creator';
 import { Series } from 'types/series';
 import * as yup from 'yup';
+import Form from '../form/form';
 import { RequiredFieldLegend } from '../required-field-legend';
 import { RequiredSymbol } from '../required-symbol';
 
@@ -77,29 +70,14 @@ const convertGenreToSelectOptions = (genres: Genre[]) => {
 };
 
 const SeriesForm = (props: SeriesFormProps) => {
-  const [value, setValue] = useState<Series>(props.initialValue || defaultSeries);
-  const [bannerFile, setBannerFile] = useState<File>();
-  const [bannerUrl, setBannerUrl] = useState<string>();
-  const bannerFileInputRef = useRef<HTMLInputElement>();
-  const [thumbnailFile, setThumbnailFile] = useState<File>();
-  const [thumbnailUrl, setThumbnailUrl] = useState<string>();
-  const thumbnailFileInputRef = useRef<HTMLInputElement>();
-
   const [books, setBooks] = useState<Book[]>([]);
   const bookOptions = books.map(convertBookToBookOption);
 
-  const [people, setPeople] = useState<Party[]>([]);
-  const { data: fetchedPeople, execute } = useSearchForParty();
   const { data: referenceData } = useReferenceData();
 
-  const selectOptions = people?.map(({ id, fullName }) => ({ value: id, label: fullName }));
   const genreOptions = referenceData ? convertGenreToSelectOptions(referenceData.genres) : [];
 
   const { data: fetchedBooks, execute: search, loading: searching } = useSearch();
-
-  const actualValue = props.value || value;
-
-  const roles = referenceData ? referenceData.roles : [];
 
   useEffect(() => {
     if (fetchedBooks) {
@@ -107,33 +85,12 @@ const SeriesForm = (props: SeriesFormProps) => {
     }
   }, [fetchedBooks]);
 
-  useEffect(() => {
-    if (fetchedPeople) {
-      setPeople(fetchedPeople);
-    }
-  }, [fetchedPeople]);
-
-  useEffect(() => {
-    if (actualValue.banner === undefined && actualValue.hasBanner && actualValue.id) {
-      setBannerFile(null);
-      setBannerUrl(`/api/series/${actualValue.id}/banner`);
-    }
-    if (actualValue.thumbnail === undefined && actualValue.hasThumbnail && actualValue.id) {
-      setThumbnailFile(null);
-      setThumbnailUrl(`/api/series/${actualValue.id}/thumbnail`);
-    }
-  }, [actualValue]);
-
   return (
-    <Formik
+    <Form
       validationSchema={schema}
-      initialValues={actualValue}
-      enableReinitialize
-      onSubmit={(values) => {
-        if (props.onSubmit) {
-          props.onSubmit(values);
-        }
-      }}
+      initialValues={props.value || { ...defaultSeries, ...props.initialValue }}
+      onChange={props.onChange}
+      onSubmit={props.onSubmit}
     >
       {({
         handleSubmit,
@@ -146,17 +103,8 @@ const SeriesForm = (props: SeriesFormProps) => {
         isValid,
         errors
       }) => {
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        useEffect(() => {
-          if (values !== actualValue) {
-            setValue(values);
-            if (props.onChange) {
-              props.onChange(values, isValid);
-            }
-          }
-        }, [values, isValid]);
         return (
-          <Form className="mb-3" noValidate onSubmit={handleSubmit}>
+          <>
             <RequiredFieldLegend />
             <Form.Group controlId="title-input">
               <Form.Label>
@@ -178,157 +126,42 @@ const SeriesForm = (props: SeriesFormProps) => {
                 Description
                 <RequiredSymbol />
               </Form.Label>
-              <MDEditor
-                className={touched.description && !!errors.description ? 'is-invalid' : undefined}
-                height={500}
-                value={values.description}
-                textareaProps={{
-                  name: 'description',
-                  onBlur: handleBlur
-                }}
-                onChange={(newValue) => {
-                  setFieldValue('description', newValue);
-                }}
+              <Form.MarkdownControl
+                name="description"
+                value={values.description || ''}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                isInvalid={touched.description && !!errors.description}
               />
               <Form.Control.Feedback type="invalid">{errors.description}</Form.Control.Feedback>
             </Form.Group>
             <Form.Group>
               <Form.Label>Banner</Form.Label>
-              <Row>
-                <Col>
-                  <Form.File custom>
-                    <Form.File.Input
-                      name="banner"
-                      accept="image/png, image/jpeg"
-                      ref={bannerFileInputRef}
-                      onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                        const file = e.target.files[0];
-                        console.log('file', file);
-                        if (file) {
-                          const reader = new FileReader();
-                          reader.readAsDataURL(file);
-                          reader.onload = function () {
-                            setBannerFile(file);
-                            setBannerUrl(URL.createObjectURL(file));
-                            setFieldValue('banner', (reader.result as string).split(',')[1]);
-                          };
-                        }
-                        // } else {
-                        //   setBannerFile(null);
-                        //   setBannerUrl(null);
-                        //   setFieldValue('banner', undefined);
-                        // }
-                      }}
-                      onBlur={handleBlur}
-                      isInvalid={touched.banner && !!errors.banner}
-                    />
-                    <Form.File.Label>
-                      {bannerFile?.name ||
-                        (actualValue.banner === undefined && actualValue.hasBanner && actualValue.id
-                          ? `${window.location.origin}/series/${actualValue.id}/banner`
-                          : 'Browse')}
-                    </Form.File.Label>
-
-                    <Form.Text muted>Max file size 1MB</Form.Text>
-                    <Feedback type="invalid">{errors.banner}</Feedback>
-                  </Form.File>
-                </Col>
-                <Col xs="auto">
-                  <Button
-                    variant="link"
-                    disabled={!((actualValue.hasBanner && actualValue.banner === undefined) || actualValue.banner)}
-                    onClick={() => {
-                      setFieldValue('banner', null);
-                      setBannerFile(null);
-                      setBannerUrl(null);
-                      if (bannerFileInputRef.current) {
-                        bannerFileInputRef.current.value = null;
-                      }
-                    }}
-                  >
-                    Remove
-                  </Button>
-                </Col>
-                <Col xs="auto">
-                  <Button
-                    variant="link"
-                    disabled={!actualValue.hasBanner || (actualValue.hasBanner && actualValue.banner === undefined)}
-                    onClick={() => setFieldValue('banner', undefined)}
-                  >
-                    Reset
-                  </Button>
-                </Col>
-              </Row>
-
-              {bannerUrl && <img src={bannerUrl} alt="Banner" className="mt-3" style={{ maxWidth: '100%' }} />}
+              <Form.ImageControl
+                name="banner"
+                defaultValue={
+                  values.id && values.hasBanner ? `${window.location.origin}/api/series/${values.id}/banner` : undefined
+                }
+                value={values.banner as File}
+                isInvalid={touched.banner && !!errors.banner}
+                onChange={setFieldValue}
+                onBlur={handleBlur}
+              />
             </Form.Group>
             <Form.Group>
               <Form.Label>Thumbnail</Form.Label>
-              <Row>
-                <Col>
-                  <Form.File custom>
-                    <Form.File.Input
-                      name="thumbnail"
-                      accept="image/png, image/jpeg"
-                      ref={thumbnailFileInputRef}
-                      onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                        const file = e.target.files[0];
-                        console.log(file);
-                        if (file) {
-                          const reader = new FileReader();
-                          reader.readAsDataURL(file);
-                          reader.onload = () => {
-                            setThumbnailFile(file);
-                            setThumbnailUrl(URL.createObjectURL(file));
-                            setFieldValue('thumbnail', (reader.result as string).split(',')[1]);
-                          };
-                        }
-                      }}
-                      onBlur={handleBlur}
-                      isInvalid={touched.thumbnail && !!errors.thumbnail}
-                    />
-                    <Form.File.Label>
-                      {thumbnailFile?.name ||
-                        (actualValue.thumbnail === undefined && actualValue.hasThumbnail && actualValue.id
-                          ? `${window.location.origin}/series/${actualValue.id}/thumbnail`
-                          : 'Browse')}
-                    </Form.File.Label>
-                    <Form.Text muted>Max file size 1MB</Form.Text>
-                    <Feedback type="invalid">{errors.thumbnail}</Feedback>
-                  </Form.File>
-                </Col>
-                <Col xs="auto">
-                  <Button
-                    variant="link"
-                    disabled={
-                      !((actualValue.hasThumbnail && actualValue.thumbnail === undefined) || actualValue.thumbnail)
-                    }
-                    onClick={() => {
-                      setFieldValue('thumbnail', null);
-                      setThumbnailFile(null);
-                      setThumbnailUrl(null);
-                      if (thumbnailFileInputRef.current) {
-                        thumbnailFileInputRef.current.value = null;
-                      }
-                    }}
-                  >
-                    Remove
-                  </Button>
-                </Col>
-                <Col xs="auto">
-                  <Button
-                    variant="link"
-                    disabled={
-                      !actualValue.hasThumbnail || (actualValue.hasThumbnail && actualValue.thumbnail === undefined)
-                    }
-                    onClick={() => setFieldValue('thumbnail', undefined)}
-                  >
-                    Reset
-                  </Button>
-                </Col>
-              </Row>
-
-              {thumbnailUrl && <img src={thumbnailUrl} alt="Thumbnail" className="mt-3" style={{ maxWidth: '100%' }} />}
+              <Form.ImageControl
+                name="thumbnail"
+                defaultValue={
+                  values.id && values.hasThumbnail
+                    ? `${window.location.origin}/api/series/${values.id}/thumbnail`
+                    : undefined
+                }
+                value={values.thumbnail as File}
+                isInvalid={touched.thumbnail && !!errors.thumbnail}
+                onChange={setFieldValue}
+                onBlur={handleBlur}
+              />
             </Form.Group>
             <Form.Group controlId="genre-select">
               <Form.Label>Genres</Form.Label>
@@ -337,7 +170,7 @@ const SeriesForm = (props: SeriesFormProps) => {
                 isMulti
                 name="genres"
                 options={genreOptions}
-                value={actualValue.genres.map((genre) => ({
+                value={values.genres.map((genre) => ({
                   value: genre,
                   label: genre
                 }))}
@@ -349,208 +182,36 @@ const SeriesForm = (props: SeriesFormProps) => {
             </Form.Group>
             <Form.Group>
               <Form.Label>Creators</Form.Label>
-              <Form.Group>
-                <Row>
-                  <Col xs={12} sm={7}>
-                    <Form.Label htmlFor={`creator0-name-select`}>
-                      Name
-                      <RequiredSymbol />
-                    </Form.Label>
-                  </Col>
-                  <Col xs={12} sm={3}>
-                    <Form.Label htmlFor={`creator0-role-select`}>Role</Form.Label>
-                  </Col>
-                  <Col xs={2} />
-                </Row>
-                {values.creators.map((creator, index) => (
-                  <Row key={index} className="mb-2">
-                    <Col xs={12} sm={7} className="mb-2 mb-sm-0">
-                      <CreatableSelect
-                        defaultValue={creator.fullName && { label: creator.fullName, value: creator.id }}
-                        inputId={`creator${index}-name-select`}
-                        name={`creators[${index}].fullName`}
-                        options={selectOptions}
-                        onChange={(data) => {
-                          let newCreator;
-                          if (data.__isNew__) {
-                            newCreator = {
-                              ...creator,
-                              id: undefined,
-                              fullName: data.label
-                            };
-                          } else {
-                            newCreator = {
-                              ...creator,
-                              id: data.value,
-                              fullName: data.label
-                            };
-                          }
-                          setFieldValue(`creators[${index}]`, newCreator);
-                        }}
-                        onInputChange={(data) => {
-                          if (data.length > 0) {
-                            debounce(execute, 200)(data);
-                          }
-                        }}
-                        onBlur={() => {
-                          setPeople([]);
-                          setFieldTouched(`creators[${index}].fullName`, true, true);
-                        }}
-                        styles={{
-                          control: (styles) => ({
-                            ...styles,
-                            borderColor:
-                              touched?.creators?.[index]?.fullName &&
-                              (errors?.creators as FormikErrors<PartyCreator>[])?.[index]?.fullName
-                                ? '#dc3545'
-                                : styles.borderColor,
-                            '&:hover': {
-                              borderColor:
-                                touched?.creators?.[index]?.fullName &&
-                                (errors?.creators as FormikErrors<PartyCreator>[])?.[index]?.fullName
-                                  ? '#dc3545'
-                                  : styles['&:hover'].borderColor
-                            }
-                          })
-                        }}
-                      />
-                      {touched?.creators?.[index]?.fullName &&
-                        (errors?.creators as FormikErrors<PartyCreator>[])?.[index]?.fullName && (
-                          <div className="invalid-feedback d-block">
-                            {(errors?.creators as FormikErrors<PartyCreator>[])?.[index]?.fullName}
-                          </div>
-                        )}
-                    </Col>
-                    <Col xs={12} sm={3} className="mb-2 mb-sm-0">
-                      <Form.Control
-                        id={`creator${index}-role-select`}
-                        as="select"
-                        custom
-                        name={`creators[${index}].role`}
-                        value={actualValue.creators[index]?.role || ''}
-                        onChange={(e) => {
-                          const newCreator = {
-                            ...creator,
-                            role: e.target.value ? roles[e.target.value].value : null
-                          };
-
-                          setFieldValue(`creators[${index}]`, newCreator);
-                        }}
-                      >
-                        <option value="-1"></option>
-                        {roles.map((role) => (
-                          <option key={role.value} value={role.value}>
-                            {role.title}
-                          </option>
-                        ))}
-                      </Form.Control>
-                    </Col>
-                    <Col xs={2}>
-                      <Button
-                        id={`remove-creator${index}-button`}
-                        variant="danger"
-                        type="button"
-                        disabled={values.creators.length === 1}
-                        onClick={() => {
-                          const newCreators = values.creators.filter((item) => item !== creator);
-                          setFieldValue('creators', newCreators);
-                        }}
-                      >
-                        <DeleteIcon />
-                      </Button>
-                    </Col>
-                  </Row>
-                ))}
-                <div className="mt-2">
-                  <Button
-                    variant="link"
-                    className="pl-0"
-                    onClick={() => {
-                      const newCreators = [].concat(values.creators).concat([{}]);
-                      setFieldValue('creators', newCreators);
-                    }}
-                  >
-                    Add new Creator
-                  </Button>
-                </div>
-              </Form.Group>
+              <Form.CreatorsField
+                name="creators"
+                value={values.creators}
+                touched={touched.creators}
+                errors={errors.creators}
+                onChange={(name, creators) => {
+                  values.creators.length = 0;
+                  values.creators.push.apply(values.creators, creators);
+                  setFieldValue(name, values.creators);
+                }}
+                onBlur={setFieldTouched}
+              />
             </Form.Group>
             <hr className="mb-4" />
-            <h4 className="mb-3">Relevant Links</h4>
             <Form.Group>
-              {values.links.length > 0 && (
-                <Row>
-                  <Col xs={12} sm={7}>
-                    <Form.Label htmlFor={`link0-name-select`}>
-                      URL
-                      <RequiredSymbol />
-                    </Form.Label>
-                  </Col>
-                  <Col xs={12} sm={3}>
-                    <Form.Label htmlFor={`link0-role-select`}>
-                      Description
-                      <RequiredSymbol />
-                    </Form.Label>
-                  </Col>
-                  <Col xs={2} />
-                </Row>
-              )}
-              {values.links.map((link, index) => (
-                <Row key={index} className="mb-2">
-                  <Col xs={12} sm={7} className="mb-2 mb-sm-0">
-                    <Form.Control
-                      id={`link${index}-url-input`}
-                      type="text"
-                      name={`links[${index}].url`}
-                      value={values.links[index].url}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      isInvalid={touched.links?.[index]?.url && !!(errors as any).links?.[index]?.url}
-                    />
-                    <Form.Control.Feedback type="invalid">{(errors as any).links?.[index]?.url}</Form.Control.Feedback>
-                  </Col>
-                  <Col xs={12} sm={3} className="mb-2 mb-sm-0">
-                    <Form.Control
-                      id={`link${index}-description-input`}
-                      type="text"
-                      name={`links[${index}].description`}
-                      value={values.links[index].description}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      isInvalid={touched.links?.[index]?.description && !!(errors as any).links?.[index]?.description}
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      {(errors as any).links?.[index]?.description}
-                    </Form.Control.Feedback>
-                  </Col>
-                  <Col xs={2}>
-                    <Button
-                      id={`remove-link${index}-button`}
-                      variant="danger"
-                      type="button"
-                      onClick={() => {
-                        const newLinks = values.links.filter((item) => item !== link);
-                        setFieldValue('links', newLinks);
-                      }}
-                    >
-                      <DeleteIcon />
-                    </Button>
-                  </Col>
-                </Row>
-              ))}
-              <div className="mt-2">
-                <Button
-                  variant="link"
-                  className="pl-0"
-                  onClick={() => {
-                    const newLinks = [].concat(values.links).concat([{ description: '', url: '' }]);
-                    setFieldValue('links', newLinks);
-                  }}
-                >
-                  Add new Link
-                </Button>
-              </div>
+              <Form.Label>Relevant Links</Form.Label>
+              <Form.LinksField
+                name="links"
+                value={values.links}
+                touched={touched.links}
+                errors={errors.links}
+                onChange={(name, links) => {
+                  values.links.length = 0;
+                  values.links.push.apply(values.links, links);
+                  setFieldValue(name, values.links);
+                }}
+                onBlur={setFieldTouched}
+              />
             </Form.Group>
+            <hr className="mb-4" />
             <Form.Group>
               <Form.Label htmlFor="books-select">Books</Form.Label>
               <Select
@@ -586,10 +247,10 @@ const SeriesForm = (props: SeriesFormProps) => {
 
             <hr className="mb-4" />
             {props.footer}
-          </Form>
+          </>
         );
       }}
-    </Formik>
+    </Form>
   );
 };
 

@@ -1,6 +1,6 @@
 import { Link } from './link';
 import { Genre } from './genre';
-import { PartyCreator } from './party-creator';
+import { PartyCreator } from './creator';
 
 export interface Book {
   id: number;

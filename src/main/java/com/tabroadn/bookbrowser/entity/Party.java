@@ -28,4 +28,8 @@ public class Party {
 	@OneToMany(mappedBy = "party")
 	@ToString.Exclude
 	private List<BookCreator> creators = new ArrayList<>();
+
+	@OneToMany(mappedBy = "party")
+	@ToString.Exclude
+	private List<SeriesPublisher> seriesPublications = new ArrayList<>();
 }

@@ -15,7 +15,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Formula;
@@ -56,9 +55,11 @@ public class Series {
 	@OneToMany(mappedBy = "series", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<SeriesLink> links = new ArrayList<>();
 
-	@NotEmpty
 	@OneToMany(mappedBy = "series", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 	private List<SeriesCreator> creators = new ArrayList<>();
+
+	@OneToMany(mappedBy = "series", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+	private List<SeriesPublisher> publishers = new ArrayList<>();
 
 	@ManyToMany
 	@JoinTable(name = "series_genre", joinColumns = @JoinColumn(name = "series_id"), inverseJoinColumns = @JoinColumn(name = "genre_id"))

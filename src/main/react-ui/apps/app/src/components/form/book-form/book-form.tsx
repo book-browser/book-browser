@@ -1,14 +1,14 @@
 import DeleteIcon from '@material-ui/icons/Delete';
 import { debounce } from 'debounce';
 import { Formik, FormikErrors } from 'formik';
-import { useSearchForParty } from 'hooks/party.hook';
+import { useFindAllParties } from 'hooks/party.hook';
 import { useReferenceData } from 'hooks/reference-data.hook';
 import React, { ChangeEvent, ReactNode, useEffect, useState } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import Feedback from 'react-bootstrap/esm/Feedback';
 import CreatableSelect from 'react-select/creatable';
 import { Party } from 'types/party';
-import { PartyCreator } from 'types/party-creator';
+import { PartyCreator } from 'types/creator';
 import * as yup from 'yup';
 import { RequiredFieldLegend } from '../required-field-legend';
 import { RequiredSymbol } from '../required-symbol';
@@ -75,7 +75,7 @@ export const BookForm = (props: BookFormProps) => {
 
   const [people, setPeople] = useState<Party[]>([]);
 
-  const { data: fetchedPeople, execute } = useSearchForParty();
+  const { data: fetchedPeople, execute } = useFindAllParties();
   const { data: referenceData } = useReferenceData();
 
   const selectOptions = people?.map(({ id, fullName }) => ({ value: id, label: fullName }));
@@ -85,7 +85,7 @@ export const BookForm = (props: BookFormProps) => {
 
   useEffect(() => {
     if (fetchedPeople) {
-      setPeople(fetchedPeople);
+      setPeople(fetchedPeople.items);
     }
   }, [fetchedPeople]);
 
@@ -284,7 +284,7 @@ export const BookForm = (props: BookFormProps) => {
                         }}
                         onInputChange={(data) => {
                           if (data.length > 0) {
-                            debounce(execute, 200)(data);
+                            debounce(execute, 200)({ name: data });
                           }
                         }}
                         onBlur={() => {

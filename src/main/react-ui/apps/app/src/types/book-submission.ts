@@ -1,6 +1,6 @@
 import { Genre } from './genre';
 import { Link } from './link';
-import { PartyCreator } from './party-creator';
+import { PartyCreator } from './creator';
 
 export class BookSubmission {
   id: number;

@@ -11,10 +11,10 @@ import com.tabroadn.bookbrowser.domain.LetterEnum;
 import com.tabroadn.bookbrowser.domain.OrderEnum;
 import com.tabroadn.bookbrowser.dto.BookDto;
 import com.tabroadn.bookbrowser.dto.BookSummaryDto;
+import com.tabroadn.bookbrowser.dto.CreatorDto;
 import com.tabroadn.bookbrowser.dto.GenreDto;
 import com.tabroadn.bookbrowser.dto.LinkDto;
 import com.tabroadn.bookbrowser.dto.PageDto;
-import com.tabroadn.bookbrowser.dto.PartyCreatorDto;
 import com.tabroadn.bookbrowser.entity.Book;
 import com.tabroadn.bookbrowser.entity.BookCreator;
 import com.tabroadn.bookbrowser.entity.BookCreatorId;
@@ -217,17 +217,17 @@ public class BookService {
 		return bookLink;
 	}
 
-	private BookCreator convertPartyCreatorDtoToBookCreator(PartyCreatorDto partyCreatorDto, Book book) {
+	private BookCreator convertPartyCreatorDtoToBookCreator(CreatorDto creatorDto, Book book) {
 		BookCreator creator = new BookCreator();
 
 		Party party = null;
-		if (partyCreatorDto.getId() == null) {
+		if (creatorDto.getPartyId() == null) {
 			party = new Party();
-			party.setFullName(partyCreatorDto.getFullName());
+			party.setFullName(creatorDto.getFullName());
 		} else {
-			party = partyRepository.findById(partyCreatorDto.getId())
+			party = partyRepository.findById(creatorDto.getPartyId())
 					.orElseThrow(() -> new ResourceNotFoundException(
-							String.format("party with id %s not found", partyCreatorDto.getId())));
+							String.format("party with id %s not found", creatorDto.getPartyId())));
 
 			if (book.getId() != null) {
 				BookCreatorId creatorId = new BookCreatorId();
@@ -238,7 +238,7 @@ public class BookService {
 		}
 
 		creator.setParty(party);
-		creator.setRole(partyCreatorDto.getRole());
+		creator.setRole(creatorDto.getRole());
 		creator.setBook(book);
 
 		return creator;

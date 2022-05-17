@@ -8,11 +8,11 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 
-@Target(ElementType.TYPE)
+@Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = { PartyCreatorDtoValidator.class })
-public @interface ValidPartyCreatorDto {
-    String message() default "Invalid creator";
+@Constraint(validatedBy = { PartySortValidator.class })
+public @interface ValidPartySort {
+    String message() default "Invalid sort";
 
     Class<?>[] groups() default {};
 
