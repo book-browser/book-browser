@@ -21,7 +21,7 @@ const mapSeriesToSeriesOption = (series: Series) => ({
   value: series.id,
   label: series.title,
   series
-}) as SeriesOption;
+} as SeriesOption);
 
 export const SeriesControl = ({
   name,

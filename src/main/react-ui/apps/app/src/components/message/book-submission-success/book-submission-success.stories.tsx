@@ -1,4 +1,4 @@
-import { Container } from '@material-ui/core';
+import { Container } from '@mui/material';
 import { BOOK_EXAMPLE } from 'fixtures/book.fixture';
 import React from 'react';
 import { Card } from 'react-bootstrap';

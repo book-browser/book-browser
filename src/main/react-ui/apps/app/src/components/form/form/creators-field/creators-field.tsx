@@ -1,4 +1,4 @@
-import DeleteIcon from '@material-ui/icons/Delete';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { RequiredSymbol } from 'components/form/required-symbol';
 import { debounce } from 'debounce';
 import { FormikErrors, FormikTouched } from 'formik';
@@ -105,10 +105,8 @@ export const CreatorsField = ({ name, value = [], touched, errors, onChange, onB
             )}
           </Col>
           <Col xs={12} sm={3} className="mb-2 mb-sm-0">
-            <Form.Control
+            <Form.Select
               id={`creator-${index}-role-select`}
-              as="select"
-              custom
               name={`${name}[${index}].role`}
               value={value[index]?.role || ''}
               onChange={(e) => {
@@ -131,7 +129,7 @@ export const CreatorsField = ({ name, value = [], touched, errors, onChange, onB
                   {role.title}
                 </option>
               ))}
-            </Form.Control>
+            </Form.Select>
           </Col>
           <Col xs={2}>
             <Button
@@ -151,7 +149,7 @@ export const CreatorsField = ({ name, value = [], touched, errors, onChange, onB
       <div className="mt-2">
         <Button
           variant="link"
-          className="pl-0"
+          className="pl-0 ms-n1"
           onClick={() => {
             const newCreators = [...value];
             newCreators.push({});

@@ -1,12 +1,14 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
-import { Provider } from 'react-redux'
+import { Provider } from 'react-redux';
 import { Routing } from 'pages/routing';
 import { store } from 'slices/store';
-import { useGetCurrentUser, } from 'hooks/user.hook';
+import { useGetCurrentUser } from 'hooks/user.hook';
 import { useEffect } from 'react';
 import { useReferenceData } from 'hooks/reference-data.hook';
+
+// import { visit } from 'unist-util-visit';
 
 const Main = () => {
   const { execute: getCurrentUser } = useGetCurrentUser();
@@ -17,19 +19,16 @@ const Main = () => {
   }, []);
 
   if (referenceData) {
-    return (
-      <Routing />
-    );
+    return <Routing />;
   }
   return null;
-}
+};
 
-ReactDOM.render(
+const root = createRoot(document.getElementById('root'));
+root.render(
   <React.StrictMode>
     <Provider store={store}>
       <Main />
     </Provider>
-  </React.StrictMode>,
-  document.getElementById('root')
+  </React.StrictMode>
 );
-

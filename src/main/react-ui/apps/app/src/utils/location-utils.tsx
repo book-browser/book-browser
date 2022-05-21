@@ -2,19 +2,18 @@ import * as yup from 'yup';
 import { parse } from 'query-string';
 import { Location } from 'react-router-dom';
 
-export type ParamType = Record<string, string | string[] | number | number[]>
+export declare type ParamType = Record<string, string | string[] | number | number[]>;
 
-export const parseParams = <E extends ParamType> (location: Location, schema: yup.SchemaOf<E>) =>  {
+export const parseParams = <E extends ParamType>(location: Location, schema: yup.SchemaOf<E>) => {
   const params: any = parse(location.search, { parseNumbers: true, parseBooleans: true });
   Object.entries(schema.fields).forEach(([fieldName, field]) => {
     if (field.type === 'array') {
       if (!params[fieldName]) {
         params[fieldName] = [];
-      }
-      else if (!Array.isArray(params[fieldName])) {
+      } else if (!Array.isArray(params[fieldName])) {
         params[fieldName] = [params[fieldName]];
       }
-      
+
       params[fieldName] = params[fieldName].filter((item) => field.isValidSync([item]));
 
       if (params[fieldName].length === 0) {
@@ -22,7 +21,6 @@ export const parseParams = <E extends ParamType> (location: Location, schema: yu
       } else {
         params[fieldName] = field.cast(params[fieldName]);
       }
-
     } else {
       if (Array.isArray(params[fieldName])) {
         params[fieldName] = params[fieldName][0];
@@ -37,7 +35,7 @@ export const parseParams = <E extends ParamType> (location: Location, schema: yu
   });
 
   return params as E;
-}
+};
 
 export const generateEncodedUrl = (url: string, params: ParamType) => {
   let joinedUrl = `${url}`;
@@ -49,7 +47,6 @@ export const generateEncodedUrl = (url: string, params: ParamType) => {
         const joinKey = paramAdded ? '&' : '?';
         joinedUrl = `${joinedUrl}${joinKey}${paramName}=${val}`;
         paramAdded = true;
-
       });
     } else {
       const joinKey = paramAdded ? '&' : '?';
@@ -61,4 +58,4 @@ export const generateEncodedUrl = (url: string, params: ParamType) => {
   });
 
   return joinedUrl;
-}
+};

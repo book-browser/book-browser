@@ -45,51 +45,44 @@ export const ImageControl = ({
   value,
   isInvalid,
   onChange = noop,
-  onBlur = noop,
+  onBlur = noop
 }: ImageControlProps) => {
   const inputRef = useRef<HTMLInputElement>();
-  const [imageUrl, setImageUrl] = useState<string>(
-    getDefaultImageUrl(defaultValue, value)
-  );
-  const [currentValue, setCurrentValue] = useState<File | null>(
-    getDefaultCurrentValue(defaultValue, value)
-  );
+  const [imageUrl, setImageUrl] = useState<string>(getDefaultImageUrl(defaultValue, value));
+  const [currentValue, setCurrentValue] = useState<File | null>(getDefaultCurrentValue(defaultValue, value));
 
   useEffect(() => {
     if (currentValue !== value) {
-      console.log(currentValue, value);
       setCurrentValue(value);
-      setImageUrl(URL.createObjectURL(defaultValue as File));
+      setImageUrl(getDefaultImageUrl(defaultValue, value));
     }
   }, [value]);
 
-  const className = classNames({ 'is-invalid' : isInvalid });
+  const className = classNames({ 'is-invalid': isInvalid });
   return (
     <div className={className}>
       <Row>
         <Col>
-          <Form.File custom>
-            <Form.File.Input
-              name={name}
-              accept="image/png, image/jpeg"
-              ref={inputRef}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                const file = e.target.files[0];
-                if (file) {
-                  const reader = new FileReader();
-                  reader.readAsDataURL(file);
-                  reader.onload = function () {
-                    setCurrentValue(file);
-                    setImageUrl(URL.createObjectURL(file));
-                    onChange(name, file);
-                  };
-                }
-              }}
-              onBlur={onBlur}
-              isInvalid={isInvalid}
-            />
-            <Form.File.Label>{currentValue?.name || imageUrl || 'Browse'}</Form.File.Label>
-          </Form.File>
+          <Form.Control
+            type="file"
+            name={name}
+            accept="image/png, image/jpeg"
+            ref={inputRef}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              const file = e.target.files[0];
+              if (file) {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = function () {
+                  setCurrentValue(file);
+                  setImageUrl(URL.createObjectURL(file));
+                  onChange(name, file);
+                };
+              }
+            }}
+            onBlur={onBlur}
+            isInvalid={isInvalid}
+          />
         </Col>
         <Col xs="auto">
           <Button
@@ -108,19 +101,20 @@ export const ImageControl = ({
         <Col xs="auto">
           <Button
             variant="link"
-            disabled={
-              !(defaultValue && value !== undefined && value !== defaultValue)
-            }
-            onClick={() => onChange(name, undefined)}
+            disabled={!(defaultValue && value !== undefined && value !== defaultValue)}
+            onClick={() => {
+              setCurrentValue(undefined);
+              setImageUrl(getDefaultImageUrl(defaultValue, undefined));
+              inputRef.current.value = null;
+              onChange(name, undefined);
+            }}
           >
             Reset
           </Button>
         </Col>
       </Row>
 
-      {imageUrl && (
-        <img src={imageUrl} alt="image" className="image-control-src" />
-      )}
+      {imageUrl && <img src={imageUrl} alt="image" className="image-control-src" />}
     </div>
   );
 };

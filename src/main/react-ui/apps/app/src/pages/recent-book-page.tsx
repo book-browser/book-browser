@@ -1,10 +1,10 @@
-import { Container } from '@material-ui/core';
+import { Container } from '@mui/material';
 import { ErrorAlert } from 'components/error/error-alert';
 import Loading from 'components/loading/loading';
 import { useFindAll } from 'hooks/book.hook';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Breadcrumb } from 'react-bootstrap';
-import { useLocation, useHistory, Link } from 'react-router-dom';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 import Pagination from 'components/pagination/pagination';
 import BookList from 'components/book-list/book-list';
 import * as yup from 'yup';
@@ -13,29 +13,33 @@ import { Location } from 'history';
 import { useReferenceData } from 'hooks/reference-data.hook';
 import { ReferenceData } from 'types/reference-data';
 
-interface RecentBookPageParams {
-  page: number
-}
+declare type RecentBookPageParams = {
+  page: number;
+};
 
 const readParams = (location: Location, referenceData: ReferenceData) => {
   const schema = yup.object().shape({
-    page: yup.number().min(0).transform((val) => val - 1).default(0),
+    page: yup
+      .number()
+      .min(0)
+      .transform((val) => val - 1)
+      .default(0)
   }) as yup.SchemaOf<RecentBookPageParams>;
 
-  return parseParams(location, schema) as RecentBookPageParams;
+  return parseParams(location, schema);
 };
 
 const RecentBookPageContent = () => {
   const { data: referenceData } = useReferenceData();
   const { data: books, loading, error, execute: findAll } = useFindAll();
-  const history = useHistory();
-  const location = useLocation<Location>();
+  const navigate = useNavigate();
+  const location = useLocation();
   const params = useMemo(() => readParams(location, referenceData), [location, referenceData]);
-  const [page, setPage] = useState(params.page);  
+  const [page, setPage] = useState(params.page);
 
   const changePage = (newPage) => {
-    history.push(`/recent${newPage > 0 ? `?page=${newPage + 1}` : ''}`);
-  }
+    navigate(`/recent${newPage > 0 ? `?page=${newPage + 1}` : ''}`);
+  };
 
   useEffect(() => {
     document.title = 'Recent Releases | BookBrowser';
@@ -51,11 +55,10 @@ const RecentBookPageContent = () => {
     }
   }, [params]);
 
-
   if (loading) {
     return <Loading />;
   } else if (error) {
-    return <ErrorAlert uiMessage="Unable to load recent books" error={error} />
+    return <ErrorAlert uiMessage="Unable to load recent books" error={error} />;
   } else if (books) {
     return (
       <div>
@@ -71,7 +74,9 @@ const RecentBookPage = () => {
   return (
     <Container maxWidth="md">
       <Breadcrumb>
-        <Breadcrumb.Item linkAs={Link} linkProps={{to: "/home"}}>Home</Breadcrumb.Item>
+        <Breadcrumb.Item linkAs={Link} linkProps={{ to: '/home' }}>
+          Home
+        </Breadcrumb.Item>
         <Breadcrumb.Item active>Recent Releases</Breadcrumb.Item>
       </Breadcrumb>
       <h1 className="heading-main">Recent Releases</h1>

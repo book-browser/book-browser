@@ -1,4 +1,4 @@
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress } from '@mui/material';
 import { ErrorAlert } from 'components/error/error-alert';
 import LoginForm from 'components/form/login-form/login-form';
 import RegisterForm from 'components/form/register-form/register-form';

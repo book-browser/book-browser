@@ -1,26 +1,26 @@
-@import "~bootstrap/scss/bootstrap";
+@import '~bootstrap/scss/bootstrap';
 @import '~react-datepicker/dist/react-datepicker.min.css';
 @import './variables.scss';
 @import './shim.scss';
 
 .heading-top {
-  font-size: $heading-top-font-size; 
+  font-size: $heading-top-font-size;
 }
 
 .heading-main {
-  font-size: $heading-main-font-size; 
+  font-size: $heading-main-font-size;
 }
 
 .heading-section {
-  font-size: $heading-section-font-size; 
+  font-size: $heading-section-font-size;
 }
 
 .heading-component {
-  font-size: $heading-component-font-size; 
+  font-size: $heading-component-font-size;
 }
 
 .heading-element {
-  font-size: $heading-element-font-size; 
+  font-size: $heading-element-font-size;
 }
 
 .breadcrumb {
@@ -47,11 +47,11 @@
 }
 
 .btn-nav {
-  color: rgba(255,255,255,.5);
+  color: rgba(255, 255, 255, 0.5);
   padding: 0.5rem 0;
   display: block;
   &:hover {
-    color: rgba(255,255,255,.75);
+    color: rgba(255, 255, 255, 0.75);
   }
 }
 

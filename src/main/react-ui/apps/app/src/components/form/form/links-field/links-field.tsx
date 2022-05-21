@@ -2,7 +2,7 @@ import { RequiredSymbol } from 'components/form/required-symbol';
 import React from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import { Link } from 'types/link';
-import DeleteIcon from '@material-ui/icons/Delete';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { FormikErrors, FormikTouched } from 'formik';
 
 export declare type LinksFieldProps = {

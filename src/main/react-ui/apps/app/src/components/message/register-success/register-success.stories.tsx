@@ -1,7 +1,7 @@
 import React from 'react';
 import RegisterSuccess from './register-success';
 import { BrowserRouter, Link } from 'react-router-dom';
-import { Container } from '@material-ui/core';
+import { Container } from '@mui/material';
 import { Card, Nav } from 'react-bootstrap';
 
 export default { title: 'Messages/Register Success' }

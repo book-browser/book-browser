@@ -4,7 +4,7 @@ import { useLogout, useUser } from 'hooks/user.hook';
 import React, { useState } from 'react';
 import { Alert, Button, Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { useLocation, Link } from 'react-router-dom';
-import AddIcon from '@material-ui/icons/Add';
+import AddIcon from '@mui/icons-material/Add';
 
 const Header = () => {
   const { user } = useUser();
@@ -39,9 +39,9 @@ const Header = () => {
           </Navbar.Brand>
           <Navbar.Toggle className="mb-2" aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
-            <Nav className="mr-auto">
+            <Nav className="me-auto">
               <NavDropdown title="Browse" id="test">
-                <div className="d-flex ml-3 mr-3">
+                <div className="d-flex ms-3 me-3">
                   <div>
                     <div className="pl-4 mb-2">
                       <strong>Books</strong>
@@ -73,7 +73,7 @@ const Header = () => {
                 Random
               </Nav.Link>
             </Nav>
-            <SearchBar className="mr-2" />
+            <SearchBar className="me-2" />
             <Nav>
               <Nav.Link as={Link} to="/search">
                 Filter

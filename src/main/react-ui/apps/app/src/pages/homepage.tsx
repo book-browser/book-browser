@@ -1,4 +1,4 @@
-import { Container } from '@material-ui/core';
+import { Container } from '@mui/material';
 import BookList from 'components/book-list/book-list';
 import { ErrorAlert } from 'components/error/error-alert';
 import Loading from 'components/loading/loading';

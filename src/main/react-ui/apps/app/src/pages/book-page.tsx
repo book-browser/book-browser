@@ -1,5 +1,5 @@
-import { Container } from '@material-ui/core';
-import EditIcon from '@material-ui/icons/Edit';
+import { Container } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
 import { BookDetails } from 'components/book-details/book-details';
 import Loading from 'components/loading/loading';
 import { NotFound } from 'components/message/not-found/not-found';
@@ -11,40 +11,48 @@ import { Link, useParams } from 'react-router-dom';
 import { ApiError } from 'types/api-error';
 import { Book } from 'types/book';
 
-const BookPageHeader = ({ book }: {
-  book: Book
-}) => {
+const BookPageHeader = ({ book }: { book: Book }) => {
   return (
-    <div className="d-flex align-items-start">
+    <div className="d-flex align-items-start mb-3">
       <Breadcrumb>
-        <Breadcrumb.Item linkAs={Link} linkProps={{to: "/home"}}>Home</Breadcrumb.Item>
+        <Breadcrumb.Item linkAs={Link} linkProps={{ to: '/home' }}>
+          Home
+        </Breadcrumb.Item>
         {book.seriesId && (
-         <>
-          <Breadcrumb.Item linkAs={Link} linkProps={{to: "/series"}}>Series</Breadcrumb.Item>
-          <Breadcrumb.Item linkAs={Link} linkProps={{to: `/series/${book.seriesId}`}}>{book.seriesTitle}</Breadcrumb.Item>
-         </> 
+          <>
+            <Breadcrumb.Item linkAs={Link} linkProps={{ to: '/series' }}>
+              Series
+            </Breadcrumb.Item>
+            <Breadcrumb.Item linkAs={Link} linkProps={{ to: `/series/${book.seriesId}` }}>
+              {book.seriesTitle}
+            </Breadcrumb.Item>
+          </>
         )}
         {!book.seriesId && (
-         <>
-          <Breadcrumb.Item linkAs={Link} linkProps={{to: "/books"}}>Books</Breadcrumb.Item>
-         </> 
+          <>
+            <Breadcrumb.Item linkAs={Link} linkProps={{ to: '/books' }}>
+              Books
+            </Breadcrumb.Item>
+          </>
         )}
-        
+
         <Breadcrumb.Item active>{book.title}</Breadcrumb.Item>
       </Breadcrumb>
-      <Button as={Link} to={`/book/${book.id}/edit`} className="ml-auto" variant="primary"><EditIcon /> Edit</Button>
+      <Button as={Link as any} to={`/book/${book.id}/edit`} className="ms-auto" variant="primary">
+        <EditIcon /> Edit
+      </Button>
     </div>
   );
-}
+};
 
 const BookPageContent = () => {
   const { data: book, execute, loading, error } = useGetBook();
   const { id } = useParams();
-  const apiError = error?.name === 'ApiError' && error as ApiError;
-  const notFound = apiError?.status === 404 ;
+  const apiError = error?.name === 'ApiError' && (error as ApiError);
+  const notFound = apiError?.status === 404;
 
   useEffect(() => {
-    execute(id);
+    execute(Number(id));
   }, [id]);
 
   useEffect(() => {
@@ -62,19 +70,18 @@ const BookPageContent = () => {
     if (notFound) {
       return <NotFound />;
     }
-    return <SomethingWentWrong error={error}/>;
+    return <SomethingWentWrong error={error} />;
   }
   if (book) {
     return (
-    <>
-      <BookPageHeader book={book} />
-      <BookDetails book={book} />
-    </>
+      <>
+        <BookPageHeader book={book} />
+        <BookDetails book={book} />
+      </>
     );
   }
   return null;
-}
-
+};
 
 export const BookPage = () => {
   return (

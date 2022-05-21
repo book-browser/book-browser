@@ -1,25 +1,25 @@
-import { Container } from '@material-ui/core';
+import { Container } from '@mui/material';
 import BookList from 'components/book-list/book-list';
 import SeriesList from 'components/series-list/series-list';
 import { useFindAll as useFindAllBooks } from 'hooks/book.hook';
 import { useFindAll as useFindAllSeries } from 'hooks/series.hook';
 import React, { KeyboardEvent, useEffect, useState } from 'react';
 import { Breadcrumb, Button, FormControl, InputGroup } from 'react-bootstrap';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { generateEncodedUrl, parseParams } from 'utils/location-utils';
 import * as yup from 'yup';
 
-interface SearchResultPageParams {
+declare type SearchResultPageParams = {
   query: string;
-}
+};
 
 const schema = yup.object().shape({
-  query: yup.string().default(''),
+  query: yup.string().default('')
 }) as yup.SchemaOf<SearchResultPageParams>;
 
 export const SearchResultPage = () => {
   const location = useLocation();
-  const history = useHistory();
+  const navigate = useNavigate();
   const params = parseParams(location, schema);
 
   const [query, setQuery] = useState(params.query);
@@ -30,7 +30,7 @@ export const SearchResultPage = () => {
   const { data: seriesList, execute: findAllSeries } = useFindAllSeries();
 
   const search = () => {
-    history.push(generateEncodedUrl('/search', { query: inputText }));
+    navigate(generateEncodedUrl('/search', { query: inputText }));
   };
 
   const onKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {

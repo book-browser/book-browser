@@ -1,6 +1,6 @@
 import { Link } from './link';
 import { Genre } from './genre';
-import { PartyCreator } from './creator';
+import { Creator } from './creator';
 
 export interface Book {
   id: number;
@@ -11,6 +11,6 @@ export interface Book {
   seriesId?: number;
   seriesTitle?: string;
   genres: Genre[];
-  creators: PartyCreator[];
+  creators: Creator[];
   links: Link[];
 }

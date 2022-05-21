@@ -1,4 +1,4 @@
-import DeleteIcon from '@material-ui/icons/Delete';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { debounce } from 'debounce';
 import { Formik, FormikErrors } from 'formik';
 import { useFindAllParties } from 'hooks/party.hook';
@@ -8,7 +8,7 @@ import { Button, Col, Form, Row } from 'react-bootstrap';
 import Feedback from 'react-bootstrap/esm/Feedback';
 import CreatableSelect from 'react-select/creatable';
 import { Party } from 'types/party';
-import { PartyCreator } from 'types/creator';
+import { Creator } from 'types/creator';
 import * as yup from 'yup';
 import { RequiredFieldLegend } from '../required-field-legend';
 import { RequiredSymbol } from '../required-symbol';
@@ -133,7 +133,7 @@ export const BookForm = (props: BookFormProps) => {
             <h4 className="mb-3">General Information</h4>
             <hr className="mb-4" />
             <RequiredFieldLegend />
-            <Form.Group controlId="title-input">
+            <Form.Group className="mb-3" controlId="title-input">
               <Form.Label>
                 Title
                 <RequiredSymbol />
@@ -148,7 +148,7 @@ export const BookForm = (props: BookFormProps) => {
               />
               <Form.Control.Feedback type="invalid">{errors.title}</Form.Control.Feedback>
             </Form.Group>
-            <Form.Group controlId="description-text-area">
+            <Form.Group className="mb-3" controlId="description-text-area">
               <Form.Label>
                 Description
                 <RequiredSymbol />
@@ -167,7 +167,7 @@ export const BookForm = (props: BookFormProps) => {
               />
               <Form.Control.Feedback type="invalid">{errors.description}</Form.Control.Feedback>
             </Form.Group>
-            <Form.Group controlId="release-date-picker" className="w-50">
+            <Form.Group controlId="release-date-picker" className="mb-3 w-50">
               <Form.Label>Release Date</Form.Label>
               <DatePicker
                 id="release-date-picker"
@@ -179,53 +179,46 @@ export const BookForm = (props: BookFormProps) => {
                 onBlur={handleBlur}
                 isClearable
               />
-              <Form.Control.Feedback type="invalid">{errors.releaseDate}</Form.Control.Feedback>
+              <Form.Control.Feedback type="invalid">{errors.releaseDate as any}</Form.Control.Feedback>
             </Form.Group>
-            <Form.Group>
+            <Form.Group className="mb-3">
               <Form.Label>
                 Thumbnail
                 <RequiredSymbol />
               </Form.Label>
               <Row>
                 <Col>
-                  <Form.File custom>
-                    <Form.File.Input
-                      name="thumbnail"
-                      accept="image/png, image/jpeg"
-                      onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                        const file = e.target.files[0];
-                        if (file) {
-                          const reader = new FileReader();
-                          reader.readAsDataURL(file);
-                          reader.onload = function () {
-                            setThumbnailFile(file);
-                            setThumbnailUrl(URL.createObjectURL(file));
-                            setFieldValue('thumbnail', (reader.result as string).split(',')[1]);
-                          };
-                        } else {
-                          setThumbnailFile(null);
-                          setThumbnailUrl(null);
-                          setFieldValue('thumbnail', null);
-                        }
-                      }}
-                      onBlur={handleBlur}
-                      isInvalid={touched.thumbnail && !!errors.thumbnail}
-                    />
-                    <Form.File.Label>
-                      {thumbnailFile?.name ||
-                        (!actualValue.thumbnail && actualValue.id
-                          ? `${window.location.origin}/book/${actualValue.id}/thumbnail`
-                          : 'Browse')}
-                    </Form.File.Label>
-                    <Form.Text muted>Max file size 1MB</Form.Text>
-                    <Feedback type="invalid">{errors.thumbnail}</Feedback>
-                  </Form.File>
+                  <Form.Control
+                    type="file"
+                    name="thumbnail"
+                    accept="image/png, image/jpeg"
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                      const file = e.target.files[0];
+                      if (file) {
+                        const reader = new FileReader();
+                        reader.readAsDataURL(file);
+                        reader.onload = function () {
+                          setThumbnailFile(file);
+                          setThumbnailUrl(URL.createObjectURL(file));
+                          setFieldValue('thumbnail', (reader.result as string).split(',')[1]);
+                        };
+                      } else {
+                        setThumbnailFile(null);
+                        setThumbnailUrl(null);
+                        setFieldValue('thumbnail', null);
+                      }
+                    }}
+                    onBlur={handleBlur}
+                    isInvalid={touched.thumbnail && !!errors.thumbnail}
+                  ></Form.Control>
+                  <Form.Text muted>Max file size 1MB</Form.Text>
+                  <Feedback type="invalid">{errors.thumbnail}</Feedback>
                 </Col>
               </Row>
 
               {thumbnailUrl && <img src={thumbnailUrl} className="mt-3" style={{ maxWidth: '100%' }} />}
             </Form.Group>
-            <Form.Group controlId="genre-select">
+            <Form.Group controlId="genre-select" className="mb-3">
               <Form.Label>Genres</Form.Label>
               <Select
                 inputId="genre-select"
@@ -242,7 +235,7 @@ export const BookForm = (props: BookFormProps) => {
                 }}
               />
             </Form.Group>
-            <Form.Group>
+            <Form.Group className="mb-3">
               <Form.Label>Creators</Form.Label>
               <Form.Group>
                 <Row>
@@ -261,7 +254,7 @@ export const BookForm = (props: BookFormProps) => {
                   <Row key={index} className="mb-2">
                     <Col xs={12} sm={7} className="mb-2 mb-sm-0">
                       <CreatableSelect
-                        defaultValue={creator.fullName && { label: creator.fullName, value: creator.id }}
+                        defaultValue={creator.fullName && { label: creator.fullName, value: creator.partyId }}
                         inputId={`creator${index}-name-select`}
                         name={`creators[${index}].fullName`}
                         options={selectOptions}
@@ -296,13 +289,13 @@ export const BookForm = (props: BookFormProps) => {
                             ...styles,
                             borderColor:
                               touched?.creators?.[index]?.fullName &&
-                              (errors?.creators as FormikErrors<PartyCreator>[])?.[index]?.fullName
+                              (errors?.creators as FormikErrors<Creator>[])?.[index]?.fullName
                                 ? '#dc3545'
                                 : styles.borderColor,
                             '&:hover': {
                               borderColor:
                                 touched?.creators?.[index]?.fullName &&
-                                (errors?.creators as FormikErrors<PartyCreator>[])?.[index]?.fullName
+                                (errors?.creators as FormikErrors<Creator>[])?.[index]?.fullName
                                   ? '#dc3545'
                                   : styles['&:hover'].borderColor
                             }
@@ -310,17 +303,15 @@ export const BookForm = (props: BookFormProps) => {
                         }}
                       />
                       {touched?.creators?.[index]?.fullName &&
-                        (errors?.creators as FormikErrors<PartyCreator>[])?.[index]?.fullName && (
+                        (errors?.creators as FormikErrors<Creator>[])?.[index]?.fullName && (
                           <div className="invalid-feedback d-block">
-                            {(errors?.creators as FormikErrors<PartyCreator>[])?.[index]?.fullName}
+                            {(errors?.creators as FormikErrors<Creator>[])?.[index]?.fullName}
                           </div>
                         )}
                     </Col>
                     <Col xs={12} sm={3} className="mb-2 mb-sm-0">
-                      <Form.Control
+                      <Form.Select
                         id={`creator${index}-role-select`}
-                        as="select"
-                        custom
                         name={`creators[${index}].role`}
                         value={actualValue.creators[index].role || ''}
                         onChange={(e) => {
@@ -338,7 +329,7 @@ export const BookForm = (props: BookFormProps) => {
                             {role.title}
                           </option>
                         ))}
-                      </Form.Control>
+                      </Form.Select>
                     </Col>
                     <Col xs={2}>
                       <Button
@@ -372,7 +363,7 @@ export const BookForm = (props: BookFormProps) => {
             </Form.Group>
             <hr className="mb-4" />
             <h4 className="mb-3">Relevant Links</h4>
-            <Form.Group>
+            <Form.Group className="mb-3">
               {values.links.length > 0 && (
                 <Row>
                   <Col xs={12} sm={7}>

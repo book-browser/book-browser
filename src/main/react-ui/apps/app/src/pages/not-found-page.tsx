@@ -1,4 +1,4 @@
-import { Container } from '@material-ui/core';
+import { Container } from '@mui/material';
 import { NotFound } from 'components/message/not-found/not-found';
 import React, { useEffect } from 'react';
 

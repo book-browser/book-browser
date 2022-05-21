@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import BookListPage from './book-list-page';
 import { BookPage } from './book-page';
 import { CreateBookPage } from './create-book-page';
@@ -32,89 +32,35 @@ export const Routing = () => {
   return (
     <BrowserRouter>
       <Header />
-      <Switch>
-        <Route exact path="/book/new">
-          <CreateBookPage />
-        </Route>
-        <Route exact path="/books/search">
-          <SearchBookPage />
-        </Route>
-        <Route exact path="/book/:id">
-          <BookPage />
-        </Route>
-        <Route exact path="/book/:id/edit">
-          <EditBookPage />
-        </Route>
-        <Route exact path="/books">
-          <BookListPage />
-        </Route>
-        <Route exact path="/series">
-          <SeriesListPage />
-        </Route>
-        <Route exact path="/series/recently-updated">
-          <RecentlyUpdatedSeriesPage />
-        </Route>
-        <Route exact path="/series/search">
-          <SearchSeriesPage />
-        </Route>
-        <Route exact path="/series/new">
-          <NewSeriesPage />
-        </Route>
-        <Route exact path="/series/:id">
-          <SeriesPage />
-        </Route>
-        <Route exact path="/series/:id/episodes">
-          <SeriesEpisodesPage />
-        </Route>
-        <Route exact path="/series/:id/edit">
-          <EditSeriesPage />
-        </Route>
-        <Route exact path="/episode/new">
-          <NewEpisodePage />
-        </Route>
-        <Route exact path="/episode/:id">
-          <EpisodePage />
-        </Route>
-        <Route exact path="/episode/:id/edit">
-          <EditEpisodePage />
-        </Route>
-        <Route exact path="/search">
-          <SearchResultPage />
-        </Route>
-        <Route exact path="/login">
-          <LoginPage />
-        </Route>
-        <Route exact path="/register">
-          <RegisterPage />
-        </Route>
-        <Route exact path="/user/verify/:token">
-          <VerifyUserPage />
-        </Route>
-        <Route exact path="/verify/resend">
-          <ResendVerificationEmailPage />
-        </Route>
-        <Route exact path="/username/recover">
-          <UsernameRecoveryPage />
-        </Route>
-        <Route exact path="/random">
-          <RandomBookPage />
-        </Route>
-        <Route exact path="/recent">
-          <RecentBookPage />
-        </Route>
-        <Route exact path="/coming-soon">
-          <UpcomingBookPage />
-        </Route>
-        <Route exact path="/home">
-          <Redirect to="/" />
-        </Route>
-        <Route exact path="/">
-          <Homepage />
-        </Route>
-        <Route>
-          <NotFoundPage />
-        </Route>
-      </Switch>
+      <Routes>
+        <Route path="/book/new" element={<CreateBookPage />} />
+        <Route path="/books/search" element={<SearchBookPage />}></Route>
+        <Route path="/book/:id" element={<BookPage />}></Route>
+        <Route path="/book/:id/edit" element={<EditBookPage />}></Route>
+        <Route path="/books" element={<BookListPage />}></Route>
+        <Route path="/series" element={<SeriesListPage />}></Route>
+        <Route path="/series/recently-updated" element={<RecentlyUpdatedSeriesPage />}></Route>
+        <Route path="/series/search" element={<SearchSeriesPage />}></Route>
+        <Route path="/series/new" element={<NewSeriesPage />}></Route>
+        <Route path="/series/:id" element={<SeriesPage />}></Route>
+        <Route path="/series/:id/episodes" element={<SeriesEpisodesPage />}></Route>
+        <Route path="/series/:id/edit" element={<EditSeriesPage />}></Route>
+        <Route path="/episode/new" element={<NewEpisodePage />}></Route>
+        <Route path="/episode/:id" element={<EpisodePage />}></Route>
+        <Route path="/episode/:id/edit" element={<EditEpisodePage />}></Route>
+        <Route path="/search" element={<SearchResultPage />}></Route>
+        <Route path="/login" element={<LoginPage />}></Route>
+        <Route path="/register" element={<RegisterPage />}></Route>
+        <Route path="/user/verify/:token" element={<VerifyUserPage />}></Route>
+        <Route path="/verify/resend" element={<ResendVerificationEmailPage />}></Route>
+        <Route path="/username/recover" element={<UsernameRecoveryPage />}></Route>
+        <Route path="/random" element={<RandomBookPage />}></Route>
+        <Route path="/recent" element={<RecentBookPage />}></Route>
+        <Route path="/coming-soon" element={<UpcomingBookPage />}></Route>
+        <Route path="/home" element={<Navigate to="/" replace />}></Route>
+        <Route path="/" element={<Homepage />}></Route>
+        <Route element={<NotFoundPage />}></Route>
+      </Routes>
     </BrowserRouter>
   );
 };

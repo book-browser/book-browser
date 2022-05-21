@@ -103,10 +103,11 @@ const SeriesForm = (props: SeriesFormProps) => {
         isValid,
         errors
       }) => {
+        console.log(values);
         return (
           <>
             <RequiredFieldLegend />
-            <Form.Group controlId="title-input">
+            <Form.Group controlId="title-input" className="mb-3">
               <Form.Label>
                 Title
                 <RequiredSymbol />
@@ -121,7 +122,7 @@ const SeriesForm = (props: SeriesFormProps) => {
               />
               <Form.Control.Feedback type="invalid">{errors.title}</Form.Control.Feedback>
             </Form.Group>
-            <Form.Group controlId="description-text-area">
+            <Form.Group controlId="description-text-area" className="mb-3">
               <Form.Label>
                 Description
                 <RequiredSymbol />
@@ -135,7 +136,7 @@ const SeriesForm = (props: SeriesFormProps) => {
               />
               <Form.Control.Feedback type="invalid">{errors.description}</Form.Control.Feedback>
             </Form.Group>
-            <Form.Group>
+            <Form.Group className="mb-3">
               <Form.Label>Banner</Form.Label>
               <Form.ImageControl
                 name="banner"
@@ -148,7 +149,7 @@ const SeriesForm = (props: SeriesFormProps) => {
                 onBlur={handleBlur}
               />
             </Form.Group>
-            <Form.Group>
+            <Form.Group className="mb-3">
               <Form.Label>Thumbnail</Form.Label>
               <Form.ImageControl
                 name="thumbnail"
@@ -163,7 +164,7 @@ const SeriesForm = (props: SeriesFormProps) => {
                 onBlur={handleBlur}
               />
             </Form.Group>
-            <Form.Group controlId="genre-select">
+            <Form.Group controlId="genre-select" className="mb-3">
               <Form.Label>Genres</Form.Label>
               <Select
                 inputId="genre-select"

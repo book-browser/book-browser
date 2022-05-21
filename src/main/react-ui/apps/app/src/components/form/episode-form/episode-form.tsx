@@ -22,13 +22,9 @@ const schema = yup.object().shape({
   links: yup.array(
     yup.object().shape({
       url: yup.string().required().max(100).label('url'),
-      description: yup
-        .string()
-        .required('description is a required field')
-        .max(50)
-        .label('description'),
+      description: yup.string().required('description is a required field').max(50).label('description')
     })
-  ),
+  )
 });
 
 export declare type EpisodeFormProps = {
@@ -44,7 +40,7 @@ const defaultEpisode = {
   description: '',
   releaseDate: undefined,
   thumbnail: undefined,
-  links: [],
+  links: []
 } as DeepPartial<Episode>;
 
 export const EpisodeForm = (props: EpisodeFormProps) => {
@@ -64,7 +60,7 @@ export const EpisodeForm = (props: EpisodeFormProps) => {
         values,
         touched,
         isValid,
-        errors,
+        errors
       }) => {
         return (
           <>
@@ -81,9 +77,7 @@ export const EpisodeForm = (props: EpisodeFormProps) => {
                 onBlur={handleBlur}
                 isInvalid={touched.title && !!errors.title}
               />
-              <Form.Control.Feedback type="invalid">
-                {errors.title}
-              </Form.Control.Feedback>
+              <Form.Control.Feedback type="invalid">{errors.title}</Form.Control.Feedback>
             </Form.Group>
             <Form.Group controlId="title-input">
               <Form.Label>
@@ -97,26 +91,23 @@ export const EpisodeForm = (props: EpisodeFormProps) => {
                 onBlur={setFieldTouched}
                 isInvalid={touched.seriesId && !!errors.seriesId}
               />
-              <Form.Control.Feedback type="invalid">
-                {errors.title}
-              </Form.Control.Feedback>
+              <Form.Control.Feedback type="invalid">{errors.title}</Form.Control.Feedback>
             </Form.Group>
             <Form.Group controlId="release-date-picker" className="w-50">
-            <Form.Label>Release Date<RequiredSymbol /></Form.Label>
-            <Form.DateControl
-              value={values.releaseDate as Date}
-              isInvalid={touched.releaseDate && !!errors.releaseDate}
-              onChange={(val) => setFieldValue('releaseDate', val)}
-              onBlur={handleBlur}
-            />
-            <Form.Control.Feedback type="invalid">
-              {errors.releaseDate}
-            </Form.Control.Feedback>
-          </Form.Group>
-            <Form.Group controlId="description-text-area">
               <Form.Label>
-                Description
+                Release Date
+                <RequiredSymbol />
               </Form.Label>
+              <Form.DateControl
+                value={values.releaseDate as Date}
+                isInvalid={touched.releaseDate && !!errors.releaseDate}
+                onChange={(val) => setFieldValue('releaseDate', val)}
+                onBlur={handleBlur}
+              />
+              <Form.Control.Feedback type="invalid">{errors.releaseDate as any}</Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group controlId="description-text-area">
+              <Form.Label>Description</Form.Label>
               <Form.MarkdownControl
                 name="description"
                 value={values.description || ''}
@@ -124,9 +115,7 @@ export const EpisodeForm = (props: EpisodeFormProps) => {
                 onBlur={handleBlur}
                 isInvalid={touched.description && !!errors.description}
               />
-              <Form.Control.Feedback type="invalid">
-                {errors.description}
-              </Form.Control.Feedback>
+              <Form.Control.Feedback type="invalid">{errors.description}</Form.Control.Feedback>
             </Form.Group>
             <Form.Group controlId="thumbnail-image">
               <Form.Label>
@@ -135,18 +124,14 @@ export const EpisodeForm = (props: EpisodeFormProps) => {
               </Form.Label>
               <Form.ImageControl
                 name="thumbnail"
-                defaultValue={
-                  values.id ? `${window.location.origin}/api/episode/${values.id}/thumbnail` : undefined
-                }
+                defaultValue={values.id ? `${window.location.origin}/api/episode/${values.id}/thumbnail` : undefined}
                 value={values.thumbnail as File}
                 isInvalid={touched.thumbnail && !!errors.thumbnail}
                 onChange={setFieldValue}
                 onBlur={handleBlur}
               />
               <Form.Text muted>Max file size 1MB</Form.Text>
-              <Form.Control.Feedback type="invalid">
-                {errors.thumbnail}
-              </Form.Control.Feedback>
+              <Form.Control.Feedback type="invalid">{errors.thumbnail as any}</Form.Control.Feedback>
             </Form.Group>
             <Form.Group>
               <Form.Label>Links</Form.Label>

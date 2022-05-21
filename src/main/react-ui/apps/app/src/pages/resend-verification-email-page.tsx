@@ -1,15 +1,15 @@
-import { CircularProgress, Container, Divider } from '@material-ui/core';
+import { CircularProgress, Container, Divider } from '@mui/material';
 import { ErrorAlert } from 'components/error/error-alert';
 import { useResendVerificationEmail, useUser } from 'hooks/user.hook';
 import React, { ChangeEvent, useState } from 'react';
 import { useEffect } from 'react';
 import { Alert, Button, Card, Form } from 'react-bootstrap';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const ResendVerificationEmailPage = () => {
   const { user } = useUser();
   const [email, setEmail] = useState('');
-  const history = useHistory();
+  const navigate = useNavigate();
   const { execute, executed, loading, error } = useResendVerificationEmail();
 
   useEffect(() => {
@@ -19,17 +19,16 @@ const ResendVerificationEmailPage = () => {
   useEffect(() => {
     if (user) {
       if (user.verified) {
-        history.push('/');
+        navigate('/');
       } else {
         setEmail(user.email);
       }
     }
-  }, [user])
-
+  }, [user, navigate]);
 
   const onChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setEmail(e.target.value);
-  }
+  };
 
   return (
     <Container maxWidth="sm">
@@ -40,28 +39,30 @@ const ResendVerificationEmailPage = () => {
           <div>
             <Form.Group controlId="email-input">
               <Form.Label>Email Address</Form.Label>
-              <Form.Control
-                type="text"
-                name="email-input"
-                value={email}
-                onChange={onChange}
-                disabled={!!user}
-              />
+              <Form.Control type="text" name="email-input" value={email} onChange={onChange} disabled={!!user} />
             </Form.Group>
           </div>
           <div className="mb-3">
-            {!loading && <Button className="w-100" variant="primary" disabled={email.length === 0} onClick={() => execute(email)}>Resend</Button>}
-            {loading && <Button className="w-100" variant="primary" disabled>Resending <CircularProgress color="inherit" size={"15px"} /></Button>}
+            {!loading && (
+              <Button className="w-100" variant="primary" disabled={email.length === 0} onClick={() => execute(email)}>
+                Resend
+              </Button>
+            )}
+            {loading && (
+              <Button className="w-100" variant="primary" disabled>
+                Resending <CircularProgress color="inherit" size={'15px'} />
+              </Button>
+            )}
           </div>
           <Form.Text className="mb-3" muted>
-            If you still have not received the email, please check your "Spam" or "Trash" folder in your email.  
+            If you still have not received the email, please check your "Spam" or "Trash" folder in your email.
           </Form.Text>
           <div className="text-center mb-3">
             <Link to="/home">Return Home</Link>
-            {user &&  (
+            {user && (
               <>
                 <span> | </span>
-                <Link>Change Email</Link>
+                <Link to="/#">Change Email</Link>
               </>
             )}
           </div>
@@ -70,7 +71,7 @@ const ResendVerificationEmailPage = () => {
         </Card.Body>
       </Card>
     </Container>
-  )
-}
+  );
+};
 
 export default ResendVerificationEmailPage;

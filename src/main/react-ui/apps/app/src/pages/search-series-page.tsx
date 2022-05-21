@@ -1,60 +1,47 @@
-import { Container } from '@material-ui/core';
+import { Container } from '@mui/material';
 import SeriesList from 'components/series-list/series-list';
 import { useReferenceData } from 'hooks/reference-data.hook';
 import { useFindAll } from 'hooks/series.hook';
 import React, { KeyboardEvent, useEffect, useMemo, useState } from 'react';
-import {
-  Breadcrumb,
-  Button,
-  ButtonGroup,
-  Form,
-  FormControl,
-  InputGroup,
-  ToggleButton,
-} from 'react-bootstrap';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { Breadcrumb, Button, ButtonGroup, Form, FormControl, InputGroup, ToggleButton } from 'react-bootstrap';
+import { Link, useNavigate, useLocation, Location } from 'react-router-dom';
 import { Genre } from 'types/genre';
 import { ReferenceData } from 'types/reference-data';
 import { Series } from 'types/series';
 import { generateEncodedUrl, parseParams } from 'utils/location-utils';
 import * as yup from 'yup';
 
-interface SearchSeriesPageParams {
+declare type SearchSeriesPageParams = {
   query: string;
   genres: string[];
   sort: string;
-}
+};
 
 const readParams = (location: Location, referenceData: ReferenceData) => {
-  const genreNames = referenceData.genres.map((genre) =>
-    genre.name.toLocaleLowerCase()
-  );
+  const genreNames = referenceData.genres.map((genre) => genre.name.toLocaleLowerCase());
 
   const schema = yup.object().shape({
     query: yup.string().default(''),
     genres: yup.array(
       yup.string().test({
-        test: (val) => genreNames.includes(val.toLocaleLowerCase()),
+        test: (val) => genreNames.includes(val.toLocaleLowerCase())
       })
     ),
-    sort: yup.string().oneOf(['id', 'title', 'lastUpdated']).default('id'),
+    sort: yup.string().oneOf(['id', 'title', 'lastUpdated']).default('id')
   }) as yup.SchemaOf<SearchSeriesPageParams>;
 
-  return parseParams(location, schema) as SearchSeriesPageParams;
+  return parseParams(location, schema);
 };
 
 const SearchSeriesPage = () => {
   const { data } = useReferenceData();
   const location = useLocation();
-  const history = useHistory();
+  const navigate = useNavigate();
   const params = useMemo(() => readParams(location, data), [location, data]);
 
   const [selectedGenres, setSelectedGenres] = useState<Genre[]>(
     params.genres.map((paramGenre) =>
-      data.genres.find(
-        (genre) =>
-          genre.name.toLocaleLowerCase() === paramGenre.toLocaleLowerCase()
-      )
+      data.genres.find((genre) => genre.name.toLocaleLowerCase() === paramGenre.toLocaleLowerCase())
     )
   );
   const [query, setQuery] = useState(params.query);
@@ -74,22 +61,12 @@ const SearchSeriesPage = () => {
     changeParams({ genres: newSelectedGenres });
   };
 
-  const changeParams = ({
-    genres,
-    query: newQuery,
-    sort,
-  }: {
-    query?: string;
-    genres?: Genre[];
-    sort?: string;
-  }) => {
-    history.push(
+  const changeParams = ({ genres, query: newQuery, sort }: { query?: string; genres?: Genre[]; sort?: string }) => {
+    navigate(
       generateEncodedUrl('/series/search', {
         query: newQuery || query || activeQuery,
-        genres: (genres ? genres : selectedGenres).map((genre) =>
-          genre.name.toLocaleLowerCase()
-        ),
-        sort: sort ? (sort !== 'id' ? sort : '') : activeSort,
+        genres: (genres ? genres : selectedGenres).map((genre) => genre.name.toLocaleLowerCase()),
+        sort: sort ? (sort !== 'id' ? sort : '') : activeSort
       })
     );
   };
@@ -105,7 +82,7 @@ const SearchSeriesPage = () => {
       query: activeQuery,
       genres: selectedGenres,
       sort: activeSort as keyof Series,
-      order: activeSort === 'lastUpdated' ? 'desc' : 'asc',
+      order: activeSort === 'lastUpdated' ? 'desc' : 'asc'
     });
   }, [selectedGenres, activeQuery, activeSort, execute]);
 
@@ -114,16 +91,10 @@ const SearchSeriesPage = () => {
       setActiveQuery(params.query);
       setQuery(params.query);
     }
-    if (
-      params.genres !==
-      selectedGenres.map((genre) => genre.name.toLocaleLowerCase())
-    ) {
+    if (params.genres !== selectedGenres.map((genre) => genre.name.toLocaleLowerCase())) {
       setSelectedGenres(
         params.genres.map((paramGenre) =>
-          data.genres.find(
-            (genre) =>
-              genre.name.toLocaleLowerCase() === paramGenre.toLocaleLowerCase()
-          )
+          data.genres.find((genre) => genre.name.toLocaleLowerCase() === paramGenre.toLocaleLowerCase())
         )
       );
     }
@@ -167,14 +138,14 @@ const SearchSeriesPage = () => {
       <div className="d-flex flex-wrap mb-4">
         {data &&
           data.genres.map((genre) => (
-            <ButtonGroup toggle key={genre.id}>
+            <ButtonGroup key={genre.id}>
               <ToggleButton
                 type="checkbox"
                 variant="outline-primary"
-                className="mr-2 mb-2"
+                className="me-2 mb-2"
                 checked={selectedGenres.includes(genre)}
                 value={genre.id}
-                onChange={() => toggleGenre(genre)}
+                onClick={() => toggleGenre(genre)}
               >
                 {genre.name}
               </ToggleButton>

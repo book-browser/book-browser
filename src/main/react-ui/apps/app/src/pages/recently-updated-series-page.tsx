@@ -1,4 +1,4 @@
-import { Container } from '@material-ui/core';
+import { Container } from '@mui/material';
 import { ErrorAlert } from 'components/error/error-alert';
 import Loading from 'components/loading/loading';
 import Pagination from 'components/pagination/pagination';
@@ -6,13 +6,13 @@ import SeriesList from 'components/series-list/series-list';
 import { useFindAll as useFindAllSeries } from 'hooks/series.hook';
 import React, { useEffect, useState } from 'react';
 import { Breadcrumb } from 'react-bootstrap';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { generateEncodedUrl, parseParams } from 'utils/location-utils';
 import * as yup from 'yup';
 
-interface RecentlyUpdatedSeriesPageParams {
+declare type RecentlyUpdatedSeriesPageParams = {
   page: number;
-}
+};
 
 const schema = yup.object().shape({
   page: yup
@@ -23,8 +23,8 @@ const schema = yup.object().shape({
 }) as yup.SchemaOf<RecentlyUpdatedSeriesPageParams>;
 
 const RecentlyUpdatedSeriesPageContent = () => {
-  const history = useHistory();
-  const location: Location = useLocation();
+  const navigate = useNavigate();
+  const location = useLocation();
   const params = parseParams(location, schema);
 
   const [page, setPage] = useState(params.page);
@@ -32,7 +32,7 @@ const RecentlyUpdatedSeriesPageContent = () => {
   const { data: seriesList, loading, error, execute: findAll } = useFindAllSeries();
 
   const onPageChange = (newPage) => {
-    history.push(generateEncodedUrl('series', { page: newPage + 1 }));
+    navigate(generateEncodedUrl('series', { page: newPage + 1 }));
   };
 
   useEffect(() => {

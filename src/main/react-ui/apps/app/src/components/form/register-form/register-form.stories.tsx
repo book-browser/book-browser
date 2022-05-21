@@ -1,4 +1,4 @@
-import { Container } from '@material-ui/core';
+import { Container } from '@mui/material';
 import React, { useState } from 'react';
 import { Button, Card } from 'react-bootstrap';
 import { RegisterRequest } from 'types/register-request';

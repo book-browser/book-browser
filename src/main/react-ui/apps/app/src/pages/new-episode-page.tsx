@@ -1,4 +1,4 @@
-import { CircularProgress, Container } from '@material-ui/core';
+import { CircularProgress, Container } from '@mui/material';
 import { DeepPartial } from '@reduxjs/toolkit';
 import { ErrorAlert } from 'components/error/error-alert';
 import { EpisodeForm } from 'components/form/episode-form/episode-form';
@@ -8,7 +8,7 @@ import { useCreateOrUpdateEpisode } from 'hooks/episode.hook';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { Breadcrumb, Button, Nav } from 'react-bootstrap';
-import { Prompt, Link, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Episode } from 'types/episode';
 import { Series } from 'types/series';
 import { parseParams } from 'utils/location-utils';
@@ -25,14 +25,14 @@ const schema = yup.object().shape({
   title: yup.string().default(''),
   seriesId: yup.number(),
   description: yup.string().default(''),
-  releaseDate: yup.string().default(''),
+  releaseDate: yup.string().default('')
 }) as yup.SchemaOf<NewEpisodePageParams>;
 
 const NewEpisodeForm = ({
   loading,
   onChange,
   onSubmit,
-  error,
+  error
 }: {
   loading: boolean;
   onChange: () => void;
@@ -46,10 +46,9 @@ const NewEpisodeForm = ({
     seriesId: params.seriesId,
     description: params.description,
     releaseDate:
-      params.releaseDate &&
-      moment(params.releaseDate, 'YYYY-MM-DD', true).isValid()
+      params.releaseDate && moment(params.releaseDate, 'YYYY-MM-DD', true).isValid()
         ? moment(params.releaseDate, 'YYYY-MM-DD').toDate()
-        : undefined,
+        : undefined
   };
 
   return (
@@ -67,12 +66,7 @@ const NewEpisodeForm = ({
         onSubmit={onSubmit}
         footer={
           <div>
-            {error && (
-              <ErrorAlert
-                uiMessage="Something went wrong. Unable to add your entry."
-                error={error}
-              />
-            )}
+            {error && <ErrorAlert uiMessage="Something went wrong. Unable to add your entry." error={error} />}
             {!loading && (
               <Button variant="primary" type="submit">
                 Submit
@@ -92,11 +86,7 @@ const NewEpisodeForm = ({
 
 const SuccessMessage = ({ episode }: { episode: Episode }) => {
   return (
-    <Message
-      variant="success"
-      title="Success"
-      lead="Your submission has been successful"
-    >
+    <Message variant="success" title="Success" lead="Your submission has been successful">
       <Nav className="justify-content-between">
         <Nav.Item>
           <Nav.Link as={Link} to="/home">
@@ -128,16 +118,11 @@ const NewEpisodePageContent = () => {
   if (!data) {
     return (
       <>
-        <NewEpisodeForm
-          loading={loading}
-          onChange={onChange}
-          onSubmit={onSubmit}
-          error={error}
-        />
-        <Prompt
+        <NewEpisodeForm loading={loading} onChange={onChange} onSubmit={onSubmit} error={error} />
+        {/* <Prompt
           when={!saved}
           message="Are you sure to leave (all changes will be lost)?"
-        />
+        /> */}
       </>
     );
   } else {
