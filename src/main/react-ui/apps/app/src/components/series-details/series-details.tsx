@@ -1,12 +1,13 @@
-import BookList from 'components/book-list/book-list';
-import React from 'react';
-import { Series } from 'types/series';
 import MDEditor from '@uiw/react-md-editor';
-import './series-details.scss';
-import GenreBadge from 'components/genre-badge/genre-badge';
-import { Genre } from 'types/genre';
-import { Link } from 'react-router-dom';
+import BookList from 'components/book-list/book-list';
 import EpisodeList from 'components/episode-list/episode-list';
+import GenreBadge from 'components/genre-badge/genre-badge';
+import PublisherList from 'components/publisher-list/publisher-list';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Genre } from 'types/genre';
+import { Series } from 'types/series';
+import './series-details.scss';
 
 interface SeriesDetailsProps {
   series: Series;
@@ -64,6 +65,13 @@ const SeriesDetails = ({ series }: SeriesDetailsProps) => {
           )}
         </div>
       </div>
+
+      {series.publishers.length > 0 && (
+        <div className="mb-3">
+          <strong>Publishers</strong>
+          <PublisherList publishers={series.publishers} />
+        </div>
+      )}
 
       {series.books.length > 0 && (
         <div className="mb-3">

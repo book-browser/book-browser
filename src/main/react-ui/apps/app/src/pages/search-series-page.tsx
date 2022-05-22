@@ -91,6 +91,7 @@ const SearchSeriesPage = () => {
       setActiveQuery(params.query);
       setQuery(params.query);
     }
+
     if (params.genres !== selectedGenres.map((genre) => genre.name.toLocaleLowerCase())) {
       setSelectedGenres(
         params.genres.map((paramGenre) =>
@@ -121,7 +122,7 @@ const SearchSeriesPage = () => {
 
       <h2 className="mb-3">Search Series</h2>
 
-      <InputGroup className="mb-5">
+      <InputGroup className="mb-3">
         <FormControl
           size="lg"
           placeholder="Search..."
@@ -134,7 +135,7 @@ const SearchSeriesPage = () => {
         </Button>
       </InputGroup>
 
-      <h3 className="mb-4">Genres</h3>
+      <h3 className="mb-2">Genres</h3>
       <div className="d-flex flex-wrap mb-4">
         {data &&
           data.genres.map((genre) => (
@@ -153,8 +154,8 @@ const SearchSeriesPage = () => {
           ))}
       </div>
 
-      <h3 className="mb-4">Filter</h3>
-      <Form.Group controlId="sort-select">
+      <h3 className="mb-2">Filter</h3>
+      <Form.Group controlId="sort-select" className="mb-3">
         <Form.Label>Sort</Form.Label>
         <Form.Control
           as="select"

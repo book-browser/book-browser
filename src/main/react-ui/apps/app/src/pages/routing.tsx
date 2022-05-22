@@ -59,7 +59,7 @@ export const Routing = () => {
         <Route path="/coming-soon" element={<UpcomingBookPage />}></Route>
         <Route path="/home" element={<Navigate to="/" replace />}></Route>
         <Route path="/" element={<Homepage />}></Route>
-        <Route element={<NotFoundPage />}></Route>
+        <Route path="*" element={<NotFoundPage />}></Route>
       </Routes>
     </BrowserRouter>
   );

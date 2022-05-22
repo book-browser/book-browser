@@ -11,5 +11,6 @@ export const SERIES_EXAMPLE: Series = {
   links: [],
   books: [],
   creators: [],
+  publishers: [],
   episodes: []
 };

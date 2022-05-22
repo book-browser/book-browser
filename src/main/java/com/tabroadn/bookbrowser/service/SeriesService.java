@@ -231,7 +231,6 @@ public class SeriesService {
 
 		publisher.setParty(party);
 		publisher.setSeries(series);
-
 		return publisher;
 	}
 

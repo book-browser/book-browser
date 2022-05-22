@@ -182,3 +182,13 @@ databaseChangeLog:
         - sqlFile:
             path: changelog/scripts/23-tabroadn-create-series-publisher-table.sql
             relativeToChangelogFile: true
+    
+    - changeSet:
+        id: addTapasParty
+        author: Tariq Broadnax
+        changes:
+        - sqlFile:
+            path: changelog/scripts/24-tabroadn-add-tapas-party.sql
+            relativeToChangelogFile: true
+
+            

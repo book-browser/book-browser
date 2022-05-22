@@ -104,7 +104,6 @@ const SearchBar = ({ className }: { className?: string }) => {
         onChange={onChange}
         options={data ? [...data[0].items, ...data[1].items] : []}
         renderMenu={(results, menuProps) => {
-          console.log(menuProps);
           return (
             <Menu {...menuProps}>
               {data && data[0].items.length > 0 && (

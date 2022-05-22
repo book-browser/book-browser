@@ -72,7 +72,7 @@ const RecentBookPageContent = () => {
 
 const RecentBookPage = () => {
   return (
-    <Container maxWidth="md">
+    <Container maxWidth="lg">
       <Breadcrumb>
         <Breadcrumb.Item linkAs={Link} linkProps={{ to: '/home' }}>
           Home

@@ -28,6 +28,12 @@ const schema = yup.object().shape({
       role: yup.string().nullable()
     })
   ),
+  publishers: yup.array(
+    yup.object().shape({
+      fullName: yup.string().required().label('name'),
+      link: yup.string().nullable()
+    })
+  ),
   links: yup.array(
     yup.object().shape({
       url: yup.string().required().max(100).label('url'),
@@ -103,7 +109,6 @@ const SeriesForm = (props: SeriesFormProps) => {
         isValid,
         errors
       }) => {
-        console.log(values);
         return (
           <>
             <RequiredFieldLegend />
@@ -187,11 +192,27 @@ const SeriesForm = (props: SeriesFormProps) => {
                 name="creators"
                 value={values.creators}
                 touched={touched.creators}
-                errors={errors.creators}
+                errors={errors.creators as any}
                 onChange={(name, creators) => {
                   values.creators.length = 0;
                   values.creators.push.apply(values.creators, creators);
                   setFieldValue(name, values.creators);
+                }}
+                onBlur={setFieldTouched}
+              />
+            </Form.Group>
+            <hr className="mb-4" />
+            <Form.Group>
+              <Form.Label>Publishers</Form.Label>
+              <Form.PublishersField
+                name="publishers"
+                value={values.publishers}
+                touched={touched.publishers}
+                errors={errors.publishers as any}
+                onChange={(name, publishers) => {
+                  values.publishers.length = 0;
+                  values.publishers.push.apply(values.publishers, publishers);
+                  setFieldValue(name, values.publishers);
                 }}
                 onBlur={setFieldTouched}
               />

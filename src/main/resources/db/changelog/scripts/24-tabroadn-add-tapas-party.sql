@@ -1,0 +1,1 @@
+insert into party(full_name) values ('Tapas');

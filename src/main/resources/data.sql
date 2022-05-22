@@ -10,7 +10,7 @@ INSERT INTO authority (username, role)
   values ('admin', 'ROLE_USER');
 
 INSERT INTO party(id, full_name)
-  values (1, 'Cedric Caballes');
+  values (26, 'Cedric Caballes');
 
 INSERT INTO party(id, full_name)
   values (2, 'Niki Smith');
@@ -149,7 +149,7 @@ INSERT INTO book(id, title, description, thumbnail, release_date)
   values (20, 'Another Kind', 'Tucked away in a government facility nicknamed the Playroom, six not-quite-human kids learn to control their strange and unpredictable abilities. Life is good--or safe, at least--hidden from the prying eyes of a judgmental world. That is, until a security breach forces them out of their home and into the path of the Collector, a mysterious being with leech-like powers. Can the group band together to thwart the Collector''s devious plan, or will they wind up the newest addition to his collection?', FILE_READ('classpath:/images/another-kind.jpg'), '2025-10-26');
 
 INSERT INTO book_creator(book_id, party_id)
-  values (1, 1);
+  values (1, 26);
 
 INSERT INTO book_creator(book_id, party_id)
   values (2, 2);

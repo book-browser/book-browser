@@ -19,7 +19,7 @@ export declare type CreatorsFieldProps = {
   onBlur?: (name: string) => void;
 };
 
-export const CreatorsField = ({ name, value = [], touched, errors, onChange, onBlur }) => {
+export const CreatorsField = ({ name, value = [], touched, errors, onChange, onBlur }: CreatorsFieldProps) => {
   const [parties, setParties] = useState<Party[]>([]);
   const { data: referenceData } = useReferenceData();
   const { data: fetchedParties, execute } = useFindAllParties();
@@ -37,7 +37,7 @@ export const CreatorsField = ({ name, value = [], touched, errors, onChange, onB
     <Form.Group>
       {value.length > 0 && (
         <Row>
-          <Col xs={12} sm={7}>
+          <Col xs={12} sm={8}>
             <Form.Label htmlFor={`creator-0-name-select`}>
               Name
               <RequiredSymbol />
@@ -46,15 +46,15 @@ export const CreatorsField = ({ name, value = [], touched, errors, onChange, onB
           <Col xs={12} sm={3}>
             <Form.Label htmlFor={`creator-0-role-select`}>Role</Form.Label>
           </Col>
-          <Col xs={2} />
+          <Col xs={1} />
         </Row>
       )}
 
       {value.map((creator, index) => (
         <Row key={index} className="mb-2">
-          <Col xs={12} sm={7} className="mb-2 mb-sm-0">
+          <Col xs={12} sm={8} className="mb-2 mb-sm-0">
             <CreatableSelect
-              defaultValue={creator.fullName && { label: creator.fullName, value: creator.id }}
+              defaultValue={creator.fullName && { label: creator.fullName, value: creator.partyId }}
               inputId={`creator-${index}-name-select`}
               name={`${name}[${index}].fullName`}
               options={selectOptions}
@@ -64,13 +64,13 @@ export const CreatorsField = ({ name, value = [], touched, errors, onChange, onB
                 if (data.__isNew__) {
                   newCreator = {
                     ...creator,
-                    id: undefined,
+                    partyId: undefined,
                     fullName: data.label
                   };
                 } else {
                   newCreator = {
                     ...creator,
-                    id: data.value,
+                    partyId: data.value,
                     fullName: data.label
                   };
                 }
@@ -85,7 +85,6 @@ export const CreatorsField = ({ name, value = [], touched, errors, onChange, onB
               onBlur={() => {
                 setParties([]);
                 onBlur(`${name}[${index}].fullName`);
-                console.log('blur');
               }}
               styles={{
                 control: (styles) => ({
@@ -110,7 +109,6 @@ export const CreatorsField = ({ name, value = [], touched, errors, onChange, onB
               name={`${name}[${index}].role`}
               value={value[index]?.role || ''}
               onChange={(e) => {
-                console.log(roles, e.target.value);
                 const newCreator = {
                   ...creator,
                   role: e.target.value
@@ -131,7 +129,7 @@ export const CreatorsField = ({ name, value = [], touched, errors, onChange, onB
               ))}
             </Form.Select>
           </Col>
-          <Col xs={2}>
+          <Col xs={1}>
             <Button
               id={`remove-creator-${index}-button`}
               variant="danger"

@@ -12,9 +12,7 @@ const GenreBadge = ({ genre, variant = 'book' }: IGenreBadgeProps) => {
   return (
     <Badge
       as={Link}
-      to={`/${variant}/search?genres=${genre.name
-        .toLowerCase()
-        .replace(' ', '+')}`}
+      to={`/${variant}/search?genres=${genre.name.toLowerCase().replace(' ', '+')}`}
       className="border m-1"
     >
       {genre.name}

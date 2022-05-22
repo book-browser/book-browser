@@ -7,6 +7,7 @@ import DateControl from './date-control/date-control';
 import ImageControl from './image-control/image-control';
 import LinksField from './links-field/links-field';
 import MarkdownControl from './markdown-control/markdown-control';
+import PublishersField from './publishers-field/publishers-field';
 import SeriesControl from './series-control/series-control';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
@@ -56,5 +57,6 @@ Form.ImageControl = ImageControl;
 Form.SeriesControl = SeriesControl;
 Form.LinksField = LinksField;
 Form.CreatorsField = CreatorsField;
+Form.PublishersField = PublishersField;
 
 export default Form;

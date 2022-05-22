@@ -6,7 +6,6 @@ import { getFileBase64 } from 'utils/file-utils';
 import { handleResponse } from './response.service';
 
 export const save = async (series: Series) => {
-  console.log(series, JSON.stringify(mapSeriesToSeriesDto(series)));
   const response = await fetch('/api/series', {
     headers: {
       'Content-Type': 'application/json'
