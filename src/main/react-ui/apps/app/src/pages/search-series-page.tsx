@@ -1,4 +1,5 @@
 import { Container } from '@mui/material';
+import Pagination from 'components/pagination/pagination';
 import SeriesList from 'components/series-list/series-list';
 import { useReferenceData } from 'hooks/reference-data.hook';
 import { useFindAll } from 'hooks/series.hook';
@@ -15,6 +16,7 @@ declare type SearchSeriesPageParams = {
   query: string;
   genres: string[];
   sort: string;
+  page: number;
 };
 
 const readParams = (location: Location, referenceData: ReferenceData) => {
@@ -27,7 +29,12 @@ const readParams = (location: Location, referenceData: ReferenceData) => {
         test: (val) => genreNames.includes(val.toLocaleLowerCase())
       })
     ),
-    sort: yup.string().oneOf(['id', 'title', 'lastUpdated']).default('id')
+    sort: yup.string().oneOf(['id', 'title', 'lastUpdated']).default('id'),
+    page: yup
+      .number()
+      .min(0)
+      .transform((val) => val - 1)
+      .default(0)
   }) as yup.SchemaOf<SearchSeriesPageParams>;
 
   return parseParams(location, schema);
@@ -39,6 +46,7 @@ const SearchSeriesPage = () => {
   const navigate = useNavigate();
   const params = useMemo(() => readParams(location, data), [location, data]);
 
+  const [page, setPage] = useState(params.page);
   const [selectedGenres, setSelectedGenres] = useState<Genre[]>(
     params.genres.map((paramGenre) =>
       data.genres.find((genre) => genre.name.toLocaleLowerCase() === paramGenre.toLocaleLowerCase())
@@ -61,13 +69,15 @@ const SearchSeriesPage = () => {
     changeParams({ genres: newSelectedGenres });
   };
 
-  const changeParams = ({ genres, query: newQuery, sort }: { query?: string; genres?: Genre[]; sort?: string }) => {
+  const changeParams = (newParams: { query?: string; genres?: Genre[]; page?: number; sort?: string }) => {
     navigate(
       generateEncodedUrl('/series/search', {
-        query: newQuery || query || activeQuery,
-        genres: (genres ? genres : selectedGenres).map((genre) => genre.name.toLocaleLowerCase()),
-        sort: sort ? (sort !== 'id' ? sort : '') : activeSort
-      })
+        query: newParams.query || activeQuery,
+        genres: (newParams.genres || selectedGenres).map((selectedGenre) => selectedGenre.name.toLocaleLowerCase()),
+        page: (newParams.page !== undefined ? newParams.page : page) + 1,
+        sort: newParams.sort ? (newParams.sort !== 'id' ? newParams.sort : '') : activeSort
+      }),
+      { replace: true }
     );
   };
 
@@ -77,12 +87,18 @@ const SearchSeriesPage = () => {
     }
   };
 
+  const onPageChange = (newPage) => {
+    changeParams({ page: newPage });
+  };
+
   useEffect(() => {
     execute({
       query: activeQuery,
       genres: selectedGenres,
       sort: activeSort as keyof Series,
-      order: activeSort === 'lastUpdated' ? 'desc' : 'asc'
+      order: activeSort === 'lastUpdated' ? 'desc' : 'asc',
+      page,
+      limit: 18
     });
   }, [selectedGenres, activeQuery, activeSort, execute]);
 
@@ -101,6 +117,9 @@ const SearchSeriesPage = () => {
     }
     if (params.sort !== activeSort) {
       setActiveSort(params.sort);
+    }
+    if (params.page !== page) {
+      setPage(params.page);
     }
   }, [params]);
 
@@ -170,7 +189,12 @@ const SearchSeriesPage = () => {
       </Form.Group>
 
       <h3 className="mb-4">Results</h3>
-      {seriesList && <SeriesList seriesList={seriesList.items} />}
+      {seriesList && (
+        <div>
+          <SeriesList seriesList={seriesList.items} />
+          <Pagination page={page} totalPages={seriesList.totalPages} onPageChange={onPageChange} />
+        </div>
+      )}
     </Container>
   );
 };

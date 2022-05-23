@@ -54,11 +54,11 @@ const SearchBookPage = () => {
 
   const { data: books, execute } = useFindAllBooks();
 
-  const createNewUrl = (params: { query?: string; genres?: Genre[]; page?: number }) => {
+  const createNewUrl = (newParams: { query?: string; genres?: Genre[]; page?: number }) => {
     return generateEncodedUrl('/books/search', {
-      query: params.query || activeQuery,
-      genres: (params.genres || selectedGenres).map((selectedGenre) => selectedGenre.name.toLocaleLowerCase()),
-      page: (params.page !== undefined ? params.page : page) + 1
+      query: newParams.query || activeQuery,
+      genres: (newParams.genres || selectedGenres).map((selectedGenre) => selectedGenre.name.toLocaleLowerCase()),
+      page: (newParams.page !== undefined ? newParams.page : page) + 1
     });
   };
 
