@@ -9,13 +9,14 @@ import { findAll as findAllSeries } from 'services/series.service';
 import { Book } from 'types/book';
 import { Series } from 'types/series';
 import { generateEncodedUrl } from 'utils/location-utils';
+import Highlighter from 'react-highlight-words';
 import './search-bar.scss';
 
 const findAll = async (arg: { query: string; limit: number }) => {
-  return await Promise.all([findAllBooks(arg), findAllSeries(arg)]);
+  return Promise.all([findAllBooks(arg), findAllSeries(arg)]);
 };
 
-const BookSearchBarOption = ({ option, position }: { option: Book; position: number }) => {
+const BookSearchBarOption = ({ option, position, query }: { option: Book; position: number; query: string }) => {
   const newProps = useItem({ option, position });
   const props = {
     ...newProps,
@@ -26,7 +27,9 @@ const BookSearchBarOption = ({ option, position }: { option: Book; position: num
     <Link to={`/book/${option.id}`} className={`dropdown-item ${newProps.active ? 'active' : ''}`} {...props}>
       <div className="search-option">
         <img className="search-option-thumbnail" src={`/api/book/${option.id}/thumbnail`} />
-        <div>{option.title}</div>
+        <div className="text-truncate">
+          <Highlighter searchWords={[query]} textToHighlight={option.title} highlightTag="strong" />
+        </div>
       </div>
     </Link>
   );
@@ -110,7 +113,7 @@ const SearchBar = ({ className }: { className?: string }) => {
                 <div className="search-bar-result-header">
                   Books{' '}
                   <Link
-                    className="float-right"
+                    className="float-end"
                     to={generateEncodedUrl('/books/search', { query: text })}
                     onClick={() => ref.current.clear()}
                   >
@@ -121,12 +124,14 @@ const SearchBar = ({ className }: { className?: string }) => {
               {data &&
                 results
                   .slice(0, data[0].items.length)
-                  .map((result, index) => <BookSearchBarOption key={index} option={result as Book} position={index} />)}
+                  .map((result, index) => (
+                    <BookSearchBarOption key={index} option={result as Book} position={index} query={text} />
+                  ))}
               {data && data[1].items.length > 0 && (
                 <div className="search-bar-result-header">
                   Series{' '}
                   <Link
-                    className="float-right"
+                    className="float-end"
                     to={generateEncodedUrl('/series/search', { query: text })}
                     onClick={() => ref.current.clear()}
                   >

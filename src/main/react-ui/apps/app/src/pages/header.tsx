@@ -121,7 +121,7 @@ const Header = () => {
           onClose={() => setVerificationAlertVisible(false)}
         >
           Unverified account. Please check your email for a verification email.
-          <Link to="/verify/resend" className="float-right">
+          <Link to="/verify/resend" className="float-end">
             Resend Email
           </Link>
         </Alert>
