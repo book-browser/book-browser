@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Button, InputGroup } from 'react-bootstrap';
 import { AsyncTypeahead, Menu, useItem } from 'react-bootstrap-typeahead';
 import { Link, useNavigate } from 'react-router-dom';
-import { findAll as findAllBooks } from 'services/book.service';
+import { findAllBooks } from 'services/book.service';
 import { findAll as findAllSeries } from 'services/series.service';
 import { Book } from 'types/book';
 import { Series } from 'types/series';

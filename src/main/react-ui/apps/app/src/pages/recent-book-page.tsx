@@ -1,7 +1,7 @@
 import { Container } from '@mui/material';
 import { ErrorAlert } from 'components/error/error-alert';
 import Loading from 'components/loading/loading';
-import { useFindAll } from 'hooks/book.hook';
+import { useFindAllBooks } from 'hooks/book.hook';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Breadcrumb } from 'react-bootstrap';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
@@ -31,7 +31,7 @@ const readParams = (location: Location, referenceData: ReferenceData) => {
 
 const RecentBookPageContent = () => {
   const { data: referenceData } = useReferenceData();
-  const { data: books, loading, error, execute: findAll } = useFindAll();
+  const { data: books, loading, error, execute: findAll } = useFindAllBooks();
   const navigate = useNavigate();
   const location = useLocation();
   const params = useMemo(() => readParams(location, referenceData), [location, referenceData]);

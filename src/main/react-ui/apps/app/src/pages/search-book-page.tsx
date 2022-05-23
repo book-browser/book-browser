@@ -1,19 +1,20 @@
 import { Container } from '@mui/material';
-import BookCard from 'components/book-card/book-card';
-import { useSearch } from 'hooks/book.hook';
+import { useFindAllBooks } from 'hooks/book.hook';
 import { useReferenceData } from 'hooks/reference-data.hook';
 import React, { useEffect, useMemo, useState, KeyboardEvent } from 'react';
 import { Breadcrumb, Button, ButtonGroup, FormControl, InputGroup, ToggleButton } from 'react-bootstrap';
 import { useLocation, useNavigate, Link, Location } from 'react-router-dom';
 import { Genre } from 'types/genre';
 import * as yup from 'yup';
-import { parseParams } from 'utils/location-utils';
+import { generateEncodedUrl, parseParams } from 'utils/location-utils';
 import { ReferenceData } from 'types/reference-data';
 import BookList from 'components/book-list/book-list';
+import Pagination from 'components/pagination/pagination';
 
 declare type SearchBookPageParams = {
   query: string;
   genres: string[];
+  page: number;
 };
 
 const readParams = (location: Location, referenceData: ReferenceData) => {
@@ -25,7 +26,12 @@ const readParams = (location: Location, referenceData: ReferenceData) => {
       yup.string().test({
         test: (val) => genreNames.includes(val.toLocaleLowerCase())
       })
-    )
+    ),
+    page: yup
+      .number()
+      .min(0)
+      .transform((val) => val - 1)
+      .default(0)
   }) as yup.SchemaOf<SearchBookPageParams>;
 
   return parseParams(location, schema);
@@ -37,6 +43,7 @@ const SearchBookPage = () => {
   const navigate = useNavigate();
   const params = useMemo(() => readParams(location, data), [location, data]);
 
+  const [page, setPage] = useState(params.page);
   const [selectedGenres, setSelectedGenres] = useState<Genre[]>(
     params.genres.map((paramGenre) =>
       data.genres.find((genre) => genre.name.toLocaleLowerCase() === paramGenre.toLocaleLowerCase())
@@ -45,17 +52,14 @@ const SearchBookPage = () => {
   const [query, setQuery] = useState(params.query);
   const [activeQuery, setActiveQuery] = useState(params.query);
 
-  const { data: books, execute } = useSearch();
+  const { data: books, execute } = useFindAllBooks();
 
-  const createNewUrl = (newQuery, newGenres) => {
-    let url = '/books/search?';
-    if (query.length > 0) {
-      url = `${url}query=${newQuery}&`;
-    }
-    if (newGenres.length > 0) {
-      newGenres.forEach((selectedGenre) => (url = `${url}genres=${selectedGenre.name.toLocaleLowerCase()}&`));
-    }
-    return url.substring(0, url.length - 1);
+  const createNewUrl = (params: { query?: string; genres?: Genre[]; page?: number }) => {
+    return generateEncodedUrl('/books/search', {
+      query: params.query || activeQuery,
+      genres: (params.genres || selectedGenres).map((selectedGenre) => selectedGenre.name.toLocaleLowerCase()),
+      page: (params.page !== undefined ? params.page : page) + 1
+    });
   };
 
   const toggleGenre = (genre: Genre) => {
@@ -67,11 +71,15 @@ const SearchBookPage = () => {
       newSelectedGenres.push(genre);
     }
     setQuery(activeQuery);
-    navigate(createNewUrl(activeQuery, newSelectedGenres), { replace: true });
+    navigate(createNewUrl({ genres: newSelectedGenres }), { replace: true });
   };
 
   const search = () => {
-    navigate(createNewUrl(query, selectedGenres));
+    navigate(createNewUrl({ query }));
+  };
+
+  const onPageChange = (newPage) => {
+    navigate(createNewUrl({ page: newPage }), { replace: true });
   };
 
   const onKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -81,8 +89,8 @@ const SearchBookPage = () => {
   };
 
   useEffect(() => {
-    execute({ query: activeQuery, genres: selectedGenres });
-  }, [selectedGenres, activeQuery, execute]);
+    execute({ query: activeQuery, genres: selectedGenres, page, limit: 18 });
+  }, [selectedGenres, activeQuery, page, execute]);
 
   useEffect(() => {
     if (params.query !== activeQuery) {
@@ -95,6 +103,9 @@ const SearchBookPage = () => {
           data.genres.find((genre) => genre.name.toLocaleLowerCase() === paramGenre.toLocaleLowerCase())
         )
       );
+    }
+    if (params.page !== page) {
+      setPage(params.page);
     }
   }, [params]);
 
@@ -149,7 +160,12 @@ const SearchBookPage = () => {
       </div>
 
       <h3 className="mb-4">Results</h3>
-      {books && <BookList books={books} />}
+      {books && (
+        <div>
+          <BookList books={books.items} />
+          <Pagination page={page} totalPages={books.totalPages} onPageChange={onPageChange} />
+        </div>
+      )}
     </Container>
   );
 };

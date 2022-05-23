@@ -1,7 +1,7 @@
 import { Container } from '@mui/material';
 import { ErrorAlert } from 'components/error/error-alert';
 import Loading from 'components/loading/loading';
-import { useFindAll } from 'hooks/book.hook';
+import { useFindAllBooks } from 'hooks/book.hook';
 import React, { useEffect, useState } from 'react';
 import { Breadcrumb } from 'react-bootstrap';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
@@ -34,7 +34,7 @@ const UpcomingBookPageContent = () => {
   const paramPage = parsePageParam(params.page);
 
   const [page, setPage] = useState(paramPage);
-  const { loading, data, error, execute } = useFindAll();
+  const { loading, data, error, execute } = useFindAllBooks();
 
   const changePage = (newPage) => {
     navigate(`/coming-soon${newPage > 0 ? `?page=${newPage + 1}` : ''}`);

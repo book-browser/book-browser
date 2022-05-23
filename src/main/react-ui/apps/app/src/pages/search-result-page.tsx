@@ -1,7 +1,7 @@
 import { Container } from '@mui/material';
 import BookList from 'components/book-list/book-list';
 import SeriesList from 'components/series-list/series-list';
-import { useFindAll as useFindAllBooks } from 'hooks/book.hook';
+import { useFindAllBooks } from 'hooks/book.hook';
 import { useFindAll as useFindAllSeries } from 'hooks/series.hook';
 import React, { KeyboardEvent, useEffect, useState } from 'react';
 import { Breadcrumb, Button, FormControl, InputGroup } from 'react-bootstrap';

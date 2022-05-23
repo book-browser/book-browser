@@ -3,15 +3,15 @@ import BookList from 'components/book-list/book-list';
 import { ErrorAlert } from 'components/error/error-alert';
 import Loading from 'components/loading/loading';
 import Pagination from 'components/pagination/pagination';
-import { useFindAll } from 'hooks/book.hook';
+import { Location } from 'history';
+import { useFindAllBooks } from 'hooks/book.hook';
 import { useReferenceData } from 'hooks/reference-data.hook';
 import React, { useEffect, useMemo, useState } from 'react';
-import { Breadcrumb, Button, ToggleButton } from 'react-bootstrap';
-import * as yup from 'yup';
-import { parseParams } from 'utils/location-utils';
-import { useLocation, useNavigate, Link } from 'react-router-dom';
+import { Breadcrumb, ToggleButton } from 'react-bootstrap';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ReferenceData } from 'types/reference-data';
-import { Location } from 'history';
+import { parseParams } from 'utils/location-utils';
+import * as yup from 'yup';
 
 declare type BookListPageParams = {
   page: number;
@@ -42,7 +42,7 @@ const BookListPageContent = () => {
   const [page, setPage] = useState(params.page);
   const [letter, setLetter] = useState(params.letter);
 
-  const { data: books, loading, error, execute: findAll } = useFindAll();
+  const { data: books, loading, error, execute: findAll } = useFindAllBooks();
 
   const onPageChange = (newPage) => {
     navigate(`/books${newPage > 0 ? `?page=${newPage + 1}` : ''}`);

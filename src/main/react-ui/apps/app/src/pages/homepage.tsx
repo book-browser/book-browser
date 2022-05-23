@@ -6,7 +6,7 @@ import SeriesList from 'components/series-list/series-list';
 import { useEmptyPromise } from 'hooks/promise.hook';
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { findAll as findAllBooks } from 'services/book.service';
+import { findAllBooks } from 'services/book.service';
 import { findAll as findAllSeries } from 'services/series.service';
 
 const loadData = () => {
