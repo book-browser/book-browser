@@ -1,9 +1,7 @@
 import React, { ReactNode } from 'react';
 import Message from '../message';
 
-const VerificationLinkResent = ({ children}: {
-  children?: ReactNode
-}) => {
+const VerificationLinkResent = ({ children }: { children?: ReactNode }) => {
   return (
     <Message
       variant="info"
@@ -13,6 +11,6 @@ const VerificationLinkResent = ({ children}: {
       {children}
     </Message>
   );
-}
+};
 
 export default VerificationLinkResent;

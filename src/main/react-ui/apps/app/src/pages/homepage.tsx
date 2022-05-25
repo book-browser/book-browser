@@ -23,7 +23,7 @@ const HomepageContent = () => {
 
   useEffect(() => {
     execute();
-  }, []);
+  }, [execute]);
 
   useEffect(() => {
     document.title = 'Home | BookBrowser';

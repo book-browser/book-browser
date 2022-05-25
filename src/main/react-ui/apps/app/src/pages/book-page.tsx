@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Container } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import { BookDetails } from 'components/book-details/book-details';
@@ -29,11 +30,9 @@ const BookPageHeader = ({ book }: { book: Book }) => {
           </>
         )}
         {!book.seriesId && (
-          <>
-            <Breadcrumb.Item linkAs={Link} linkProps={{ to: '/books' }}>
-              Books
-            </Breadcrumb.Item>
-          </>
+          <Breadcrumb.Item linkAs={Link} linkProps={{ to: '/books' }}>
+            Books
+          </Breadcrumb.Item>
         )}
 
         <Breadcrumb.Item active>{book.title}</Breadcrumb.Item>
@@ -53,7 +52,7 @@ const BookPageContent = () => {
 
   useEffect(() => {
     execute(Number(id));
-  }, [id]);
+  }, [id, execute]);
 
   useEffect(() => {
     if (book) {

@@ -6,11 +6,11 @@ import { NotFound } from './not-found';
 export default { title: 'Messages/Not Found' };
 
 export const NotFoundExample = () => {
-	return (
-		<Container>
-			<Card>
-				<NotFound />
-			</Card>
-		</Container>
-	);
+  return (
+    <Container>
+      <Card>
+        <NotFound />
+      </Card>
+    </Container>
+  );
 };

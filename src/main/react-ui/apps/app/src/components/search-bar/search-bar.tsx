@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import SearchIcon from '@mui/icons-material/Search';
 import { usePromise } from 'hooks/promise.hook';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
@@ -26,7 +27,7 @@ const BookSearchBarOption = ({ option, position, query }: { option: Book; positi
   return (
     <Link to={`/book/${option.id}`} className={`dropdown-item ${newProps.active ? 'active' : ''}`} {...props}>
       <div className="search-option">
-        <img className="search-option-thumbnail" src={`/api/book/${option.id}/thumbnail`} />
+        <img className="search-option-thumbnail" src={`/api/book/${option.id}/thumbnail`} alt="search thumbnail" />
         <div className="text-truncate">
           <Highlighter searchWords={[query]} textToHighlight={option.title} highlightTag="strong" />
         </div>
@@ -34,8 +35,6 @@ const BookSearchBarOption = ({ option, position, query }: { option: Book; positi
     </Link>
   );
 };
-
-declare type Content = Book | Series;
 
 const SeriesSearchBarOption = ({ option, position }: { option: Series; position: number }) => {
   const newProps = useItem({ option, position });
@@ -47,7 +46,7 @@ const SeriesSearchBarOption = ({ option, position }: { option: Series; position:
   return (
     <Link to={`/series/${option.id}`} className={`dropdown-item ${newProps.active ? 'active' : ''}`} {...props}>
       <div className="search-option">
-        <img className="search-option-thumbnail" src={`/api/series/${option.id}/thumbnail`} />
+        <img className="search-option-thumbnail" src={`/api/series/${option.id}/thumbnail`} alt="search thumbnail" />
         <div>{option.title}</div>
       </div>
     </Link>
@@ -65,7 +64,7 @@ const SearchBar = ({ className }: { className?: string }) => {
 
   const onKeyDown = (event: KeyboardEvent) => {
     if (event.key === 'Enter') {
-      if (activeIndex != -1) {
+      if (activeIndex !== -1) {
         if (activeIndex < data[0].items.length) {
           navigate(`/book/${data[0].items[activeIndex].id}`);
         } else {
@@ -80,8 +79,8 @@ const SearchBar = ({ className }: { className?: string }) => {
     }
   };
 
-  const onInputChange = (text: string) => {
-    setText(text);
+  const onInputChange = (newText: string) => {
+    setText(newText);
   };
 
   const onChange = () => {
@@ -100,7 +99,7 @@ const SearchBar = ({ className }: { className?: string }) => {
         id="search-bar"
         isLoading={loading}
         labelKey={() => text}
-        onSearch={useCallback((query) => execute({ query, limit: 4 }), [])}
+        onSearch={useCallback((query) => execute({ query, limit: 4 }), [execute])}
         onFocus={onFocus}
         onKeyDown={onKeyDown}
         onInputChange={onInputChange}

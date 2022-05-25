@@ -4,17 +4,17 @@ import { Button, Card } from 'react-bootstrap';
 import { RegisterRequest } from 'types/register-request';
 import RegisterForm from './register-form';
 
-export default { title: 'Forms/Register Form' }
+export default { title: 'Forms/Register Form' };
 
 export const Example = () => {
   const [valid, setValid] = useState(false);
 
   const onChange = (_data: RegisterRequest, valid: boolean) => {
     setValid(valid);
-  }
+  };
 
   const onSubmit = (data: RegisterRequest) => {
-    window.alert(`Registering: ${JSON.stringify(data)}`)
+    window.alert(`Registering: ${JSON.stringify(data)}`);
   };
 
   return (
@@ -26,7 +26,9 @@ export const Example = () => {
             onSubmit={onSubmit}
             footer={
               <div>
-                <Button variant="primary" type="submit" disabled={!valid}>Register</Button>
+                <Button variant="primary" type="submit" disabled={!valid}>
+                  Register
+                </Button>
               </div>
             }
           />
@@ -34,4 +36,4 @@ export const Example = () => {
       </Card>
     </Container>
   );
-}
+};

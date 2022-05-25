@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import DeleteIcon from '@mui/icons-material/Delete';
 import { debounce } from 'debounce';
 import { Formik, FormikErrors } from 'formik';
@@ -25,8 +26,8 @@ const schema = yup.object().shape({
   releaseDate: yup.date().nullable(),
   thumbnail: yup
     .mixed()
-    .when('id', (id, schema) => {
-      return id ? schema : schema.required();
+    .when('id', (id, thumbnailSchema) => {
+      return id ? thumbnailSchema : thumbnailSchema.required();
     })
     .test('fileSize', 'The file is too large', (file?: File) => {
       return !(file && file.size > 1024 * 1024);
@@ -70,6 +71,7 @@ const convertGenreToSelectOptions = (genres: Genre[]) => {
 
 export const BookForm = (props: BookFormProps) => {
   const [value, setValue] = useState<Book>(props.initialValue || defaultBook);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [thumbnailFile, setThumbnailFile] = useState<File>();
   const [thumbnailUrl, setThumbnailUrl] = useState<string>();
 
@@ -120,6 +122,7 @@ export const BookForm = (props: BookFormProps) => {
         isValid,
         errors
       }) => {
+        // eslint-disable-next-line react-hooks/rules-of-hooks
         useEffect(() => {
           if (values !== actualValue) {
             setValue(values);
@@ -127,7 +130,7 @@ export const BookForm = (props: BookFormProps) => {
               props.onChange(values, isValid);
             }
           }
-        }, [values]);
+        }, [values, isValid]);
         return (
           <Form className="mb-3" noValidate onSubmit={handleSubmit}>
             <h4 className="mb-3">General Information</h4>
@@ -216,7 +219,7 @@ export const BookForm = (props: BookFormProps) => {
                 </Col>
               </Row>
 
-              {thumbnailUrl && <img src={thumbnailUrl} className="mt-3" style={{ maxWidth: '100%' }} />}
+              {thumbnailUrl && <img src={thumbnailUrl} className="mt-3" style={{ maxWidth: '100%' }} alt="thumbnail" />}
             </Form.Group>
             <Form.Group controlId="genre-select" className="mb-3">
               <Form.Label>Genres</Form.Label>

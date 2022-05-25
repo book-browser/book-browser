@@ -56,6 +56,7 @@ const AddBookForm = ({
 
 export const CreateBookPage = () => {
   const { execute, data: book, loading, error } = useSaveBook();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [saved, setSaved] = useState(true);
 
   const onChange = () => {

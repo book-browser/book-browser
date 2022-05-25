@@ -1,13 +1,12 @@
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { Formik } from 'formik';
-import React, { ReactNode, useState } from 'react';
-import { Button, Col, Form, FormControl, InputGroup, Spinner } from 'react-bootstrap';
+import React, { ReactNode, useEffect, useState } from 'react';
+import { Button, Form, InputGroup } from 'react-bootstrap';
 import { LoginRequest } from 'types/login-request';
 import * as yup from 'yup';
 import { RequiredFieldLegend } from '../required-field-legend';
 import { RequiredSymbol } from '../required-symbol';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import { useEffect } from 'react';
 
 interface LoginFormProps {
   onSubmit?: (loginRequest: LoginRequest) => void;
@@ -42,11 +41,12 @@ const LoginForm = ({ onSubmit, onChange, footer }: LoginFormProps) => {
         isValid,
         errors
       }) => {
+        // eslint-disable-next-line react-hooks/rules-of-hooks
         useEffect(() => {
           if (values !== initialValues) {
             onChange(values, isValid);
           }
-        }, [values]);
+        }, [values, isValid]);
 
         return (
           <Form noValidate onSubmit={handleSubmit}>

@@ -5,7 +5,7 @@ import { Location } from 'react-router-dom';
 export declare type ParamType = Record<string, string | string[] | number | number[]>;
 
 export const parseParams = <E extends ParamType>(location: Location, schema: yup.SchemaOf<E>) => {
-  const params: any = parse(location.search, { parseNumbers: true, parseBooleans: true });
+  const params: unknown = parse(location.search, { parseNumbers: true, parseBooleans: true });
   Object.entries(schema.fields).forEach(([fieldName, field]) => {
     if (field.type === 'array') {
       if (!params[fieldName]) {

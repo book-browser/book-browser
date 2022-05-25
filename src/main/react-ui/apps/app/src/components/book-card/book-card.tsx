@@ -5,19 +5,17 @@ import { Book } from 'types/book';
 import './book-card.scss';
 
 export interface IBookCardProps {
-  book: Book
+  book: Book;
 }
 
-const BookCard = ({
-  book
-}: IBookCardProps) => {
+const BookCard = ({ book }: IBookCardProps) => {
   return (
     <Card className="book-card">
       <Card.Thumbnail>
-        <ImgLink to={`/book/${book.id}`} imgProps={{alt: "thumbnail", src: `/api/book/${book.id}/thumbnail`}}/>
+        <ImgLink to={`/book/${book.id}`} imgProps={{ alt: 'thumbnail', src: `/api/book/${book.id}/thumbnail` }} />
       </Card.Thumbnail>
     </Card>
   );
-}
+};
 
 export default BookCard;

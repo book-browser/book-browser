@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable prefer-spread */
 import { debounce } from 'debounce';
 import { useSearch } from 'hooks/book.hook';

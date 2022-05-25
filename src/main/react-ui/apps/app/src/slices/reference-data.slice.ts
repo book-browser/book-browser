@@ -1,23 +1,20 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { handleResponse } from "services/response.service";
-import { ReferenceData } from "types/reference-data";
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { handleResponse } from 'services/response.service';
+import { ReferenceData } from 'types/reference-data';
 
-export const fetchReferenceData = createAsyncThunk(
-  'referenceData/fetchReferenceData',
-  async (arg, thunkApi) => {
-    try {
-      const response = await fetch('/api/reference-data');
-      return await handleResponse<ReferenceData>(response);
-    } catch (e) {
-      thunkApi.rejectWithValue(e);
-    }
+export const fetchReferenceData = createAsyncThunk('referenceData/fetchReferenceData', async (arg, thunkApi) => {
+  try {
+    const response = await fetch('/api/reference-data');
+    return await handleResponse<ReferenceData>(response);
+  } catch (e) {
+    thunkApi.rejectWithValue(e);
   }
-)
+});
 
 interface ReferenceDataState {
-  data?: ReferenceData
-  loading: boolean,
-  error?: Error 
+  data?: ReferenceData;
+  loading: boolean;
+  error?: Error;
 }
 
 export const referenceDataSlice = createSlice({
@@ -25,12 +22,10 @@ export const referenceDataSlice = createSlice({
   initialState: {
     data: null,
     loading: false,
-    error: null,
+    error: null
   } as ReferenceDataState,
-  reducers: {
-
-  },
-  extraReducers: builder => {
+  reducers: {},
+  extraReducers: (builder) => {
     builder.addCase(fetchReferenceData.pending, (state, action) => {
       state.data = null;
       state.loading = true;

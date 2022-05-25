@@ -11,28 +11,28 @@ import { ApiError } from 'types/api-error';
 const VerifyUserPage = () => {
   const { token } = useParams();
   const { execute, loading, executed, error } = useConfirmRegistration();
-  const apiError = error?.name === 'ApiError' && error as ApiError;
-  
+  const apiError = error?.name === 'ApiError' && (error as ApiError);
+
   useEffect(() => {
     document.title = 'Verify User | BookBrowser';
   }, []);
 
   useEffect(() => {
     execute(token);
-  }, []);
+  }, [execute, token]);
 
   if (!executed) {
     return null;
   } else if (loading) {
-    return <Loading />
+    return <Loading />;
   } else if (!error) {
-    return <UserVerified />
+    return <UserVerified />;
   } else if (apiError?.status === 404) {
     return <NotFound />;
   } else if (apiError?.status === 400) {
     return <VerificationLinkExpired />;
   } else {
-    return <SomethingWentWrong error={error} />
+    return <SomethingWentWrong error={error} />;
   }
 };
 

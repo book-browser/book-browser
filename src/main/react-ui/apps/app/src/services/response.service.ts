@@ -1,15 +1,14 @@
-import { ApiError } from "types/api-error";
-
+/* eslint-disable no-throw-literal */
 export const handleResponse = async <T>(response: Response) => {
   if (response.ok) {
-    return await response.json() as T;
+    return (await response.json()) as T;
   } else {
     const text = await response.text();
     if (text.length > 0) {
       throw {
         name: 'ApiError',
-        ...JSON.parse(text),
-       };
+        ...JSON.parse(text)
+      };
     }
     throw {
       name: 'ApiError',
@@ -18,10 +17,10 @@ export const handleResponse = async <T>(response: Response) => {
       message: 'The server could not be reached',
       httpError: response.statusText,
       path: response.url,
-      errors: [],
+      errors: []
     };
   }
-}
+};
 
 export const handleEmptyResponse = async (response: Response) => {
   if (response.ok) {
@@ -31,8 +30,8 @@ export const handleEmptyResponse = async (response: Response) => {
     if (text.length > 0) {
       throw {
         name: 'ApiError',
-        ...JSON.parse(text),
-       };
+        ...JSON.parse(text)
+      };
     }
     throw {
       name: 'ApiError',
@@ -41,22 +40,22 @@ export const handleEmptyResponse = async (response: Response) => {
       message: 'The server could not be reached',
       httpError: response.statusText,
       path: response.url,
-      errors: [],
+      errors: []
     };
   }
-}
+};
 
 export const handleTextResponse = async <T>(response: Response) => {
   if (response.ok) {
-    const text = await response.text(); 
-    return text.length ? JSON.parse(text) as T : null;
+    const text = await response.text();
+    return text.length ? (JSON.parse(text) as T) : null;
   } else {
     const text = await response.text();
     if (text.length > 0) {
       throw {
         name: 'ApiError',
-        ...JSON.parse(text),
-       };
+        ...JSON.parse(text)
+      };
     }
     throw {
       name: 'ApiError',
@@ -65,7 +64,7 @@ export const handleTextResponse = async <T>(response: Response) => {
       message: 'The server could not be reached',
       httpError: response.statusText,
       path: response.url,
-      errors: [],
+      errors: []
     };
   }
-}
+};

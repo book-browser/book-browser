@@ -1,5 +1,5 @@
-import { findAll, getById, save } from "services/series.service";
-import { usePromise } from "./promise.hook";
+import { findAll, getById, save } from 'services/series.service';
+import { usePromise } from './promise.hook';
 
 export const useSave = () => usePromise(save);
 

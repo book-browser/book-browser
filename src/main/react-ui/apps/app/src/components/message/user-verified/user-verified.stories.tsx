@@ -4,7 +4,7 @@ import { Card } from 'react-bootstrap';
 import { BrowserRouter } from 'react-router-dom';
 import UserVerified from './user-verified';
 
-export default { title: 'Messages/User Verify Success' }
+export default { title: 'Messages/User Verify Success' };
 
 export const Example = () => {
   return (
@@ -15,5 +15,5 @@ export const Example = () => {
         </Card>
       </Container>
     </BrowserRouter>
-  )
-}
+  );
+};

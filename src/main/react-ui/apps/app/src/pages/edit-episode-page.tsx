@@ -11,6 +11,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ApiError } from 'types/api-error';
 import { Episode } from 'types/episode';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const UNSAVED_MESSAGE = 'Are you sure that you want to leave with unsaved changes?';
 
 export const EditEpisodePage = () => {

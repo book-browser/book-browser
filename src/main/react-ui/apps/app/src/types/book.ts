@@ -2,7 +2,7 @@ import { Link } from './link';
 import { Genre } from './genre';
 import { Creator } from './creator';
 
-export interface Book {
+export declare type Book = {
   id: number;
   title: string;
   description: string;
@@ -13,4 +13,4 @@ export interface Book {
   genres: Genre[];
   creators: Creator[];
   links: Link[];
-}
+};

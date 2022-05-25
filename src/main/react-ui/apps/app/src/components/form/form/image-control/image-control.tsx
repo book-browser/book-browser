@@ -56,6 +56,7 @@ export const ImageControl = ({
       setCurrentValue(value);
       setImageUrl(getDefaultImageUrl(defaultValue, value));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
   const className = classNames({ 'is-invalid': isInvalid });
@@ -104,7 +105,7 @@ export const ImageControl = ({
             disabled={!(defaultValue && value !== undefined && value !== defaultValue)}
             onClick={() => {
               setCurrentValue(undefined);
-              setImageUrl(getDefaultImageUrl(defaultValue, undefined));
+              setImageUrl(getDefaultImageUrl(defaultValue));
               inputRef.current.value = null;
               onChange(name, undefined);
             }}
@@ -114,7 +115,7 @@ export const ImageControl = ({
         </Col>
       </Row>
 
-      {imageUrl && <img src={imageUrl} alt="image" className="image-control-src" />}
+      {imageUrl && <img src={imageUrl} alt={name} className="image-control-src" />}
     </div>
   );
 };

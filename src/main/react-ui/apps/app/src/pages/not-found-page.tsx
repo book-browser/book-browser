@@ -11,7 +11,7 @@ const NotFoundPage = () => {
     <Container maxWidth="sm" className="mt-3">
       <NotFound />
     </Container>
-  )
+  );
 };
 
 export default NotFoundPage;

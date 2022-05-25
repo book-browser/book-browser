@@ -10,6 +10,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ApiError } from 'types/api-error';
 import { Series } from 'types/series';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const UNSAVED_MESSAGE = 'Are you sure that you want to leave with unsaved changes?';
 
 const EditSeriesPageContent = () => {
@@ -36,7 +37,7 @@ const EditSeriesPageContent = () => {
   };
 
   const cancel = () => {
-    navigate(`/series/${series!.id}`);
+    navigate(`/series/${series.id}`);
   };
 
   useEffect(() => {
@@ -45,11 +46,11 @@ const EditSeriesPageContent = () => {
     } else {
       document.title = 'Edit | SeriesBrowser';
     }
-  }, [series, saved]);
+  }, [series, savedSeries, loadedSeries, saved]);
 
   useEffect(() => {
     load(Number(id));
-  }, [id]);
+  }, [id, load]);
 
   useEffect(() => {
     if (loadedSeries) {
@@ -83,7 +84,7 @@ const EditSeriesPageContent = () => {
           <Breadcrumb.Item linkAs={Link} linkProps={{ to: '/series' }}>
             Series
           </Breadcrumb.Item>
-          <Breadcrumb.Item linkAs={Link} linkProps={{ to: `/series/${series!.id}` }}>
+          <Breadcrumb.Item linkAs={Link} linkProps={{ to: `/series/${series.id}` }}>
             {(savedSeries || loadedSeries)?.title}
           </Breadcrumb.Item>
           <Breadcrumb.Item active>Edit</Breadcrumb.Item>
@@ -103,24 +104,22 @@ const EditSeriesPageContent = () => {
                   Changes successfully saved
                 </Alert>
               )}
-              <>
-                <div className="d-flex">
-                  <Button className="me-2" variant="secondary" disabled={savingSeries} onClick={cancel}>
-                    Cancel
-                  </Button>
-                  <Button className="me-auto" variant="secondary" disabled={savingSeries} onClick={reset}>
-                    Reset
-                  </Button>
-                  <Button variant="primary" type="submit" disabled={savingSeries}>
-                    {!savingSeries && <span>Save</span>}
-                    {savingSeries && (
-                      <span>
-                        Saving <CircularProgress color="secondary" size={'15px'} />
-                      </span>
-                    )}
-                  </Button>
-                </div>
-              </>
+              <div className="d-flex">
+                <Button className="me-2" variant="secondary" disabled={savingSeries} onClick={cancel}>
+                  Cancel
+                </Button>
+                <Button className="me-auto" variant="secondary" disabled={savingSeries} onClick={reset}>
+                  Reset
+                </Button>
+                <Button variant="primary" type="submit" disabled={savingSeries}>
+                  {!savingSeries && <span>Save</span>}
+                  {savingSeries && (
+                    <span>
+                      Saving <CircularProgress color="secondary" size={'15px'} />
+                    </span>
+                  )}
+                </Button>
+              </div>
             </div>
           }
         />

@@ -4,6 +4,10 @@ import { Letter } from 'types/letter';
 import { mapPageItems, Page } from 'types/page';
 import { handleResponse } from './response.service';
 
+declare type BookDto = Book & {
+  releaseDate?: string;
+};
+
 export const saveBook = async (book: Book) => {
   const response = await fetch('/api/book', {
     headers: {
@@ -48,7 +52,7 @@ export const search = async ({
   }
 
   const response = await fetch('/api/books/search?' + params.toString());
-  return (await handleResponse<any[]>(response)).map(convertBookResponseToBook);
+  return (await handleResponse<BookDto[]>(response)).map(convertBookResponseToBook);
 };
 
 export const findAllBooks = async ({
@@ -103,10 +107,10 @@ export const findAllBooks = async ({
   }
 
   const response = await fetch('/api/books?' + params.toString());
-  return mapPageItems(await handleResponse<Page<any>>(response), convertBookResponseToBook);
+  return mapPageItems(await handleResponse<Page<BookDto>>(response), convertBookResponseToBook);
 };
 
-const convertBookResponseToBook = (data: any) => {
+const convertBookResponseToBook = (data: BookDto) => {
   return {
     ...data,
     releaseDate: data.releaseDate && new Date(data.releaseDate)

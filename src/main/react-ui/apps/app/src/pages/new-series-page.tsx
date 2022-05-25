@@ -75,6 +75,7 @@ const SuccessMessage = ({ series }: { series: Series }) => {
 
 const NewSeriesPageContent = () => {
   const { execute, data, loading, error } = useSave();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [saved, setSaved] = useState(true);
 
   const onChange = () => {

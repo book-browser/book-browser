@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Container } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import Loading from 'components/loading/loading';

@@ -10,6 +10,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ApiError } from 'types/api-error';
 import { Book } from 'types/book';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const UNSAVED_MESSAGE = 'Are you sure that you want to leave with unsaved changes?';
 
 const EditBookPage = () => {
@@ -36,7 +37,7 @@ const EditBookPage = () => {
   };
 
   const cancel = () => {
-    navigate(`/book/${book!.id}`);
+    navigate(`/book/${book.id}`);
   };
 
   useEffect(() => {
@@ -45,11 +46,11 @@ const EditBookPage = () => {
     } else {
       document.title = 'Edit | BookBrowser';
     }
-  }, [book, saved]);
+  }, [book, savedBook, loadedBook, saved]);
 
   useEffect(() => {
     load(Number(id));
-  }, [id]);
+  }, [id, load]);
 
   useEffect(() => {
     if (loadedBook) {
@@ -80,7 +81,7 @@ const EditBookPage = () => {
             <Breadcrumb.Item linkAs={Link} linkProps={{ to: '/books' }}>
               Books
             </Breadcrumb.Item>
-            <Breadcrumb.Item linkAs={Link} linkProps={{ to: `/book/${book!.id}` }}>
+            <Breadcrumb.Item linkAs={Link} linkProps={{ to: `/book/${book.id}` }}>
               {(savedBook || loadedBook)?.title}
             </Breadcrumb.Item>
             <Breadcrumb.Item active>Edit</Breadcrumb.Item>
@@ -100,24 +101,22 @@ const EditBookPage = () => {
                     Changes successfully saved
                   </Alert>
                 )}
-                <>
-                  <div className="d-flex">
-                    <Button className="me-2" variant="secondary" disabled={savingBook} onClick={cancel}>
-                      Cancel
-                    </Button>
-                    <Button className="me-auto" variant="secondary" disabled={savingBook} onClick={reset}>
-                      Reset
-                    </Button>
-                    <Button variant="primary" type="submit" disabled={savingBook}>
-                      {!savingBook && <span>Save</span>}
-                      {savingBook && (
-                        <span>
-                          Saving <CircularProgress color="secondary" size={'15px'} />
-                        </span>
-                      )}
-                    </Button>
-                  </div>
-                </>
+                <div className="d-flex">
+                  <Button className="me-2" variant="secondary" disabled={savingBook} onClick={cancel}>
+                    Cancel
+                  </Button>
+                  <Button className="me-auto" variant="secondary" disabled={savingBook} onClick={reset}>
+                    Reset
+                  </Button>
+                  <Button variant="primary" type="submit" disabled={savingBook}>
+                    {!savingBook && <span>Save</span>}
+                    {savingBook && (
+                      <span>
+                        Saving <CircularProgress color="secondary" size={'15px'} />
+                      </span>
+                    )}
+                  </Button>
+                </div>
               </div>
             }
           />

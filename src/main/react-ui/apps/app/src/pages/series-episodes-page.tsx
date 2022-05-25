@@ -9,7 +9,7 @@ import React, { useEffect, useState } from 'react';
 import { Breadcrumb } from 'react-bootstrap';
 import { Link, useParams, useLocation, useNavigate } from 'react-router-dom';
 import { ApiError } from 'types/api-error';
-import { parseParams } from 'utils/location-utils';
+import { generateEncodedUrl, parseParams } from 'utils/location-utils';
 import * as yup from 'yup';
 
 declare type SeriesEpisodesPageParams = {
@@ -25,13 +25,8 @@ const schema = yup.object().shape({
 }) as yup.SchemaOf<SeriesEpisodesPageParams>;
 
 export const SeriesEpisodePageContent = () => {
-  const { data: series, execute, loading, error } = useGetById();
-  const {
-    data: episodes,
-    execute: findAllEpisodes,
-    loading: loadingEpisodes,
-    error: episodeError
-  } = useFindAllEpisodes();
+  const { data: series, execute, error } = useGetById();
+  const { data: episodes, execute: findAllEpisodes } = useFindAllEpisodes();
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -44,13 +39,14 @@ export const SeriesEpisodePageContent = () => {
   const notFound = apiError?.status === 404;
 
   const onPageChange = (newPage) => {
-    navigate(`/series/${series.id}/episodes${newPage > 0 ? `?page=${newPage + 1}` : ''}`);
+    navigate(generateEncodedUrl(`/series/${series.id}/episodes`, { page: newPage > 0 ? newPage + 1 : undefined }));
   };
 
   useEffect(() => {
     if (params.page !== page) {
       setPage(params.page);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params]);
 
   useEffect(() => {
@@ -61,7 +57,7 @@ export const SeriesEpisodePageContent = () => {
     if (series) {
       findAllEpisodes({ seriesId: series.id, page, limit: 24 });
     }
-  }, [series, page]);
+  }, [series, page, findAllEpisodes]);
 
   useEffect(() => {
     if (series) {
@@ -88,11 +84,9 @@ export const SeriesEpisodePageContent = () => {
           <Breadcrumb.Item linkAs={Link} linkProps={{ to: '/series' }}>
             Series
           </Breadcrumb.Item>
-          {series && (
-            <Breadcrumb.Item linkAs={Link} linkProps={{ to: `/series/${series.id}` }}>
-              {series.title}
-            </Breadcrumb.Item>
-          )}
+          <Breadcrumb.Item linkAs={Link} linkProps={{ to: `/series/${series.id}` }}>
+            {series.title}
+          </Breadcrumb.Item>
           <Breadcrumb.Item active>Episodes</Breadcrumb.Item>
         </Breadcrumb>
         <h1 className="heading-main">{`${series.title} Episodes`}</h1>

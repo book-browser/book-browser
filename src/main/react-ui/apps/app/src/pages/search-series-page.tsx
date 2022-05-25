@@ -70,12 +70,13 @@ const SearchSeriesPage = () => {
   };
 
   const changeParams = (newParams: { query?: string; genres?: Genre[]; page?: number; sort?: string }) => {
+    const sort = newParams.sort || activeSort;
     navigate(
       generateEncodedUrl('/series/search', {
         query: newParams.query || activeQuery,
         genres: (newParams.genres || selectedGenres).map((selectedGenre) => selectedGenre.name.toLocaleLowerCase()),
         page: (newParams.page !== undefined ? newParams.page : page) + 1,
-        sort: newParams.sort ? (newParams.sort !== 'id' ? newParams.sort : '') : activeSort
+        sort: sort !== 'id' ? sort : ''
       }),
       { replace: true }
     );
@@ -100,7 +101,7 @@ const SearchSeriesPage = () => {
       page,
       limit: 18
     });
-  }, [selectedGenres, activeQuery, activeSort, execute]);
+  }, [selectedGenres, activeQuery, activeSort, page, execute]);
 
   useEffect(() => {
     if (params.query !== activeQuery) {
@@ -121,6 +122,7 @@ const SearchSeriesPage = () => {
     if (params.page !== page) {
       setPage(params.page);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params]);
 
   useEffect(() => {

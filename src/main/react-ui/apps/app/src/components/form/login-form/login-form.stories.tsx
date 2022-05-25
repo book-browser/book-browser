@@ -4,17 +4,17 @@ import { Button, Card } from 'react-bootstrap';
 import { LoginRequest } from 'types/login-request';
 import LoginForm from './login-form';
 
-export default { title: 'Forms/Login Form' }
+export default { title: 'Forms/Login Form' };
 
 export const Example = () => {
   const [valid, setValid] = useState(false);
 
   const onChange = (_data: LoginRequest, valid: boolean) => {
     setValid(valid);
-  }
+  };
 
   const onSubmit = (data: LoginRequest) => {
-    window.alert(`Logging in: ${JSON.stringify(data)}`)
+    window.alert(`Logging in: ${JSON.stringify(data)}`);
   };
 
   return (
@@ -26,12 +26,14 @@ export const Example = () => {
             onSubmit={onSubmit}
             footer={
               <div>
-                <Button variant="primary" type="submit" disabled={!valid}>Login</Button>
+                <Button variant="primary" type="submit" disabled={!valid}>
+                  Login
+                </Button>
               </div>
             }
           />
         </Card.Body>
       </Card>
     </Container>
-  )
-}
+  );
+};

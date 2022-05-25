@@ -19,7 +19,7 @@ const UsernameRecoveryPage = () => {
     if (user) {
       navigate('/');
     }
-  }, [user]);
+  }, [user, navigate]);
 
   const onChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setEmail(e.target.value);

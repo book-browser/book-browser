@@ -1,9 +1,17 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { confirmRegistration, getCurrentUser, login, logout, resendVerificationEmail, register, sendUsernameEmail } from "services/user.service";
-import { RootState } from "slices/store";
-import { userSlice } from "slices/user.slice";
-import { useEmptyPromise, usePromise } from "./promise.hook";
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  confirmRegistration,
+  getCurrentUser,
+  login,
+  logout,
+  resendVerificationEmail,
+  register,
+  sendUsernameEmail
+} from 'services/user.service';
+import { RootState } from 'slices/store';
+import { userSlice } from 'slices/user.slice';
+import { useEmptyPromise, usePromise } from './promise.hook';
 
 export const useUser = () => useSelector((state: RootState) => state.userReducer);
 
@@ -25,10 +33,10 @@ export const useLogin = () => {
     if (executed && data) {
       dispatch(userSlice.actions.setUser(data));
     }
-  }, [executed, data])
+  }, [executed, data, dispatch]);
 
   return loginHook;
-}
+};
 
 export const useLogout = () => {
   const dispatch = useDispatch();
@@ -40,10 +48,10 @@ export const useLogout = () => {
     if (executed && !error) {
       dispatch(userSlice.actions.setUser(null));
     }
-  }, [executed, error])
+  }, [executed, error, dispatch]);
 
   return logoutHook;
-}
+};
 
 export const useGetCurrentUser = () => {
   const dispatch = useDispatch();
@@ -55,10 +63,7 @@ export const useGetCurrentUser = () => {
     if (executed && data) {
       dispatch(userSlice.actions.setUser(data));
     }
-  }, [executed, data])
+  }, [executed, data, dispatch]);
 
   return getCurrentUserHook;
-}
-
-
-
+};

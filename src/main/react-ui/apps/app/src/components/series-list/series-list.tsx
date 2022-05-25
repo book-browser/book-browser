@@ -5,12 +5,10 @@ import { Series } from 'types/series';
 import './series-list.scss';
 
 export interface SeriesListProps {
-  seriesList: Series[]
+  seriesList: Series[];
 }
 
-const SeriesList = ({
-  seriesList
-}: SeriesListProps) => {
+const SeriesList = ({ seriesList }: SeriesListProps) => {
   return (
     <CardList>
       {seriesList.map((series) => (

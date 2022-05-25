@@ -6,9 +6,9 @@ import Pagination from 'components/pagination/pagination';
 import { useFindAll } from 'hooks/series.hook';
 import { useReferenceData } from 'hooks/reference-data.hook';
 import React, { useEffect, useMemo, useState } from 'react';
-import { Breadcrumb, Button, ToggleButton } from 'react-bootstrap';
+import { Breadcrumb, ToggleButton } from 'react-bootstrap';
 import * as yup from 'yup';
-import { parseParams } from 'utils/location-utils';
+import { generateEncodedUrl, parseParams } from 'utils/location-utils';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { ReferenceData } from 'types/reference-data';
 import { Location } from 'history';
@@ -45,7 +45,7 @@ const SeriesListPageContent = () => {
   const { data: seriesList, loading, error, execute: findAll } = useFindAll();
 
   const onPageChange = (newPage) => {
-    navigate(`/series${newPage > 0 ? `?page=${newPage + 1}` : ''}`);
+    navigate(generateEncodedUrl('/series', { page: newPage > 0 ? newPage + 1 : undefined }));
   };
 
   useEffect(() => {
@@ -55,16 +55,13 @@ const SeriesListPageContent = () => {
     if (params.page !== page) {
       setPage(params.page);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params]);
 
   useEffect(() => {
     const actualLetter = letter && referenceData.letters.find(({ value }) => value === letter);
     findAll({ titleStartsWith: actualLetter, page, order: 'asc', sort: 'title', limit: 48 });
-  }, [page, letter]);
-
-  useEffect(() => {
-    setPage(params.page);
-  }, [params.page]);
+  }, [page, letter, referenceData.letters, findAll]);
 
   if (loading) {
     return <Loading />;

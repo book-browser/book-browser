@@ -5,7 +5,7 @@ import { Card } from 'react-bootstrap';
 import { BrowserRouter } from 'react-router-dom';
 import BookSubmissionSuccess from './book-submission-success';
 
-export default { title: 'Messages/Book Submission Success' }
+export default { title: 'Messages/Book Submission Success' };
 
 export const Example = () => {
   return (
@@ -16,5 +16,5 @@ export const Example = () => {
         </Card>
       </Container>
     </BrowserRouter>
-  )
-}
+  );
+};

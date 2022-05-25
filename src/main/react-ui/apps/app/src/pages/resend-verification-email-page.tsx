@@ -1,8 +1,7 @@
-import { CircularProgress, Container, Divider } from '@mui/material';
+import { CircularProgress, Container } from '@mui/material';
 import { ErrorAlert } from 'components/error/error-alert';
 import { useResendVerificationEmail, useUser } from 'hooks/user.hook';
-import React, { ChangeEvent, useState } from 'react';
-import { useEffect } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { Alert, Button, Card, Form } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 

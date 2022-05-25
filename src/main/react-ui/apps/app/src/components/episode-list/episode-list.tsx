@@ -5,12 +5,10 @@ import { Episode } from 'types/episode';
 import './episode-list.scss';
 
 export interface EpisodeListProps {
-  episodes: Episode[]
+  episodes: Episode[];
 }
 
-const EpisodeList = ({
-  episodes
-}: EpisodeListProps) => {
+const EpisodeList = ({ episodes }: EpisodeListProps) => {
   return (
     <CardList>
       {episodes.map((episode) => (

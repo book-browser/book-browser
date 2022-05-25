@@ -13,16 +13,16 @@ export const Example = () => {
         <SomethingWentWrong error={error} />
       </Card>
     </Container>
-  )
+  );
 };
 
 export const WithApiError = () => {
-  const error = { name: 'ApiError', correlationId: '123-123' } as any;
+  const error = { name: 'ApiError', correlationId: '123-123', message: 'message' };
   return (
     <Container>
       <Card>
         <SomethingWentWrong error={error} />
       </Card>
     </Container>
-  )
+  );
 };

@@ -1,24 +1,27 @@
-import { json } from "msw/lib/types/context";
-import { LoginRequest } from "types/login-request";
-import { RegisterRequest } from "types/register-request";
-import { User } from "types/user";
-import { handleEmptyResponse, handleResponse, handleTextResponse } from "./response.service";
+import { LoginRequest } from 'types/login-request';
+import { RegisterRequest } from 'types/register-request';
+import { User } from 'types/user';
+import { handleEmptyResponse, handleResponse, handleTextResponse } from './response.service';
 
 export const login = async (loginRequest: LoginRequest) => {
-  const response = await fetch('/api/login?' + new URLSearchParams({
-      rememberMe: `${loginRequest.rememberMe}`
-    }), {
-    method: 'POST',
-    body: JSON.stringify({
-      username: loginRequest.username,
-      password: loginRequest.password
-    }),
-    headers: {
-      'Content-Type': 'application/json'
-    },
-  });
-  return await handleResponse<User>(response);
-}
+  const response = await fetch(
+    '/api/login?' +
+      new URLSearchParams({
+        rememberMe: `${loginRequest.rememberMe}`
+      }),
+    {
+      method: 'POST',
+      body: JSON.stringify({
+        username: loginRequest.username,
+        password: loginRequest.password
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+  );
+  return handleResponse<User>(response);
+};
 
 export const register = async (registerRequest: RegisterRequest) => {
   const response = await fetch('/api/register', {
@@ -26,10 +29,10 @@ export const register = async (registerRequest: RegisterRequest) => {
     body: JSON.stringify(registerRequest),
     headers: {
       'Content-Type': 'application/json'
-    },
+    }
   });
-  return await handleEmptyResponse(response);
-}
+  return handleEmptyResponse(response);
+};
 
 export const confirmRegistration = async (token: string) => {
   const response = await fetch('/api/user/confirm', {
@@ -37,10 +40,10 @@ export const confirmRegistration = async (token: string) => {
     body: JSON.stringify({ token }),
     headers: {
       'Content-Type': 'application/json'
-    },
+    }
   });
-  return await handleEmptyResponse(response);
-}
+  return handleEmptyResponse(response);
+};
 
 export const resendVerificationEmail = async (email: string) => {
   const response = await fetch('/api/verify/email', {
@@ -48,10 +51,10 @@ export const resendVerificationEmail = async (email: string) => {
     body: JSON.stringify({ email }),
     headers: {
       'Content-Type': 'application/json'
-    },
+    }
   });
-  return await handleEmptyResponse(response);
-}
+  return handleEmptyResponse(response);
+};
 
 export const sendUsernameEmail = async (email: string) => {
   const response = await fetch('/api/username/email', {
@@ -59,20 +62,19 @@ export const sendUsernameEmail = async (email: string) => {
     body: JSON.stringify({ email }),
     headers: {
       'Content-Type': 'application/json'
-    },
+    }
   });
-  return await handleEmptyResponse(response);
-}
-
+  return handleEmptyResponse(response);
+};
 
 export const logout = async () => {
   const response = await fetch('/api/logout', {
-    method: 'POST',
+    method: 'POST'
   });
-  return await handleEmptyResponse(response);
-}
+  return handleEmptyResponse(response);
+};
 
 export const getCurrentUser = async () => {
   const response = await fetch('/api/user/self');
-  return await handleTextResponse<User>(response);
-}
+  return handleTextResponse<User>(response);
+};

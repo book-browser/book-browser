@@ -1,11 +1,7 @@
 import React, { ReactNode } from 'react';
 import Message from '../message';
-import { Link } from 'react-router-dom';
-import { Nav } from 'react-bootstrap';
 
-const RegisterSuccess = ({ footer }: {
-  footer?: ReactNode
-}) => {
+const RegisterSuccess = ({ footer }: { footer?: ReactNode }) => {
   return (
     <Message
       variant="success"
@@ -15,6 +11,6 @@ const RegisterSuccess = ({ footer }: {
       {footer}
     </Message>
   );
-}
+};
 
 export default RegisterSuccess;

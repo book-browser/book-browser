@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { DeepPartial } from '@reduxjs/toolkit';
 import React, { ReactNode } from 'react';
 import { Episode } from 'types/episode';

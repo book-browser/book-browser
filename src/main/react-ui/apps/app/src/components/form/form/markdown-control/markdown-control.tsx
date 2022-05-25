@@ -1,21 +1,15 @@
-import MDEditor from "@uiw/react-md-editor"
-import React from "react"
+import MDEditor from '@uiw/react-md-editor';
+import React from 'react';
 
 declare type MarkdownControlProps = {
-  name?: string
-  value?: string
-  isInvalid?: boolean
-  onChange: React.ChangeEventHandler<HTMLTextAreaElement>
-  onBlur?: React.FocusEventHandler<HTMLTextAreaElement>
-}
+  name?: string;
+  value?: string;
+  isInvalid?: boolean;
+  onChange: React.ChangeEventHandler<HTMLTextAreaElement>;
+  onBlur?: React.FocusEventHandler<HTMLTextAreaElement>;
+};
 
-export const MarkdownControl = ({
-  name,
-  value,
-  isInvalid,
-  onChange,
-  onBlur
-}: MarkdownControlProps) => {
+export const MarkdownControl = ({ name, value, isInvalid, onChange, onBlur }: MarkdownControlProps) => {
   return (
     <MDEditor
       className={isInvalid ? 'is-invalid' : undefined}
@@ -30,7 +24,7 @@ export const MarkdownControl = ({
       //   setFieldValue('description', newValue);
       // }}
     />
-  )
-}
+  );
+};
 
 export default MarkdownControl;

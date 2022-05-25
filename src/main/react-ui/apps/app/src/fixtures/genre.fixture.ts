@@ -1,12 +1,11 @@
-
 export const GENRE_EXAMPLE = {
   id: 1,
-  name: 'Drama', 
-}
+  name: 'Drama'
+};
 export const MULTIPLE_GENRES = [
   {
     id: 1,
-    name: 'Drama', 
+    name: 'Drama'
   },
   {
     id: 2,

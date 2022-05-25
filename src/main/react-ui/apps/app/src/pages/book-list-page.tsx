@@ -10,7 +10,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Breadcrumb, ToggleButton } from 'react-bootstrap';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ReferenceData } from 'types/reference-data';
-import { parseParams } from 'utils/location-utils';
+import { generateEncodedUrl, parseParams } from 'utils/location-utils';
 import * as yup from 'yup';
 
 declare type BookListPageParams = {
@@ -45,7 +45,7 @@ const BookListPageContent = () => {
   const { data: books, loading, error, execute: findAll } = useFindAllBooks();
 
   const onPageChange = (newPage) => {
-    navigate(`/books${newPage > 0 ? `?page=${newPage + 1}` : ''}`);
+    navigate(generateEncodedUrl('/books', { page: newPage > 0 ? newPage + 1 : '' }));
   };
 
   useEffect(() => {
@@ -55,12 +55,13 @@ const BookListPageContent = () => {
     if (params.page !== page) {
       setPage(params.page);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params]);
 
   useEffect(() => {
     const actualLetter = letter && referenceData.letters.find(({ value }) => value === letter);
     findAll({ titleStartsWith: actualLetter, page, order: 'asc', sort: 'title' });
-  }, [page, letter]);
+  }, [page, letter, referenceData.letters, findAll]);
 
   useEffect(() => {
     setPage(params.page);

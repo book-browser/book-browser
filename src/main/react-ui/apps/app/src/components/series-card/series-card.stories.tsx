@@ -12,17 +12,18 @@ export const Example = () => {
       <SeriesCard series={SERIES_EXAMPLE} />
     </BrowserRouter>
   );
-}
+};
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const msw = [
-  rest.get('/api/series/0/thumbnail', async (req, res, ctx) => {
-    const image = await fetch('https://cdn.imagecomics.com/assets/i/releases/76910/invincible-compendium-vol-3-tp_474738fa22.jpg').then((res) =>
-      res.arrayBuffer(),
-    )
+  rest.get('/api/series/0/thumbnail', async (_req, res, ctx) => {
+    const image = await fetch(
+      'https://cdn.imagecomics.com/assets/i/releases/76910/invincible-compendium-vol-3-tp_474738fa22.jpg'
+    ).then((imgRes) => imgRes.arrayBuffer());
     return res(
       ctx.set('Content-Length', image.byteLength.toString()),
       ctx.set('Content-Type', 'image/jpg'),
-      ctx.body(image),
-    )
+      ctx.body(image)
+    );
   })
 ];

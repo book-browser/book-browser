@@ -2,7 +2,6 @@ import { CircularProgress, Container } from '@mui/material';
 import { DeepPartial } from '@reduxjs/toolkit';
 import { ErrorAlert } from 'components/error/error-alert';
 import { EpisodeForm } from 'components/form/episode-form/episode-form';
-import SeriesForm from 'components/form/series-form/series-form';
 import Message from 'components/message/message';
 import { useCreateOrUpdateEpisode } from 'hooks/episode.hook';
 import moment from 'moment';
@@ -105,6 +104,7 @@ const SuccessMessage = ({ episode }: { episode: Episode }) => {
 
 const NewEpisodePageContent = () => {
   const { execute, data, loading, error } = useCreateOrUpdateEpisode();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [saved, setSaved] = useState(true);
 
   const onChange = () => {

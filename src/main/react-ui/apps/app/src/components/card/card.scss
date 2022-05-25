@@ -1,6 +1,7 @@
 .card-horizontal {
   flex-direction: row !important;
-  .card-img, .card-thumbnail {
+  .card-img,
+  .card-thumbnail {
     width: auto;
   }
 }

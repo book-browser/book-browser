@@ -1,23 +1,21 @@
 import { Container } from '@mui/material';
+import BookList from 'components/book-list/book-list';
 import { ErrorAlert } from 'components/error/error-alert';
 import Loading from 'components/loading/loading';
+import Pagination from 'components/pagination/pagination';
+import { Location } from 'history';
 import { useFindAllBooks } from 'hooks/book.hook';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Breadcrumb } from 'react-bootstrap';
-import { useLocation, useNavigate, Link } from 'react-router-dom';
-import Pagination from 'components/pagination/pagination';
-import BookList from 'components/book-list/book-list';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { generateEncodedUrl, parseParams } from 'utils/location-utils';
 import * as yup from 'yup';
-import { parseParams } from 'utils/location-utils';
-import { Location } from 'history';
-import { useReferenceData } from 'hooks/reference-data.hook';
-import { ReferenceData } from 'types/reference-data';
 
 declare type RecentBookPageParams = {
   page: number;
 };
 
-const readParams = (location: Location, referenceData: ReferenceData) => {
+const readParams = (location: Location) => {
   const schema = yup.object().shape({
     page: yup
       .number()
@@ -30,15 +28,14 @@ const readParams = (location: Location, referenceData: ReferenceData) => {
 };
 
 const RecentBookPageContent = () => {
-  const { data: referenceData } = useReferenceData();
   const { data: books, loading, error, execute: findAll } = useFindAllBooks();
   const navigate = useNavigate();
   const location = useLocation();
-  const params = useMemo(() => readParams(location, referenceData), [location, referenceData]);
+  const params = useMemo(() => readParams(location), [location]);
   const [page, setPage] = useState(params.page);
 
   const changePage = (newPage) => {
-    navigate(`/recent${newPage > 0 ? `?page=${newPage + 1}` : ''}`);
+    navigate(generateEncodedUrl('/recent', { page: newPage > 0 ? newPage + 1 : '' }));
   };
 
   useEffect(() => {
@@ -47,12 +44,13 @@ const RecentBookPageContent = () => {
 
   useEffect(() => {
     findAll({ page, endReleaseDate: new Date(Date.now()), limit: 15, order: 'desc', sort: 'releaseDate' });
-  }, [page]);
+  }, [page, findAll]);
 
   useEffect(() => {
     if (params.page !== page) {
       setPage(params.page);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params]);
 
   if (loading) {

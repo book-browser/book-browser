@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState } from 'react';
 
 export declare type PromiseExecutor<A, B> = (args: A) => Promise<B>;
 
@@ -9,53 +9,56 @@ export const usePromise = <A, B>(executor: PromiseExecutor<A, B>) => {
     loading: false,
     data: undefined,
     error: undefined,
-    executed: false,
+    executed: false
   });
 
-  const execute = useCallback((args: A) => {
-    setState((prevState) => {
-      return {
-        ...prevState,
-        loading: true,
-        executed: false,
-      }
-    });
+  const execute = useCallback(
+    (args: A) => {
+      setState((prevState) => {
+        return {
+          ...prevState,
+          loading: true,
+          executed: false
+        };
+      });
 
-    executor(args)
-      .then((data) => {
-        setState(() => {
-          return {
-            loading: false,
-            data,
-            error: undefined,
-            executed: true
-          }
+      executor(args)
+        .then((data) => {
+          setState(() => {
+            return {
+              loading: false,
+              data,
+              error: undefined,
+              executed: true
+            };
+          });
+        })
+        .catch((error) => {
+          setState(() => {
+            return {
+              loading: false,
+              data: undefined,
+              error,
+              executed: true
+            };
+          });
         });
-      })
-      .catch((error) => {
-        setState(() => {
-          return {
-            loading: false,
-            data: undefined,
-            error,
-            executed: true
-          }
-        });
-      })
-  }, []);
+    },
+    [executor]
+  );
 
-  return ({
+  return {
     execute,
     ...state
-  } as UsePromiseState<A, B>)
-}
+  } as UsePromiseState<A, B>;
+};
 
 export interface UsePromiseState<A, B> {
-  loading: boolean,
-  data?: B,
-  error?: Error,
-  execute: (args: A) => void,
-  executed: boolean
+  loading: boolean;
+  data?: B;
+  error?: Error;
+  execute: (args: A) => void;
+  executed: boolean;
 }
 
 export const useEmptyPromise = <B>(executor: EmptyPromiseExecutor<B>) => {
@@ -63,7 +66,7 @@ export const useEmptyPromise = <B>(executor: EmptyPromiseExecutor<B>) => {
     loading: false,
     data: undefined,
     error: undefined,
-    executed: false,
+    executed: false
   });
 
   const execute = useCallback(() => {
@@ -71,8 +74,8 @@ export const useEmptyPromise = <B>(executor: EmptyPromiseExecutor<B>) => {
       return {
         ...prevState,
         loading: true,
-        executed: false,
-      }
+        executed: false
+      };
     });
 
     executor()
@@ -83,7 +86,7 @@ export const useEmptyPromise = <B>(executor: EmptyPromiseExecutor<B>) => {
             data,
             error: undefined,
             executed: true
-          }
+          };
         });
       })
       .catch((error) => {
@@ -93,21 +96,21 @@ export const useEmptyPromise = <B>(executor: EmptyPromiseExecutor<B>) => {
             data: undefined,
             error,
             executed: true
-          }
+          };
         });
-      })
-  }, []);
+      });
+  }, [executor]);
 
-  return ({
+  return {
     execute,
     ...state
-  } as UseEmptyPromiseState<B>)
-}
+  } as UseEmptyPromiseState<B>;
+};
 
 export interface UseEmptyPromiseState<B> {
-  loading: boolean,
-  data?: B,
-  error?: Error,
-  execute: () => void,
-  executed: boolean
+  loading: boolean;
+  data?: B;
+  error?: Error;
+  execute: () => void;
+  executed: boolean;
 }
