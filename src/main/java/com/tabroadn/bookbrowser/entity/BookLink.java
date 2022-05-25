@@ -8,7 +8,6 @@ import javax.persistence.MapsId;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-
 import lombok.Data;
 import lombok.ToString;
 
@@ -16,17 +15,15 @@ import lombok.ToString;
 @Entity
 @Valid
 public class BookLink {
-	@EmbeddedId
-	@Valid
-	private BookLinkId id = new BookLinkId();
+  @EmbeddedId @Valid private BookLinkId id = new BookLinkId();
 
-	@NotBlank
-	@Size(max = 100)
-	private String description;
+  @NotBlank
+  @Size(max = 100)
+  private String description;
 
-	@MapsId("bookId")
-	@ManyToOne
-	@JoinColumn
-	@ToString.Exclude
-	private Book book;
+  @MapsId("bookId")
+  @ManyToOne
+  @JoinColumn
+  @ToString.Exclude
+  private Book book;
 }

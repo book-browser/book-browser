@@ -1,8 +1,9 @@
 plugins {
-	id 'org.springframework.boot' version '2.2.2.RELEASE'
-	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
-	id 'java'
-	id 'eclipse'
+  id 'java'
+  id 'org.springframework.boot' version '2.2.2.RELEASE'
+  id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+  id 'com.diffplug.spotless' version '5.12.5'
+  id 'eclipse'
 }
 
 group = 'com.tabroadn'
@@ -10,80 +11,105 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+  compileOnly {
+    extendsFrom annotationProcessor
+  }
 }
 
 repositories {
-	mavenCentral()
+  mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-mail'
-	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-	implementation 'org.liquibase:liquibase-core'
-	implementation 'org.apache.commons:commons-lang3:3.11'
-	compileOnly 'org.projectlombok:lombok:1.18.20'
-	runtimeOnly 'com.h2database:h2'
-	runtimeOnly "mysql:mysql-connector-java"
-	annotationProcessor 'org.projectlombok:lombok:1.18.20'
-	testImplementation('org.springframework.boot:spring-boot-starter-test') {
-		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-	}
-	testImplementation 'org.springframework.security:spring-security-test'
+  implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+  implementation 'org.springframework.boot:spring-boot-starter-security'
+  implementation 'org.springframework.boot:spring-boot-starter-web'
+  implementation 'org.springframework.boot:spring-boot-starter-mail'
+  implementation 'org.springframework.boot:spring-boot-starter-actuator'
+  implementation 'org.liquibase:liquibase-core'
+  implementation 'org.apache.commons:commons-lang3:3.11'
+  // https://mvnrepository.com/artifact/com.google.code.findbugs/jsr305
+  implementation 'com.google.code.findbugs:jsr305:3.0.2'
+  compileOnly 'org.projectlombok:lombok:1.18.20'
+  runtimeOnly 'com.h2database:h2'
+  runtimeOnly "mysql:mysql-connector-java"
+  annotationProcessor 'org.projectlombok:lombok:1.18.20'
+  testImplementation('org.springframework.boot:spring-boot-starter-test') {
+    exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+  }
+  testImplementation 'org.springframework.security:spring-security-test'
 }
 
 test {
-	useJUnitPlatform()
+  useJUnitPlatform()
 }
 
 def webappDir = "$projectDir/src/main/react-ui"
 
 sourceSets {
-	main {
-		resources {
-			srcDirs = ["$webappDir/dist/apps", "$projectDir/src/main/resources"]
-		}
-	}
+  main {
+    resources {
+      srcDirs = ["$webappDir/dist/apps", "$projectDir/src/main/resources"]
+    }
+  }
 }
- 
+
+spotless {
+  java {
+    target project.fileTree(project.rootDir) {
+      include 'src/main/**/*.java'
+      include 'src/test/**/*.java'
+      exclude '**/build/*'
+    }
+
+    importOrder()
+    removeUnusedImports()
+
+    googleJavaFormat('1.15.0')
+  }
+
+  format 'misc', {
+    target '**/*.gradle', '**/*.md', '**/.gitignore', '**/*.groovy'
+
+    trimTrailingWhitespace()
+    indentWithSpaces(2) // or spaces. Takes an integer argument if you don't like 4
+    endWithNewline()
+  }
+}
+
 task buildReact(type:Exec) {
-	description = "Assemble webapp resources that are served by the application"
-	dependsOn "installReact"
-	workingDir "$webappDir"
-	inputs.file "$webappDir/workspace.json"
-	inputs.dir "$webappDir/apps"
-	outputs.dir "$webappDir/dist/apps/app"
+  description = "Assemble webapp resources that are served by the application"
+  dependsOn "installReact"
+  workingDir "$webappDir"
+  inputs.file "$webappDir/workspace.json"
+  inputs.dir "$webappDir/apps"
+  outputs.dir "$webappDir/dist/apps/app"
 
-	// Add task to the standard build group
-	group = BasePlugin.BUILD_GROUP
-	// ng doesn't exist as a file in windows -> ng.cmd
-	if (System.getProperty("os.name").toUpperCase().contains("WINDOWS")){
-		commandLine "npm.cmd", "run", "build"
-	} else {
-		commandLine "npm", "run", "build"
-	}
+  // Add task to the standard build group
+  group = BasePlugin.BUILD_GROUP
+  // ng doesn't exist as a file in windows -> ng.cmd
+  if (System.getProperty("os.name").toUpperCase().contains("WINDOWS")){
+    commandLine "npm.cmd", "run", "build"
+  } else {
+    commandLine "npm", "run", "build"
+  }
 }
- 
-task installReact(type:Exec) {
-	description = "Assemble dependencies required to build the webapp"
-	workingDir "$webappDir"
-	inputs.file "$webappDir/package.json"
-	outputs.dir "$webappDir/node_modules"
 
-	group = BasePlugin.BUILD_GROUP
-	if (System.getProperty("os.name").toUpperCase().contains("WINDOWS")){
-		commandLine "npm.cmd", "install"
-	} else {
-		commandLine "npm", "install"
-	}
+task installReact(type:Exec) {
+  description = "Assemble dependencies required to build the webapp"
+  workingDir "$webappDir"
+  inputs.file "$webappDir/package.json"
+  outputs.dir "$webappDir/node_modules"
+
+  group = BasePlugin.BUILD_GROUP
+  if (System.getProperty("os.name").toUpperCase().contains("WINDOWS")){
+    commandLine "npm.cmd", "install"
+  } else {
+    commandLine "npm", "install"
+  }
 }
 
 bootRun {
-	systemProperty 'spring.output.ansi.enabled', 'ALWAYS'
-	systemProperty 'spring.profiles.active', 'local'
+  systemProperty 'spring.output.ansi.enabled', 'ALWAYS'
+  systemProperty 'spring.profiles.active', 'local'
 }

@@ -4,11 +4,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper = false)
 public class ImageUploadFailureException extends RuntimeException {
-	private static final long serialVersionUID = -3304425430086838709L;
+  private static final long serialVersionUID = -3304425430086838709L;
 
-	public ImageUploadFailureException(String message, Throwable cause) {
-		super(message, cause);
-	}
+  public ImageUploadFailureException(String message, Throwable cause) {
+    super(message, cause);
+  }
 }

@@ -1,8 +1,5 @@
 package com.tabroadn.bookbrowser.service;
 
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 import com.tabroadn.bookbrowser.domain.OrderEnum;
 import com.tabroadn.bookbrowser.dto.EpisodeDto;
 import com.tabroadn.bookbrowser.dto.LinkDto;
@@ -16,14 +13,14 @@ import com.tabroadn.bookbrowser.repository.EpisodeRepository;
 import com.tabroadn.bookbrowser.repository.EpisodeSpecification;
 import com.tabroadn.bookbrowser.repository.SeriesRepository;
 import com.tabroadn.bookbrowser.util.DtoConversionUtils;
-
+import java.util.Optional;
+import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
-
-import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Slf4j
@@ -32,8 +29,7 @@ public class EpisodeService {
   private SeriesRepository seriesRepository;
 
   @Autowired
-  public EpisodeService(EpisodeRepository episodeRepository,
-    SeriesRepository seriesRepository) {
+  public EpisodeService(EpisodeRepository episodeRepository, SeriesRepository seriesRepository) {
     this.episodeRepository = episodeRepository;
     this.seriesRepository = seriesRepository;
   }
@@ -49,14 +45,15 @@ public class EpisodeService {
 
   public EpisodeDto getById(Long id) {
     return DtoConversionUtils.convertEpisodeToEpisodeDto(getEpisodeById(id));
-  }  
+  }
 
   public byte[] getEpisodeThumbnail(Long id) {
     return getEpisodeById(id).getThumbnail();
   }
 
   private Episode convertEpisodeDtoToEpisode(EpisodeDto episodeDto) {
-    Episode episode = episodeDto.getId() != null ? getEpisodeById(episodeDto.getId()) : new Episode();
+    Episode episode =
+        episodeDto.getId() != null ? getEpisodeById(episodeDto.getId()) : new Episode();
 
     if (episodeDto.getTitle() != null) {
       episode.setTitle(episodeDto.getTitle().orElse(null));
@@ -69,7 +66,7 @@ public class EpisodeService {
     if (episodeDto.getReleaseDate() != null) {
       episode.setReleaseDate(episodeDto.getReleaseDate().orElse(null));
     }
-    
+
     if (episodeDto.getThumbnail() != null) {
       episode.setThumbnail(episodeDto.getThumbnailBytes());
     }
@@ -77,7 +74,12 @@ public class EpisodeService {
     if (episodeDto.getLinks() != null) {
       if (episodeDto.getLinks().isPresent()) {
         episode.getLinks().clear();
-        episode.getLinks().addAll(episodeDto.getLinks().get().stream().map((linkDto) -> convertLinkDtoToEpisodeLink(linkDto, episode)).collect(Collectors.toList()));
+        episode
+            .getLinks()
+            .addAll(
+                episodeDto.getLinks().get().stream()
+                    .map((linkDto) -> convertLinkDtoToEpisodeLink(linkDto, episode))
+                    .collect(Collectors.toList()));
       } else {
         episode.setLinks(null);
       }
@@ -85,7 +87,14 @@ public class EpisodeService {
 
     if (episodeDto.getSeriesId() != null) {
       if (episodeDto.getSeriesId().isPresent()) {
-        Series series = seriesRepository.findById(episodeDto.getSeriesId().get()).orElseThrow(() -> new ResourceNotFoundException(String.format("series with id %s not found", episodeDto.getSeriesId().get())));
+        Series series =
+            seriesRepository
+                .findById(episodeDto.getSeriesId().get())
+                .orElseThrow(
+                    () ->
+                        new ResourceNotFoundException(
+                            String.format(
+                                "series with id %s not found", episodeDto.getSeriesId().get())));
         if (!series.getEpisodes().contains(episode)) {
           episode.setSeries(series);
           series.getEpisodes().add(episode);
@@ -94,51 +103,57 @@ public class EpisodeService {
         episode.setSeries(null);
       }
     }
-    
+
     return episode;
   }
 
   private static EpisodeLink convertLinkDtoToEpisodeLink(LinkDto linkDto, Episode episode) {
-		EpisodeLink episodeLink = new EpisodeLink();
-		
-		if (episode.getId() != null) {
-			EpisodeLinkId episodeLinkId = new EpisodeLinkId();
-			episodeLinkId.setEpisodeId(episode.getId());
-			episodeLink.setId(episodeLinkId);
-		}
+    EpisodeLink episodeLink = new EpisodeLink();
 
-		episodeLink.getId().setUrl(linkDto.getUrl());
-		episodeLink.setDescription(linkDto.getDescription());
-		episodeLink.setEpisode(episode);
-		return episodeLink;
-	}
+    if (episode.getId() != null) {
+      EpisodeLinkId episodeLinkId = new EpisodeLinkId();
+      episodeLinkId.setEpisodeId(episode.getId());
+      episodeLink.setId(episodeLinkId);
+    }
+
+    episodeLink.getId().setUrl(linkDto.getUrl());
+    episodeLink.setDescription(linkDto.getDescription());
+    episodeLink.setEpisode(episode);
+    return episodeLink;
+  }
 
   private Episode getEpisodeById(Long id) {
-		return episodeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format("episode with id %s not found", id)));
-	}
+    return episodeRepository
+        .findById(id)
+        .orElseThrow(
+            () -> new ResourceNotFoundException(String.format("episode with id %s not found", id)));
+  }
 
-  public PageDto<EpisodeDto> findAll(Integer page, Integer size, String sort, OrderEnum order,
-    Optional<Long> seriesId) {
+  public PageDto<EpisodeDto> findAll(
+      Integer page, Integer size, String sort, OrderEnum order, Optional<Long> seriesId) {
 
     validateEpisodeField(sort);
 
     Pageable pageable = PageRequest.of(page, size);
-    
+
     Specification<Episode> specification = EpisodeSpecification.orderBy(sort, order);
 
     if (seriesId.isPresent()) {
-			specification = specification.and(EpisodeSpecification.seriesIdEqual(seriesId.get()));
-		}
+      specification = specification.and(EpisodeSpecification.seriesIdEqual(seriesId.get()));
+    }
 
-    return new PageDto<>(episodeRepository.findAll(specification, pageable)
-				.map(DtoConversionUtils::convertEpisodeToEpisodeDto));
+    return new PageDto<>(
+        episodeRepository
+            .findAll(specification, pageable)
+            .map(DtoConversionUtils::convertEpisodeToEpisodeDto));
   }
 
   private void validateEpisodeField(String fieldName) {
-		try {
-			Episode.class.getDeclaredField(fieldName);
-		} catch (Exception e) {
-			throw new IllegalArgumentException(String.format("%s is a not a valid sort parameter", fieldName));
-		}
-	}
+    try {
+      Episode.class.getDeclaredField(fieldName);
+    } catch (Exception e) {
+      throw new IllegalArgumentException(
+          String.format("%s is a not a valid sort parameter", fieldName));
+    }
+  }
 }

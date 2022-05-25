@@ -7,9 +7,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 @EnableScheduling
 public class BookBrowserApplication {
-
-	public static void main(String[] args) {
-		SpringApplication.run(BookBrowserApplication.class, args);
-	}
-
+  public static void main(String[] args) {
+    SpringApplication.run(BookBrowserApplication.class, args);
+  }
 }

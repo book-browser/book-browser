@@ -1,7 +1,6 @@
 package com.tabroadn.bookbrowser.dto;
 
 import java.util.Optional;
-
 import lombok.Data;
 
 @Data

@@ -1,16 +1,15 @@
 package com.tabroadn.bookbrowser.dto;
 
 import java.util.List;
-
 import lombok.Data;
 
 @Data
 public class BookSummaryDto {
-	private Long id;
+  private Long id;
 
-	private String title;
+  private String title;
 
-	private String description;
+  private String description;
 
-	private List<CreatorDto> creators;
+  private List<CreatorDto> creators;
 }

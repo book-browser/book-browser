@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class RoleDto {
-	private String title;
-	private String value;
+  private String title;
+  private String value;
 }

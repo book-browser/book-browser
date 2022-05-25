@@ -4,6 +4,6 @@ import lombok.Getter;
 
 @Getter
 public enum ReleaseTypeEnum {
-	VOLUME,
-	ISSUE
+  VOLUME,
+  ISSUE
 }
