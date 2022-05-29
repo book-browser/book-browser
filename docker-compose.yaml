@@ -1,6 +1,8 @@
-version: '3'
+version: "3"
 services:
   db:
+    container_name: book-browser
+    restart: always
     image: mysql
     ports:
       - "3306:3306"
@@ -9,3 +11,7 @@ services:
       - MYSQL_DATABASE=book-browser
       - MYSQL_USER=book-browser
       - MYSQL_PASSWORD=changeit
+    volumes:
+      - ./:/book-browser
+      - ./database/init-database.sh:/docker-entrypoint-initdb.d/init-database.sh
+      - ./database/my.cnf:/etc/mysql/my.cnf

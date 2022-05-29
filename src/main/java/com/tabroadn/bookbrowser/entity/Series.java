@@ -38,7 +38,7 @@ public class Series {
 
   @ToString.Exclude private byte[] thumbnail;
 
-  @Formula("select max(e.release_date) from Episode e where e.series_id = id")
+  @Formula("(select max(e.release_date) from episode e where e.series_id = id)")
   private LocalDate lastUpdated;
 
   @OneToMany(mappedBy = "series", fetch = FetchType.LAZY)
