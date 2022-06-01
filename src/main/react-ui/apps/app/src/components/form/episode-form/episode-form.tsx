@@ -65,7 +65,7 @@ export const EpisodeForm = (props: EpisodeFormProps) => {
       }) => {
         return (
           <>
-            <Form.Group controlId="title-input">
+            <Form.Group controlId="title-input" className="mb-3">
               <Form.Label>
                 Title
                 <RequiredSymbol />
@@ -80,7 +80,7 @@ export const EpisodeForm = (props: EpisodeFormProps) => {
               />
               <Form.Control.Feedback type="invalid">{errors.title}</Form.Control.Feedback>
             </Form.Group>
-            <Form.Group controlId="title-input">
+            <Form.Group controlId="title-input" className="mb-3">
               <Form.Label>
                 Series
                 <RequiredSymbol />
@@ -94,7 +94,7 @@ export const EpisodeForm = (props: EpisodeFormProps) => {
               />
               <Form.Control.Feedback type="invalid">{errors.title}</Form.Control.Feedback>
             </Form.Group>
-            <Form.Group controlId="release-date-picker" className="w-50">
+            <Form.Group controlId="release-date-picker" className="w-50 mb-3">
               <Form.Label>
                 Release Date
                 <RequiredSymbol />
@@ -107,7 +107,7 @@ export const EpisodeForm = (props: EpisodeFormProps) => {
               />
               <Form.Control.Feedback type="invalid">{errors.releaseDate as any}</Form.Control.Feedback>
             </Form.Group>
-            <Form.Group controlId="description-text-area">
+            <Form.Group controlId="description-text-area" className="mb-3">
               <Form.Label>Description</Form.Label>
               <Form.MarkdownControl
                 name="description"
@@ -118,7 +118,7 @@ export const EpisodeForm = (props: EpisodeFormProps) => {
               />
               <Form.Control.Feedback type="invalid">{errors.description}</Form.Control.Feedback>
             </Form.Group>
-            <Form.Group controlId="thumbnail-image">
+            <Form.Group controlId="thumbnail-image" className="mb-3">
               <Form.Label>
                 Thumbnail
                 <RequiredSymbol />
@@ -134,7 +134,7 @@ export const EpisodeForm = (props: EpisodeFormProps) => {
               <Form.Text muted>Max file size 1MB</Form.Text>
               <Form.Control.Feedback type="invalid">{errors.thumbnail as any}</Form.Control.Feedback>
             </Form.Group>
-            <Form.Group>
+            <Form.Group className="mb-3">
               <Form.Label>Links</Form.Label>
               <Form.LinksField
                 name="links"

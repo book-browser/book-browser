@@ -1,9 +1,11 @@
+import { Add } from '@mui/icons-material';
 import MDEditor from '@uiw/react-md-editor';
 import BookList from 'components/book-list/book-list';
 import EpisodeList from 'components/episode-list/episode-list';
 import GenreBadge from 'components/genre-badge/genre-badge';
 import PublisherList from 'components/publisher-list/publisher-list';
 import React from 'react';
+import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { Genre } from 'types/genre';
 import { Series } from 'types/series';
@@ -82,7 +84,12 @@ const SeriesDetails = ({ series }: SeriesDetailsProps) => {
 
       {series.episodes.length > 0 && (
         <div className="mb-3">
-          <h2 className="heading-section">Episodes</h2>
+          <h2 className="heading-section d-flex align-items-start">
+            <div>Episodes</div>
+            <Button as={Link as any} to={`/episode/new?seriesId=${series.id}`} className="ms-auto" variant="primary">
+              <Add /> New Episode
+            </Button>
+          </h2>
           <EpisodeList episodes={series.episodes.slice(0, 12)} />
           {series.episodes.length > 12 && (
             <div>

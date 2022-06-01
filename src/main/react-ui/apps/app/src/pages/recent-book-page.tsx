@@ -43,7 +43,7 @@ const RecentBookPageContent = () => {
   }, []);
 
   useEffect(() => {
-    findAll({ page, endReleaseDate: new Date(Date.now()), limit: 15, order: 'desc', sort: 'releaseDate' });
+    findAll({ page, endReleaseDate: new Date(Date.now()), limit: 18, order: 'desc', sort: 'releaseDate' });
   }, [page, findAll]);
 
   useEffect(() => {

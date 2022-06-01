@@ -1,3 +1,4 @@
+import ScrollToTop from 'components/scroll-to-top/scroll-to-top';
 import React from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import BookListPage from './book-list-page';
@@ -32,6 +33,7 @@ export const Routing = () => {
   return (
     <BrowserRouter>
       <Header />
+      <ScrollToTop />
       <Routes>
         <Route path="/book/new" element={<CreateBookPage />} />
         <Route path="/books/search" element={<SearchBookPage />}></Route>
