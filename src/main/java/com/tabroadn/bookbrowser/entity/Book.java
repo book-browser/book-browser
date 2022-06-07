@@ -35,7 +35,9 @@ public class Book {
   @Size(max = 2000)
   private String description;
 
-  @NotEmpty @ToString.Exclude private byte[] thumbnail;
+  @NotEmpty
+  @ToString.Exclude
+  private byte[] thumbnail;
 
   private Integer pageViews;
 
@@ -47,20 +49,13 @@ public class Book {
   private Series series;
 
   @NotEmpty
-  @OneToMany(
-      mappedBy = "book",
-      cascade = CascadeType.ALL,
-      fetch = FetchType.LAZY,
-      orphanRemoval = true)
+  @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
   private List<BookCreator> creators = new ArrayList<>();
 
   @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<BookLink> links = new ArrayList<>();
 
   @ManyToMany
-  @JoinTable(
-      name = "book_genre",
-      joinColumns = @JoinColumn(name = "book_id"),
-      inverseJoinColumns = @JoinColumn(name = "genre_id"))
+  @JoinTable(name = "book_genre", joinColumns = @JoinColumn(name = "book_id"), inverseJoinColumns = @JoinColumn(name = "genre_id"))
   private List<Genre> genres = new ArrayList<>();
 }

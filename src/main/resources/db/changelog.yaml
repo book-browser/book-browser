@@ -1,194 +1,200 @@
 databaseChangeLog:
-    - changeSet:
-        id: createSchema
-        author: Tariq Broadnax
-        changes:
+  - changeSet:
+      id: createSchema
+      author: Tariq Broadnax
+      changes:
         - sqlFile:
             path: changelog/scripts/01-tabroadn-create-schema.sql
             relativeToChangelogFile: true
 
-    - changeSet:
-        id: createUserTable
-        author: Tariq Broadnax
-        changes:
+  - changeSet:
+      id: createUserTable
+      author: Tariq Broadnax
+      changes:
         - sqlFile:
             path: changelog/scripts/02-tabroadn-create-user-table.sql
             relativeToChangelogFile: true
 
-    - changeSet:
-        id: createBookTable
-        author: Tariq Broadnax
-        changes:
+  - changeSet:
+      id: createBookTable
+      author: Tariq Broadnax
+      changes:
         - sqlFile:
             path: changelog/scripts/03-tabroadn-create-book-table.sql
             relativeToChangelogFile: true
 
-    - changeSet:
-        id: createPersonTable
-        author: Tariq Broadnax
-        changes:
+  - changeSet:
+      id: createPersonTable
+      author: Tariq Broadnax
+      changes:
         - sqlFile:
             path: changelog/scripts/04-tabroadn-create-person-table.sql
             relativeToChangelogFile: true
 
-    - changeSet:
-        id: createCreatorTable
-        author: Tariq Broadnax
-        changes:
+  - changeSet:
+      id: createCreatorTable
+      author: Tariq Broadnax
+      changes:
         - sqlFile:
             path: changelog/scripts/05-tabroadn-create-creator-table.sql
             relativeToChangelogFile: true
 
-    - changeSet:
-        id: createReleaseTable
-        author: Tariq Broadnax
-        changes:
+  - changeSet:
+      id: createReleaseTable
+      author: Tariq Broadnax
+      changes:
         - sqlFile:
             path: changelog/scripts/06-tabroadn-create-release-table.sql
             relativeToChangelogFile: true
 
-    - changeSet:
-        id: createVerificationTokenTable
-        author: Tariq Broadnax
-        changes:
+  - changeSet:
+      id: createVerificationTokenTable
+      author: Tariq Broadnax
+      changes:
         - sqlFile:
             path: changelog/scripts/07-tabroadn-create-verification-token-table.sql
             relativeToChangelogFile: true
 
-    - changeSet:
-        id: createPersistentLoginsTable
-        author: Tariq Broadnax
-        changes:
+  - changeSet:
+      id: createPersistentLoginsTable
+      author: Tariq Broadnax
+      changes:
         - sqlFile:
             path: changelog/scripts/08-tabroadn-create-persistent-logins-table.sql
             relativeToChangelogFile: true
 
-    - changeSet:
-        id: createGenreTable
-        author: Tariq Broadnax
-        changes:
+  - changeSet:
+      id: createGenreTable
+      author: Tariq Broadnax
+      changes:
         - sqlFile:
             path: changelog/scripts/09-tabroadn-create-genre-table.sql
             relativeToChangelogFile: true
 
-    - changeSet:
-        id: createBookGenreTable
-        author: Tariq Broadnax
-        changes:
+  - changeSet:
+      id: createBookGenreTable
+      author: Tariq Broadnax
+      changes:
         - sqlFile:
             path: changelog/scripts/10-tabroadn-create-book-genre-table.sql
             relativeToChangelogFile: true
 
-    - changeSet:
-        id: createBookLinkTable
-        author: Tariq Broadnax
-        changes:
+  - changeSet:
+      id: createBookLinkTable
+      author: Tariq Broadnax
+      changes:
         - sqlFile:
             path: changelog/scripts/11-tabroadn-create-book-link-table.sql
             relativeToChangelogFile: true
-    
-    - changeSet:
-        id: alterPersonTable
-        author: Tariq Broadnax
-        changes:
+
+  - changeSet:
+      id: alterPersonTable
+      author: Tariq Broadnax
+      changes:
         - sqlFile:
             path: changelog/scripts/12-tabroadn-alter-person-table.sql
             relativeToChangelogFile: true
 
-    - changeSet:
-        id: alterBookTableAddReleaseDate13
-        author: Tariq Broadnax
-        changes:
+  - changeSet:
+      id: alterBookTableAddReleaseDate13
+      author: Tariq Broadnax
+      changes:
         - sqlFile:
             path: changelog/scripts/13-tabroadn-alter-book-add-release-date.sql
             relativeToChangelogFile: true
 
-    - changeSet:
-        id: createSeriesTable14
-        author: Tariq Broadnax
-        changes:
+  - changeSet:
+      id: createSeriesTable14
+      author: Tariq Broadnax
+      changes:
         - sqlFile:
             path: changelog/scripts/14-tabroadn-create-series-table.sql
             relativeToChangelogFile: true
 
-    - changeSet:
-        id: insertAndUpdateGenreTable
-        author: Tariq Broadnax
-        changes:
+  - changeSet:
+      id: insertAndUpdateGenreTable
+      author: Tariq Broadnax
+      changes:
         - sqlFile:
             path: changelog/scripts/15-tabroadn-insert-and-update-genres-table.sql
             relativeToChangelogFile: true
 
-    - changeSet:
-        id: createSeriesGenreTable
-        author: Tariq Broadnax
-        changes:
+  - changeSet:
+      id: createSeriesGenreTable
+      author: Tariq Broadnax
+      changes:
         - sqlFile:
             path: changelog/scripts/16-tabroadn-create-series-genre-table.sql
             relativeToChangelogFile: true
-    
-    - changeSet:
-        id: createSeriesLinkTable
-        author: Tariq Broadnax
-        changes:
+
+  - changeSet:
+      id: createSeriesLinkTable
+      author: Tariq Broadnax
+      changes:
         - sqlFile:
             path: changelog/scripts/17-tabroadn-create-series-link-table.sql
             relativeToChangelogFile: true
 
-    - changeSet:
-        id: alterSeriesTableAddThumbnailBanner
-        author: Tariq Broadnax
-        changes:
+  - changeSet:
+      id: alterSeriesTableAddThumbnailBanner
+      author: Tariq Broadnax
+      changes:
         - sqlFile:
             path: changelog/scripts/18-tabroadn-alter-series-table-add-thumbnail.sql
             relativeToChangelogFile: true
 
-    - changeSet:
-        id: createSeriesCreatorTable
-        author: Tariq Broadnax
-        changes:
+  - changeSet:
+      id: createSeriesCreatorTable
+      author: Tariq Broadnax
+      changes:
         - sqlFile:
             path: changelog/scripts/19-tabroadn-create-series-creator-table.sql
             relativeToChangelogFile: true
 
-    - changeSet:
-        id: createEpisodeTable
-        author: Tariq Broadnax
-        changes:
+  - changeSet:
+      id: createEpisodeTable
+      author: Tariq Broadnax
+      changes:
         - sqlFile:
             path: changelog/scripts/20-tabroadn-create-episode-table.sql
             relativeToChangelogFile: true
 
-    - changeSet:
-        id: createEpisodeLinkTable
-        author: Tariq Broadnax
-        changes:
+  - changeSet:
+      id: createEpisodeLinkTable
+      author: Tariq Broadnax
+      changes:
         - sqlFile:
             path: changelog/scripts/21-tabroadn-create-episode-link-table.sql
             relativeToChangelogFile: true
 
-    - changeSet:
-        id: renamePersonToParty
-        author: Tariq Broadnax
-        changes:
+  - changeSet:
+      id: renamePersonToParty
+      author: Tariq Broadnax
+      changes:
         - sqlFile:
             path: changelog/scripts/22-tabroadn-rename-person-to-party.sql
             relativeToChangelogFile: true
 
-    - changeSet:
-        id: createSeriesPublisherTable
-        author: Tariq Broadnax
-        changes:
+  - changeSet:
+      id: createSeriesPublisherTable
+      author: Tariq Broadnax
+      changes:
         - sqlFile:
             path: changelog/scripts/23-tabroadn-create-series-publisher-table.sql
             relativeToChangelogFile: true
-    
-    - changeSet:
-        id: addTapasParty
-        author: Tariq Broadnax
-        changes:
+
+  - changeSet:
+      id: addTapasParty
+      author: Tariq Broadnax
+      changes:
         - sqlFile:
             path: changelog/scripts/24-tabroadn-add-tapas-party.sql
             relativeToChangelogFile: true
 
-            
+  - changeSet:
+      id: alterPartyTableAddDescriptionThumbnail
+      author: Tariq Broadnax
+      changes:
+        - sqlFile:
+            path: changelog/scripts/25-tabroadn-alter-party-table-add-description-thumbnail.sql
+            relativeToChangelogFile: true

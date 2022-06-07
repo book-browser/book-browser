@@ -8,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import lombok.Data;
 import lombok.ToString;
@@ -19,9 +20,17 @@ public class Party {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Size(max = 150)
   @NotBlank
+  @Size(max = 150)
   private String fullName;
+
+  @NotBlank
+  @Size(max = 2000)
+  private String description;
+
+  @NotEmpty
+  @ToString.Exclude
+  private byte[] thumbnail;
 
   @OneToMany(mappedBy = "party")
   @ToString.Exclude
