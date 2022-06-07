@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import lombok.Data;
+import lombok.ToString;
 
 @Data
 @Entity
@@ -18,5 +19,6 @@ public class Genre {
   private String name;
 
   @ManyToMany(mappedBy = "genres")
+  @ToString.Exclude
   private List<Book> books;
 }

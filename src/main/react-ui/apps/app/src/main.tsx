@@ -7,14 +7,14 @@ import { Provider } from 'react-redux';
 import { store } from 'slices/store';
 
 const Main = () => {
-  const { execute: getCurrentUser } = useGetCurrentUser();
+  const { loading: loadingUser, execute: getCurrentUser } = useGetCurrentUser();
   const { data: referenceData } = useReferenceData();
 
   useEffect(() => {
     getCurrentUser();
   }, [getCurrentUser]);
 
-  if (referenceData) {
+  if (referenceData && !loadingUser) {
     return <Routing />;
   }
   return null;

@@ -11,6 +11,7 @@ import { ReferenceData } from 'types/reference-data';
 import { Series } from 'types/series';
 import { generateEncodedUrl, parseParams } from 'utils/location-utils';
 import * as yup from 'yup';
+import Loading from 'components/loading/loading';
 
 declare type SearchSeriesPageParams = {
   query: string;
@@ -56,7 +57,7 @@ const SearchSeriesPage = () => {
   const [activeQuery, setActiveQuery] = useState(params.query);
   const [activeSort, setActiveSort] = useState(params.sort);
 
-  const { data: seriesList, execute } = useFindAll();
+  const { data: seriesList, loading, execute } = useFindAll();
 
   const toggleGenre = (genre: Genre) => {
     const newSelectedGenres = [...selectedGenres];
@@ -191,6 +192,8 @@ const SearchSeriesPage = () => {
       </Form.Group>
 
       <h3 className="mb-4">Results</h3>
+      {loading && <Loading />}
+
       {seriesList && (
         <div>
           <SeriesList seriesList={seriesList.items} />

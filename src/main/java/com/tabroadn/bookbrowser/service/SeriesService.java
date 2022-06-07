@@ -7,6 +7,7 @@ import com.tabroadn.bookbrowser.dto.LinkDto;
 import com.tabroadn.bookbrowser.dto.PageDto;
 import com.tabroadn.bookbrowser.dto.PublisherDto;
 import com.tabroadn.bookbrowser.dto.SeriesDto;
+import com.tabroadn.bookbrowser.dto.SeriesSearchCriteriaDto;
 import com.tabroadn.bookbrowser.entity.Party;
 import com.tabroadn.bookbrowser.entity.Series;
 import com.tabroadn.bookbrowser.entity.SeriesCreator;
@@ -68,30 +69,27 @@ public class SeriesService {
     return DtoConversionUtils.convertSeriesToSeriesDto(seriesRepository.save(series));
   }
 
-  public PageDto<SeriesDto> findAll(
-      Integer page,
-      Integer size,
-      String sort,
-      OrderEnum order,
-      Optional<String> query,
-      Optional<String> link,
-      Optional<LetterEnum> titleStartLetter) {
+  public PageDto<SeriesDto> findAll(SeriesSearchCriteriaDto seriesSearchCriteriaDto) {
+    Pageable pageable = PageRequest.of(seriesSearchCriteriaDto.getPage(), seriesSearchCriteriaDto.getLimit());
 
-    Pageable pageable = PageRequest.of(page, size);
+    Specification<Series> specification = SeriesSpecification.orderBy(seriesSearchCriteriaDto.getSort(),
+        seriesSearchCriteriaDto.getOrder());
 
-    Specification<Series> specification = SeriesSpecification.orderBy(sort, order);
-
-    if (query.isPresent()) {
-      specification = specification.and(SeriesSpecification.hasText(query.get()));
+    if (seriesSearchCriteriaDto.getQuery().isPresent()) {
+      specification = specification.and(SeriesSpecification.hasText(seriesSearchCriteriaDto.getQuery().get()));
     }
 
-    if (titleStartLetter.isPresent()) {
-      specification =
-          specification.and(SeriesSpecification.titleStartsWith(titleStartLetter.get()));
+    if (seriesSearchCriteriaDto.getTitleStartsWith().isPresent()) {
+      specification = specification
+          .and(SeriesSpecification.titleStartsWith(seriesSearchCriteriaDto.getTitleStartsWith().get()));
     }
 
-    if (link.isPresent()) {
-      specification = specification.and(SeriesSpecification.hasLink(link.get()));
+    if (seriesSearchCriteriaDto.getLink().isPresent()) {
+      specification = specification.and(SeriesSpecification.hasLink(seriesSearchCriteriaDto.getLink().get()));
+    }
+
+    if (seriesSearchCriteriaDto.getGenres().isPresent() && !seriesSearchCriteriaDto.getGenres().get().isEmpty()) {
+      specification = specification.and(SeriesSpecification.hasGenres(seriesSearchCriteriaDto.getGenres().get()));
     }
 
     return new PageDto<>(
@@ -101,15 +99,13 @@ public class SeriesService {
   }
 
   private Series convertSeriesDtoToSeries(SeriesDto seriesDto) {
-    Series series =
-        seriesDto.getId() == null
-            ? new Series()
-            : seriesRepository
-                .findById(seriesDto.getId())
-                .orElseThrow(
-                    () ->
-                        new ResourceNotFoundException(
-                            String.format("series with id %s not found", seriesDto.getId())));
+    Series series = seriesDto.getId() == null
+        ? new Series()
+        : seriesRepository
+            .findById(seriesDto.getId())
+            .orElseThrow(
+                () -> new ResourceNotFoundException(
+                    String.format("series with id %s not found", seriesDto.getId())));
 
     if (seriesDto.getTitle() != null) {
       series.setTitle(seriesDto.getTitle());
@@ -131,13 +127,11 @@ public class SeriesService {
       series.setGenres(
           seriesDto.getGenres().stream()
               .map(
-                  genre ->
-                      genreRepository
-                          .findByNameIgnoreCase(genre)
-                          .orElseThrow(
-                              () ->
-                                  new ResourceNotFoundException(
-                                      String.format("genre with name %s not found", genre))))
+                  genre -> genreRepository
+                      .findByNameIgnoreCase(genre)
+                      .orElseThrow(
+                          () -> new ResourceNotFoundException(
+                              String.format("genre with name %s not found", genre))))
               .collect(Collectors.toList()));
     }
 
@@ -179,14 +173,12 @@ public class SeriesService {
               seriesDto.getBooks().stream()
                   .filter(bookDto -> bookDto.getId() != null)
                   .map(
-                      bookDto ->
-                          bookRepository
-                              .findById(bookDto.getId())
-                              .orElseThrow(
-                                  () ->
-                                      new ResourceNotFoundException(
-                                          String.format(
-                                              "book with id %s not found", bookDto.getId()))))
+                      bookDto -> bookRepository
+                          .findById(bookDto.getId())
+                          .orElseThrow(
+                              () -> new ResourceNotFoundException(
+                                  String.format(
+                                      "book with id %s not found", bookDto.getId()))))
                   .collect(Collectors.toList()));
       series.getBooks().forEach(book -> book.setSeries(series));
     }
@@ -218,13 +210,11 @@ public class SeriesService {
       party = new Party();
       party.setFullName(creatorDto.getFullName());
     } else {
-      party =
-          partyRepository
-              .findById(creatorDto.getPartyId())
-              .orElseThrow(
-                  () ->
-                      new ResourceNotFoundException(
-                          String.format("party with id %s not found", creatorDto.getPartyId())));
+      party = partyRepository
+          .findById(creatorDto.getPartyId())
+          .orElseThrow(
+              () -> new ResourceNotFoundException(
+                  String.format("party with id %s not found", creatorDto.getPartyId())));
 
       if (series.getId() != null) {
         SeriesPartyId creatorId = new SeriesPartyId();
@@ -251,14 +241,12 @@ public class SeriesService {
         party.setFullName(publisherDto.getFullName().get());
       }
     } else {
-      party =
-          partyRepository
-              .findById(publisherDto.getPartyId().get())
-              .orElseThrow(
-                  () ->
-                      new ResourceNotFoundException(
-                          String.format(
-                              "party with id %s not found", publisherDto.getPartyId().get())));
+      party = partyRepository
+          .findById(publisherDto.getPartyId().get())
+          .orElseThrow(
+              () -> new ResourceNotFoundException(
+                  String.format(
+                      "party with id %s not found", publisherDto.getPartyId().get())));
 
       if (series.getId() != null) {
         SeriesPartyId creatorId = new SeriesPartyId();

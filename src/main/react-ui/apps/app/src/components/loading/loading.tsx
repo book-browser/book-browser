@@ -4,7 +4,7 @@ import './loading.scss';
 const Loading = () => {
   return (
     <div className="spinner-border loading-indicator" role="status">
-      <span className="sr-only">Loading...</span>
+      <span className="visually-hidden">Loading...</span>
     </div>
   );
 };

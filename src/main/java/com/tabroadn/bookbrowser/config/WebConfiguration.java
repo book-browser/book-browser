@@ -1,6 +1,8 @@
 package com.tabroadn.bookbrowser.config;
 
 import java.io.IOException;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -12,6 +14,9 @@ import org.springframework.web.servlet.resource.PathResourceResolver;
 
 @Configuration
 public class WebConfiguration implements WebMvcConfigurer {
+  @Autowired
+  private StringToGenreConverter stringToGenreConverter;
+
   @Override
   public void addResourceHandlers(ResourceHandlerRegistry registry) {
     registry
@@ -39,5 +44,6 @@ public class WebConfiguration implements WebMvcConfigurer {
     DateTimeFormatterRegistrar registrar = new DateTimeFormatterRegistrar();
     registrar.setUseIsoFormat(true);
     registrar.registerFormatters(registry);
+    registry.addConverter(stringToGenreConverter);
   }
 }
