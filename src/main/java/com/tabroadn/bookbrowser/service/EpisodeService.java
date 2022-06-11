@@ -35,11 +35,7 @@ public class EpisodeService {
   }
 
   public EpisodeDto createOrUpdate(EpisodeDto episodeDto) {
-    log.info("Creating or updating an episode");
-    log.debug("episodeDto {}", episodeDto);
     Episode episode = convertEpisodeDtoToEpisode(episodeDto);
-    log.info("Saving episode to repository");
-    log.debug("episode {}", episode);
     return DtoConversionUtils.convertEpisodeToEpisodeDto(episodeRepository.save(episode));
   }
 
@@ -52,8 +48,7 @@ public class EpisodeService {
   }
 
   private Episode convertEpisodeDtoToEpisode(EpisodeDto episodeDto) {
-    Episode episode =
-        episodeDto.getId() != null ? getEpisodeById(episodeDto.getId()) : new Episode();
+    Episode episode = episodeDto.getId() != null ? getEpisodeById(episodeDto.getId()) : new Episode();
 
     if (episodeDto.getTitle() != null) {
       episode.setTitle(episodeDto.getTitle().orElse(null));
@@ -87,14 +82,12 @@ public class EpisodeService {
 
     if (episodeDto.getSeriesId() != null) {
       if (episodeDto.getSeriesId().isPresent()) {
-        Series series =
-            seriesRepository
-                .findById(episodeDto.getSeriesId().get())
-                .orElseThrow(
-                    () ->
-                        new ResourceNotFoundException(
-                            String.format(
-                                "series with id %s not found", episodeDto.getSeriesId().get())));
+        Series series = seriesRepository
+            .findById(episodeDto.getSeriesId().get())
+            .orElseThrow(
+                () -> new ResourceNotFoundException(
+                    String.format(
+                        "series with id %s not found", episodeDto.getSeriesId().get())));
         if (!series.getEpisodes().contains(episode)) {
           episode.setSeries(series);
           series.getEpisodes().add(episode);

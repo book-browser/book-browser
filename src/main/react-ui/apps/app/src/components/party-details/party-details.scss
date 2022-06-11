@@ -1,0 +1,22 @@
+@import '../../variables.scss';
+
+.party-details-header {
+  display: flex;
+}
+
+.party-details {
+  margin-bottom: $margin-component-y;
+  display: flex;
+  gap: $margin-component-x;
+}
+
+@media screen and (max-width: 768px) {
+  .party-details {
+    flex-wrap: wrap;
+  }
+}
+
+.party-details-picture {
+  width: 300px;
+  height: 400px;
+}

@@ -49,13 +49,13 @@ const schema = yup.object().shape({
   )
 });
 
-interface SeriesFormProps {
+declare type SeriesFormProps = {
   onChange?: (series: Series, valid: boolean) => void;
   onSubmit?: (series: Series) => void;
   footer?: ReactNode;
   initialValue?: Series;
   value?: Series;
-}
+};
 
 const defaultSeries = {
   title: '',

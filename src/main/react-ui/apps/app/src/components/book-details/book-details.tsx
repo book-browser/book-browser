@@ -5,11 +5,11 @@ import { Book } from 'types/book';
 import MDEditor from '@uiw/react-md-editor';
 import './book-details.scss';
 
-interface BookProps {
+export declare type BookDetailsProps = {
   book: Book;
-}
+};
 
-export const BookDetails = ({ book }: BookProps) => {
+export const BookDetails = ({ book }: BookDetailsProps) => {
   return (
     <div className="book-details">
       <img className="book-details-thumbnail" alt="thumbnail" src={`/api/book/${book.id}/thumbnail`} />
@@ -68,3 +68,5 @@ export const BookDetails = ({ book }: BookProps) => {
     </div>
   );
 };
+
+export default BookDetails;

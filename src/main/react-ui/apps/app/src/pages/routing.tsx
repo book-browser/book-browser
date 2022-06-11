@@ -2,10 +2,11 @@ import ScrollToTop from 'components/scroll-to-top/scroll-to-top';
 import React from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import BookListPage from './book-list-page';
-import { BookPage } from './book-page';
-import { CreateBookPage } from './create-book-page';
+import BookPage from './book-page';
+import CreateBookPage from './create-book-page';
 import EditBookPage from './edit-book-page';
 import EditEpisodePage from './edit-episode-page';
+import EditPartyPage from './edit-party-page';
 import EditSeriesPage from './edit-series-page';
 import EpisodePage from './episode-page';
 import Header from './header';
@@ -14,6 +15,7 @@ import LoginPage from './login-page';
 import NewEpisodePage from './new-episode-page';
 import NewSeriesPage from './new-series-page';
 import NotFoundPage from './not-found-page';
+import PartyPage from './party-page';
 import RandomBookPage from './random-book-page';
 import RecentBookPage from './recent-book-page';
 import RecentlyUpdatedSeriesPage from './recently-updated-series-page';
@@ -50,6 +52,8 @@ export const Routing = () => {
         <Route path="/episode/new" element={<NewEpisodePage />}></Route>
         <Route path="/episode/:id" element={<EpisodePage />}></Route>
         <Route path="/episode/:id/edit" element={<EditEpisodePage />}></Route>
+        <Route path="/party/:id" element={<PartyPage />}></Route>
+        <Route path="/party/:id/edit" element={<EditPartyPage />}></Route>
         <Route path="/search" element={<SearchResultPage />}></Route>
         <Route path="/login" element={<LoginPage />}></Route>
         <Route path="/register" element={<RegisterPage />}></Route>

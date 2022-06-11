@@ -196,5 +196,5 @@ databaseChangeLog:
       author: Tariq Broadnax
       changes:
         - sqlFile:
-            path: changelog/scripts/25-tabroadn-alter-party-table-add-description-thumbnail.sql
+            path: changelog/scripts/25-tabroadn-alter-party-table-add-description-picture.sql
             relativeToChangelogFile: true

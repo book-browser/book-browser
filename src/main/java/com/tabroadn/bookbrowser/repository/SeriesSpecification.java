@@ -11,8 +11,7 @@ import javax.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
 public class SeriesSpecification {
-  private SeriesSpecification() {
-  }
+  private SeriesSpecification() {}
 
   public static Specification<Series> hasText(String text) {
     String[] parts = text.split(" ");
@@ -36,12 +35,13 @@ public class SeriesSpecification {
     return (series, cq, cb) -> {
       Expression<String> expression = series.get(field);
       if (field.equals("title")) {
-        expression = cb.function(
-            "replace",
-            String.class,
-            cb.upper(series.get("title")),
-            cb.literal("THE "),
-            cb.literal(""));
+        expression =
+            cb.function(
+                "replace",
+                String.class,
+                cb.upper(series.get("title")),
+                cb.literal("THE "),
+                cb.literal(""));
       }
       if (order == OrderEnum.ASC) {
         cq.orderBy(cb.asc(expression));

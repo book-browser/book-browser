@@ -1,18 +1,13 @@
 package com.tabroadn.bookbrowser.dto;
 
-import java.lang.StackWalker.Option;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-
 import com.tabroadn.bookbrowser.domain.LetterEnum;
 import com.tabroadn.bookbrowser.domain.OrderEnum;
 import com.tabroadn.bookbrowser.entity.Genre;
 import com.tabroadn.bookbrowser.validation.ValidSeriesSort;
-
+import java.util.List;
+import java.util.Optional;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
@@ -25,11 +20,9 @@ public class SeriesSearchCriteriaDto {
   @NotNull
   private Integer page = 0;
 
-  @ValidSeriesSort
-  private String sort = "id";
+  @ValidSeriesSort private String sort = "id";
 
-  @NotNull
-  private OrderEnum order = OrderEnum.DESC;
+  @NotNull private OrderEnum order = OrderEnum.DESC;
 
   private Optional<String> query = Optional.empty();
 

@@ -4,8 +4,11 @@ import com.tabroadn.bookbrowser.dto.PageDto;
 import com.tabroadn.bookbrowser.dto.PartyDto;
 import com.tabroadn.bookbrowser.dto.PartySearchCriteriaDto;
 import com.tabroadn.bookbrowser.entity.Party;
+import com.tabroadn.bookbrowser.exception.ResourceNotFoundException;
 import com.tabroadn.bookbrowser.repository.PartyRepository;
 import com.tabroadn.bookbrowser.repository.PartySpecification;
+import com.tabroadn.bookbrowser.util.DtoConversionUtils;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -18,7 +21,21 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class PartyService {
-  @Autowired private PartyRepository partyRepository;
+  @Autowired
+  private PartyRepository partyRepository;
+
+  public PartyDto getById(Long id) {
+    return DtoConversionUtils.convertPartyToPartyDto(getPartyById(id));
+  }
+
+  public PartyDto createOrUpdate(PartyDto partyDto) {
+    Party party = convertPartyDtoToParty(partyDto);
+    return DtoConversionUtils.convertPartyToPartyDto(partyRepository.save(party));
+  }
+
+  public byte[] getPicture(Long id) {
+    return getPartyById(id).getPicture();
+  }
 
   public List<PartyDto> search(String query) {
     String[] terms = query.split(" ");
@@ -30,50 +47,62 @@ public class PartyService {
       }
     }
 
-    return parties.stream().map(PartyService::convertPartyToPartyDto).collect(Collectors.toList());
+    return parties.stream().map(DtoConversionUtils::convertPartyToPartyDto).collect(Collectors.toList());
   }
 
   public PageDto<PartyDto> findAll(PartySearchCriteriaDto partySearchCriteriaDto) {
-    Pageable pageable =
-        PageRequest.of(partySearchCriteriaDto.getPage(), partySearchCriteriaDto.getLimit());
+    Pageable pageable = PageRequest.of(partySearchCriteriaDto.getPage(), partySearchCriteriaDto.getLimit());
 
-    Specification<Party> specification =
-        PartySpecification.orderBy(
-            partySearchCriteriaDto.getSort(), partySearchCriteriaDto.getOrder());
+    Specification<Party> specification = PartySpecification.orderBy(
+        partySearchCriteriaDto.getSort(), partySearchCriteriaDto.getOrder());
 
     if (partySearchCriteriaDto.getName() != null) {
-      specification =
-          specification.and(
-              PartySpecification.fullNameLike(partySearchCriteriaDto.getName().get()));
+      specification = specification.and(
+          PartySpecification.fullNameLike(partySearchCriteriaDto.getName().get()));
     }
     return new PageDto<>(
-        partyRepository.findAll(specification, pageable).map(PartyService::convertPartyToPartyDto));
+        partyRepository.findAll(specification, pageable).map(DtoConversionUtils::convertPartyToPartyDto));
   }
 
   public PageDto<PartyDto> findAllPublishers(PartySearchCriteriaDto partySearchCriteriaDto) {
-    Pageable pageable =
-        PageRequest.of(partySearchCriteriaDto.getPage(), partySearchCriteriaDto.getLimit());
+    Pageable pageable = PageRequest.of(partySearchCriteriaDto.getPage(), partySearchCriteriaDto.getLimit());
 
-    Specification<Party> specification =
-        PartySpecification.orderBy(
-            partySearchCriteriaDto.getSort(), partySearchCriteriaDto.getOrder());
+    Specification<Party> specification = PartySpecification.orderBy(
+        partySearchCriteriaDto.getSort(), partySearchCriteriaDto.getOrder());
 
     if (partySearchCriteriaDto.getName() != null) {
-      specification =
-          specification.and(
-              PartySpecification.fullNameLike(partySearchCriteriaDto.getName().orElse("")));
+      specification = specification.and(
+          PartySpecification.fullNameLike(partySearchCriteriaDto.getName().orElse("")));
     }
 
     specification = specification.and(PartySpecification.hasPublications());
 
     return new PageDto<>(
-        partyRepository.findAll(specification, pageable).map(PartyService::convertPartyToPartyDto));
+        partyRepository.findAll(specification, pageable).map(DtoConversionUtils::convertPartyToPartyDto));
   }
 
-  private static PartyDto convertPartyToPartyDto(Party party) {
-    PartyDto partyDto = new PartyDto();
-    partyDto.setId(party.getId());
-    partyDto.setFullName(party.getFullName());
-    return partyDto;
+  private Party convertPartyDtoToParty(PartyDto partyDto) {
+    Party party = partyDto.getId() != null ? getPartyById(partyDto.getId()) : new Party();
+
+    if (partyDto.getFullName() != null) {
+      party.setFullName(partyDto.getFullName().orElse(null));
+    }
+
+    if (partyDto.getDescription() != null) {
+      party.setDescription(partyDto.getDescription().orElse(null));
+    }
+
+    if (partyDto.getPicture() != null) {
+      party.setPicture(partyDto.getPictureBytes());
+    }
+
+    return party;
+  }
+
+  private Party getPartyById(Long id) {
+    return partyRepository
+        .findById(id)
+        .orElseThrow(
+            () -> new ResourceNotFoundException(String.format("party with id %s not found", id)));
   }
 }

@@ -30,7 +30,7 @@ const SeriesDetails = ({ series }: SeriesDetailsProps) => {
       <p>
         {series.creators.map((creator, index) => (
           <span key={creator.partyId}>
-            <Link to={`/creator/${creator.partyId}`}>{creator.fullName}</Link>
+            <Link to={`/party/${creator.partyId}`}>{creator.fullName}</Link>
             {index !== series.creators.length - 1 && ', '}
           </span>
         ))}

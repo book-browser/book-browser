@@ -8,6 +8,7 @@ import com.tabroadn.bookbrowser.dto.EpisodeDto;
 import com.tabroadn.bookbrowser.dto.GenreDto;
 import com.tabroadn.bookbrowser.dto.LetterDto;
 import com.tabroadn.bookbrowser.dto.LinkDto;
+import com.tabroadn.bookbrowser.dto.PartyDto;
 import com.tabroadn.bookbrowser.dto.PublisherDto;
 import com.tabroadn.bookbrowser.dto.SeriesDto;
 import com.tabroadn.bookbrowser.entity.Book;
@@ -16,6 +17,7 @@ import com.tabroadn.bookbrowser.entity.BookLink;
 import com.tabroadn.bookbrowser.entity.Episode;
 import com.tabroadn.bookbrowser.entity.EpisodeLink;
 import com.tabroadn.bookbrowser.entity.Genre;
+import com.tabroadn.bookbrowser.entity.Party;
 import com.tabroadn.bookbrowser.entity.Series;
 import com.tabroadn.bookbrowser.entity.SeriesCreator;
 import com.tabroadn.bookbrowser.entity.SeriesLink;
@@ -25,7 +27,8 @@ import java.util.stream.Collectors;
 
 public class DtoConversionUtils {
 
-  private DtoConversionUtils() {}
+  private DtoConversionUtils() {
+  }
 
   public static GenreDto convertGenreToGenreDto(Genre genre) {
     GenreDto genreDto = new GenreDto();
@@ -172,5 +175,14 @@ public class DtoConversionUtils {
                 .map(DtoConversionUtils::convertEpisodeLinkToLinkDto)
                 .collect(Collectors.toList())));
     return episodeDto;
+  }
+
+  public static PartyDto convertPartyToPartyDto(Party party) {
+    PartyDto partyDto = new PartyDto();
+    partyDto.setId(party.getId());
+    partyDto.setFullName(Optional.ofNullable(party.getFullName()));
+    partyDto.setDescription(Optional.ofNullable(party.getDescription()));
+    partyDto.setHasPicture(party.getPicture() != null);
+    return partyDto;
   }
 }

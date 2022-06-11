@@ -37,13 +37,17 @@ public class SeriesController {
     return seriesService.getById(id);
   }
 
-  @GetMapping(value = "/series/{id}/banner", produces = { MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE })
+  @GetMapping(
+      value = "/series/{id}/banner",
+      produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
   public byte[] getSeriesBanner(@PathVariable("id") Long id, HttpServletResponse response) {
     response.addHeader("Cache-Control", "max-age=86400, must-revalidate, no-transform");
     return seriesService.getSeriesBanner(id);
   }
 
-  @GetMapping(value = "/series/{id}/thumbnail", produces = { MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE })
+  @GetMapping(
+      value = "/series/{id}/thumbnail",
+      produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
   public byte[] getSeriesThumbnail(@PathVariable("id") Long id, HttpServletResponse response) {
     response.addHeader("Cache-Control", "max-age=86400, must-revalidate, no-transform");
     return seriesService.getSeriesThumbnail(id);

@@ -18,7 +18,6 @@ export const usePromise = <A, B>(executor: PromiseExecutor<A, B>) => {
       const currentPromise = promise;
       currentPromise
         .then((data) => {
-          console.log(currentPromise, promise);
           if (currentPromise === promise) {
             setState(() => {
               return {

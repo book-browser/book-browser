@@ -89,3 +89,5 @@ export const CreateBookPage = () => {
     </Container>
   );
 };
+
+export default CreateBookPage;

@@ -1,10 +1,8 @@
 package com.tabroadn.bookbrowser.config;
 
 import javax.servlet.http.HttpServletRequest;
-
-import org.springframework.web.filter.AbstractRequestLoggingFilter;
-
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.filter.AbstractRequestLoggingFilter;
 
 @Slf4j
 public class RequestLoggingFilter extends AbstractRequestLoggingFilter {
@@ -23,6 +21,5 @@ public class RequestLoggingFilter extends AbstractRequestLoggingFilter {
   }
 
   @Override
-  protected void afterRequest(HttpServletRequest request, String message) {
-  }
+  protected void afterRequest(HttpServletRequest request, String message) {}
 }

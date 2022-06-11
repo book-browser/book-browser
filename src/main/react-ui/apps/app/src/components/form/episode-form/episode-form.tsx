@@ -4,6 +4,7 @@ import React, { ReactNode } from 'react';
 import { Episode } from 'types/episode';
 import * as yup from 'yup';
 import Form from '../form/form';
+import { RequiredFieldLegend } from '../required-field-legend';
 import { RequiredSymbol } from '../required-symbol';
 
 const schema = yup.object().shape({
@@ -65,6 +66,7 @@ export const EpisodeForm = (props: EpisodeFormProps) => {
       }) => {
         return (
           <>
+            <RequiredFieldLegend />
             <Form.Group controlId="title-input" className="mb-3">
               <Form.Label>
                 Title
