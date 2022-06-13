@@ -9,14 +9,13 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificationExecutor<Book> {
-  @Query(
-      value =
-          "select * from book b "
-              + "join creator c on b.id = c.book_id "
-              + "join party p on c.party_id = p.id "
-              + "where upper(b.title) like upper(concat('%',:query,'%')) "
-              + "or upper(b.description) like upper(concat('%',:query,'%')) "
-              + "or upper(p.full_name) like upper(concat('%',:query,'%'))",
-      nativeQuery = true)
+  @Query(value = "select * from book b "
+      + "join creator c on b.id = c.book_id "
+      + "join party p on c.party_id = p.id "
+      + "where upper(b.title) like upper(concat('%',:query,'%')) "
+      + "or upper(b.description) like upper(concat('%',:query,'%')) "
+      + "or upper(p.full_name) like upper(concat('%',:query,'%'))", nativeQuery = true)
   List<Book> search(String query);
+
+  public List<Book> findAllBySeriesIdOrderByReleaseDateDesc(Long seriesId);
 }

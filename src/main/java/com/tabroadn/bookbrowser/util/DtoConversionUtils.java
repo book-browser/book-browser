@@ -73,10 +73,6 @@ public class DtoConversionUtils {
     seriesDto.setHasBanner(series.getBanner() != null);
     seriesDto.setHasThumbnail(series.getThumbnail() != null);
     seriesDto.setLastUpdated(series.getLastUpdated());
-    seriesDto.setBooks(
-        series.getBooks().stream()
-            .map(DtoConversionUtils::convertBookToBookDto)
-            .collect(Collectors.toList()));
     seriesDto.setCreators(
         series.getCreators().stream()
             .map(DtoConversionUtils::convertSeriesCreatorToPartyCreatorDto)
@@ -86,10 +82,6 @@ public class DtoConversionUtils {
     seriesDto.setLinks(
         series.getLinks().stream()
             .map(DtoConversionUtils::convertSeriesLinkToLinkDto)
-            .collect(Collectors.toList()));
-    seriesDto.setEpisodes(
-        series.getEpisodes().stream()
-            .map(DtoConversionUtils::convertEpisodeToEpisodeDto)
             .collect(Collectors.toList()));
     seriesDto.setPublishers(
         series.getPublishers().stream()

@@ -23,7 +23,7 @@ export const BookDetails = ({ book }: BookDetailsProps) => {
         <p>
           {book.creators.map((creator, index) => (
             <span key={creator.partyId}>
-              <Link to={`/creator/${creator.partyId}`}>{creator.fullName}</Link>
+              <Link to={`/party/${creator.partyId}`}>{creator.fullName}</Link>
               {index !== book.creators.length - 1 && ', '}
             </span>
           ))}
