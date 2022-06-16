@@ -14,7 +14,7 @@ const RandomBookPage = () => {
 
   useEffect(() => {
     if (data) {
-      navigate(`/book/${data[0].id}`);
+      navigate(`/books/${data[0].id}`);
     }
   }, [data, navigate]);
 

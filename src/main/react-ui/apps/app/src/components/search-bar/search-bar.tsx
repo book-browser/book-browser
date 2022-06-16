@@ -25,7 +25,7 @@ const BookSearchBarOption = ({ option, position, query }: { option: Book; positi
   };
 
   return (
-    <Link to={`/book/${option.id}`} className={`dropdown-item ${newProps.active ? 'active' : ''}`} {...props}>
+    <Link to={`/books/${option.id}`} className={`dropdown-item ${newProps.active ? 'active' : ''}`} {...props}>
       <div className="search-option">
         <img className="search-option-thumbnail" src={`/api/book/${option.id}/thumbnail`} alt="search thumbnail" />
         <div className="text-truncate">
@@ -66,7 +66,7 @@ const SearchBar = ({ className }: { className?: string }) => {
     if (event.key === 'Enter') {
       if (activeIndex !== -1) {
         if (activeIndex < data[0].items.length) {
-          navigate(`/book/${data[0].items[activeIndex].id}`);
+          navigate(`/books/${data[0].items[activeIndex].id}`);
         } else {
           navigate(`/series/${data[1].items[data[0].items.length - activeIndex].id}`);
         }

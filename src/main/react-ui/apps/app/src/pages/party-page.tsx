@@ -22,7 +22,7 @@ const PartyPageHeader = ({ party }: { party: Party }) => {
         <Breadcrumb.Item active>Party</Breadcrumb.Item>
         <Breadcrumb.Item active>{party.fullName}</Breadcrumb.Item>
       </Breadcrumb>
-      <Button as={Link as any} to={`/party/${party.id}/edit`} className="ms-auto" variant="primary">
+      <Button as={Link as any} to={`/parties/${party.id}/edit`} className="ms-auto" variant="primary">
         <EditIcon /> Edit
       </Button>
     </div>

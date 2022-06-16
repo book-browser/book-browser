@@ -27,7 +27,7 @@ const EpisodePageHeader = ({ episode }: { episode: Episode }) => {
         </Breadcrumb.Item>
         <Breadcrumb.Item active>{episode.title}</Breadcrumb.Item>
       </Breadcrumb>
-      <Button as={Link as any} to={`/episode/${episode.id}/edit`} className="ms-auto" variant="primary">
+      <Button as={Link as any} to={`/episodes/${episode.id}/edit`} className="ms-auto" variant="primary">
         <EditIcon /> Edit
       </Button>
     </div>

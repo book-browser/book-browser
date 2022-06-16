@@ -38,7 +38,7 @@ export const EditEpisodePage = () => {
   };
 
   const cancel = () => {
-    navigate(`/episode/${episode.id}`);
+    navigate(`/episodes/${episode.id}`);
   };
 
   useEffect(() => {
@@ -85,7 +85,7 @@ export const EditEpisodePage = () => {
             <Breadcrumb.Item linkAs={Link} linkProps={{ to: `/series/${episode.seriesId}` }}>
               {episode.seriesTitle}
             </Breadcrumb.Item>
-            <Breadcrumb.Item linkAs={Link} linkProps={{ to: `/episode/${episode.id}` }}>
+            <Breadcrumb.Item linkAs={Link} linkProps={{ to: `/episodes/${episode.id}` }}>
               {(savedEpisode || loadedEpisode)?.title}
             </Breadcrumb.Item>
             <Breadcrumb.Item active>Edit</Breadcrumb.Item>

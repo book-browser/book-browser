@@ -93,7 +93,7 @@ const Header = () => {
               <>
                 <Nav>
                   <NavDropdown title={<AddIcon />} id="test">
-                    <NavDropdown.Item as={Link} to="/book/new">
+                    <NavDropdown.Item as={Link} to="/books/new">
                       New Book
                     </NavDropdown.Item>
                     <NavDropdown.Item as={Link} to="/series/new">

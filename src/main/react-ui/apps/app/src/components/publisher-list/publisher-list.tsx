@@ -14,7 +14,7 @@ export const PublisherList = ({ publishers }: PublisherListProps) => {
       {publishers.map((publisher) => (
         <ListGroup.Item key={publisher.partyId} className="bg-light">
           <div className="d-flex justify-content-start align-items-baseline">
-            <Link to={`/party/${publisher.partyId}`}>
+            <Link to={`/parties/${publisher.partyId}`}>
               <strong>{publisher.fullName}</strong>
             </Link>
             {publisher && (

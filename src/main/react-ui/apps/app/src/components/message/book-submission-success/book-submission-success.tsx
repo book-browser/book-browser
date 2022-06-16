@@ -18,7 +18,7 @@ const BookSubmissionSuccess = ({ book }: BookSubmissionSuccessProps) => {
           </Nav.Link>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link as={Link} to={`/book/${book.id}`}>
+          <Nav.Link as={Link} to={`/books/${book.id}`}>
             View Submission
           </Nav.Link>
         </Nav.Item>

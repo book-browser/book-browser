@@ -37,23 +37,43 @@ export const Routing = () => {
       <Header />
       <ScrollToTop />
       <Routes>
-        <Route path="/book/new" element={<CreateBookPage />} />
-        <Route path="/books/search" element={<SearchBookPage />}></Route>
-        <Route path="/book/:id" element={<BookPage />}></Route>
-        <Route path="/book/:id/edit" element={<EditBookPage />}></Route>
-        <Route path="/books" element={<BookListPage />}></Route>
-        <Route path="/series" element={<SeriesListPage />}></Route>
-        <Route path="/series/recently-updated" element={<RecentlyUpdatedSeriesPage />}></Route>
-        <Route path="/series/search" element={<SearchSeriesPage />}></Route>
-        <Route path="/series/new" element={<NewSeriesPage />}></Route>
-        <Route path="/series/:id" element={<SeriesPage />}></Route>
-        <Route path="/series/:id/episodes" element={<SeriesEpisodesPage />}></Route>
-        <Route path="/series/:id/edit" element={<EditSeriesPage />}></Route>
-        <Route path="/episode/new" element={<NewEpisodePage />}></Route>
-        <Route path="/episode/:id" element={<EpisodePage />}></Route>
-        <Route path="/episode/:id/edit" element={<EditEpisodePage />}></Route>
-        <Route path="/party/:id" element={<PartyPage />}></Route>
-        <Route path="/party/:id/edit" element={<EditPartyPage />}></Route>
+        <Route path="books">
+          <Route index element={<BookListPage />}></Route>
+          <Route path="new" element={<CreateBookPage />}></Route>
+          <Route path="search" element={<SearchBookPage />}></Route>
+          <Route path=":id">
+            <Route index element={<BookPage />}></Route>
+            <Route path="edit" element={<EditBookPage />}></Route>
+          </Route>
+        </Route>
+
+        <Route path="series">
+          <Route index element={<SeriesListPage />}></Route>
+          <Route path="recently-updated" element={<RecentlyUpdatedSeriesPage />}></Route>
+          <Route path="search" element={<SearchSeriesPage />}></Route>
+          <Route path="new" element={<NewSeriesPage />}></Route>
+          <Route path=":id">
+            <Route index element={<SeriesPage />}></Route>
+            <Route path="episodes" element={<SeriesEpisodesPage />}></Route>
+            <Route path="edit" element={<EditSeriesPage />}></Route>
+          </Route>
+        </Route>
+
+        <Route path="episodes">
+          <Route path="new" element={<NewEpisodePage />}></Route>
+          <Route path=":id">
+            <Route index element={<EpisodePage />}></Route>
+            <Route path="edit" element={<EditEpisodePage />}></Route>
+          </Route>
+        </Route>
+
+        <Route path="parties">
+          <Route path=":id">
+            <Route index element={<PartyPage />}></Route>
+            <Route path="edit" element={<EditPartyPage />}></Route>
+          </Route>
+        </Route>
+
         <Route path="/search" element={<SearchResultPage />}></Route>
         <Route path="/login" element={<LoginPage />}></Route>
         <Route path="/register" element={<RegisterPage />}></Route>

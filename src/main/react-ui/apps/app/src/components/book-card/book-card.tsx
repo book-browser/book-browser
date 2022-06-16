@@ -12,7 +12,7 @@ const BookCard = ({ book }: IBookCardProps) => {
   return (
     <Card className="book-card">
       <Card.Thumbnail>
-        <ImgLink to={`/book/${book.id}`} imgProps={{ alt: 'thumbnail', src: `/api/book/${book.id}/thumbnail` }} />
+        <ImgLink to={`/books/${book.id}`} imgProps={{ alt: 'thumbnail', src: `/api/book/${book.id}/thumbnail` }} />
       </Card.Thumbnail>
     </Card>
   );

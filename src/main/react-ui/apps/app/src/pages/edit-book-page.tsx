@@ -37,7 +37,7 @@ const EditBookPage = () => {
   };
 
   const cancel = () => {
-    navigate(`/book/${book.id}`);
+    navigate(`/books/${book.id}`);
   };
 
   useEffect(() => {
@@ -81,7 +81,7 @@ const EditBookPage = () => {
             <Breadcrumb.Item linkAs={Link} linkProps={{ to: '/books' }}>
               Books
             </Breadcrumb.Item>
-            <Breadcrumb.Item linkAs={Link} linkProps={{ to: `/book/${book.id}` }}>
+            <Breadcrumb.Item linkAs={Link} linkProps={{ to: `/books/${book.id}` }}>
               {(savedBook || loadedBook)?.title}
             </Breadcrumb.Item>
             <Breadcrumb.Item active>Edit</Breadcrumb.Item>

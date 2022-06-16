@@ -38,7 +38,7 @@ export const EditPartyPage = () => {
   };
 
   const cancel = () => {
-    navigate(`/party/${party.id}`);
+    navigate(`/parties/${party.id}`);
   };
 
   useEffect(() => {
@@ -80,7 +80,7 @@ export const EditPartyPage = () => {
               Home
             </Breadcrumb.Item>
             <Breadcrumb.Item active>Party</Breadcrumb.Item>
-            <Breadcrumb.Item linkAs={Link} linkProps={{ to: `/party/${party.id}` }}>
+            <Breadcrumb.Item linkAs={Link} linkProps={{ to: `/parties/${party.id}` }}>
               {(savedParty || loadedParty)?.fullName}
             </Breadcrumb.Item>
             <Breadcrumb.Item active>Edit</Breadcrumb.Item>

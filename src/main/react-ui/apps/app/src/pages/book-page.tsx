@@ -37,7 +37,7 @@ const BookPageHeader = ({ book }: { book: Book }) => {
 
         <Breadcrumb.Item active>{book.title}</Breadcrumb.Item>
       </Breadcrumb>
-      <Button as={Link as any} to={`/book/${book.id}/edit`} className="ms-auto" variant="primary">
+      <Button as={Link as any} to={`/books/${book.id}/edit`} className="ms-auto" variant="primary">
         <EditIcon /> Edit
       </Button>
     </div>

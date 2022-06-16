@@ -30,7 +30,7 @@ const SeriesDetails = ({ series }: SeriesDetailsProps) => {
       <p>
         {series.creators.map((creator, index) => (
           <span key={creator.partyId}>
-            <Link to={`/party/${creator.partyId}`}>{creator.fullName}</Link>
+            <Link to={`/parties/${creator.partyId}`}>{creator.fullName}</Link>
             {index !== series.creators.length - 1 && ', '}
           </span>
         ))}
@@ -86,7 +86,7 @@ const SeriesDetails = ({ series }: SeriesDetailsProps) => {
         <div className="mb-3">
           <h2 className="heading-section d-flex align-items-start">
             <div>Episodes</div>
-            <Button as={Link as any} to={`/episode/new?seriesId=${series.id}`} className="ms-auto" variant="primary">
+            <Button as={Link as any} to={`/episodes/new?seriesId=${series.id}`} className="ms-auto" variant="primary">
               <Add /> New Episode
             </Button>
           </h2>
