@@ -2,6 +2,7 @@ import { Container } from '@mui/material';
 import BookList from 'components/book-list/book-list';
 import { ErrorAlert } from 'components/error/error-alert';
 import Loading from 'components/loading/loading';
+import Heading from 'components/navigation/heading/heading';
 import SeriesList from 'components/series-list/series-list';
 import { useEmptyPromise } from 'hooks/promise.hook';
 import React, { useEffect } from 'react';
@@ -36,18 +37,24 @@ const HomepageContent = () => {
   } else if (data) {
     return (
       <div>
-        <h3>Recently Updated</h3>
+        <Heading as="h2" id="recently-updated">
+          Recently Updated
+        </Heading>
         {data[1].items && <SeriesList seriesList={data[0].items} />}
         <div className="d-flex mb-3">
           <Link to="/series/recently-updated">View More</Link>
         </div>
-        <h3>Recent Releases</h3>
+        <Heading as="h2" id="recent-releases">
+          Recent Releases
+        </Heading>
         {data[1].items && <BookList books={data[1].items} />}
         <div className="d-flex mb-3">
           <Link to="/recent">View More</Link>
         </div>
         <hr />
-        <h3>Coming Soon</h3>
+        <Heading as="h2" id="coming-soon">
+          Coming Soon
+        </Heading>
         {data[2].items && <BookList books={data[2].items} />}
         <div className="d-flex">
           <Link to="/coming-soon">View More</Link>

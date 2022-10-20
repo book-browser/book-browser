@@ -261,7 +261,7 @@ public class SeriesService {
       }
     }
 
-    if (publisherDto.getUrl() != null) {
+    if (publisherDto.getUrl() != null && publisherDto.getUrl().isPresent()) {
       publisher.setUrl(publisherDto.getUrl().get());
     }
 

@@ -3,6 +3,15 @@
 @import './variables.scss';
 @import './shim.scss';
 
+@font-face {
+  font-family: 'Nunito-Light';
+  src: local('Nunito-Light'), url(./assets/fonts/Nunito-Light.ttf) format('truetype');
+}
+
+* {
+  font-family: 'Nunito-Light';
+}
+
 .heading-top {
   font-size: $heading-top-font-size;
 }
@@ -73,7 +82,36 @@
 
 .details-banner {
   width: 100%;
-  height: 350px;
+}
+
+@include media-breakpoint-up(xs) {
+  .details-banner {
+    height: 175px;
+  }
+}
+
+@include media-breakpoint-up(sm) {
+  .details-banner {
+    height: 200px;
+  }
+}
+
+@include media-breakpoint-up(md) {
+  .details-banner {
+    height: 250px;
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  .details-banner {
+    height: 300px;
+  }
+}
+
+@include media-breakpoint-up(xl) {
+  .details-banner {
+    height: 350px;
+  }
 }
 
 a {

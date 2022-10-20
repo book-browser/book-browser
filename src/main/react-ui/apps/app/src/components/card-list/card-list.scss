@@ -3,7 +3,7 @@
 .card-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 1%;
   row-gap: 20px;
   margin-bottom: 10px;
 }
@@ -11,7 +11,16 @@
 @include media-breakpoint-up(xs) {
   .card-list {
     .card {
-      flex: 0 1 30%;
+      flex: 0 1 49.5%; // 2
+      // 101/n - 1 = p
+    }
+  }
+}
+
+@include media-breakpoint-up(sm) {
+  .card-list {
+    .card {
+      flex: 0 1 32.66%; // 2
     }
   }
 }
@@ -19,7 +28,7 @@
 @include media-breakpoint-up(md) {
   .card-list {
     .card {
-      flex: 0 1 24%;
+      flex: 0 1 24.25%; // 4
     }
   }
 }
@@ -27,7 +36,7 @@
 @include media-breakpoint-up(lg) {
   .card-list {
     .card {
-      flex: 0 1 19%;
+      flex: 0 1 19.2%; // 5
     }
   }
 }
@@ -35,7 +44,7 @@
 @include media-breakpoint-up(xl) {
   .card-list {
     .card {
-      flex: 0 1 15.5%;
+      flex: 0 1 15.83%; // 6
     }
   }
 }

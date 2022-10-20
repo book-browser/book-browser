@@ -14,7 +14,7 @@ import { Series } from 'types/series';
 
 const SeriesPageHeader = ({ series }: { series: Series }) => {
   return (
-    <div className="d-flex align-items-start mb-3">
+    <div className="d-flex align-items-baseline mb-2">
       <Breadcrumb>
         <Breadcrumb.Item linkAs={Link} linkProps={{ to: '/home' }}>
           Home

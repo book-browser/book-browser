@@ -20,11 +20,9 @@ export const EpisodeCard = ({ episode }: EpisodeCardProps) => {
         />
       </Card.Thumbnail>
       <div>
+        <Link to={`/episodes/${episode.id}`}>{episode.title}</Link>
         <div>
-          <Link to={`/episodes/${episode.id}`}>{episode.title}</Link>
-        </div>
-        <div>
-          <small>{moment(episode.releaseDate).format('MM/DD/YYYY')}</small>
+          <small>{moment(episode.releaseDate).format('M/D/YYYY')}</small>
         </div>
       </div>
     </Card>

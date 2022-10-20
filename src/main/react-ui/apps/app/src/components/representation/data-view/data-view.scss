@@ -1,0 +1,14 @@
+@import '../../../variables.scss';
+
+.data-view {
+  margin-bottom: $margin-component-y;
+  .data-view-item {
+    margin-bottom: $margin-element-y;
+    display: flex;
+    align-items: baseline;
+  }
+  .data-view-heading {
+    font-weight: bolder;
+    margin-right: $margin-element-x;
+  }
+}

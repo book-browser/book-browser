@@ -1,9 +1,9 @@
 import GenreBadge from 'components/genre-badge/genre-badge';
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { Book } from 'types/book';
 import MDEditor from '@uiw/react-md-editor';
 import './book-details.scss';
+import { Link } from 'react-router-dom';
 
 export declare type BookDetailsProps = {
   book: Book;
@@ -56,9 +56,9 @@ export const BookDetails = ({ book }: BookDetailsProps) => {
             <div className="mb-4">
               {book.links.map((link) => (
                 <div key={link.url}>
-                  <Link to={{ pathname: link.url }} target="_blank">
+                  <a href={link.url} rel="noreferrer" target="_blank">
                     {link.description}
-                  </Link>
+                  </a>
                 </div>
               ))}
             </div>
