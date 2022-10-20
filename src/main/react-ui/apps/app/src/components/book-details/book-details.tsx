@@ -5,6 +5,7 @@ import MDEditor from '@uiw/react-md-editor';
 import './book-details.scss';
 import { Link } from 'react-router-dom';
 import Heading from 'components/navigation/heading/heading';
+import ExternalLink from 'components/navigation/external-link/external-link';
 
 export type BookDetailsProps = {
   book: Book;
@@ -57,9 +58,7 @@ export const BookDetails = ({ book }: BookDetailsProps) => {
             <div className="mb-4">
               {book.links.map((link) => (
                 <div key={link.url}>
-                  <a href={link.url} rel="noreferrer" target="_blank">
-                    {link.description}
-                  </a>
+                  <ExternalLink href={link.url}>{link.description}</ExternalLink>
                 </div>
               ))}
             </div>

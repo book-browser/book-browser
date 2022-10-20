@@ -1,8 +1,8 @@
+import ExternalLink from 'components/navigation/external-link/external-link';
 import React from 'react';
-import { Button, ListGroup } from 'react-bootstrap';
+import { ListGroup } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { Publisher } from 'types/publisher';
-import LaunchIcon from '@mui/icons-material/Launch';
 
 export type PublisherListProps = {
   publishers: Publisher[];
@@ -19,11 +19,7 @@ export const PublisherList = ({ publishers }: PublisherListProps) => {
             </Link>
             {publisher && (
               <div className="ms-auto">
-                <a href={publisher.url} target="_blank" rel="noreferrer">
-                  <Button>
-                    <LaunchIcon />
-                  </Button>
-                </a>
+                <ExternalLink href={publisher.url}>publisher.url</ExternalLink>
               </div>
             )}
           </div>
