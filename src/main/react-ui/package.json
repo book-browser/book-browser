@@ -34,7 +34,7 @@
     "@mui/material": "5.8.0",
     "@mui/styles": "5.8.0",
     "@reduxjs/toolkit": "1.8.1",
-    "@storybook/builder-webpack5": "6.4.5",
+    "@storybook/builder-webpack5": "6.5.12",
     "@storybook/core-server": "6.4.22",
     "@storybook/manager-webpack5": "6.4.5",
     "@types/react-redux": "7.1.16",
