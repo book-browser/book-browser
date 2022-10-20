@@ -2,7 +2,7 @@ import * as yup from 'yup';
 import { parse } from 'query-string';
 import { Location } from 'react-router-dom';
 
-export declare type ParamType = Record<string, string | string[] | number | number[]>;
+export type ParamType = Record<string, string | string[] | number | number[]>;
 
 export const parseParams = <E extends ParamType>(location: Location, schema: yup.SchemaOf<E>) => {
   const params: unknown = parse(location.search, { parseNumbers: true, parseBooleans: true });

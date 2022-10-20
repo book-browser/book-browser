@@ -1,7 +1,7 @@
 import MDEditor from '@uiw/react-md-editor';
 import React from 'react';
 
-declare type MarkdownControlProps = {
+export type MarkdownControlProps = {
   name?: string;
   value?: string;
   isInvalid?: boolean;

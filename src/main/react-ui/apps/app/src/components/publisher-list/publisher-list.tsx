@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Publisher } from 'types/publisher';
 import LaunchIcon from '@mui/icons-material/Launch';
 
-export declare type PublisherListProps = {
+export type PublisherListProps = {
   publishers: Publisher[];
 };
 

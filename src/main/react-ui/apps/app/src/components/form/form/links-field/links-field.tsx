@@ -5,7 +5,7 @@ import { Link } from 'types/link';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { FormikErrors, FormikTouched } from 'formik';
 
-export declare type LinksFieldProps = {
+export type LinksFieldProps = {
   name?: string;
   value?: Partial<Link>[];
   touched?: FormikTouched<Link[]>;

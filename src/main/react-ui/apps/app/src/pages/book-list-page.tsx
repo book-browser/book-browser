@@ -13,7 +13,7 @@ import { ReferenceData } from 'types/reference-data';
 import { generateEncodedUrl, parseParams } from 'utils/location-utils';
 import * as yup from 'yup';
 
-declare type BookListPageParams = {
+type BookListPageParams = {
   page: number;
   letter: string;
 };

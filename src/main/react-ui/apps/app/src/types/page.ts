@@ -1,8 +1,8 @@
-export interface Page<E> {
+export type Page<E> = {
   items: E[];
   totalPages: number;
   totalElements: number;
-}
+};
 
 export const mapPageItems = <A, B>(p: Page<A>, mapper: (A) => B) => {
   return {

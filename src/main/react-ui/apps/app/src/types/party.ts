@@ -1,4 +1,4 @@
-export declare type Party = {
+export type Party = {
   id: number;
   fullName: string;
   description: string;

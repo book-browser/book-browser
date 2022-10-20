@@ -11,7 +11,7 @@ import PublishersField from './publishers-field/publishers-field';
 import SeriesControl from './series-control/series-control';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-export declare type FormProps<Values extends FormikValues, ExtraProps = {}> = Omit<
+export type FormProps<Values extends FormikValues, ExtraProps = {}> = Omit<
   FormikConfig<Values> & ExtraProps,
   'onSubmit'
 > & {

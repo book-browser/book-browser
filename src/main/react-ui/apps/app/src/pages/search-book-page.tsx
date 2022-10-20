@@ -11,7 +11,7 @@ import { ReferenceData } from 'types/reference-data';
 import BookList from 'components/book-list/book-list';
 import Pagination from 'components/pagination/pagination';
 
-declare type SearchBookPageParams = {
+type SearchBookPageParams = {
   query: string;
   genres: string[];
   page: number;

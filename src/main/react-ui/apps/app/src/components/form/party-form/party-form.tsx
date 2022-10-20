@@ -15,7 +15,7 @@ const schema = yup.object().shape({
   })
 });
 
-declare type PartyFormProps = {
+export type PartyFormProps = {
   onChange?: (series: DeepPartial<Party>, valid: boolean) => void;
   onSubmit?: (series: DeepPartial<Party>) => void;
   footer?: ReactNode;

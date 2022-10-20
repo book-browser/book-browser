@@ -10,7 +10,7 @@ import { Link } from 'types/link';
 import { Party } from 'types/party';
 import { Publisher } from 'types/publisher';
 
-export declare type PublishersFieldProps = {
+export type PublishersFieldProps = {
   name?: string;
   value?: Partial<Publisher>[];
   touched?: FormikTouched<Publisher[]>;

@@ -29,7 +29,7 @@ const schema = yup.object().shape({
   )
 });
 
-export declare type EpisodeFormProps = {
+export type EpisodeFormProps = {
   onChange?: (series: DeepPartial<Episode>, valid: boolean) => void;
   onSubmit?: (series: DeepPartial<Episode>) => void;
   footer?: ReactNode;

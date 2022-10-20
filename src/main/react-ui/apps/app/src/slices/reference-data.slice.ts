@@ -11,11 +11,11 @@ export const fetchReferenceData = createAsyncThunk('referenceData/fetchReference
   }
 });
 
-interface ReferenceDataState {
+export type ReferenceDataState = {
   data?: ReferenceData;
   loading: boolean;
   error?: Error;
-}
+};
 
 export const referenceDataSlice = createSlice({
   name: 'referenceData',

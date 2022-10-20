@@ -13,7 +13,7 @@ import { Series } from 'types/series';
 import { parseParams } from 'utils/location-utils';
 import * as yup from 'yup';
 
-declare type NewEpisodePageParams = {
+type NewEpisodePageParams = {
   title?: string;
   seriesId?: number;
   description?: string;

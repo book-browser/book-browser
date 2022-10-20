@@ -5,7 +5,7 @@ import { mapPageItems, Page } from 'types/page';
 import { getFileBase64 } from 'utils/file-utils';
 import { handleResponse } from './response.service';
 
-declare type EpisodeDto = {
+type EpisodeDto = {
   id: number;
   seriesId: number;
   title: string;

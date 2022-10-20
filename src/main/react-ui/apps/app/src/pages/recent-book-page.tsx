@@ -11,7 +11,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { generateEncodedUrl, parseParams } from 'utils/location-utils';
 import * as yup from 'yup';
 
-declare type RecentBookPageParams = {
+type RecentBookPageParams = {
   page: number;
 };
 

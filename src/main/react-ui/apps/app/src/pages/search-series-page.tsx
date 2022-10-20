@@ -13,7 +13,7 @@ import { generateEncodedUrl, parseParams } from 'utils/location-utils';
 import * as yup from 'yup';
 import Loading from 'components/loading/loading';
 
-declare type SearchSeriesPageParams = {
+type SearchSeriesPageParams = {
   query: string;
   genres: string[];
   sort: string;

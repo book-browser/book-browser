@@ -4,7 +4,7 @@ import { Link } from './link';
 import { Creator } from './creator';
 import { Publisher } from './publisher';
 
-export interface Series {
+export type Series = {
   id: number;
   title: string;
   description: string;
@@ -19,4 +19,4 @@ export interface Series {
   episodes: Episode[];
   hasThumbnail?: boolean;
   hasBanner?: boolean;
-}
+};

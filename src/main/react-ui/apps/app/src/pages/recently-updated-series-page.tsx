@@ -10,7 +10,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { generateEncodedUrl, parseParams } from 'utils/location-utils';
 import * as yup from 'yup';
 
-declare type RecentlyUpdatedSeriesPageParams = {
+type RecentlyUpdatedSeriesPageParams = {
   page: number;
 };
 

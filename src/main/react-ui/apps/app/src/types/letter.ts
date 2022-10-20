@@ -1,4 +1,4 @@
-export interface Letter {
+export type Letter = {
   label: string;
   value: string;
-}
+};

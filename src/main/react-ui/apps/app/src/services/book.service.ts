@@ -4,7 +4,7 @@ import { Letter } from 'types/letter';
 import { mapPageItems, Page } from 'types/page';
 import { handleResponse } from './response.service';
 
-declare type BookDto = Book & {
+type BookDto = Book & {
   releaseDate?: string;
 };
 

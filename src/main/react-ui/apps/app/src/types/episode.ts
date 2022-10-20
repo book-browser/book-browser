@@ -1,6 +1,6 @@
 import { Link } from './link';
 
-export declare type Episode = {
+export type Episode = {
   id: number;
   seriesId: number;
   seriesTitle: string;

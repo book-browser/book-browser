@@ -13,7 +13,7 @@ import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { ReferenceData } from 'types/reference-data';
 import { Location } from 'history';
 
-declare type SeriesListPageParams = {
+type SeriesListPageParams = {
   page: number;
   letter: string;
 };

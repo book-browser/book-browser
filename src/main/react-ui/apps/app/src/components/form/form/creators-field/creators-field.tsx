@@ -10,7 +10,7 @@ import CreatableSelect from 'react-select/creatable';
 import { Creator } from 'types/creator';
 import { Party } from 'types/party';
 
-export declare type CreatorsFieldProps = {
+export type CreatorsFieldProps = {
   name?: string;
   value?: Partial<Creator>[];
   touched?: FormikTouched<Creator[]>;

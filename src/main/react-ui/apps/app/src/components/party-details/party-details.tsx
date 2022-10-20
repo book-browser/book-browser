@@ -3,7 +3,7 @@ import React from 'react';
 import { Party } from 'types/party';
 import './party-details.scss';
 
-export declare type PartyDetailsProps = {
+export type PartyDetailsProps = {
   party: Party;
 };
 

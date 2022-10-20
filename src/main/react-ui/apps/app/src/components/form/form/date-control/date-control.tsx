@@ -3,7 +3,7 @@ import React from 'react';
 import DatePicker from 'react-datepicker';
 import { noop } from 'utils/noop';
 
-export declare type DateControlProps = {
+export type DateControlProps = {
   name?: string;
   value?: Date;
   isInvalid?: boolean;

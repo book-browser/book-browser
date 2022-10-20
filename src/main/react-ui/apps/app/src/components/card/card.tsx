@@ -3,7 +3,7 @@ import { Card as BootstrapCard } from 'react-bootstrap';
 import classnames from 'classnames';
 import './card.scss';
 
-export declare type CardProps = ComponentProps<typeof BootstrapCard> & {
+export type CardProps = ComponentProps<typeof BootstrapCard> & {
   orientation?: 'vertical' | 'horizontal';
 };
 

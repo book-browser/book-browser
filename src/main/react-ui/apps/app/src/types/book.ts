@@ -2,7 +2,7 @@ import { Link } from './link';
 import { Genre } from './genre';
 import { Creator } from './creator';
 
-export declare type Book = {
+export type Book = {
   id: number;
   title: string;
   description: string;

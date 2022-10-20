@@ -4,7 +4,7 @@ import React from 'react';
 import { Series } from 'types/series';
 import './series-card.scss';
 
-export declare type SeriesCardProps = {
+export type SeriesCardProps = {
   series: Series;
 };
 

@@ -5,7 +5,7 @@ import MDEditor from '@uiw/react-md-editor';
 import './book-details.scss';
 import { Link } from 'react-router-dom';
 
-export declare type BookDetailsProps = {
+export type BookDetailsProps = {
   book: Book;
 };
 

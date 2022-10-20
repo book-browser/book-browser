@@ -3,7 +3,7 @@ import AsyncSelect from 'react-select/async';
 import { findAll, getById } from 'services/series.service';
 import { Series } from 'types/series';
 
-export declare type SeriesControlProps = {
+export type SeriesControlProps = {
   name?: string;
   value?: number;
   isInvalid?: boolean;
@@ -11,7 +11,7 @@ export declare type SeriesControlProps = {
   onBlur?: (name: string) => void;
 };
 
-declare type SeriesOption = {
+type SeriesOption = {
   value: number;
   label: string;
   series: Series;

@@ -1,5 +1,5 @@
-export interface Link {
+export type Link = {
   id?: number;
   url: string;
   description: string;
-}
+};

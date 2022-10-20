@@ -49,7 +49,7 @@ const schema = yup.object().shape({
   )
 });
 
-declare type SeriesFormProps = {
+export type SeriesFormProps = {
   onChange?: (series: Series, valid: boolean) => void;
   onSubmit?: (series: Series) => void;
   footer?: ReactNode;

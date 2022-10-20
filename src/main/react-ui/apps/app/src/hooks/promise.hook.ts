@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
 
-export declare type PromiseExecutor<A, B> = (args: A) => Promise<B>;
+export type PromiseExecutor<A, B> = (args: A) => Promise<B>;
 
-export declare type EmptyPromiseExecutor<B> = () => Promise<B>;
+export type EmptyPromiseExecutor<B> = () => Promise<B>;
 
 export const usePromise = <A, B>(executor: PromiseExecutor<A, B>) => {
   const [promise, setPromise] = useState<Promise<B>>();
@@ -64,7 +64,7 @@ export const usePromise = <A, B>(executor: PromiseExecutor<A, B>) => {
   } as UsePromiseState<A, B>;
 };
 
-export declare type UsePromiseState<A, B> = {
+export type UsePromiseState<A, B> = {
   loading: boolean;
   data?: B;
   error?: Error;
@@ -130,7 +130,7 @@ export const useEmptyPromise = <B>(executor: EmptyPromiseExecutor<B>) => {
   } as UseEmptyPromiseState<B>;
 };
 
-export declare type UseEmptyPromiseState<B> = {
+export type UseEmptyPromiseState<B> = {
   loading: boolean;
   data?: B;
   error?: Error;

@@ -5,7 +5,7 @@ import { getFileBase64 } from 'utils/file-utils';
 import { generateEncodedUrl } from 'utils/location-utils';
 import { handleResponse } from './response.service';
 
-export declare type PartySearchCriteria = {
+export type PartySearchCriteria = {
   limit: number;
   page: number;
   sort: 'id' | 'title';
@@ -13,7 +13,7 @@ export declare type PartySearchCriteria = {
   name?: string | null;
 };
 
-declare type PartyDto = {
+type PartyDto = {
   id: number;
   fullName: string;
   description?: string;

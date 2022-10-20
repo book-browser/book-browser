@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { User } from 'types/user';
 
-interface UserState {
+export type UserState = {
   user?: User;
-}
+};
 
 export const userSlice = createSlice({
   name: 'user',

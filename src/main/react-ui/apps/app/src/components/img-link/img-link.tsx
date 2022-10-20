@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import classnames from 'classnames';
 import './img-link.scss';
 
-export declare type ImgLinkProps = React.ComponentProps<typeof Link> & {
+export type ImgLinkProps = React.ComponentProps<typeof Link> & {
   imgProps: React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>;
 };
 

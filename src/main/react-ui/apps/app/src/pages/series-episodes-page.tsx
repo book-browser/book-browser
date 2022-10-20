@@ -13,7 +13,7 @@ import { ApiError } from 'types/api-error';
 import { generateEncodedUrl, parseParams } from 'utils/location-utils';
 import * as yup from 'yup';
 
-declare type SeriesEpisodesPageParams = {
+type SeriesEpisodesPageParams = {
   page: number;
 };
 

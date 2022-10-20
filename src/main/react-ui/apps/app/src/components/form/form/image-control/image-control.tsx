@@ -4,7 +4,7 @@ import { Row, Col, Form, Button } from 'react-bootstrap';
 import { noop } from 'utils/noop';
 import './image-control.scss';
 
-export declare type ImageControlProps = {
+export type ImageControlProps = {
   name?: string;
   defaultValue?: string | File;
   value?: File;
