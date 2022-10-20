@@ -4,8 +4,8 @@
   display: flex;
   flex-wrap: wrap;
   gap: 1%;
-  row-gap: 20px;
-  margin-bottom: 10px;
+  row-gap: 10px;
+  margin-bottom: $margin-component-y;
 }
 
 @include media-breakpoint-up(xs) {

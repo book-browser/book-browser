@@ -41,21 +41,23 @@ export const generateEncodedUrl = (url: string, params: ParamType) => {
   let joinedUrl = `${url}`;
   let paramAdded = false;
 
-  Object.entries(params).forEach(([paramName, paramVal]) => {
-    if (Array.isArray(paramVal)) {
-      Object.values(paramVal).forEach((val) => {
+  Object.entries(params)
+    .filter(([, paramVal]) => paramVal !== undefined)
+    .forEach(([paramName, paramVal]) => {
+      if (Array.isArray(paramVal)) {
+        Object.values(paramVal).forEach((val) => {
+          const joinKey = paramAdded ? '&' : '?';
+          joinedUrl = `${joinedUrl}${joinKey}${paramName}=${val}`;
+          paramAdded = true;
+        });
+      } else {
         const joinKey = paramAdded ? '&' : '?';
-        joinedUrl = `${joinedUrl}${joinKey}${paramName}=${val}`;
-        paramAdded = true;
-      });
-    } else {
-      const joinKey = paramAdded ? '&' : '?';
-      if (paramVal !== '') {
-        joinedUrl = `${joinedUrl}${joinKey}${paramName}=${paramVal}`;
-        paramAdded = true;
+        if (paramVal !== '') {
+          joinedUrl = `${joinedUrl}${joinKey}${paramName}=${paramVal}`;
+          paramAdded = true;
+        }
       }
-    }
-  });
+    });
 
   return joinedUrl;
 };

@@ -1,5 +1,6 @@
 import { Container } from '@mui/material';
 import EpisodeList from 'components/episode-list/episode-list';
+import Loading from 'components/loading/loading';
 import { NotFound } from 'components/message/not-found/not-found';
 import { SomethingWentWrong } from 'components/message/something-went-wrong/something-went-wrong';
 import Pagination from 'components/pagination/pagination';
@@ -25,8 +26,8 @@ const schema = yup.object().shape({
 }) as yup.SchemaOf<SeriesEpisodesPageParams>;
 
 export const SeriesEpisodePageContent = () => {
-  const { data: series, execute, error } = useGetById();
-  const { data: episodes, execute: findAllEpisodes } = useFindAllEpisodes();
+  const { data: series, execute, error, loading: loadingSeries } = useGetById();
+  const { data: episodes, execute: findAllEpisodes, loading: loadingEpisodes } = useFindAllEpisodes();
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -72,6 +73,10 @@ export const SeriesEpisodePageContent = () => {
       return <NotFound />;
     }
     return <SomethingWentWrong error={error} />;
+  }
+
+  if (loadingSeries || loadingEpisodes) {
+    return <Loading />;
   }
 
   if (series && episodes) {

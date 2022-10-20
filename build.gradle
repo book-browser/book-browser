@@ -103,9 +103,9 @@ task installReact(type:Exec) {
 
   group = BasePlugin.BUILD_GROUP
   if (System.getProperty("os.name").toUpperCase().contains("WINDOWS")){
-    commandLine "npm.cmd", "install"
+    commandLine "npm.cmd", "ci"
   } else {
-    commandLine "npm", "install"
+    commandLine "npm", "ci"
   }
 }
 
