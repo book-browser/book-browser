@@ -3,15 +3,13 @@ import { ErrorAlert } from 'components/error/error-alert';
 import SeriesForm from 'components/form/series-form/series-form';
 import Loading from 'components/loading/loading';
 import { NotFound } from 'components/message/not-found/not-found';
+import { usePrompt } from 'hooks/router.hook';
 import { useGetById, useSave } from 'hooks/series.hook';
 import React, { useEffect, useState } from 'react';
 import { Alert, Breadcrumb, Button } from 'react-bootstrap';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ApiError } from 'types/api-error';
 import { Series } from 'types/series';
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const UNSAVED_MESSAGE = 'Are you sure that you want to leave with unsaved changes?';
 
 const EditSeriesPageContent = () => {
   const { id } = useParams();
@@ -22,6 +20,7 @@ const EditSeriesPageContent = () => {
 
   const [series, setSeries] = useState<Series>();
   const [saved, setSaved] = useState(true);
+  usePrompt('Are you sure to leave (all changes will be lost)?', !saved);
 
   const onChange = (changedSeries: Series) => {
     setSeries(changedSeries);
@@ -123,7 +122,6 @@ const EditSeriesPageContent = () => {
             </div>
           }
         />
-        {/* <Prompt when={!saved} message={UNSAVED_MESSAGE} /> */}
       </div>
     );
   }

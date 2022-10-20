@@ -4,14 +4,12 @@ import { BookForm } from 'components/form/book-form/book-form';
 import Loading from 'components/loading/loading';
 import { NotFound } from 'components/message/not-found/not-found';
 import { useGetBook, useSaveBook } from 'hooks/book.hook';
+import { usePrompt } from 'hooks/router.hook';
 import React, { useEffect, useState } from 'react';
 import { Alert, Breadcrumb, Button } from 'react-bootstrap';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ApiError } from 'types/api-error';
 import { Book } from 'types/book';
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const UNSAVED_MESSAGE = 'Are you sure that you want to leave with unsaved changes?';
 
 const EditBookPage = () => {
   const { id } = useParams();
@@ -22,6 +20,7 @@ const EditBookPage = () => {
 
   const [book, setBook] = useState<Book>();
   const [saved, setSaved] = useState(true);
+  usePrompt('Are you sure to leave (all changes will be lost)?', !saved);
 
   const onChange = (changedBook: Book) => {
     setBook(changedBook);
@@ -120,7 +119,6 @@ const EditBookPage = () => {
               </div>
             }
           />
-          {/* <Prompt when={!saved} message={UNSAVED_MESSAGE} /> */}
         </div>
       )}
     </Container>

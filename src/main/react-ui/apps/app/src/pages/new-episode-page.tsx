@@ -4,6 +4,7 @@ import { ErrorAlert } from 'components/error/error-alert';
 import { EpisodeForm } from 'components/form/episode-form/episode-form';
 import Message from 'components/message/message';
 import { useCreateOrUpdateEpisode } from 'hooks/episode.hook';
+import { usePrompt } from 'hooks/router.hook';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { Breadcrumb, Button, Nav } from 'react-bootstrap';
@@ -106,6 +107,7 @@ const NewEpisodePageContent = () => {
   const { execute, data, loading, error } = useCreateOrUpdateEpisode();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [saved, setSaved] = useState(true);
+  usePrompt('Are you sure to leave (all changes will be lost)?', !saved);
 
   const onChange = () => {
     setSaved(false);
@@ -116,15 +118,7 @@ const NewEpisodePageContent = () => {
   };
 
   if (!data) {
-    return (
-      <>
-        <NewEpisodeForm loading={loading} onChange={onChange} onSubmit={onSubmit} error={error} />
-        {/* <Prompt
-          when={!saved}
-          message="Are you sure to leave (all changes will be lost)?"
-        /> */}
-      </>
-    );
+    return <NewEpisodeForm loading={loading} onChange={onChange} onSubmit={onSubmit} error={error} />;
   } else {
     return <SuccessMessage episode={data} />;
   }

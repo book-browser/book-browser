@@ -7,6 +7,7 @@ import { Breadcrumb, Button, Nav } from 'react-bootstrap';
 import { ErrorAlert } from 'components/error/error-alert';
 import SeriesForm from 'components/form/series-form/series-form';
 import Message from 'components/message/message';
+import { usePrompt } from 'hooks/router.hook';
 
 const NewSeriesForm = ({
   loading,
@@ -75,8 +76,8 @@ const SuccessMessage = ({ series }: { series: Series }) => {
 
 const NewSeriesPageContent = () => {
   const { execute, data, loading, error } = useSave();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [saved, setSaved] = useState(true);
+  usePrompt('Are you sure to leave (all changes will be lost)?', !saved);
 
   const onChange = () => {
     setSaved(false);
@@ -87,12 +88,7 @@ const NewSeriesPageContent = () => {
   };
 
   if (!data) {
-    return (
-      <>
-        <NewSeriesForm loading={loading} onChange={onChange} onSubmit={onSubmit} error={error} />
-        {/* <Prompt when={!saved} message="Are you sure to leave (all changes will be lost)?" /> */}
-      </>
-    );
+    return <NewSeriesForm loading={loading} onChange={onChange} onSubmit={onSubmit} error={error} />;
   } else {
     return <SuccessMessage series={data} />;
   }
