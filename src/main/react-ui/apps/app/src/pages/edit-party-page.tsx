@@ -4,6 +4,7 @@ import { ErrorAlert } from 'components/error/error-alert';
 import { PartyForm } from 'components/form/party-form/party-form';
 import Loading from 'components/loading/loading';
 import { NotFound } from 'components/message/not-found/not-found';
+import Heading from 'components/navigation/heading/heading';
 import { useGetPartyById, useCreateOrUpdateParty } from 'hooks/party.hook';
 import React, { useEffect, useState } from 'react';
 import { Alert, Breadcrumb, Button } from 'react-bootstrap';
@@ -85,7 +86,7 @@ export const EditPartyPage = () => {
             </Breadcrumb.Item>
             <Breadcrumb.Item active>Edit</Breadcrumb.Item>
           </Breadcrumb>
-          <h1 className="heading-main">Edit Party</h1>
+          <Heading as="h1">Edit Party</Heading>
           <PartyForm
             value={party}
             onChange={onChange}

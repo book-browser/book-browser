@@ -1,6 +1,7 @@
 import { Container } from '@mui/material';
 import { ErrorAlert } from 'components/error/error-alert';
 import Loading from 'components/loading/loading';
+import Heading from 'components/navigation/heading/heading';
 import Pagination from 'components/pagination/pagination';
 import SeriesList from 'components/series-list/series-list';
 import { useFindAll as useFindAllSeries } from 'hooks/series.hook';
@@ -82,7 +83,7 @@ export const RecentlyUpdatedSeries = () => {
         </Breadcrumb.Item>
         <Breadcrumb.Item active>Recently Updated</Breadcrumb.Item>
       </Breadcrumb>
-      <h2>Recently Updated</h2>
+      <Heading as="h1">Recently Updated</Heading>
       <RecentlyUpdatedSeriesPageContent />
     </Container>
   );

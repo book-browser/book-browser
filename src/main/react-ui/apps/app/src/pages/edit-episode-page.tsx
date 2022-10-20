@@ -4,6 +4,7 @@ import { ErrorAlert } from 'components/error/error-alert';
 import { EpisodeForm } from 'components/form/episode-form/episode-form';
 import Loading from 'components/loading/loading';
 import { NotFound } from 'components/message/not-found/not-found';
+import Heading from 'components/navigation/heading/heading';
 import { useGetEpisodeById, useCreateOrUpdateEpisode } from 'hooks/episode.hook';
 import { usePrompt } from 'hooks/router.hook';
 import React, { useEffect, useState } from 'react';
@@ -89,7 +90,7 @@ export const EditEpisodePage = () => {
             </Breadcrumb.Item>
             <Breadcrumb.Item active>Edit</Breadcrumb.Item>
           </Breadcrumb>
-          <h1 className="heading-main">Edit Episode</h1>
+          <Heading as="h1">Edit Episode</Heading>
           <EpisodeForm
             value={episode}
             onChange={onChange}

@@ -8,6 +8,7 @@ import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { parse } from 'query-string';
 import BookList from 'components/book-list/book-list';
 import Pagination from 'components/pagination/pagination';
+import Heading from 'components/navigation/heading/heading';
 
 const parsePageParam = (page?: string | string[]) => {
   if (page) {
@@ -76,7 +77,7 @@ const UpcomingBookPage = () => {
         </Breadcrumb.Item>
         <Breadcrumb.Item active>Coming Soon</Breadcrumb.Item>
       </Breadcrumb>
-      <h1 className="heading-main">Coming Soon</h1>
+      <Heading as="h1">Coming Soon</Heading>
       <UpcomingBookPageContent />
     </Container>
   );

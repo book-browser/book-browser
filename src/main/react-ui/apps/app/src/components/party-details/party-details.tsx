@@ -1,4 +1,5 @@
 import MDEditor from '@uiw/react-md-editor';
+import Heading from 'components/navigation/heading/heading';
 import React from 'react';
 import { Party } from 'types/party';
 import './party-details.scss';
@@ -12,7 +13,7 @@ export const PartyDetails = ({ party }: PartyDetailsProps) => {
     <div className="party-details">
       {party.hasPicture && <img className="party-details-picture" alt="party" src={`/api/party/${party.id}/picture`} />}
       <div className="flex-grow-1">
-        <h1 className="heading-main">{party.fullName}</h1>
+        <Heading as="h1">{party.fullName}</Heading>
         <MDEditor.Markdown source={party.description} />
       </div>
     </div>

@@ -1,4 +1,5 @@
 import MDEditor from '@uiw/react-md-editor';
+import Heading from 'components/navigation/heading/heading';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Episode } from 'types/episode';
@@ -13,7 +14,7 @@ export const EpisodeDetails = ({ episode }: EpisodeDetailsProps) => {
     <div className="episode-details">
       <img className="episode-details-thumbnail" alt="thumbnail" src={`/api/episode/${episode.id}/thumbnail`} />
       <div className="flex-grow-1">
-        <h1 className="heading-main">{episode.title}</h1>
+        <Heading as="h1">{episode.title}</Heading>
         {episode.seriesId && (
           <p>
             <strong>Series: </strong> <Link to={`/series/${episode.seriesId}`}>{episode.seriesTitle}</Link>

@@ -12,6 +12,7 @@ import { Series } from 'types/series';
 import { generateEncodedUrl, parseParams } from 'utils/location-utils';
 import * as yup from 'yup';
 import Loading from 'components/loading/loading';
+import Heading from 'components/navigation/heading/heading';
 
 type SearchSeriesPageParams = {
   query: string;
@@ -142,7 +143,9 @@ const SearchSeriesPage = () => {
         <Breadcrumb.Item active>Search</Breadcrumb.Item>
       </Breadcrumb>
 
-      <h2 className="mb-3">Search Series</h2>
+      <Heading as="h1" className="mb-3">
+        Search Series
+      </Heading>
 
       <InputGroup className="mb-3">
         <FormControl
@@ -157,7 +160,9 @@ const SearchSeriesPage = () => {
         </Button>
       </InputGroup>
 
-      <h3 className="mb-2">Genres</h3>
+      <Heading as="h2" className="mb-2">
+        Genres
+      </Heading>
       <div className="d-flex flex-wrap mb-4">
         {data &&
           data.genres.map((genre) => (
@@ -176,7 +181,9 @@ const SearchSeriesPage = () => {
           ))}
       </div>
 
-      <h3 className="mb-2">Filter</h3>
+      <Heading as="h2" className="mb-2">
+        Filter
+      </Heading>
       <Form.Group controlId="sort-select" className="mb-3">
         <Form.Label>Sort</Form.Label>
         <Form.Control
@@ -191,7 +198,9 @@ const SearchSeriesPage = () => {
         </Form.Control>
       </Form.Group>
 
-      <h3 className="mb-4">Results</h3>
+      <Heading as="h2" className="mb-4">
+        Results
+      </Heading>
       {loading && <Loading />}
 
       {seriesList && (

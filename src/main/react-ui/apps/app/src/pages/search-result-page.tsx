@@ -1,5 +1,6 @@
 import { Container } from '@mui/material';
 import BookList from 'components/book-list/book-list';
+import Heading from 'components/navigation/heading/heading';
 import SeriesList from 'components/series-list/series-list';
 import { useFindAllBooks } from 'hooks/book.hook';
 import { useFindAll as useFindAllSeries } from 'hooks/series.hook';
@@ -63,7 +64,9 @@ export const SearchResultPage = () => {
         <Breadcrumb.Item active>Search</Breadcrumb.Item>
       </Breadcrumb>
 
-      <h2 className="mb-3">Search</h2>
+      <Heading as="h1" className="mb-3">
+        Search
+      </Heading>
 
       <InputGroup className="mb-5">
         <FormControl
@@ -80,7 +83,7 @@ export const SearchResultPage = () => {
 
       {books && (
         <div className="mb-5">
-          <h3>{`Books (${books.totalElements} Results)`}</h3>
+          <Heading as="h2">{`Books (${books.totalElements} Results)`}</Heading>
           <BookList books={books.items} />
           {books.totalElements > 12 && (
             <div className="d-flex mt-2">
@@ -92,7 +95,7 @@ export const SearchResultPage = () => {
 
       {seriesList && (
         <div className="mb-5">
-          <h3>{`Series (${seriesList.totalElements} Results)`}</h3>
+          <Heading as="h2">{`Series (${seriesList.totalElements} Results)`}</Heading>
           <SeriesList seriesList={seriesList.items} />
           {seriesList.totalElements > 12 && (
             <div className="d-flex mt-2">

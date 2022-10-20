@@ -3,6 +3,7 @@ import { DeepPartial } from '@reduxjs/toolkit';
 import { ErrorAlert } from 'components/error/error-alert';
 import { EpisodeForm } from 'components/form/episode-form/episode-form';
 import Message from 'components/message/message';
+import Heading from 'components/navigation/heading/heading';
 import { useCreateOrUpdateEpisode } from 'hooks/episode.hook';
 import { usePrompt } from 'hooks/router.hook';
 import moment from 'moment';
@@ -59,7 +60,7 @@ const NewEpisodeForm = ({
         </Breadcrumb.Item>
         <Breadcrumb.Item active>New Episode</Breadcrumb.Item>
       </Breadcrumb>
-      <h1 className="heading-main">Add a New Episode</h1>
+      <Heading as="h1">Add a New Episode</Heading>
       <EpisodeForm
         initialValue={initialValue}
         onChange={onChange}

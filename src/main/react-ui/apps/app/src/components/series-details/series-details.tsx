@@ -50,7 +50,7 @@ export const SeriesDetails = ({ series }: SeriesDetailsProps) => {
 
       {series.books.length > 0 && (
         <div className="mb-3">
-          <h2>Books</h2>
+          <Heading as="h2">Books</Heading>
           <BookList books={series.books} />
         </div>
       )}

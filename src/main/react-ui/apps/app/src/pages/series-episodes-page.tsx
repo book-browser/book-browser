@@ -3,6 +3,7 @@ import EpisodeList from 'components/episode-list/episode-list';
 import Loading from 'components/loading/loading';
 import { NotFound } from 'components/message/not-found/not-found';
 import { SomethingWentWrong } from 'components/message/something-went-wrong/something-went-wrong';
+import Heading from 'components/navigation/heading/heading';
 import Pagination from 'components/pagination/pagination';
 import { useFindAllEpisodes } from 'hooks/episode.hook';
 import { useGetById } from 'hooks/series.hook';
@@ -94,7 +95,7 @@ export const SeriesEpisodePageContent = () => {
           </Breadcrumb.Item>
           <Breadcrumb.Item active>Episodes</Breadcrumb.Item>
         </Breadcrumb>
-        <h1 className="heading-main">{`${series.title} Episodes`}</h1>
+        <Heading as="h1">{`${series.title} Episodes`}</Heading>
         <EpisodeList episodes={episodes.items} />
         <Pagination page={page} totalPages={episodes.totalPages} onPageChange={onPageChange} />
       </>

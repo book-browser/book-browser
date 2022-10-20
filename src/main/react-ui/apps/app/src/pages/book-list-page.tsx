@@ -2,6 +2,7 @@ import { Container } from '@mui/material';
 import BookList from 'components/book-list/book-list';
 import { ErrorAlert } from 'components/error/error-alert';
 import Loading from 'components/loading/loading';
+import Heading from 'components/navigation/heading/heading';
 import Pagination from 'components/pagination/pagination';
 import { Location } from 'history';
 import { useFindAllBooks } from 'hooks/book.hook';
@@ -106,7 +107,7 @@ const BookListPage = () => {
         </Breadcrumb.Item>
         <Breadcrumb.Item active>Books</Breadcrumb.Item>
       </Breadcrumb>
-      <h1 className="heading-main">Books</h1>
+      <Heading as="h1">Books</Heading>
       <BookListPageContent />
     </Container>
   );

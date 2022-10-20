@@ -8,6 +8,7 @@ import { ErrorAlert } from 'components/error/error-alert';
 import SeriesForm from 'components/form/series-form/series-form';
 import Message from 'components/message/message';
 import { usePrompt } from 'hooks/router.hook';
+import Heading from 'components/navigation/heading/heading';
 
 const NewSeriesForm = ({
   loading,
@@ -31,7 +32,7 @@ const NewSeriesForm = ({
         </Breadcrumb.Item>
         <Breadcrumb.Item active>New Series</Breadcrumb.Item>
       </Breadcrumb>
-      <h1 className="heading-main">Add a New Series</h1>
+      <Heading as="h1">Add a New Series</Heading>
       <SeriesForm
         onChange={onChange}
         onSubmit={onSubmit}

@@ -3,6 +3,7 @@ import { ErrorAlert } from 'components/error/error-alert';
 import SeriesForm from 'components/form/series-form/series-form';
 import Loading from 'components/loading/loading';
 import { NotFound } from 'components/message/not-found/not-found';
+import Heading from 'components/navigation/heading/heading';
 import { usePrompt } from 'hooks/router.hook';
 import { useGetById, useSave } from 'hooks/series.hook';
 import React, { useEffect, useState } from 'react';
@@ -88,7 +89,7 @@ const EditSeriesPageContent = () => {
           </Breadcrumb.Item>
           <Breadcrumb.Item active>Edit</Breadcrumb.Item>
         </Breadcrumb>
-        <h1 className="heading-main">Edit Series</h1>
+        <Heading as="h1">Edit Series</Heading>
         <SeriesForm
           value={series}
           onChange={onChange}

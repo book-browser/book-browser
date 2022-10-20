@@ -3,6 +3,7 @@ import { ErrorAlert } from 'components/error/error-alert';
 import { BookForm } from 'components/form/book-form/book-form';
 import Loading from 'components/loading/loading';
 import { NotFound } from 'components/message/not-found/not-found';
+import Heading from 'components/navigation/heading/heading';
 import { useGetBook, useSaveBook } from 'hooks/book.hook';
 import { usePrompt } from 'hooks/router.hook';
 import React, { useEffect, useState } from 'react';
@@ -85,7 +86,7 @@ const EditBookPage = () => {
             </Breadcrumb.Item>
             <Breadcrumb.Item active>Edit</Breadcrumb.Item>
           </Breadcrumb>
-          <h1 className="heading-main">Edit Book</h1>
+          <Heading as="h1">Edit Book</Heading>
           <BookForm
             value={book}
             onChange={onChange}

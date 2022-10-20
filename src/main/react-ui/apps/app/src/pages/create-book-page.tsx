@@ -7,6 +7,7 @@ import React, { useEffect, useState } from 'react';
 import { Breadcrumb, Button, Card } from 'react-bootstrap';
 import { Book } from 'types/book';
 import { Link } from 'react-router-dom';
+import Heading from 'components/navigation/heading/heading';
 
 const AddBookForm = ({
   loading,
@@ -30,7 +31,7 @@ const AddBookForm = ({
         </Breadcrumb.Item>
         <Breadcrumb.Item active>Add Book</Breadcrumb.Item>
       </Breadcrumb>
-      <h1 className="heading-main">Add a New Book</h1>
+      <Heading as="h1">Add a New Book</Heading>
       <BookForm
         onChange={onChange}
         onSubmit={onSubmit}

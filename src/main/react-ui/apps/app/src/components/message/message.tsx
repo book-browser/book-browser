@@ -5,6 +5,7 @@ import ErrorIcon from '@mui/icons-material/Error';
 import InfoIcon from '@mui/icons-material/Info';
 import WarningIcon from '@mui/icons-material/Warning';
 import './message.scss';
+import Heading from 'components/navigation/heading/heading';
 
 export interface MessageProps {
   variant: Variant;
@@ -23,7 +24,7 @@ const Message = ({ variant, title, lead, children }: MessageProps) => {
           {variant === 'info' && <InfoIcon className="text-info" fontSize="inherit" />}
           {variant === 'warning' && <WarningIcon className="text-warning" fontSize="inherit" />}
         </div>
-        <h1>{title}</h1>
+        <Heading as="h1">{title}</Heading>
         <div className="lead mb-4">{lead}</div>
       </div>
       {children}

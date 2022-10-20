@@ -12,6 +12,7 @@ import { generateEncodedUrl, parseParams } from 'utils/location-utils';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { ReferenceData } from 'types/reference-data';
 import { Location } from 'history';
+import Heading from 'components/navigation/heading/heading';
 
 type SeriesListPageParams = {
   page: number;
@@ -103,7 +104,7 @@ const SeriesListPage = () => {
         </Breadcrumb.Item>
         <Breadcrumb.Item active>Series</Breadcrumb.Item>
       </Breadcrumb>
-      <h1 className="heading-main">Series</h1>
+      <Heading as="h1">Series</Heading>
       <SeriesListPageContent />
     </Container>
   );

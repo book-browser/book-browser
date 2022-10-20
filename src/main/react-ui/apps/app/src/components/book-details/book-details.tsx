@@ -4,6 +4,7 @@ import { Book } from 'types/book';
 import MDEditor from '@uiw/react-md-editor';
 import './book-details.scss';
 import { Link } from 'react-router-dom';
+import Heading from 'components/navigation/heading/heading';
 
 export type BookDetailsProps = {
   book: Book;
@@ -14,7 +15,7 @@ export const BookDetails = ({ book }: BookDetailsProps) => {
     <div className="book-details">
       <img className="book-details-thumbnail" alt="thumbnail" src={`/api/book/${book.id}/thumbnail`} />
       <div className="flex-grow-1">
-        <h1 className="heading-main">{book.title}</h1>
+        <Heading as="h1">{book.title}</Heading>
         {book.seriesId && (
           <p>
             <strong>Series: </strong> <Link to={`/series/${book.seriesId}`}>{book.seriesTitle}</Link>

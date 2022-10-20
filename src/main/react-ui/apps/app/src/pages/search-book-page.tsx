@@ -10,6 +10,7 @@ import { generateEncodedUrl, parseParams } from 'utils/location-utils';
 import { ReferenceData } from 'types/reference-data';
 import BookList from 'components/book-list/book-list';
 import Pagination from 'components/pagination/pagination';
+import Heading from 'components/navigation/heading/heading';
 
 type SearchBookPageParams = {
   query: string;
@@ -126,7 +127,9 @@ const SearchBookPage = () => {
         <Breadcrumb.Item active>Search</Breadcrumb.Item>
       </Breadcrumb>
 
-      <h2 className="mb-3">Search Books</h2>
+      <Heading as="h1" className="mb-3">
+        Search Books
+      </Heading>
 
       <InputGroup className="mb-5">
         <FormControl
@@ -141,7 +144,9 @@ const SearchBookPage = () => {
         </Button>
       </InputGroup>
 
-      <h3 className="mb-4">Genres</h3>
+      <Heading as="h2" className="mb-4">
+        Genres
+      </Heading>
       <div className="d-flex flex-wrap mb-4">
         {data &&
           data.genres.map((genre) => (
@@ -160,7 +165,9 @@ const SearchBookPage = () => {
           ))}
       </div>
 
-      <h3 className="mb-4">Results</h3>
+      <Heading as="h2" className="mb-4">
+        Results
+      </Heading>
       {books && (
         <div>
           <BookList books={books.items} />
