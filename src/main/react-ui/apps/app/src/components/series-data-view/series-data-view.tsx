@@ -19,7 +19,7 @@ const SERIES_DATA_VIEW_ITEMS: DataViewItem<Series>[] = [
         : series.genres.map((genre) => <GenreBadge key={genre} genre={{ name: genre } as Genre} variant="series" />)
   },
   {
-    heading: 'External Links:',
+    heading: 'Publishers:',
     content: (series) =>
       series.publishers.map((publisher, index) => (
         <span key={publisher.partyId}>
@@ -30,7 +30,7 @@ const SERIES_DATA_VIEW_ITEMS: DataViewItem<Series>[] = [
     hidden: (series) => series.publishers.length === 0
   },
   {
-    heading: 'Publishers:',
+    heading: 'External Links:',
     content: (series) =>
       series.links.map((link, index) => (
         <span key={link.url}>

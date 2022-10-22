@@ -14,7 +14,7 @@ import { Episode } from 'types/episode';
 
 const EpisodePageHeader = ({ episode }: { episode: Episode }) => {
   return (
-    <div className="d-flex align-items-start">
+    <div className="d-flex align-items-baseline mb-2">
       <Breadcrumb>
         <Breadcrumb.Item linkAs={Link} linkProps={{ to: '/home' }}>
           Home

@@ -2,14 +2,11 @@ import { Add } from '@mui/icons-material';
 import MDEditor from '@uiw/react-md-editor';
 import BookList from 'components/book-list/book-list';
 import EpisodeList from 'components/episode-list/episode-list';
-import GenreBadge from 'components/genre-badge/genre-badge';
-import ExternalLink from 'components/navigation/external-link/external-link';
 import Heading from 'components/navigation/heading/heading';
 import SeriesDataView from 'components/series-data-view/series-data-view';
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { Genre } from 'types/genre';
 import { Series } from 'types/series';
 import './series-details.scss';
 
