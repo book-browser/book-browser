@@ -10,6 +10,7 @@ import java.util.Optional;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
 import lombok.Data;
+import lombok.ToString;
 
 @Data
 @JsonInclude(Include.NON_NULL)
@@ -30,14 +31,22 @@ public class BookDto {
 
   private String seriesTitle;
 
-  @Valid private List<CreatorDto> creators;
+  @Valid
+  private List<CreatorDto> creators;
 
-  @Valid private List<GenreDto> genres;
+  @Valid
+  private List<GenreDto> genres;
 
-  @Valid private List<LinkDto> links;
+  @Valid
+  private List<LinkDto> links;
 
   @JsonIgnore
   public byte[] getThumbnailBytes() {
     return Base64.getDecoder().decode(thumbnail);
+  }
+
+  @ToString.Include(name = "thumbnail")
+  private String maskedThumbnail() {
+    return thumbnail == null ? null : "*****";
   }
 }

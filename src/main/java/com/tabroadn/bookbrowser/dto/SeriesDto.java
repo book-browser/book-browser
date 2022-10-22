@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
 import lombok.Data;
+import lombok.ToString;
 
 @Data
 @JsonInclude(Include.NON_NULL)
@@ -32,11 +33,14 @@ public class SeriesDto {
 
   private List<String> genres = new ArrayList<>();
 
-  @Valid private List<LinkDto> links = new ArrayList<>();
+  @Valid
+  private List<LinkDto> links = new ArrayList<>();
 
-  @Valid private List<CreatorDto> creators = new ArrayList<>();
+  @Valid
+  private List<CreatorDto> creators = new ArrayList<>();
 
-  @Valid private List<PublisherDto> publishers = new ArrayList<>();
+  @Valid
+  private List<PublisherDto> publishers = new ArrayList<>();
 
   private List<BookDto> books = new ArrayList<>();
 
@@ -56,5 +60,27 @@ public class SeriesDto {
       return Base64.getDecoder().decode(thumbnail.get());
     }
     return null;
+  }
+
+  @ToString.Include(name = "thumbnail")
+  private String maskedThumbnail() {
+    if (thumbnail == null) {
+      return null;
+    } else if (thumbnail.isEmpty()) {
+      return thumbnail.toString();
+    } else {
+      return "*****";
+    }
+  }
+
+  @ToString.Include(name = "banner")
+  private String maskedBanner() {
+    if (banner == null) {
+      return null;
+    } else if (banner.isEmpty()) {
+      return banner.toString();
+    } else {
+      return "*****";
+    }
   }
 }

@@ -20,7 +20,7 @@ public class EpisodeDto {
 
   private Optional<String> description;
 
-  @ToString.Exclude private Optional<String> thumbnail;
+  private Optional<String> thumbnail;
 
   private Optional<LocalDate> releaseDate;
 
@@ -32,5 +32,16 @@ public class EpisodeDto {
       return Base64.getDecoder().decode(thumbnail.get());
     }
     return null;
+  }
+
+  @ToString.Include(name = "thumbnail")
+  private String maskedThumbnail() {
+    if (thumbnail == null) {
+      return null;
+    } else if (thumbnail.isEmpty()) {
+      return thumbnail.toString();
+    } else {
+      return "*****";
+    }
   }
 }
