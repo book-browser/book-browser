@@ -1,0 +1,11 @@
+@import '../variables.scss';
+
+.episode-page-header {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: $margin-component-y;
+
+  .btn {
+    white-space: nowrap;
+  }
+}

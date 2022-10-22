@@ -114,6 +114,23 @@
   }
 }
 
+@media screen and (max-width: 768px) {
+  .breadcrumb > :not(:nth-last-child(2)) {
+    display: none;
+  }
+
+  .breadcrumb :nth-last-child(2) {
+    padding-left: 0;
+  }
+
+  .breadcrumb :nth-last-child(2)::before {
+    content: none;
+  }
+  .breadcrumb :nth-last-child(2) ::before {
+    content: '‹ ';
+  }
+}
+
 a {
   text-decoration: none;
 }

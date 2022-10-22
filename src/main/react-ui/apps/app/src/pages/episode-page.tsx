@@ -11,10 +11,11 @@ import { Breadcrumb, Button } from 'react-bootstrap';
 import { Link, useParams } from 'react-router-dom';
 import { ApiError } from 'types/api-error';
 import { Episode } from 'types/episode';
+import './episode-page.scss';
 
 const EpisodePageHeader = ({ episode }: { episode: Episode }) => {
   return (
-    <div className="d-flex align-items-baseline mb-2">
+    <div className="episode-page-header">
       <Breadcrumb>
         <Breadcrumb.Item linkAs={Link} linkProps={{ to: '/home' }}>
           Home
