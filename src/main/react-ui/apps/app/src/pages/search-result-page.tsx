@@ -1,5 +1,7 @@
 import { Container } from '@mui/material';
 import BookList from 'components/book-list/book-list';
+import { ErrorAlert } from 'components/error/error-alert';
+import Loading from 'components/loading/loading';
 import Heading from 'components/navigation/heading/heading';
 import SeriesList from 'components/series-list/series-list';
 import { useFindAllBooks } from 'hooks/book.hook';
@@ -26,9 +28,11 @@ export const SearchResultPage = () => {
   const [query, setQuery] = useState(params.query);
   const [inputText, setInputText] = useState(params.query);
 
-  const { data: books, execute: findAllBooks } = useFindAllBooks();
+  const { data: books, execute: findAllBooks, loading: loadingBooks, error: booksError } = useFindAllBooks();
 
-  const { data: seriesList, execute: findAllSeries } = useFindAllSeries();
+  const { data: seriesList, execute: findAllSeries, loading: loadingSeries, error: seriesError } = useFindAllSeries();
+
+  const loading = loadingBooks || loadingSeries;
 
   const search = () => {
     navigate(generateEncodedUrl('/search', { query: inputText }));
@@ -81,28 +85,39 @@ export const SearchResultPage = () => {
         </Button>
       </InputGroup>
 
-      {books && (
-        <div className="mb-5">
-          <Heading as="h2">{`Books (${books.totalElements} Results)`}</Heading>
-          <BookList books={books.items} />
-          {books.totalElements > 12 && (
-            <div className="d-flex mt-2">
-              <Link to={generateEncodedUrl('/books/search', { query: inputText })}>View More</Link>
-            </div>
-          )}
-        </div>
-      )}
+      {loading && <Loading />}
 
-      {seriesList && (
-        <div className="mb-5">
-          <Heading as="h2">{`Series (${seriesList.totalElements} Results)`}</Heading>
-          <SeriesList seriesList={seriesList.items} />
-          {seriesList.totalElements > 12 && (
-            <div className="d-flex mt-2">
-              <Link to={generateEncodedUrl('/series/search', { query: inputText })}>View More</Link>
-            </div>
-          )}
-        </div>
+      {!loading && (
+        <>
+          <div className="mb-5">
+            <Heading as="h2">{`Books (${books.totalElements} Results)`}</Heading>
+            {booksError && <ErrorAlert error={booksError} />}
+            {books && (
+              <>
+                <BookList books={books.items} />
+                {books.totalElements > 12 && (
+                  <div className="d-flex mt-2">
+                    <Link to={generateEncodedUrl('/books/search', { query: inputText })}>View More</Link>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+          <div className="mb-5">
+            <Heading as="h2">{`Series (${seriesList.totalElements} Results)`}</Heading>
+            {seriesError && <ErrorAlert error={seriesError} />}
+            {seriesList && (
+              <>
+                <SeriesList seriesList={seriesList.items} />
+                {seriesList.totalElements > 12 && (
+                  <div className="d-flex mt-2">
+                    <Link to={generateEncodedUrl('/series/search', { query: inputText })}>View More</Link>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        </>
       )}
     </Container>
   );

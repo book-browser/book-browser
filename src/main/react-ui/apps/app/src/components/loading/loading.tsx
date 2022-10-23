@@ -13,8 +13,10 @@ const Loading = () => {
 
   if (time - start > 2000) {
     return (
-      <div className="spinner-border loading-indicator" role="status">
-        <span className="visually-hidden">Loading...</span>
+      <div className="loading-container">
+        <div className="spinner-border loading-indicator" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
       </div>
     );
   }

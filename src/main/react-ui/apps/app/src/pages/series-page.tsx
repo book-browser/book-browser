@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Container } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
+import { Container } from '@mui/material';
 import Loading from 'components/loading/loading';
-import { NotFound } from 'components/message/not-found/not-found';
-import { SomethingWentWrong } from 'components/message/something-went-wrong/something-went-wrong';
+import { ErrorMessage } from 'components/message/error-message/error-message';
 import SeriesDetails from 'components/series-details/series-details';
 import { useGetById } from 'hooks/series.hook';
 import React, { useEffect } from 'react';
@@ -34,8 +33,6 @@ const SeriesPageHeader = ({ series }: { series: Series }) => {
 const SeriesPageContent = () => {
   const { data: series, execute, loading, error } = useGetById();
   const { id } = useParams();
-  const apiError = error?.name === 'ApiError' && (error as ApiError);
-  const notFound = apiError?.status === 404;
 
   useEffect(() => {
     execute(Number(id));
@@ -54,10 +51,7 @@ const SeriesPageContent = () => {
   }
 
   if (error) {
-    if (notFound) {
-      return <NotFound />;
-    }
-    return <SomethingWentWrong error={error} />;
+    <ErrorMessage error={error} />;
   }
 
   if (series) {

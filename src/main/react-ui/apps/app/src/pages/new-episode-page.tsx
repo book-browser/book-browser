@@ -106,7 +106,6 @@ const SuccessMessage = ({ episode }: { episode: Episode }) => {
 
 const NewEpisodePageContent = () => {
   const { execute, data, loading, error } = useCreateOrUpdateEpisode();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [saved, setSaved] = useState(true);
   usePrompt('Are you sure to leave (all changes will be lost)?', !saved);
 

@@ -1,15 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Container } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
-import { PartyDetails } from 'components/party-details/party-details';
+import { Container } from '@mui/material';
 import Loading from 'components/loading/loading';
-import { NotFound } from 'components/message/not-found/not-found';
-import { SomethingWentWrong } from 'components/message/something-went-wrong/something-went-wrong';
+import { ErrorMessage } from 'components/message/error-message/error-message';
+import { PartyDetails } from 'components/party-details/party-details';
 import { useGetPartyById } from 'hooks/party.hook';
 import React, { useEffect } from 'react';
 import { Breadcrumb, Button } from 'react-bootstrap';
 import { Link, useParams } from 'react-router-dom';
-import { ApiError } from 'types/api-error';
 import { Party } from 'types/party';
 
 const PartyPageHeader = ({ party }: { party: Party }) => {
@@ -32,8 +30,6 @@ const PartyPageHeader = ({ party }: { party: Party }) => {
 const PartyPageContent = () => {
   const { data: party, execute, loading, error } = useGetPartyById();
   const { id } = useParams();
-  const apiError = error?.name === 'ApiError' && (error as ApiError);
-  const notFound = apiError?.status === 404;
 
   useEffect(() => {
     execute(Number(id));
@@ -51,10 +47,7 @@ const PartyPageContent = () => {
     return <Loading />;
   }
   if (error) {
-    if (notFound) {
-      return <NotFound />;
-    }
-    return <SomethingWentWrong error={error} />;
+    return <ErrorMessage error={error} />;
   }
   if (party) {
     return (

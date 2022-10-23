@@ -2,14 +2,13 @@ import { CircularProgress, Container } from '@mui/material';
 import { ErrorAlert } from 'components/error/error-alert';
 import SeriesForm from 'components/form/series-form/series-form';
 import Loading from 'components/loading/loading';
-import { NotFound } from 'components/message/not-found/not-found';
+import { ErrorMessage } from 'components/message/error-message/error-message';
 import Heading from 'components/navigation/heading/heading';
 import { usePrompt } from 'hooks/router.hook';
 import { useGetById, useSave } from 'hooks/series.hook';
 import React, { useEffect, useState } from 'react';
 import { Alert, Breadcrumb, Button } from 'react-bootstrap';
-import { useParams, useNavigate, Link } from 'react-router-dom';
-import { ApiError } from 'types/api-error';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Series } from 'types/series';
 
 const EditSeriesPageContent = () => {
@@ -17,7 +16,6 @@ const EditSeriesPageContent = () => {
   const navigate = useNavigate();
   const { data: loadedSeries, execute: load, loading: loadingSeries, error: loadError } = useGetById();
   const { data: savedSeries, execute: save, loading: savingSeries, error: saveError } = useSave();
-  const notFound = loadError?.name === 'ApiError' && (loadError as ApiError)?.status === 404;
 
   const [series, setSeries] = useState<Series>();
   const [saved, setSaved] = useState(true);
@@ -68,11 +66,8 @@ const EditSeriesPageContent = () => {
   if (loadingSeries) {
     return <Loading />;
   }
-  if (notFound) {
-    return <NotFound />;
-  }
   if (loadError) {
-    return <ErrorAlert uiMessage="Something went wrong. Unable to load this entry." error={loadError} />;
+    return <ErrorMessage error={loadError} />;
   }
   if (series) {
     return (

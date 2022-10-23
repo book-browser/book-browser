@@ -1,16 +1,15 @@
 import { Container } from '@mui/material';
 import EpisodeList from 'components/episode-list/episode-list';
+import { ErrorAlert } from 'components/error/error-alert';
 import Loading from 'components/loading/loading';
-import { NotFound } from 'components/message/not-found/not-found';
-import { SomethingWentWrong } from 'components/message/something-went-wrong/something-went-wrong';
+import { ErrorMessage } from 'components/message/error-message/error-message';
 import Heading from 'components/navigation/heading/heading';
 import Pagination from 'components/pagination/pagination';
 import { useFindAllEpisodes } from 'hooks/episode.hook';
 import { useGetById } from 'hooks/series.hook';
 import React, { useEffect, useState } from 'react';
 import { Breadcrumb } from 'react-bootstrap';
-import { Link, useParams, useLocation, useNavigate } from 'react-router-dom';
-import { ApiError } from 'types/api-error';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { generateEncodedUrl, parseParams } from 'utils/location-utils';
 import * as yup from 'yup';
 
@@ -27,8 +26,13 @@ const schema = yup.object().shape({
 }) as yup.SchemaOf<SeriesEpisodesPageParams>;
 
 export const SeriesEpisodePageContent = () => {
-  const { data: series, execute, error, loading: loadingSeries } = useGetById();
-  const { data: episodes, execute: findAllEpisodes, loading: loadingEpisodes } = useFindAllEpisodes();
+  const { data: series, execute, error: seriesError, loading: loadingSeries } = useGetById();
+  const {
+    data: episodes,
+    execute: findAllEpisodes,
+    error: episodesError,
+    loading: loadingEpisodes
+  } = useFindAllEpisodes();
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -36,9 +40,6 @@ export const SeriesEpisodePageContent = () => {
   const params = parseParams(location, schema);
 
   const [page, setPage] = useState(params.page);
-
-  const apiError = error?.name === 'ApiError' && (error as ApiError);
-  const notFound = apiError?.status === 404;
 
   const onPageChange = (newPage) => {
     navigate(generateEncodedUrl(`/series/${series.id}/episodes`, { page: newPage > 0 ? newPage + 1 : undefined }));
@@ -69,18 +70,15 @@ export const SeriesEpisodePageContent = () => {
     }
   }, [series]);
 
-  if (error) {
-    if (notFound) {
-      return <NotFound />;
-    }
-    return <SomethingWentWrong error={error} />;
+  if (seriesError) {
+    <ErrorMessage error={seriesError} />;
   }
 
   if (loadingSeries || loadingEpisodes) {
     return <Loading />;
   }
 
-  if (series && episodes) {
+  if (series) {
     return (
       <>
         <Breadcrumb>
@@ -96,8 +94,13 @@ export const SeriesEpisodePageContent = () => {
           <Breadcrumb.Item active>Episodes</Breadcrumb.Item>
         </Breadcrumb>
         <Heading as="h1">{`${series.title} Episodes`}</Heading>
-        <EpisodeList episodes={episodes.items} />
-        <Pagination page={page} totalPages={episodes.totalPages} onPageChange={onPageChange} />
+        {episodesError && <ErrorAlert error={episodesError} />}
+        {episodes && (
+          <>
+            <EpisodeList episodes={episodes.items} />
+            <Pagination page={page} totalPages={episodes.totalPages} onPageChange={onPageChange} />
+          </>
+        )}
       </>
     );
   }

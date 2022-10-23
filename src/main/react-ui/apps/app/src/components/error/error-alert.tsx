@@ -3,11 +3,11 @@ import { Alert } from 'react-bootstrap';
 import { ApiError } from 'types/api-error';
 import './error-alert.scss';
 
-export interface ErrorAlertProps {
-  uiMessage: string;
+export type ErrorAlertProps = {
+  uiMessage?: string;
   error: Error;
   className?: string;
-}
+};
 
 export const ErrorAlert = (props: ErrorAlertProps) => {
   let apiError: ApiError;
@@ -18,7 +18,7 @@ export const ErrorAlert = (props: ErrorAlertProps) => {
   return (
     <Alert variant="danger" className={`error-alert ${props.className}`}>
       <div className="error-alert-heading">
-        <div className="error-alert-message">{props.uiMessage}</div>
+        <div className="error-alert-message">{props.uiMessage || 'Something went wrong'}</div>
       </div>
       <div>
         <small>{`Message: ${props.error.message}`}</small>

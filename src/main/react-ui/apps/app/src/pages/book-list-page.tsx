@@ -68,34 +68,32 @@ const BookListPageContent = () => {
     setPage(params.page);
   }, [params.page]);
 
-  if (loading) {
-    return <Loading />;
-  } else if (error) {
-    return <ErrorAlert uiMessage="Unable to load content" error={error} />;
-  } else if (books) {
-    return (
-      <>
-        <div className="d-flex flex-wrap mb-3">
-          {referenceData.letters.map((currLetter) => (
-            <ToggleButton
-              key={currLetter.value}
-              value={currLetter.value}
-              checked={currLetter.value === letter}
-              disabled={currLetter.value === letter}
-              className="me-2 mb-2"
-              onClick={() => navigate(`/books?letter=${currLetter.value}`)}
-            >
-              {currLetter.label}
-            </ToggleButton>
-          ))}
-        </div>
-        <BookList books={books.items} />
-        <Pagination page={page} totalPages={books.totalPages} onPageChange={onPageChange} />
-      </>
-    );
-  }
-
-  return null;
+  return (
+    <>
+      <div className="d-flex flex-wrap mb-3">
+        {referenceData.letters.map((currLetter) => (
+          <ToggleButton
+            key={currLetter.value}
+            value={currLetter.value}
+            checked={currLetter.value === letter}
+            disabled={currLetter.value === letter}
+            className="me-2 mb-2"
+            onClick={() => navigate(`/books?letter=${currLetter.value}`)}
+          >
+            {currLetter.label}
+          </ToggleButton>
+        ))}
+      </div>
+      {loading && <Loading />}
+      {error && <ErrorAlert uiMessage="Unable to load content" error={error} />}
+      {books && (
+        <>
+          <BookList books={books.items} />
+          <Pagination page={page} totalPages={books.totalPages} onPageChange={onPageChange} />
+        </>
+      )}
+    </>
+  );
 };
 
 const BookListPage = () => {

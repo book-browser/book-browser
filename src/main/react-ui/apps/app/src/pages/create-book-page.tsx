@@ -8,6 +8,7 @@ import { Breadcrumb, Button, Card } from 'react-bootstrap';
 import { Book } from 'types/book';
 import { Link } from 'react-router-dom';
 import Heading from 'components/navigation/heading/heading';
+import { usePrompt } from 'hooks/router.hook';
 
 const AddBookForm = ({
   loading,
@@ -57,8 +58,8 @@ const AddBookForm = ({
 
 export const CreateBookPage = () => {
   const { execute, data: book, loading, error } = useSaveBook();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [saved, setSaved] = useState(true);
+  usePrompt('Are you sure to leave (all changes will be lost)?', !saved);
 
   const onChange = () => {
     setSaved(false);
@@ -86,7 +87,6 @@ export const CreateBookPage = () => {
           <BookSubmissionSuccess book={book} />
         </Card>
       )}
-      {/* <Prompt when={!saved} message="Are you sure to leave (all changes will be lost)?" /> */}
     </Container>
   );
 };

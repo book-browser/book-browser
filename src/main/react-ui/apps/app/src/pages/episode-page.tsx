@@ -1,15 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Container } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
+import { Container } from '@mui/material';
 import { EpisodeDetails } from 'components/episode-details/episode-details';
 import Loading from 'components/loading/loading';
-import { NotFound } from 'components/message/not-found/not-found';
-import { SomethingWentWrong } from 'components/message/something-went-wrong/something-went-wrong';
+import { ErrorMessage } from 'components/message/error-message/error-message';
 import { useGetEpisodeById } from 'hooks/episode.hook';
 import React, { useEffect } from 'react';
 import { Breadcrumb, Button } from 'react-bootstrap';
 import { Link, useParams } from 'react-router-dom';
-import { ApiError } from 'types/api-error';
 import { Episode } from 'types/episode';
 import './episode-page.scss';
 
@@ -38,8 +36,6 @@ const EpisodePageHeader = ({ episode }: { episode: Episode }) => {
 const EpisodePageContent = () => {
   const { data: episode, execute, loading, error } = useGetEpisodeById();
   const { id } = useParams();
-  const apiError = error?.name === 'ApiError' && (error as ApiError);
-  const notFound = apiError?.status === 404;
 
   useEffect(() => {
     execute(Number(id));
@@ -57,10 +53,7 @@ const EpisodePageContent = () => {
     return <Loading />;
   }
   if (error) {
-    if (notFound) {
-      return <NotFound />;
-    }
-    return <SomethingWentWrong error={error} />;
+    return <ErrorMessage error={error} />;
   }
   if (episode) {
     return (

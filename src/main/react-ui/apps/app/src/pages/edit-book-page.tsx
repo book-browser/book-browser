@@ -2,14 +2,13 @@ import { CircularProgress, Container } from '@mui/material';
 import { ErrorAlert } from 'components/error/error-alert';
 import { BookForm } from 'components/form/book-form/book-form';
 import Loading from 'components/loading/loading';
-import { NotFound } from 'components/message/not-found/not-found';
+import { ErrorMessage } from 'components/message/error-message/error-message';
 import Heading from 'components/navigation/heading/heading';
 import { useGetBook, useSaveBook } from 'hooks/book.hook';
 import { usePrompt } from 'hooks/router.hook';
 import React, { useEffect, useState } from 'react';
 import { Alert, Breadcrumb, Button } from 'react-bootstrap';
-import { useParams, useNavigate, Link } from 'react-router-dom';
-import { ApiError } from 'types/api-error';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Book } from 'types/book';
 
 const EditBookPage = () => {
@@ -17,7 +16,6 @@ const EditBookPage = () => {
   const navigate = useNavigate();
   const { data: loadedBook, execute: load, loading: loadingBook, error: loadError } = useGetBook();
   const { data: savedBook, execute: save, loading: savingBook, error: saveError } = useSaveBook();
-  const notFound = loadError?.name === 'ApiError' && (loadError as ApiError)?.status === 404;
 
   const [book, setBook] = useState<Book>();
   const [saved, setSaved] = useState(true);
@@ -68,10 +66,7 @@ const EditBookPage = () => {
   return (
     <Container maxWidth="md" className="mt-3">
       {loadingBook && <Loading />}
-      {loadError && !notFound && (
-        <ErrorAlert uiMessage="Something went wrong. Unable to load this entry." error={loadError} />
-      )}
-      {loadError && notFound && <NotFound />}
+      {loadError && <ErrorMessage error={loadError} />}
       {book && (
         <div>
           <Breadcrumb>

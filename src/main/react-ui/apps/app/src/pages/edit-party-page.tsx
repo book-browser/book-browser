@@ -3,16 +3,15 @@ import { DeepPartial } from '@reduxjs/toolkit';
 import { ErrorAlert } from 'components/error/error-alert';
 import { PartyForm } from 'components/form/party-form/party-form';
 import Loading from 'components/loading/loading';
-import { NotFound } from 'components/message/not-found/not-found';
+import { ErrorMessage } from 'components/message/error-message/error-message';
 import Heading from 'components/navigation/heading/heading';
-import { useGetPartyById, useCreateOrUpdateParty } from 'hooks/party.hook';
+import { useCreateOrUpdateParty, useGetPartyById } from 'hooks/party.hook';
+import { usePrompt } from 'hooks/router.hook';
 import React, { useEffect, useState } from 'react';
 import { Alert, Breadcrumb, Button } from 'react-bootstrap';
-import { useParams, useNavigate, Link } from 'react-router-dom';
-import { ApiError } from 'types/api-error';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Party } from 'types/party';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const UNSAVED_MESSAGE = 'Are you sure that you want to leave with unsaved changes?';
 
 export const EditPartyPage = () => {
@@ -20,10 +19,9 @@ export const EditPartyPage = () => {
   const navigate = useNavigate();
   const { data: loadedParty, execute: load, loading: loadingParty, error: loadError } = useGetPartyById();
   const { data: savedParty, execute: save, loading: savingParty, error: saveError } = useCreateOrUpdateParty();
-  const notFound = loadError?.name === 'ApiError' && (loadError as ApiError)?.status === 404;
-
   const [party, setParty] = useState<DeepPartial<Party>>();
   const [saved, setSaved] = useState(true);
+  usePrompt(UNSAVED_MESSAGE, !saved);
 
   const onChange = (changedParty: DeepPartial<Party>) => {
     setParty(changedParty);
@@ -70,10 +68,7 @@ export const EditPartyPage = () => {
   return (
     <Container maxWidth="md" className="mt-3">
       {loadingParty && <Loading />}
-      {loadError && !notFound && (
-        <ErrorAlert uiMessage="Something went wrong. Unable to load this entry." error={loadError} />
-      )}
-      {loadError && notFound && <NotFound />}
+      {loadError && <ErrorMessage error={loadError} />}
       {party && (
         <div>
           <Breadcrumb>

@@ -11,6 +11,8 @@ import { ReferenceData } from 'types/reference-data';
 import BookList from 'components/book-list/book-list';
 import Pagination from 'components/pagination/pagination';
 import Heading from 'components/navigation/heading/heading';
+import Loading from 'components/loading/loading';
+import { ErrorAlert } from 'components/error/error-alert';
 
 type SearchBookPageParams = {
   query: string;
@@ -53,7 +55,7 @@ const SearchBookPage = () => {
   const [query, setQuery] = useState(params.query);
   const [activeQuery, setActiveQuery] = useState(params.query);
 
-  const { data: books, execute } = useFindAllBooks();
+  const { data: books, loading, error, execute } = useFindAllBooks();
 
   const createNewUrl = (newParams: { query?: string; genres?: Genre[]; page?: number }) => {
     return generateEncodedUrl('/books/search', {
@@ -126,11 +128,9 @@ const SearchBookPage = () => {
         </Breadcrumb.Item>
         <Breadcrumb.Item active>Search</Breadcrumb.Item>
       </Breadcrumb>
-
       <Heading as="h1" className="mb-3">
         Search Books
       </Heading>
-
       <InputGroup className="mb-5">
         <FormControl
           size="lg"
@@ -143,7 +143,6 @@ const SearchBookPage = () => {
           Search
         </Button>
       </InputGroup>
-
       <Heading as="h2" className="mb-4">
         Genres
       </Heading>
@@ -164,10 +163,11 @@ const SearchBookPage = () => {
             </ButtonGroup>
           ))}
       </div>
-
       <Heading as="h2" className="mb-4">
         Results
       </Heading>
+      {loading && <Loading />}
+      {error && <ErrorAlert uiMessage="Unable to load content" error={error} />}
       {books && (
         <div>
           <BookList books={books.items} />

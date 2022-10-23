@@ -64,35 +64,33 @@ const SeriesListPageContent = () => {
     findAll({ titleStartsWith: actualLetter, page, order: 'asc', sort: 'title', limit: 48 });
   }, [page, letter, referenceData.letters, findAll]);
 
-  if (loading) {
-    return <Loading />;
-  } else if (error) {
-    return <ErrorAlert uiMessage="Unable to load content" error={error} />;
-  } else if (seriesList) {
-    return (
-      <>
-        <div className="d-flex flex-wrap mb-3">
-          {referenceData.letters.map((currLetter) => (
-            <ToggleButton
-              key={currLetter.value}
-              value={currLetter.value}
-              checked={currLetter.value === letter}
-              className="me-2 mb-2"
-              onClick={() => navigate(`/series?letter=${currLetter.value}`)}
-            >
-              {currLetter.label}
-            </ToggleButton>
-          ))}
-        </div>
-        <div className="mb-3">
-          <SeriesList seriesList={seriesList.items} />
-        </div>
-        <Pagination page={page} totalPages={seriesList.totalPages} onPageChange={onPageChange} />
-      </>
-    );
-  }
-
-  return null;
+  return (
+    <>
+      <div className="d-flex flex-wrap mb-3">
+        {referenceData.letters.map((currLetter) => (
+          <ToggleButton
+            key={currLetter.value}
+            value={currLetter.value}
+            checked={currLetter.value === letter}
+            className="me-2 mb-2"
+            onClick={() => navigate(`/series?letter=${currLetter.value}`)}
+          >
+            {currLetter.label}
+          </ToggleButton>
+        ))}
+      </div>
+      {loading && <Loading />}
+      {error && <ErrorAlert uiMessage="Unable to load content" error={error} />}
+      {seriesList && (
+        <>
+          <div className="mb-3">
+            <SeriesList seriesList={seriesList.items} />
+          </div>
+          <Pagination page={page} totalPages={seriesList.totalPages} onPageChange={onPageChange} />
+        </>
+      )}
+    </>
+  );
 };
 
 const SeriesListPage = () => {

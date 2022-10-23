@@ -1,4 +1,5 @@
 .loading-indicator {
+  flex: 1;
   position: absolute;
   top: 45%;
   left: 45%;
@@ -7,4 +8,10 @@
   margin-left: auto;
   margin-right: auto;
   display: block;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
 }

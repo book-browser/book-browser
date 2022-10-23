@@ -1,7 +1,7 @@
 import { Container } from '@mui/material';
 import BookList from 'components/book-list/book-list';
-import { ErrorAlert } from 'components/error/error-alert';
 import Loading from 'components/loading/loading';
+import { ErrorMessage } from 'components/message/error-message/error-message';
 import Heading from 'components/navigation/heading/heading';
 import SeriesList from 'components/series-list/series-list';
 import { useEmptyPromise } from 'hooks/promise.hook';
@@ -33,7 +33,7 @@ const HomepageContent = () => {
   if (loading) {
     return <Loading />;
   } else if (error) {
-    return <ErrorAlert uiMessage="Unable to data" error={error} />;
+    return <ErrorMessage error={error} />;
   } else if (data) {
     return (
       <div>

@@ -13,6 +13,7 @@ import { generateEncodedUrl, parseParams } from 'utils/location-utils';
 import * as yup from 'yup';
 import Loading from 'components/loading/loading';
 import Heading from 'components/navigation/heading/heading';
+import { ErrorAlert } from 'components/error/error-alert';
 
 type SearchSeriesPageParams = {
   query: string;
@@ -58,7 +59,7 @@ const SearchSeriesPage = () => {
   const [activeQuery, setActiveQuery] = useState(params.query);
   const [activeSort, setActiveSort] = useState(params.sort);
 
-  const { data: seriesList, loading, execute } = useFindAll();
+  const { data: seriesList, loading, error, execute } = useFindAll();
 
   const toggleGenre = (genre: Genre) => {
     const newSelectedGenres = [...selectedGenres];
@@ -202,7 +203,7 @@ const SearchSeriesPage = () => {
         Results
       </Heading>
       {loading && <Loading />}
-
+      {error && <ErrorAlert uiMessage="Unable to load content" error={error} />}
       {seriesList && (
         <div>
           <SeriesList seriesList={seriesList.items} />

@@ -46,6 +46,9 @@ const Header = () => {
                     <div className="pl-4 mb-2">
                       <strong>Books</strong>
                     </div>
+                    <NavDropdown.Item as={Link} to="/books/search">
+                      Book Search
+                    </NavDropdown.Item>
                     <NavDropdown.Item as={Link} to="/recent">
                       Recent Releases
                     </NavDropdown.Item>
@@ -60,6 +63,9 @@ const Header = () => {
                     <div className="pl-4 mb-2">
                       <strong>Series</strong>
                     </div>
+                    <NavDropdown.Item as={Link} to="/series/search">
+                      Series Search
+                    </NavDropdown.Item>
                     <NavDropdown.Item as={Link} to="/series/recently-updated">
                       Recently Updated
                     </NavDropdown.Item>
