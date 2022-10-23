@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { Alert, Button, Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { useLocation, Link } from 'react-router-dom';
 import AddIcon from '@mui/icons-material/Add';
+import './header.scss';
 
 const Header = () => {
   const { user } = useUser();
@@ -40,10 +41,10 @@ const Header = () => {
           <Navbar.Toggle className="mb-2" aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto">
-              <NavDropdown title="Browse" id="test">
+              <NavDropdown title="Browse" id="test" className="multiline-navbar-dropdown">
                 <div className="d-flex ms-3 me-3">
                   <div>
-                    <div className="pl-4 mb-2">
+                    <div className="pl-4 mb-1">
                       <strong>Books</strong>
                     </div>
                     <NavDropdown.Item as={Link} to="/books/search">
@@ -60,7 +61,7 @@ const Header = () => {
                     </NavDropdown.Item>
                   </div>
                   <div>
-                    <div className="pl-4 mb-2">
+                    <div className="pl-4 mb-1">
                       <strong>Series</strong>
                     </div>
                     <NavDropdown.Item as={Link} to="/series/search">
