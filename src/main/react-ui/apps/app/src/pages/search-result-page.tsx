@@ -90,10 +90,10 @@ export const SearchResultPage = () => {
       {!loading && (
         <>
           <div className="mb-5">
-            <Heading as="h2">{`Books (${books.totalElements} Results)`}</Heading>
             {booksError && <ErrorAlert error={booksError} />}
             {books && (
               <>
+                <Heading as="h2">{`Books (${books.totalElements} Results)`}</Heading>
                 <BookList books={books.items} />
                 {books.totalElements > 12 && (
                   <div className="d-flex mt-2">
@@ -104,10 +104,10 @@ export const SearchResultPage = () => {
             )}
           </div>
           <div className="mb-5">
-            <Heading as="h2">{`Series (${seriesList.totalElements} Results)`}</Heading>
             {seriesError && <ErrorAlert error={seriesError} />}
             {seriesList && (
               <>
+                <Heading as="h2">{`Series (${seriesList.totalElements} Results)`}</Heading>
                 <SeriesList seriesList={seriesList.items} />
                 {seriesList.totalElements > 12 && (
                   <div className="d-flex mt-2">

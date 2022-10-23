@@ -163,13 +163,11 @@ const SearchBookPage = () => {
             </ButtonGroup>
           ))}
       </div>
-      <Heading as="h2" className="mb-4">
-        Results
-      </Heading>
       {loading && <Loading />}
       {error && <ErrorAlert uiMessage="Unable to load content" error={error} />}
       {books && (
         <div>
+          <Heading as="h2">{books.items.length > 0 ? 'Results' : 'No Results'}</Heading>
           <BookList books={books.items} />
           <Pagination page={page} totalPages={books.totalPages} onPageChange={onPageChange} />
         </div>
