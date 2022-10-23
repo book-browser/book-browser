@@ -110,7 +110,7 @@ const EditSeriesPageContent = () => {
                   {!savingSeries && <span>Save</span>}
                   {savingSeries && (
                     <span>
-                      Saving <CircularProgress color="secondary" size={'15px'} />
+                      Saving <CircularProgress color="secondary" size="0.95rem" />
                     </span>
                   )}
                 </Button>

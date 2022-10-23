@@ -76,8 +76,8 @@
 }
 
 .details-thumbnail {
-  width: 300px;
-  height: 400px;
+  width: 18.75rem;
+  height: 25rem;
 }
 
 .details-banner {
@@ -86,31 +86,31 @@
 
 @include media-breakpoint-up(xs) {
   .details-banner {
-    height: 175px;
+    height: 11rem;
   }
 }
 
 @include media-breakpoint-up(sm) {
   .details-banner {
-    height: 200px;
+    height: 12.5rem;
   }
 }
 
 @include media-breakpoint-up(md) {
   .details-banner {
-    height: 250px;
+    height: 15.625rem;
   }
 }
 
 @include media-breakpoint-up(lg) {
   .details-banner {
-    height: 300px;
+    height: 18.75rem;
   }
 }
 
 @include media-breakpoint-up(xl) {
   .details-banner {
-    height: 350px;
+    height: 21.875rem;
   }
 }
 
@@ -139,7 +139,7 @@ a {
 .dropdown-item:focus {
   background-color: inherit;
   text-decoration: underline;
-  text-underline-offset: 3px;
+  text-underline-offset: 0.2rem;
 }
 
 // .MuiSvgIcon-root {

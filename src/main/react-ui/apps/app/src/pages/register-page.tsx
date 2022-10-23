@@ -41,7 +41,7 @@ const RegisterStep = ({
                 )}
                 {loading && (
                   <Button className="mb-4" variant="primary" type="submit" disabled>
-                    Registering <CircularProgress color="secondary" size={'15px'} />
+                    Registering <CircularProgress color="secondary" size="0.95rem" />
                   </Button>
                 )}
 

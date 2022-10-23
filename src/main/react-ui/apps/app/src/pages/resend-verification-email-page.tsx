@@ -49,7 +49,7 @@ const ResendVerificationEmailPage = () => {
             )}
             {loading && (
               <Button className="w-100" variant="primary" disabled>
-                Resending <CircularProgress color="inherit" size={'15px'} />
+                Resending <CircularProgress color="inherit" size="0.95rem" />
               </Button>
             )}
           </div>

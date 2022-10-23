@@ -51,7 +51,7 @@ const LoginPage = () => {
                 )}
                 {loading && (
                   <Button variant="primary" type="submit" disabled>
-                    Loading <CircularProgress color="secondary" size={'15px'} />
+                    Loading <CircularProgress color="secondary" size="0.95rem" />
                   </Button>
                 )}
 

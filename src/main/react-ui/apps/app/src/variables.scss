@@ -5,16 +5,16 @@
 @import '~bootstrap/scss/_variables.scss';
 
 // Spacing
-$margin-sm: 5px;
-$margin-md: 10px;
+$margin-sm: 0.3rem;
+$margin-md: 0.625rem;
 
-$margin-section-y: 25px;
+$margin-section-y: 1.5rem;
 
-$margin-component-y: 15px;
-$margin-component-x: 15px;
+$margin-component-y: 0.95rem;
+$margin-component-x: 95rem;
 
-$margin-element-y: 5px;
-$margin-element-x: 5px;
+$margin-element-y: 0.3rem;
+$margin-element-x: 0.3rem;
 
 $heading-top-font-size: $h1-font-size;
 $heading-main-font-size: $h2-font-size;

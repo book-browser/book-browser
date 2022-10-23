@@ -32,7 +32,7 @@ const Header = () => {
   ].includes(location.pathname);
 
   return (
-    <div style={{ marginBottom: '80px' }}>
+    <div style={{ marginBottom: '5rem' }}>
       <Navbar fixed="top" collapseOnSelect expand="md" bg="primary" variant="dark">
         <Container fluid>
           <Navbar.Brand as={Link} to="/home">

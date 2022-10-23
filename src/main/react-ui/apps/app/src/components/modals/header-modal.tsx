@@ -53,7 +53,7 @@ const LoginModalContent = ({
                 )}
                 {loading && (
                   <Button variant="primary" className="w-100" type="submit" disabled>
-                    Loading <CircularProgress color="inherit" size={'15px'} />
+                    Loading <CircularProgress color="inherit" size={'0.95rem'} />
                   </Button>
                 )}
               </div>
@@ -121,7 +121,7 @@ const RegisterStep = ({
           )}
           {loading && (
             <Button className="mb-4 w-100" variant="primary" type="submit" disabled>
-              Registering <CircularProgress color="inherit" size={'15px'} />
+              Registering <CircularProgress color="inherit" size={'0.95rem'} />
             </Button>
           )}
           <p className="text-center">
@@ -212,7 +212,7 @@ const UsernameRecoveryContent = ({
           )}
           {loading && (
             <Button className="w-100" variant="primary" disabled>
-              Resending <CircularProgress color="inherit" size={'15px'} />
+              Resending <CircularProgress color="inherit" size={'0.95rem'} />
             </Button>
           )}
         </div>

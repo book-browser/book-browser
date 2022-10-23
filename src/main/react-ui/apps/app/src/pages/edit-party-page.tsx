@@ -107,7 +107,7 @@ export const EditPartyPage = () => {
                     {!savingParty && <span>Save</span>}
                     {savingParty && (
                       <span>
-                        Saving <CircularProgress color="secondary" size={'15px'} />
+                        Saving <CircularProgress color="secondary" size="0.95rem" />
                       </span>
                     )}
                   </Button>

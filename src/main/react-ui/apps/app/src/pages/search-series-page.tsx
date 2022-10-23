@@ -189,7 +189,7 @@ const SearchSeriesPage = () => {
         <Form.Label>Sort</Form.Label>
         <Form.Control
           as="select"
-          style={{ width: '250px' }}
+          style={{ width: '15.625rem' }}
           value={activeSort}
           onChange={(e) => changeParams({ sort: e.target.value })}
         >
@@ -203,9 +203,7 @@ const SearchSeriesPage = () => {
       {error && <ErrorAlert uiMessage="Unable to load content" error={error} />}
       {seriesList && (
         <div>
-          <Heading as="h2" className="mb-4">
-            {seriesList.totalElements > 0 ? 'Results' : 'No Results'}
-          </Heading>
+          <Heading as="h2">{seriesList.totalElements > 0 ? 'Results' : 'No Results'}</Heading>
           <SeriesList seriesList={seriesList.items} />
           <Pagination page={page} totalPages={seriesList.totalPages} onPageChange={onPageChange} />
         </div>

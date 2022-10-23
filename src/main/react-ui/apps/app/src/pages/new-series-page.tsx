@@ -46,7 +46,7 @@ const NewSeriesForm = ({
             )}
             {loading && (
               <Button variant="primary" type="submit" disabled>
-                Submitting <CircularProgress color="secondary" size={'15px'} />
+                Submitting <CircularProgress color="secondary" size="0.95rem" />
               </Button>
             )}
           </div>
