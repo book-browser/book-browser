@@ -1,5 +1,28 @@
+@import '../variables.scss';
+
 .multiline-navbar-dropdown {
   .dropdown-item {
     padding-left: 0;
+  }
+}
+
+.mobile-search-bar > .search-bar {
+  display: none;
+}
+
+@include media-breakpoint-down(md) {
+  .search-bar {
+    display: none;
+  }
+  .mobile-search-bar > .search-bar {
+    display: flex;
+    margin-top: $margin-md;
+    margin-bottom: $margin-md;
+    min-width: 100%;
+    max-width: 100%;
+
+    .dropdown-menu {
+      width: calc(100vw - 1.5rem) !important;
+    }
   }
 }

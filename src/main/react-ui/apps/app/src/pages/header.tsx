@@ -40,6 +40,9 @@ const Header = () => {
           </Navbar.Brand>
           <Navbar.Toggle className="mb-2" aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
+            <div className="mobile-search-bar">
+              <SearchBar className="me-2" />
+            </div>
             <Nav className="me-auto">
               <NavDropdown title="Browse" id="test" className="multiline-navbar-dropdown">
                 <div className="d-flex ms-3 me-3">
