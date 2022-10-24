@@ -4,12 +4,12 @@
 @import './shim.scss';
 
 @font-face {
-  font-family: 'Nunito-Light';
-  src: local('Nunito-Light'), url(./assets/fonts/Nunito-Light.ttf) format('truetype');
+  font-family: 'Nunito-Regular';
+  src: local('Nunito-Regular'), url(./assets/fonts/Nunito-Regular.ttf) format('truetype');
 }
 
 * {
-  font-family: 'Nunito-Light';
+  font-family: 'Nunito-Regular';
 }
 
 .heading-top {
