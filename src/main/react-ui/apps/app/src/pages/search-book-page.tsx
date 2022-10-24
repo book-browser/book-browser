@@ -45,13 +45,12 @@ const SearchBookPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const params = useMemo(() => readParams(location, data), [location, data]);
+  const formattedGenreParams = params.genres.map((paramGenre) =>
+    data.genres.find((genre) => genre.name.toLocaleLowerCase() === paramGenre.toLocaleLowerCase())
+  );
 
   const [page, setPage] = useState(params.page);
-  const [selectedGenres, setSelectedGenres] = useState<Genre[]>(
-    params.genres.map((paramGenre) =>
-      data.genres.find((genre) => genre.name.toLocaleLowerCase() === paramGenre.toLocaleLowerCase())
-    )
-  );
+  const [selectedGenres, setSelectedGenres] = useState<Genre[]>(formattedGenreParams);
   const [query, setQuery] = useState(params.query);
   const [activeQuery, setActiveQuery] = useState(params.query);
 
@@ -100,7 +99,7 @@ const SearchBookPage = () => {
       setActiveQuery(params.query);
       setQuery(params.query);
     }
-    if (params.genres !== selectedGenres.map((genre) => genre.name.toLocaleLowerCase())) {
+    if (formattedGenreParams !== selectedGenres) {
       setSelectedGenres(
         params.genres.map((paramGenre) =>
           data.genres.find((genre) => genre.name.toLocaleLowerCase() === paramGenre.toLocaleLowerCase())

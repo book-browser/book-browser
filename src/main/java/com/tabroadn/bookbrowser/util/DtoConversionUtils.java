@@ -11,6 +11,7 @@ import com.tabroadn.bookbrowser.dto.LinkDto;
 import com.tabroadn.bookbrowser.dto.PartyDto;
 import com.tabroadn.bookbrowser.dto.PublisherDto;
 import com.tabroadn.bookbrowser.dto.SeriesDto;
+import com.tabroadn.bookbrowser.dto.SeriesSummaryDto;
 import com.tabroadn.bookbrowser.entity.Book;
 import com.tabroadn.bookbrowser.entity.BookCreator;
 import com.tabroadn.bookbrowser.entity.BookLink;
@@ -87,8 +88,38 @@ public class DtoConversionUtils {
         series.getPublishers().stream()
             .map(DtoConversionUtils::convertSeriesCreatorToPartyCreatorDto)
             .collect(Collectors.toList()));
+    seriesDto.setBooks(series.getBooks()
+        .stream().map(DtoConversionUtils::convertBookToBookDto)
+        .collect(Collectors.toList()));
+    seriesDto.setEpisodes(series.getEpisodes()
+        .stream().map(DtoConversionUtils::convertEpisodeToEpisodeDto)
+        .collect(Collectors.toList()));
 
     return seriesDto;
+  }
+
+  public static SeriesSummaryDto convertSeriesToSeriesSummaryDto(Series series) {
+    SeriesSummaryDto seriesSummaryDto = new SeriesSummaryDto();
+    seriesSummaryDto.setId(series.getId());
+    seriesSummaryDto.setTitle(series.getTitle());
+    seriesSummaryDto.setDescription(series.getDescription());
+    seriesSummaryDto.setLastUpdated(series.getLastUpdated());
+    seriesSummaryDto.setHasThumbnail(series.getThumbnail() != null);
+    seriesSummaryDto.setCreators(
+        series.getCreators().stream()
+            .map(DtoConversionUtils::convertSeriesCreatorToPartyCreatorDto)
+            .collect(Collectors.toList()));
+    seriesSummaryDto.setGenres(
+        series.getGenres().stream().map(Genre::getName).collect(Collectors.toList()));
+    seriesSummaryDto.setLinks(
+        series.getLinks().stream()
+            .map(DtoConversionUtils::convertSeriesLinkToLinkDto)
+            .collect(Collectors.toList()));
+    seriesSummaryDto.setPublishers(
+        series.getPublishers().stream()
+            .map(DtoConversionUtils::convertSeriesCreatorToPartyCreatorDto)
+            .collect(Collectors.toList()));
+    return seriesSummaryDto;
   }
 
   public static BookDto convertBookToBookDto(Book book) {

@@ -6,6 +6,7 @@ import com.tabroadn.bookbrowser.domain.OrderEnum;
 import com.tabroadn.bookbrowser.dto.PageDto;
 import com.tabroadn.bookbrowser.dto.SeriesDto;
 import com.tabroadn.bookbrowser.dto.SeriesSearchCriteriaDto;
+import com.tabroadn.bookbrowser.dto.SeriesSummaryDto;
 import com.tabroadn.bookbrowser.service.SeriesService;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -37,24 +38,20 @@ public class SeriesController {
     return seriesService.getById(id);
   }
 
-  @GetMapping(
-      value = "/series/{id}/banner",
-      produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
+  @GetMapping(value = "/series/{id}/banner", produces = { MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE })
   public byte[] getSeriesBanner(@PathVariable("id") Long id, HttpServletResponse response) {
     response.addHeader("Cache-Control", "max-age=86400, must-revalidate, no-transform");
     return seriesService.getSeriesBanner(id);
   }
 
-  @GetMapping(
-      value = "/series/{id}/thumbnail",
-      produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
+  @GetMapping(value = "/series/{id}/thumbnail", produces = { MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE })
   public byte[] getSeriesThumbnail(@PathVariable("id") Long id, HttpServletResponse response) {
     response.addHeader("Cache-Control", "max-age=86400, must-revalidate, no-transform");
     return seriesService.getSeriesThumbnail(id);
   }
 
   @GetMapping("/series")
-  public PageDto<SeriesDto> findAll(@Valid SeriesSearchCriteriaDto seriesSearchCriteriaDto) {
+  public PageDto<SeriesSummaryDto> findAll(@Valid SeriesSearchCriteriaDto seriesSearchCriteriaDto) {
     return seriesService.findAll(seriesSearchCriteriaDto);
   }
 

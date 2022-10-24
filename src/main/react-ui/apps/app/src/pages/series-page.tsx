@@ -8,7 +8,6 @@ import { useGetById } from 'hooks/series.hook';
 import React, { useEffect } from 'react';
 import { Breadcrumb, Button } from 'react-bootstrap';
 import { Link, useParams } from 'react-router-dom';
-import { ApiError } from 'types/api-error';
 import { Series } from 'types/series';
 
 const SeriesPageHeader = ({ series }: { series: Series }) => {

@@ -1,11 +1,20 @@
 package com.tabroadn.bookbrowser.service;
 
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Component;
+
 import com.tabroadn.bookbrowser.dto.CreatorDto;
 import com.tabroadn.bookbrowser.dto.LinkDto;
 import com.tabroadn.bookbrowser.dto.PageDto;
 import com.tabroadn.bookbrowser.dto.PublisherDto;
 import com.tabroadn.bookbrowser.dto.SeriesDto;
 import com.tabroadn.bookbrowser.dto.SeriesSearchCriteriaDto;
+import com.tabroadn.bookbrowser.dto.SeriesSummaryDto;
 import com.tabroadn.bookbrowser.entity.Party;
 import com.tabroadn.bookbrowser.entity.Series;
 import com.tabroadn.bookbrowser.entity.SeriesCreator;
@@ -15,26 +24,17 @@ import com.tabroadn.bookbrowser.entity.SeriesPartyId;
 import com.tabroadn.bookbrowser.entity.SeriesPublisher;
 import com.tabroadn.bookbrowser.exception.ResourceNotFoundException;
 import com.tabroadn.bookbrowser.repository.BookRepository;
-import com.tabroadn.bookbrowser.repository.EpisodeRepository;
 import com.tabroadn.bookbrowser.repository.GenreRepository;
 import com.tabroadn.bookbrowser.repository.PartyRepository;
 import com.tabroadn.bookbrowser.repository.SeriesRepository;
 import com.tabroadn.bookbrowser.repository.SeriesSpecification;
 import com.tabroadn.bookbrowser.util.DtoConversionUtils;
-import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Component;
 
 @Component
 public class SeriesService {
   private SeriesRepository seriesRepository;
 
   private BookRepository bookRepository;
-
-  private EpisodeRepository episodeRepository;
 
   private GenreRepository genreRepository;
 
@@ -45,17 +45,15 @@ public class SeriesService {
       SeriesRepository seriesRepository,
       BookRepository bookRepository,
       GenreRepository genreRepository,
-      PartyRepository partyRepository,
-      EpisodeRepository episodeRepository) {
+      PartyRepository partyRepository) {
     this.seriesRepository = seriesRepository;
     this.bookRepository = bookRepository;
     this.genreRepository = genreRepository;
     this.partyRepository = partyRepository;
-    this.episodeRepository = episodeRepository;
   }
 
   public SeriesDto getById(Long id) {
-    return convertSeriesToSeriesDto(getSeriesById(id));
+    return DtoConversionUtils.convertSeriesToSeriesDto(getSeriesById(id));
   }
 
   public byte[] getSeriesBanner(Long id) {
@@ -68,10 +66,10 @@ public class SeriesService {
 
   public SeriesDto save(SeriesDto seriesDto) {
     Series series = convertSeriesDtoToSeries(seriesDto);
-    return convertSeriesToSeriesDto(seriesRepository.save(series));
+    return DtoConversionUtils.convertSeriesToSeriesDto(seriesRepository.save(series));
   }
 
-  public PageDto<SeriesDto> findAll(SeriesSearchCriteriaDto seriesSearchCriteriaDto) {
+  public PageDto<SeriesSummaryDto> findAll(SeriesSearchCriteriaDto seriesSearchCriteriaDto) {
     Pageable pageable = PageRequest.of(seriesSearchCriteriaDto.getPage(), seriesSearchCriteriaDto.getLimit());
 
     Specification<Series> specification = SeriesSpecification.orderBy(
@@ -100,7 +98,7 @@ public class SeriesService {
     return new PageDto<>(
         seriesRepository
             .findAll(specification, pageable)
-            .map(this::convertSeriesToSeriesDto));
+            .map(DtoConversionUtils::convertSeriesToSeriesSummaryDto));
   }
 
   private Series convertSeriesDtoToSeries(SeriesDto seriesDto) {
@@ -268,19 +266,6 @@ public class SeriesService {
     publisher.setParty(party);
     publisher.setSeries(series);
     return publisher;
-  }
-
-  private SeriesDto convertSeriesToSeriesDto(Series series) {
-    SeriesDto seriesDto = DtoConversionUtils.convertSeriesToSeriesDto(series);
-
-    seriesDto.setBooks(bookRepository.findAllBySeriesIdOrderByReleaseDateDesc(series.getId())
-        .stream().map(DtoConversionUtils::convertBookToBookDto)
-        .collect(Collectors.toList()));
-
-    seriesDto.setEpisodes(episodeRepository.findAllBySeriesIdOrderByReleaseDateDesc(series.getId())
-        .stream().map(DtoConversionUtils::convertEpisodeToEpisodeDto)
-        .collect(Collectors.toList()));
-    return seriesDto;
   }
 
   private Series getSeriesById(Long id) {

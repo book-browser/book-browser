@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import lombok.Data;
@@ -22,52 +23,47 @@ import org.hibernate.annotations.Formula;
 @Data
 @Entity
 public class Series {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  @NotBlank
-  @Size(max = 50)
-  private String title;
+    @NotBlank
+    @Size(max = 50)
+    private String title;
 
-  @NotBlank
-  @Size(max = 2000)
-  private String description;
+    @NotBlank
+    @Size(max = 2000)
+    private String description;
 
-  @ToString.Exclude private byte[] banner;
+    @ToString.Exclude
+    private byte[] banner;
 
-  @ToString.Exclude private byte[] thumbnail;
+    @ToString.Exclude
+    private byte[] thumbnail;
 
-  @Formula("(select max(e.release_date) from episode e where e.series_id = id)")
-  private LocalDate lastUpdated;
+    @Formula("(select max(e.release_date) from episode e where e.series_id = id)")
+    private LocalDate lastUpdated;
 
-  @OneToMany(mappedBy = "series", fetch = FetchType.LAZY)
-  private List<Book> books = new ArrayList<>();
+    @OneToMany(mappedBy = "series", fetch = FetchType.LAZY)
+    @OrderBy("releaseDate")
+    @Size(min = 1, max = 30)
+    private List<Book> books = new ArrayList<>();
 
-  @OneToMany(mappedBy = "series", fetch = FetchType.LAZY)
-  private List<Episode> episodes = new ArrayList<>();
+    @OneToMany(mappedBy = "series", fetch = FetchType.LAZY)
+    @OrderBy("releaseDate")
+    @Size(min = 1, max = 30)
+    private List<Episode> episodes = new ArrayList<>();
 
-  @OneToMany(mappedBy = "series", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<SeriesLink> links = new ArrayList<>();
+    @OneToMany(mappedBy = "series", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SeriesLink> links = new ArrayList<>();
 
-  @OneToMany(
-      mappedBy = "series",
-      cascade = CascadeType.ALL,
-      fetch = FetchType.LAZY,
-      orphanRemoval = true)
-  private List<SeriesCreator> creators = new ArrayList<>();
+    @OneToMany(mappedBy = "series", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<SeriesCreator> creators = new ArrayList<>();
 
-  @OneToMany(
-      mappedBy = "series",
-      cascade = CascadeType.ALL,
-      fetch = FetchType.LAZY,
-      orphanRemoval = true)
-  private List<SeriesPublisher> publishers = new ArrayList<>();
+    @OneToMany(mappedBy = "series", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<SeriesPublisher> publishers = new ArrayList<>();
 
-  @ManyToMany
-  @JoinTable(
-      name = "series_genre",
-      joinColumns = @JoinColumn(name = "series_id"),
-      inverseJoinColumns = @JoinColumn(name = "genre_id"))
-  private List<Genre> genres = new ArrayList<>();
+    @ManyToMany
+    @JoinTable(name = "series_genre", joinColumns = @JoinColumn(name = "series_id"), inverseJoinColumns = @JoinColumn(name = "genre_id"))
+    private List<Genre> genres = new ArrayList<>();
 }
