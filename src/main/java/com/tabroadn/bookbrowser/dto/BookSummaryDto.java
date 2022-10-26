@@ -11,5 +11,7 @@ public class BookSummaryDto {
 
   private String description;
 
+  private String thumbnailUrl;
+
   private List<CreatorDto> creators;
 }

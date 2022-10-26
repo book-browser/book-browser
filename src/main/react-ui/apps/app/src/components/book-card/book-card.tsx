@@ -4,15 +4,15 @@ import React from 'react';
 import { Book } from 'types/book';
 import './book-card.scss';
 
-export interface IBookCardProps {
+export type IBookCardProps = {
   book: Book;
-}
+};
 
 const BookCard = ({ book }: IBookCardProps) => {
   return (
     <Card className="book-card">
       <Card.Thumbnail>
-        <ImgLink to={`/books/${book.id}`} imgProps={{ alt: 'thumbnail', src: `/api/book/${book.id}/thumbnail` }} />
+        <ImgLink to={`/books/${book.id}`} imgProps={{ alt: 'thumbnail', src: book.thumbnailUrl }} />
       </Card.Thumbnail>
     </Card>
   );

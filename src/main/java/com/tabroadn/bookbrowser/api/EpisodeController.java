@@ -43,14 +43,6 @@ public class EpisodeController {
     return episodeService.getById(id);
   }
 
-  @GetMapping(
-      value = "/episode/{id}/thumbnail",
-      produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
-  public byte[] geEpisodeThumbnail(@PathVariable("id") Long id, HttpServletResponse response) {
-    response.addHeader("Cache-Control", "max-age=86400, must-revalidate, no-transform");
-    return episodeService.getEpisodeThumbnail(id);
-  }
-
   @GetMapping("/episodes")
   public PageDto<EpisodeDto> findAll(
       @RequestParam(required = false, defaultValue = "50") @Min(1) Integer limit,

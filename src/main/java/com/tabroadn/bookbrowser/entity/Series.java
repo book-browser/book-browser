@@ -35,23 +35,21 @@ public class Series {
     @Size(max = 2000)
     private String description;
 
-    @ToString.Exclude
-    private byte[] banner;
+    @Size(max = 200)
+    private String thumbnailUrl;
 
-    @ToString.Exclude
-    private byte[] thumbnail;
+    @Size(max = 200)
+    private String bannerUrl;
 
     @Formula("(select max(e.release_date) from episode e where e.series_id = id)")
     private LocalDate lastUpdated;
 
     @OneToMany(mappedBy = "series", fetch = FetchType.LAZY)
     @OrderBy("releaseDate")
-    @Size(min = 1, max = 30)
     private List<Book> books = new ArrayList<>();
 
     @OneToMany(mappedBy = "series", fetch = FetchType.LAZY)
     @OrderBy("releaseDate")
-    @Size(min = 1, max = 30)
     private List<Episode> episodes = new ArrayList<>();
 
     @OneToMany(mappedBy = "series", cascade = CascadeType.ALL, orphanRemoval = true)

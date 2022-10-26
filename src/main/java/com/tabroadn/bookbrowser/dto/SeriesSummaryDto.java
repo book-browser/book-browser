@@ -18,7 +18,9 @@ public class SeriesSummaryDto {
 
   private LocalDate lastUpdated;
 
-  private boolean hasThumbnail;
+  private String bannerUrl;
+
+  private String thumbnailUrl;
 
   private List<String> genres = new ArrayList<>();
 

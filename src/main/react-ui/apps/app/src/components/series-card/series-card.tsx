@@ -12,13 +12,10 @@ const SeriesCard = ({ series }: SeriesCardProps) => {
   return (
     <Card className="series-card">
       <Card.Thumbnail>
-        {series.hasThumbnail && (
-          <ImgLink
-            to={`/series/${series.id}`}
-            imgProps={{ alt: 'thumbnail', src: `/api/series/${series.id}/thumbnail` }}
-          />
+        {series.thumbnailUrl && (
+          <ImgLink to={`/series/${series.id}`} imgProps={{ alt: 'thumbnail', src: series.thumbnailUrl }} />
         )}
-        {!series.hasThumbnail && (
+        {!series.thumbnailUrl && (
           <ImgLink
             to={`/series/${series.id}`}
             imgProps={{

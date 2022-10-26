@@ -58,7 +58,7 @@ const EditBookPage = () => {
 
   useEffect(() => {
     if (savedBook) {
-      setBook(savedBook);
+      setBook({ ...book, ...savedBook });
       setSaved(true);
     }
   }, [savedBook]);

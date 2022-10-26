@@ -11,6 +11,7 @@ import com.tabroadn.bookbrowser.entity.Series;
 import com.tabroadn.bookbrowser.exception.ResourceNotFoundException;
 import com.tabroadn.bookbrowser.repository.EpisodeRepository;
 import com.tabroadn.bookbrowser.repository.EpisodeSpecification;
+import com.tabroadn.bookbrowser.repository.ImageRepository;
 import com.tabroadn.bookbrowser.repository.SeriesRepository;
 import com.tabroadn.bookbrowser.util.DtoConversionUtils;
 import java.util.Optional;
@@ -27,24 +28,24 @@ import org.springframework.stereotype.Component;
 public class EpisodeService {
   private EpisodeRepository episodeRepository;
   private SeriesRepository seriesRepository;
+  private ImageRepository imageRepository;
 
   @Autowired
-  public EpisodeService(EpisodeRepository episodeRepository, SeriesRepository seriesRepository) {
+  public EpisodeService(EpisodeRepository episodeRepository, SeriesRepository seriesRepository,
+      ImageRepository imageRepository) {
     this.episodeRepository = episodeRepository;
     this.seriesRepository = seriesRepository;
+    this.imageRepository = imageRepository;
   }
 
   public EpisodeDto createOrUpdate(EpisodeDto episodeDto) {
     Episode episode = convertEpisodeDtoToEpisode(episodeDto);
+    createOrUpdateEpisodeImages(episode, episodeDto);
     return DtoConversionUtils.convertEpisodeToEpisodeDto(episodeRepository.save(episode));
   }
 
   public EpisodeDto getById(Long id) {
     return DtoConversionUtils.convertEpisodeToEpisodeDto(getEpisodeById(id));
-  }
-
-  public byte[] getEpisodeThumbnail(Long id) {
-    return getEpisodeById(id).getThumbnail();
   }
 
   private Episode convertEpisodeDtoToEpisode(EpisodeDto episodeDto) {
@@ -60,10 +61,6 @@ public class EpisodeService {
 
     if (episodeDto.getReleaseDate() != null) {
       episode.setReleaseDate(episodeDto.getReleaseDate().orElse(null));
-    }
-
-    if (episodeDto.getThumbnail() != null) {
-      episode.setThumbnail(episodeDto.getThumbnailBytes());
     }
 
     if (episodeDto.getLinks() != null) {
@@ -139,6 +136,16 @@ public class EpisodeService {
         episodeRepository
             .findAll(specification, pageable)
             .map(DtoConversionUtils::convertEpisodeToEpisodeDto));
+  }
+
+  private void createOrUpdateEpisodeImages(Episode episode, EpisodeDto episodeDto) {
+    if (episodeDto.getThumbnail() != null && episodeDto.getThumbnail().isPresent()) {
+      if (episode.getThumbnailUrl() != null) {
+        imageRepository.updateImage(episode.getThumbnailUrl(), episodeDto.getThumbnail().get());
+      } else {
+        episode.setThumbnailUrl(imageRepository.createImage(episodeDto.getThumbnail().get()));
+      }
+    }
   }
 
   private void validateEpisodeField(String fieldName) {

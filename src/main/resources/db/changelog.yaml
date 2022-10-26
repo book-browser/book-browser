@@ -198,3 +198,19 @@ databaseChangeLog:
         - sqlFile:
             path: changelog/scripts/25-tabroadn-alter-party-table-add-description-picture.sql
             relativeToChangelogFile: true
+
+  - changeSet:
+      id: alterSeriesBookEpisodeTableAddImageUrl
+      author: Tariq Broadnax
+      changes:
+        - sqlFile:
+            path: changelog/scripts/26-tabroadn-alter-series-book-episode-table-add-image-url.sql
+            relativeToChangelogFile: true
+
+  - changeSet:
+      id: alterSeriesBookEpisodeTableRemoveThumbnailBanner
+      author: Tariq Broadnax
+      changes:
+        - sqlFile:
+            path: changelog/scripts/27-tabroadn-alter-series-book-episode-table-remove-thumbnail-banner.sql
+            relativeToChangelogFile: true

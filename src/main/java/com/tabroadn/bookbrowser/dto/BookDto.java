@@ -25,6 +25,8 @@ public class BookDto {
 
   private String thumbnail;
 
+  private String thumbnailUrl;
+
   private Optional<LocalDate> releaseDate;
 
   private Long seriesId;
@@ -39,11 +41,6 @@ public class BookDto {
 
   @Valid
   private List<LinkDto> links;
-
-  @JsonIgnore
-  public byte[] getThumbnailBytes() {
-    return Base64.getDecoder().decode(thumbnail);
-  }
 
   @ToString.Include(name = "thumbnail")
   private String maskedThumbnail() {

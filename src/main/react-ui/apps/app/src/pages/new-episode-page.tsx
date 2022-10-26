@@ -117,6 +117,12 @@ const NewEpisodePageContent = () => {
     execute(newSeries);
   };
 
+  useEffect(() => {
+    if (data) {
+      setSaved(true);
+    }
+  }, [data]);
+
   if (!data) {
     return <NewEpisodeForm loading={loading} onChange={onChange} onSubmit={onSubmit} error={error} />;
   } else {

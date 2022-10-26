@@ -58,7 +58,7 @@ const EditSeriesPageContent = () => {
 
   useEffect(() => {
     if (savedSeries) {
-      setSeries(savedSeries);
+      setSeries({ ...series, ...savedSeries });
       setSaved(true);
     }
   }, [savedSeries]);

@@ -58,7 +58,7 @@ export const EditEpisodePage = () => {
 
   useEffect(() => {
     if (savedEpisode) {
-      setEpisode(savedEpisode);
+      setEpisode({ ...episode, ...savedEpisode });
       setSaved(true);
     }
   }, [savedEpisode]);

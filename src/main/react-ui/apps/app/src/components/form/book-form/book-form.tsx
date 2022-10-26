@@ -1,23 +1,24 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import DeleteIcon from '@mui/icons-material/Delete';
+import MDEditor from '@uiw/react-md-editor';
 import { debounce } from 'debounce';
-import { Formik, FormikErrors } from 'formik';
+import { FormikErrors } from 'formik';
 import { useFindAllParties } from 'hooks/party.hook';
 import { useReferenceData } from 'hooks/reference-data.hook';
-import React, { ChangeEvent, ReactNode, useEffect, useState } from 'react';
-import { Button, Col, Form, Row } from 'react-bootstrap';
+import React, { ReactNode, useEffect, useState } from 'react';
+import { Button, Col, Row } from 'react-bootstrap';
 import Feedback from 'react-bootstrap/esm/Feedback';
+import DatePicker from 'react-datepicker';
+import Select from 'react-select';
 import CreatableSelect from 'react-select/creatable';
-import { Party } from 'types/party';
+import { Book } from 'types/book';
 import { Creator } from 'types/creator';
+import { Genre } from 'types/genre';
+import { Party } from 'types/party';
 import * as yup from 'yup';
+import Form from '../form/form';
 import { RequiredFieldLegend } from '../required-field-legend';
 import { RequiredSymbol } from '../required-symbol';
-import Select from 'react-select';
-import { Genre } from 'types/genre';
-import { Book } from 'types/book';
-import DatePicker from 'react-datepicker';
-import MDEditor from '@uiw/react-md-editor';
 
 const schema = yup.object().shape({
   id: yup.number().nullable(),
@@ -70,11 +71,6 @@ const convertGenreToSelectOptions = (genres: Genre[]) => {
 };
 
 export const BookForm = (props: BookFormProps) => {
-  const [value, setValue] = useState<Book>(props.initialValue || defaultBook);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [thumbnailFile, setThumbnailFile] = useState<File>();
-  const [thumbnailUrl, setThumbnailUrl] = useState<string>();
-
   const [people, setPeople] = useState<Party[]>([]);
 
   const { data: fetchedPeople, execute } = useFindAllParties();
@@ -91,25 +87,12 @@ export const BookForm = (props: BookFormProps) => {
     }
   }, [fetchedPeople]);
 
-  const actualValue = props.value || value;
-
-  useEffect(() => {
-    if (!actualValue.thumbnail && actualValue.id) {
-      setThumbnailFile(null);
-      setThumbnailUrl(`/api/book/${actualValue.id}/thumbnail`);
-    }
-  }, [actualValue]);
-
   return (
-    <Formik
+    <Form
       validationSchema={schema}
-      initialValues={actualValue}
-      enableReinitialize
-      onSubmit={(values) => {
-        if (props.onSubmit) {
-          props.onSubmit(values);
-        }
-      }}
+      initialValues={props.value || { ...defaultBook, ...props.initialValue }}
+      onChange={props.onChange}
+      onSubmit={props.onSubmit}
     >
       {({
         handleSubmit,
@@ -122,17 +105,8 @@ export const BookForm = (props: BookFormProps) => {
         isValid,
         errors
       }) => {
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        useEffect(() => {
-          if (values !== actualValue) {
-            setValue(values);
-            if (props.onChange) {
-              props.onChange(values, isValid);
-            }
-          }
-        }, [values, isValid]);
         return (
-          <Form className="mb-3" noValidate onSubmit={handleSubmit}>
+          <>
             <h4 className="mb-3">General Information</h4>
             <hr className="mb-4" />
             <RequiredFieldLegend />
@@ -177,7 +151,7 @@ export const BookForm = (props: BookFormProps) => {
                 showPopperArrow={false}
                 wrapperClassName={errors.releaseDate ? 'is-invalid' : null}
                 className={`form-control ${errors.releaseDate ? 'is-invalid' : null}`}
-                selected={actualValue.releaseDate || null}
+                selected={values.releaseDate || null}
                 onChange={(val) => setFieldValue('releaseDate', val)}
                 onBlur={handleBlur}
                 isClearable
@@ -191,35 +165,18 @@ export const BookForm = (props: BookFormProps) => {
               </Form.Label>
               <Row>
                 <Col>
-                  <Form.Control
-                    type="file"
+                  <Form.ImageControl
                     name="thumbnail"
-                    accept="image/png, image/jpeg"
-                    onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                      const file = e.target.files[0];
-                      if (file) {
-                        const reader = new FileReader();
-                        reader.readAsDataURL(file);
-                        reader.onload = function () {
-                          setThumbnailFile(file);
-                          setThumbnailUrl(URL.createObjectURL(file));
-                          setFieldValue('thumbnail', (reader.result as string).split(',')[1]);
-                        };
-                      } else {
-                        setThumbnailFile(null);
-                        setThumbnailUrl(null);
-                        setFieldValue('thumbnail', null);
-                      }
-                    }}
-                    onBlur={handleBlur}
+                    defaultValue={values.thumbnailUrl}
+                    value={values.thumbnail as File}
                     isInvalid={touched.thumbnail && !!errors.thumbnail}
-                  ></Form.Control>
+                    onChange={setFieldValue}
+                    onBlur={handleBlur}
+                  />
                   <Form.Text muted>Max file size 1MB</Form.Text>
-                  <Feedback type="invalid">{errors.thumbnail}</Feedback>
+                  <Feedback type="invalid">{errors.thumbnail as any}</Feedback>
                 </Col>
               </Row>
-
-              {thumbnailUrl && <img src={thumbnailUrl} className="mt-3" style={{ maxWidth: '100%' }} alt="thumbnail" />}
             </Form.Group>
             <Form.Group controlId="genre-select" className="mb-3">
               <Form.Label>Genres</Form.Label>
@@ -228,7 +185,7 @@ export const BookForm = (props: BookFormProps) => {
                 isMulti
                 name="genres"
                 options={genreOptions}
-                value={convertGenreToSelectOptions(actualValue.genres)}
+                value={convertGenreToSelectOptions(values.genres)}
                 onChange={(data) => {
                   const genres = data.map((item) => ({
                     id: item.value,
@@ -316,7 +273,7 @@ export const BookForm = (props: BookFormProps) => {
                       <Form.Select
                         id={`creator${index}-role-select`}
                         name={`creators[${index}].role`}
-                        value={actualValue.creators[index].role || ''}
+                        value={values.creators[index].role || ''}
                         onChange={(e) => {
                           const newCreator = {
                             ...creator,
@@ -442,9 +399,9 @@ export const BookForm = (props: BookFormProps) => {
             </Form.Group>
             <hr className="mb-4" />
             {props.footer}
-          </Form>
+          </>
         );
       }}
-    </Formik>
+    </Form>
   );
 };

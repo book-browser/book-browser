@@ -1,6 +1,6 @@
 version: "3"
 services:
-  db:
+  database:
     container_name: book-browser
     restart: always
     image: mysql
@@ -15,3 +15,20 @@ services:
       - ./:/book-browser
       - ./database/init-database.sh:/docker-entrypoint-initdb.d/init-database.sh
       - ./database/my.cnf:/etc/mysql/my.cnf
+  s3:
+    container_name: localstack
+    image: localstack/localstack:latest
+    ports:
+      - "4566-4583:4566-4583"
+    environment:
+      - DEBUG=1
+      - USE_SSL=0
+      - AWS_CBOR_DISABLE=1
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - HOSTNAME=localstack
+      - SERVICES=s3
+      - AWS_DEFAULT_REGION=us-east-1
+    volumes:
+      - ${TEMPDIR:-/tmp/localstack}:/tmp/localstack
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./s3/init-s3-bucket.sh:/docker-entrypoint-initaws.d/init-s3-bucket.sh

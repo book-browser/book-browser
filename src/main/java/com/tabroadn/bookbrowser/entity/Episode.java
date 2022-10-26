@@ -32,9 +32,11 @@ public class Episode {
   @Size(max = 2000)
   private String description;
 
-  @ToString.Exclude @NotEmpty private byte[] thumbnail;
+  @Size(max = 200)
+  private String thumbnailUrl;
 
-  @NotNull private LocalDate releaseDate;
+  @NotNull
+  private LocalDate releaseDate;
 
   @ManyToOne
   @JoinColumn(name = "series_id")

@@ -71,8 +71,8 @@ public class DtoConversionUtils {
     seriesDto.setId(series.getId());
     seriesDto.setTitle(series.getTitle());
     seriesDto.setDescription(series.getDescription());
-    seriesDto.setHasBanner(series.getBanner() != null);
-    seriesDto.setHasThumbnail(series.getThumbnail() != null);
+    seriesDto.setBannerUrl(series.getBannerUrl());
+    seriesDto.setThumbnailUrl(series.getThumbnailUrl());
     seriesDto.setLastUpdated(series.getLastUpdated());
     seriesDto.setCreators(
         series.getCreators().stream()
@@ -104,7 +104,8 @@ public class DtoConversionUtils {
     seriesSummaryDto.setTitle(series.getTitle());
     seriesSummaryDto.setDescription(series.getDescription());
     seriesSummaryDto.setLastUpdated(series.getLastUpdated());
-    seriesSummaryDto.setHasThumbnail(series.getThumbnail() != null);
+    seriesSummaryDto.setThumbnailUrl(series.getThumbnailUrl());
+    seriesSummaryDto.setBannerUrl(series.getBannerUrl());
     seriesSummaryDto.setCreators(
         series.getCreators().stream()
             .map(DtoConversionUtils::convertSeriesCreatorToPartyCreatorDto)
@@ -133,6 +134,7 @@ public class DtoConversionUtils {
     bookDto.setTitle(book.getTitle());
     bookDto.setDescription(book.getDescription());
     bookDto.setReleaseDate(Optional.ofNullable(book.getReleaseDate()));
+    bookDto.setThumbnailUrl(book.getThumbnailUrl());
     bookDto.setCreators(
         book.getCreators().stream()
             .map(DtoConversionUtils::convertBookCreatorToPartyCreatorDto)
@@ -153,6 +155,7 @@ public class DtoConversionUtils {
     bookSummary.setId(book.getId());
     bookSummary.setTitle(book.getTitle());
     bookSummary.setDescription(book.getDescription());
+    bookSummary.setThumbnailUrl(book.getThumbnailUrl());
     bookSummary.setCreators(
         book.getCreators().stream()
             .map(DtoConversionUtils::convertBookCreatorToPartyCreatorDto)
@@ -192,6 +195,7 @@ public class DtoConversionUtils {
     episodeDto.setTitle(Optional.ofNullable(episode.getTitle()));
     episodeDto.setDescription(Optional.ofNullable(episode.getDescription()));
     episodeDto.setReleaseDate(Optional.ofNullable(episode.getReleaseDate()));
+    episodeDto.setThumbnailUrl(episode.getThumbnailUrl());
     episodeDto.setLinks(
         Optional.ofNullable(
             episode.getLinks().stream()

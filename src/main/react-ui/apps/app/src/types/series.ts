@@ -17,6 +17,6 @@ export type Series = {
   publishers: Publisher[];
   books: Book[];
   episodes: Episode[];
-  hasThumbnail?: boolean;
-  hasBanner?: boolean;
+  bannerUrl?: string;
+  thumbnailUrl?: string;
 };

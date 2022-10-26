@@ -2,6 +2,7 @@ import { Book } from 'types/book';
 import { Genre } from 'types/genre';
 import { Letter } from 'types/letter';
 import { mapPageItems, Page } from 'types/page';
+import { getFileBase64 } from 'utils/file-utils';
 import { handleResponse } from './response.service';
 
 type BookDto = Book & {
@@ -14,10 +15,17 @@ export const saveBook = async (book: Book) => {
       'Content-Type': 'application/json'
     },
     method: 'PUT',
-    body: JSON.stringify(book)
+    body: JSON.stringify(await mapBookToBookDto(book))
   });
 
   return convertBookResponseToBook(await handleResponse(response));
+};
+
+const mapBookToBookDto = async (book: Book) => {
+  return {
+    ...book,
+    thumbnail: book.thumbnail ? await getFileBase64(book.thumbnail as File) : book.thumbnail
+  };
 };
 
 export const getById = async (id: number) => {

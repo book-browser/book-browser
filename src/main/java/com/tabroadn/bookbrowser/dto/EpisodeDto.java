@@ -12,6 +12,8 @@ import lombok.ToString;
 public class EpisodeDto {
   private Long id;
 
+  private String thumbnailUrl;
+
   private Optional<Long> seriesId;
 
   private Optional<String> seriesTitle;

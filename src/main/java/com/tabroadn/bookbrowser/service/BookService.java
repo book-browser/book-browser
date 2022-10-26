@@ -1,5 +1,21 @@
 package com.tabroadn.bookbrowser.service;
 
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import javax.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Component;
+
 import com.tabroadn.bookbrowser.domain.LetterEnum;
 import com.tabroadn.bookbrowser.domain.OrderEnum;
 import com.tabroadn.bookbrowser.dto.BookDto;
@@ -15,49 +31,34 @@ import com.tabroadn.bookbrowser.entity.BookLink;
 import com.tabroadn.bookbrowser.entity.BookLinkId;
 import com.tabroadn.bookbrowser.entity.Genre;
 import com.tabroadn.bookbrowser.entity.Party;
-import com.tabroadn.bookbrowser.exception.ImageUploadFailureException;
 import com.tabroadn.bookbrowser.exception.ResourceNotFoundException;
 import com.tabroadn.bookbrowser.repository.BookRepository;
 import com.tabroadn.bookbrowser.repository.BookSpecification;
 import com.tabroadn.bookbrowser.repository.GenreRepository;
+import com.tabroadn.bookbrowser.repository.ImageRepository;
 import com.tabroadn.bookbrowser.repository.PartyRepository;
 import com.tabroadn.bookbrowser.util.DtoConversionUtils;
-import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Component;
 
 @Component
 public class BookService {
-  @Autowired private BookRepository repository;
+  @Autowired
+  private BookRepository repository;
 
-  @Autowired private GenreRepository genreRepository;
+  @Autowired
+  private GenreRepository genreRepository;
 
-  @Autowired private PartyRepository partyRepository;
+  @Autowired
+  private PartyRepository partyRepository;
+
+  @Autowired
+  private ImageRepository imageRepository;
 
   public BookDto getById(Long id) {
     return DtoConversionUtils.convertBookToBookDto(
         repository
             .findById(id)
             .orElseThrow(
-                () ->
-                    new ResourceNotFoundException(String.format("book with id %s not found", id))));
-  }
-
-  public byte[] findBookThumbnail(Long id) {
-    return repository
-        .findById(id)
-        .orElseThrow(
-            () -> new ResourceNotFoundException(String.format("book with id %s not found", id)))
-        .getThumbnail();
+                () -> new ResourceNotFoundException(String.format("book with id %s not found", id))));
   }
 
   public List<BookSummaryDto> search(
@@ -119,14 +120,12 @@ public class BookService {
     }
 
     if (startReleaseDate.isPresent()) {
-      specification =
-          specification.and(
-              BookSpecification.releaseDateGreaterThanOrEqual(startReleaseDate.get()));
+      specification = specification.and(
+          BookSpecification.releaseDateGreaterThanOrEqual(startReleaseDate.get()));
     }
 
     if (endReleaseDate.isPresent()) {
-      specification =
-          specification.and(BookSpecification.releaseDateLessThanOrEqual(endReleaseDate.get()));
+      specification = specification.and(BookSpecification.releaseDateLessThanOrEqual(endReleaseDate.get()));
     }
 
     if (genreNames.isPresent()) {
@@ -154,21 +153,21 @@ public class BookService {
     }
   }
 
+  @Transactional
   public BookDto save(BookDto bookDto) {
     Book book = convertBookDtoToBook(bookDto);
+    createOrUpdateBookImages(book, bookDto);
     return DtoConversionUtils.convertBookToBookDto(repository.save(book));
   }
 
   private Book convertBookDtoToBook(BookDto bookDto) {
-    Book book =
-        bookDto.getId() != null
-            ? repository
-                .findById(bookDto.getId())
-                .orElseThrow(
-                    () ->
-                        new ResourceNotFoundException(
-                            String.format("book with id %s not found", bookDto.getId())))
-            : new Book();
+    Book book = bookDto.getId() != null
+        ? repository
+            .findById(bookDto.getId())
+            .orElseThrow(
+                () -> new ResourceNotFoundException(
+                    String.format("book with id %s not found", bookDto.getId())))
+        : new Book();
 
     if (bookDto.getTitle() != null) {
       book.setTitle(bookDto.getTitle());
@@ -180,14 +179,6 @@ public class BookService {
 
     if (bookDto.getReleaseDate() != null) {
       book.setReleaseDate(bookDto.getReleaseDate().orElse(null));
-    }
-
-    if (bookDto.getThumbnail() != null) {
-      try {
-        book.setThumbnail(bookDto.getThumbnailBytes());
-      } catch (IllegalArgumentException e) {
-        throw new ImageUploadFailureException("Unable upload image with invalid base64 scheme", e);
-      }
     }
 
     if (bookDto.getCreators() != null) {
@@ -221,6 +212,16 @@ public class BookService {
     return book;
   }
 
+  private void createOrUpdateBookImages(Book book, BookDto bookDto) {
+    if (bookDto.getThumbnail() != null) {
+      if (book.getThumbnailUrl() != null) {
+        imageRepository.updateImage(book.getThumbnailUrl(), bookDto.getThumbnail());
+      } else {
+        book.setThumbnailUrl(imageRepository.createImage(bookDto.getThumbnail()));
+      }
+    }
+  }
+
   private static BookLink convertLinkDtoToBookLink(LinkDto bookLinkDto, Book book) {
     BookLink bookLink = new BookLink();
 
@@ -244,13 +245,11 @@ public class BookService {
       party = new Party();
       party.setFullName(creatorDto.getFullName());
     } else {
-      party =
-          partyRepository
-              .findById(creatorDto.getPartyId())
-              .orElseThrow(
-                  () ->
-                      new ResourceNotFoundException(
-                          String.format("party with id %s not found", creatorDto.getPartyId())));
+      party = partyRepository
+          .findById(creatorDto.getPartyId())
+          .orElseThrow(
+              () -> new ResourceNotFoundException(
+                  String.format("party with id %s not found", creatorDto.getPartyId())));
 
       if (book.getId() != null) {
         BookCreatorId creatorId = new BookCreatorId();
@@ -271,8 +270,7 @@ public class BookService {
     return genreRepository
         .findById(genreDto.getId())
         .orElseThrow(
-            () ->
-                new ResourceNotFoundException(
-                    String.format("genre with id %s not found", genreDto.getId())));
+            () -> new ResourceNotFoundException(
+                String.format("genre with id %s not found", genreDto.getId())));
   }
 }

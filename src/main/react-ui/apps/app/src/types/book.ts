@@ -7,7 +7,8 @@ export type Book = {
   title: string;
   description: string;
   releaseDate?: Date;
-  thumbnail?: string;
+  thumbnail?: File;
+  thumbnailUrl?: string;
   seriesId?: number;
   seriesTitle?: string;
   genres: Genre[];

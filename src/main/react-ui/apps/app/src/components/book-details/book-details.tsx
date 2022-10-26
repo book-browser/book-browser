@@ -14,7 +14,7 @@ export type BookDetailsProps = {
 export const BookDetails = ({ book }: BookDetailsProps) => {
   return (
     <div className="book-details">
-      <img className="book-details-thumbnail" alt="thumbnail" src={`/api/book/${book.id}/thumbnail`} />
+      <img className="book-details-thumbnail" alt="thumbnail" src={book.thumbnailUrl} />
       <div className="flex-grow-1">
         <Heading as="h1">{book.title}</Heading>
         {book.seriesId && (

@@ -14,10 +14,7 @@ export const EpisodeCard = ({ episode }: EpisodeCardProps) => {
   return (
     <Card className="episode-card">
       <Card.Thumbnail>
-        <ImgLink
-          to={`/episodes/${episode.id}`}
-          imgProps={{ alt: 'thumbnail', src: `/api/episode/${episode.id}/thumbnail` }}
-        />
+        <ImgLink to={`/episodes/${episode.id}`} imgProps={{ alt: 'thumbnail', src: episode.thumbnailUrl }} />
       </Card.Thumbnail>
       <div>
         <Link to={`/episodes/${episode.id}`}>{episode.title}</Link>

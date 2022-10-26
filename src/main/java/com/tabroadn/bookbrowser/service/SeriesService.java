@@ -25,6 +25,7 @@ import com.tabroadn.bookbrowser.entity.SeriesPublisher;
 import com.tabroadn.bookbrowser.exception.ResourceNotFoundException;
 import com.tabroadn.bookbrowser.repository.BookRepository;
 import com.tabroadn.bookbrowser.repository.GenreRepository;
+import com.tabroadn.bookbrowser.repository.ImageRepository;
 import com.tabroadn.bookbrowser.repository.PartyRepository;
 import com.tabroadn.bookbrowser.repository.SeriesRepository;
 import com.tabroadn.bookbrowser.repository.SeriesSpecification;
@@ -40,32 +41,29 @@ public class SeriesService {
 
   private PartyRepository partyRepository;
 
+  private ImageRepository imageRepository;
+
   @Autowired
   public SeriesService(
       SeriesRepository seriesRepository,
       BookRepository bookRepository,
       GenreRepository genreRepository,
-      PartyRepository partyRepository) {
+      PartyRepository partyRepository,
+      ImageRepository imageRepository) {
     this.seriesRepository = seriesRepository;
     this.bookRepository = bookRepository;
     this.genreRepository = genreRepository;
     this.partyRepository = partyRepository;
+    this.imageRepository = imageRepository;
   }
 
   public SeriesDto getById(Long id) {
     return DtoConversionUtils.convertSeriesToSeriesDto(getSeriesById(id));
   }
 
-  public byte[] getSeriesBanner(Long id) {
-    return getSeriesById(id).getBanner();
-  }
-
-  public byte[] getSeriesThumbnail(Long id) {
-    return getSeriesById(id).getThumbnail();
-  }
-
   public SeriesDto save(SeriesDto seriesDto) {
     Series series = convertSeriesDtoToSeries(seriesDto);
+    createOrUpdateSeriesImages(series, seriesDto);
     return DtoConversionUtils.convertSeriesToSeriesDto(seriesRepository.save(series));
   }
 
@@ -116,14 +114,6 @@ public class SeriesService {
 
     if (seriesDto.getDescription() != null) {
       series.setDescription(seriesDto.getDescription());
-    }
-
-    if (seriesDto.getBanner() != null) {
-      series.setBanner(seriesDto.getBannerBytes());
-    }
-
-    if (seriesDto.getThumbnail() != null) {
-      series.setThumbnail(seriesDto.getThumbnailBytes());
     }
 
     if (seriesDto.getGenres() != null) {
@@ -266,6 +256,24 @@ public class SeriesService {
     publisher.setParty(party);
     publisher.setSeries(series);
     return publisher;
+  }
+
+  private void createOrUpdateSeriesImages(Series series, SeriesDto seriesDto) {
+    if (seriesDto.getThumbnail() != null && seriesDto.getThumbnail().isPresent()) {
+      if (series.getThumbnailUrl() != null) {
+        imageRepository.updateImage(series.getThumbnailUrl(), seriesDto.getThumbnail().get());
+      } else {
+        series.setThumbnailUrl(imageRepository.createImage(seriesDto.getThumbnail().get()));
+      }
+    }
+
+    if (seriesDto.getBanner() != null && seriesDto.getBanner().isPresent()) {
+      if (series.getBannerUrl() != null) {
+        imageRepository.updateImage(series.getBannerUrl(), seriesDto.getBanner().get());
+      } else {
+        series.setBannerUrl(imageRepository.createImage(seriesDto.getBanner().get()));
+      }
+    }
   }
 
   private Series getSeriesById(Long id) {

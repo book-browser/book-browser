@@ -1,6 +1,7 @@
 package com.tabroadn.bookbrowser.api;
 
 import com.tabroadn.bookbrowser.dto.ApiError;
+import com.tabroadn.bookbrowser.exception.ImageConversionFailureException;
 import com.tabroadn.bookbrowser.exception.IncorrectPasswordException;
 import com.tabroadn.bookbrowser.exception.ResourceNotFoundException;
 import com.tabroadn.bookbrowser.exception.UserAlreadyExistException;
@@ -36,23 +37,22 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
   private static Logger logger = LogManager.getLogger();
 
-  @ExceptionHandler(
-      value = {
-        UserAlreadyExistException.class,
-        VerificationTokenExpiredException.class,
-        MultipartException.class,
-        IllegalArgumentException.class
-      })
+  @ExceptionHandler(value = {
+      UserAlreadyExistException.class,
+      VerificationTokenExpiredException.class,
+      MultipartException.class,
+      IllegalArgumentException.class,
+      ImageConversionFailureException.class
+  })
   protected ResponseEntity<ApiError> handleConflict(
       RuntimeException exception, HttpServletRequest request) {
     Throwable cause = getRootCause(exception);
 
-    ApiError apiError =
-        new ApiError(
-            Instant.now(),
-            HttpStatus.BAD_REQUEST,
-            cause.getLocalizedMessage(),
-            request.getRequestURI().toString());
+    ApiError apiError = new ApiError(
+        Instant.now(),
+        HttpStatus.BAD_REQUEST,
+        cause.getLocalizedMessage(),
+        request.getRequestURI().toString());
 
     return ResponseEntity.badRequest().body(apiError);
   }
@@ -60,25 +60,23 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
   @ExceptionHandler(ResourceNotFoundException.class)
   protected ResponseEntity<ApiError> handleUserNotFound(
       ResourceNotFoundException exception, HttpServletRequest request) {
-    ApiError apiError =
-        new ApiError(
-            Instant.now(),
-            HttpStatus.NOT_FOUND,
-            exception.getLocalizedMessage(),
-            request.getRequestURI().toString());
+    ApiError apiError = new ApiError(
+        Instant.now(),
+        HttpStatus.NOT_FOUND,
+        exception.getLocalizedMessage(),
+        request.getRequestURI().toString());
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiError);
   }
 
   @ExceptionHandler(IncorrectPasswordException.class)
   protected ResponseEntity<ApiError> handleIncorrectPassword(
       IncorrectPasswordException exception, HttpServletRequest request) {
-    ApiError apiError =
-        new ApiError(
-            Instant.now(),
-            HttpStatus.UNAUTHORIZED,
-            exception.getLocalizedMessage(),
-            Arrays.asList(exception.getLocalizedMessage()),
-            request.getRequestURI().toString());
+    ApiError apiError = new ApiError(
+        Instant.now(),
+        HttpStatus.UNAUTHORIZED,
+        exception.getLocalizedMessage(),
+        Arrays.asList(exception.getLocalizedMessage()),
+        request.getRequestURI().toString());
     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(apiError);
   }
 
@@ -97,13 +95,12 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
       errors.add(error.getObjectName() + ": " + error.getDefaultMessage());
     }
 
-    ApiError apiError =
-        new ApiError(
-            Instant.now(),
-            HttpStatus.BAD_REQUEST,
-            "Validation failed for payload",
-            errors,
-            ((ServletWebRequest) request).getRequest().getRequestURI().toString());
+    ApiError apiError = new ApiError(
+        Instant.now(),
+        HttpStatus.BAD_REQUEST,
+        "Validation failed for payload",
+        errors,
+        ((ServletWebRequest) request).getRequest().getRequestURI().toString());
 
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
   }
@@ -121,13 +118,12 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
       errors.add(error.getObjectName() + ": " + error.getDefaultMessage());
     }
 
-    ApiError apiError =
-        new ApiError(
-            Instant.now(),
-            HttpStatus.BAD_REQUEST,
-            "Validation failed for payload",
-            errors,
-            ((ServletWebRequest) request).getRequest().getRequestURI().toString());
+    ApiError apiError = new ApiError(
+        Instant.now(),
+        HttpStatus.BAD_REQUEST,
+        "Validation failed for payload",
+        errors,
+        ((ServletWebRequest) request).getRequest().getRequestURI().toString());
 
     return new ResponseEntity<Object>(apiError, HttpStatus.BAD_REQUEST);
   }
@@ -140,17 +136,16 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
       WebRequest request) {
     String error = exception.getParameterName() + " parameter is missing";
 
-    ApiError apiError =
-        new ApiError(
-            Instant.now(),
-            HttpStatus.BAD_REQUEST,
-            error,
-            ((ServletWebRequest) request).getRequest().getRequestURI().toString());
+    ApiError apiError = new ApiError(
+        Instant.now(),
+        HttpStatus.BAD_REQUEST,
+        error,
+        ((ServletWebRequest) request).getRequest().getRequestURI().toString());
 
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
   }
 
-  @ExceptionHandler({ConstraintViolationException.class})
+  @ExceptionHandler({ ConstraintViolationException.class })
   public ResponseEntity<Object> handleConstraintViolation(
       ConstraintViolationException exception, WebRequest request) {
     List<String> errors = new ArrayList<String>();
@@ -158,28 +153,26 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
       errors.add(violation.getPropertyPath() + ": " + violation.getMessage());
     }
 
-    ApiError apiError =
-        new ApiError(
-            Instant.now(),
-            HttpStatus.BAD_REQUEST,
-            "Validation failed for payload",
-            errors,
-            ((ServletWebRequest) request).getRequest().getRequestURI().toString());
+    ApiError apiError = new ApiError(
+        Instant.now(),
+        HttpStatus.BAD_REQUEST,
+        "Validation failed for payload",
+        errors,
+        ((ServletWebRequest) request).getRequest().getRequestURI().toString());
 
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
   }
 
-  @ExceptionHandler({MethodArgumentTypeMismatchException.class})
+  @ExceptionHandler({ MethodArgumentTypeMismatchException.class })
   public ResponseEntity<Object> handleMethodArgumentTypeMismatch(
       MethodArgumentTypeMismatchException ex, WebRequest request) {
     String error = ex.getName() + " should be of type " + ex.getRequiredType().getName();
 
-    ApiError apiError =
-        new ApiError(
-            Instant.now(),
-            HttpStatus.BAD_REQUEST,
-            error,
-            ((ServletWebRequest) request).getRequest().getRequestURI().toString());
+    ApiError apiError = new ApiError(
+        Instant.now(),
+        HttpStatus.BAD_REQUEST,
+        error,
+        ((ServletWebRequest) request).getRequest().getRequestURI().toString());
 
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
   }
@@ -191,12 +184,11 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
       HttpHeaders headers,
       HttpStatus status,
       WebRequest request) {
-    ApiError apiError =
-        new ApiError(
-            Instant.now(),
-            status,
-            ex.getMessage(),
-            ((ServletWebRequest) request).getRequest().getRequestURI().toString());
+    ApiError apiError = new ApiError(
+        Instant.now(),
+        status,
+        ex.getMessage(),
+        ((ServletWebRequest) request).getRequest().getRequestURI().toString());
 
     return ResponseEntity.status(status).headers(headers).body(apiError);
   }
@@ -207,18 +199,18 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     UUID correlationId = UUID.randomUUID();
     logger.error(String.format("%s %s", correlationId.toString(), exception.getMessage()));
     exception.printStackTrace();
-    ApiError apiError =
-        new ApiError(
-            Instant.now(),
-            HttpStatus.INTERNAL_SERVER_ERROR,
-            "Something unexpected occurred",
-            request.getRequestURL().toString());
+    ApiError apiError = new ApiError(
+        Instant.now(),
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        "Something unexpected occurred",
+        request.getRequestURL().toString());
     apiError.setCorrelationId(correlationId.toString());
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(apiError);
   }
 
   public static Throwable getRootCause(Throwable throwable) {
-    if (throwable.getCause() != null) return getRootCause(throwable.getCause());
+    if (throwable.getCause() != null)
+      return getRootCause(throwable.getCause());
 
     return throwable;
   }

@@ -146,9 +146,7 @@ const SeriesForm = (props: SeriesFormProps) => {
               <Form.Label>Banner</Form.Label>
               <Form.ImageControl
                 name="banner"
-                defaultValue={
-                  values.id && values.hasBanner ? `${window.location.origin}/api/series/${values.id}/banner` : undefined
-                }
+                defaultValue={values.id && values.bannerUrl ? values.bannerUrl : undefined}
                 value={values.banner as File}
                 isInvalid={touched.banner && !!errors.banner}
                 onChange={setFieldValue}
@@ -159,11 +157,7 @@ const SeriesForm = (props: SeriesFormProps) => {
               <Form.Label>Thumbnail</Form.Label>
               <Form.ImageControl
                 name="thumbnail"
-                defaultValue={
-                  values.id && values.hasThumbnail
-                    ? `${window.location.origin}/api/series/${values.id}/thumbnail`
-                    : undefined
-                }
+                defaultValue={values.id && values.thumbnailUrl ? values.thumbnailUrl : undefined}
                 value={values.thumbnail as File}
                 isInvalid={touched.thumbnail && !!errors.thumbnail}
                 onChange={setFieldValue}

@@ -127,7 +127,7 @@ export const EpisodeForm = (props: EpisodeFormProps) => {
               </Form.Label>
               <Form.ImageControl
                 name="thumbnail"
-                defaultValue={values.id ? `${window.location.origin}/api/episode/${values.id}/thumbnail` : undefined}
+                defaultValue={values.thumbnailUrl}
                 value={values.thumbnail as File}
                 isInvalid={touched.thumbnail && !!errors.thumbnail}
                 onChange={setFieldValue}

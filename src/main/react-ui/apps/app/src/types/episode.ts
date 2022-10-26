@@ -7,6 +7,7 @@ export type Episode = {
   title: string;
   description?: string;
   thumbnail?: File;
+  thumbnailUrl?: string;
   releaseDate: Date;
   links: Link[];
 };

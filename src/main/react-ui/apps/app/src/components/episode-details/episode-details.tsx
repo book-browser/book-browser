@@ -13,7 +13,7 @@ export type EpisodeDetailsProps = {
 export const EpisodeDetails = ({ episode }: EpisodeDetailsProps) => {
   return (
     <div className="episode-details">
-      <img className="episode-details-thumbnail" alt="thumbnail" src={`/api/episode/${episode.id}/thumbnail`} />
+      <img className="episode-details-thumbnail" alt="thumbnail" src={episode.thumbnailUrl} />
       <div className="flex-grow-1">
         <Heading as="h1">{episode.title}</Heading>
         {episode.seriesId && (

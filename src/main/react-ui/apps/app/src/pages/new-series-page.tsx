@@ -88,6 +88,12 @@ const NewSeriesPageContent = () => {
     execute(newSeries);
   };
 
+  useEffect(() => {
+    if (data) {
+      setSaved(true);
+    }
+  }, [data]);
+
   if (!data) {
     return <NewSeriesForm loading={loading} onChange={onChange} onSubmit={onSubmit} error={error} />;
   } else {

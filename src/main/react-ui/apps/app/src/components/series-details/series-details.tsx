@@ -18,10 +18,10 @@ export const SeriesDetails = ({ series }: SeriesDetailsProps) => {
   return (
     <div className="series-details">
       <div className="mb-4">
-        {series.hasBanner && <img className="details-banner" alt="banner" src={`/api/series/${series.id}/banner`} />}
-        {!series.hasBanner && series.hasThumbnail && (
+        {series.bannerUrl && <img className="details-banner" alt="banner" src={series.bannerUrl} />}
+        {!series.bannerUrl && series.thumbnailUrl && (
           <div className="d-flex">
-            <img className="details-thumbnail m-auto" alt="banner" src={`/api/series/${series.id}/thumbnail`} />
+            <img className="details-thumbnail m-auto" alt="banner" src={series.thumbnailUrl} />
           </div>
         )}
       </div>
