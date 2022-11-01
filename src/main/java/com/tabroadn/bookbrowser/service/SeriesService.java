@@ -67,6 +67,13 @@ public class SeriesService {
     return DtoConversionUtils.convertSeriesToSeriesDto(seriesRepository.save(series));
   }
 
+  public void delete(Long id) {
+    if (!seriesRepository.existsById(id)) {
+      throw new ResourceNotFoundException(String.format("series with id %s not found", id));
+    }
+    seriesRepository.deleteById(id);
+  }
+
   public PageDto<SeriesSummaryDto> findAll(SeriesSearchCriteriaDto seriesSearchCriteriaDto) {
     Pageable pageable = PageRequest.of(seriesSearchCriteriaDto.getPage(), seriesSearchCriteriaDto.getLimit());
 

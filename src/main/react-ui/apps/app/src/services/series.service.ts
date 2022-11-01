@@ -3,7 +3,7 @@ import { Letter } from 'types/letter';
 import { Page } from 'types/page';
 import { Series } from 'types/series';
 import { getFileBase64 } from 'utils/file-utils';
-import { handleResponse } from './response.service';
+import { handleEmptyResponse, handleResponse } from './response.service';
 
 export const save = async (series: Series) => {
   const response = await fetch('/api/series', {
@@ -28,6 +28,13 @@ const mapSeriesToSeriesDto = async (series: Series) => {
 export const getById = async (id: number) => {
   const response = await fetch(`/api/series/${id}`);
   return await handleResponse<Series>(response);
+};
+
+export const deleteSeriesById = async (id: number) => {
+  const response = await fetch(`/api/series/${id}`, {
+    method: 'DELETE'
+  });
+  return handleEmptyResponse(response);
 };
 
 export const findAll = async ({

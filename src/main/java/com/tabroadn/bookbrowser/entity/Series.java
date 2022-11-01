@@ -3,6 +3,7 @@ package com.tabroadn.bookbrowser.entity;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,9 +17,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import lombok.Data;
-import lombok.ToString;
+
 import org.hibernate.annotations.Formula;
+
+import lombok.Data;
 
 @Data
 @Entity
@@ -44,11 +46,11 @@ public class Series {
     @Formula("(select max(e.release_date) from episode e where e.series_id = id)")
     private LocalDate lastUpdated;
 
-    @OneToMany(mappedBy = "series", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "series")
     @OrderBy("releaseDate")
     private List<Book> books = new ArrayList<>();
 
-    @OneToMany(mappedBy = "series", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "series", cascade = CascadeType.REMOVE, orphanRemoval = true)
     @OrderBy("releaseDate")
     private List<Episode> episodes = new ArrayList<>();
 

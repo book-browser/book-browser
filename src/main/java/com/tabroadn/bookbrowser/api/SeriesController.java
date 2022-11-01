@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -36,6 +37,11 @@ public class SeriesController {
   @GetMapping("/series/{id}")
   public SeriesDto getById(@PathVariable("id") Long id) {
     return seriesService.getById(id);
+  }
+
+  @DeleteMapping("/series/{id}")
+  public void deleteById(@PathVariable("id") Long id) {
+    seriesService.delete(id);
   }
 
   @GetMapping("/series")
