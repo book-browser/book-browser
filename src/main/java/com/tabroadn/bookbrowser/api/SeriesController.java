@@ -19,6 +19,7 @@ import com.tabroadn.bookbrowser.domain.LetterEnum;
 import com.tabroadn.bookbrowser.domain.OrderEnum;
 import com.tabroadn.bookbrowser.dto.PageDto;
 import com.tabroadn.bookbrowser.dto.SeriesDto;
+import com.tabroadn.bookbrowser.dto.SeriesFormDto;
 import com.tabroadn.bookbrowser.dto.SeriesSearchCriteriaDto;
 import com.tabroadn.bookbrowser.dto.SeriesSummaryDto;
 import com.tabroadn.bookbrowser.service.SeriesService;
@@ -51,8 +52,8 @@ public class SeriesController {
 
   @Valid
   @PatchMapping("series")
-  public SeriesDto save(@Valid @RequestBody SeriesDto seriesDto) {
-    return seriesService.save(seriesDto);
+  public SeriesDto save(@Valid @RequestBody SeriesFormDto seriesFormDto) {
+    return seriesService.save(seriesFormDto);
   }
 
   @InitBinder

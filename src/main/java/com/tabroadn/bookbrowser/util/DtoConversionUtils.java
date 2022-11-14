@@ -181,9 +181,15 @@ public class DtoConversionUtils {
 
   public static PublisherDto convertSeriesCreatorToPartyCreatorDto(SeriesPublisher publisher) {
     PublisherDto publisherDto = new PublisherDto();
-    publisherDto.setPartyId(Optional.ofNullable((publisher.getParty().getId())));
-    publisherDto.setFullName(Optional.ofNullable(publisher.getParty().getFullName()));
-    publisherDto.setUrl(Optional.ofNullable(publisher.getUrl()));
+    publisherDto.setPartyId(publisher.getParty().getId());
+    publisherDto.setFullName(publisher.getParty().getFullName());
+    publisherDto.setUrl(publisher.getUrl());
+    publisherDto.setEpisodeCount(publisher.getEpisodeCount());
+    publisherDto.setCostAccess(publisher.getCostAccess());
+    publisherDto.setCost(publisher.getCost());
+    publisherDto.setCompletion(publisher.getCompletion());
+    publisherDto.setDistribution(publisher.getDistribution());
+    publisherDto.setPreview(publisher.getPreview());
     return publisherDto;
   }
 

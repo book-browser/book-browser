@@ -2,7 +2,7 @@
 
 ## Description
 
-BookBrowser is website for tracking, discovering, and managing sequential art, namely graphic novels, comics, webtoons, and other similar mediums, through a modern and user friendly interface. In the future, the scope of this project might be expanded to store and preserve works that are no available online anywhere else.
+BookBrowser is website for indexing, tracking, and discovering comics, through a modern and friendly user interface.
 
 Sections of README inludes:
 

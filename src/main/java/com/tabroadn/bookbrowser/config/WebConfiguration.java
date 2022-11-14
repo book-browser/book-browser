@@ -13,7 +13,8 @@ import org.springframework.web.servlet.resource.PathResourceResolver;
 
 @Configuration
 public class WebConfiguration implements WebMvcConfigurer {
-  @Autowired private StringToGenreConverter stringToGenreConverter;
+  @Autowired
+  private StringToGenreConverter stringToGenreConverter;
 
   @Override
   public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -43,5 +44,8 @@ public class WebConfiguration implements WebMvcConfigurer {
     registrar.setUseIsoFormat(true);
     registrar.registerFormatters(registry);
     registry.addConverter(stringToGenreConverter);
+    registry.addConverter(new StringToCompletionEnumConverter());
+    registry.addConverter(new StringToCostAccessEnumConverter());
+    registry.addConverter(new StringToDistributionEnumConverter());
   }
 }

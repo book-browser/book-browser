@@ -12,7 +12,9 @@ import com.tabroadn.bookbrowser.dto.CreatorDto;
 import com.tabroadn.bookbrowser.dto.LinkDto;
 import com.tabroadn.bookbrowser.dto.PageDto;
 import com.tabroadn.bookbrowser.dto.PublisherDto;
+import com.tabroadn.bookbrowser.dto.PublisherFormDto;
 import com.tabroadn.bookbrowser.dto.SeriesDto;
+import com.tabroadn.bookbrowser.dto.SeriesFormDto;
 import com.tabroadn.bookbrowser.dto.SeriesSearchCriteriaDto;
 import com.tabroadn.bookbrowser.dto.SeriesSummaryDto;
 import com.tabroadn.bookbrowser.entity.Party;
@@ -61,9 +63,9 @@ public class SeriesService {
     return DtoConversionUtils.convertSeriesToSeriesDto(getSeriesById(id));
   }
 
-  public SeriesDto save(SeriesDto seriesDto) {
-    Series series = convertSeriesDtoToSeries(seriesDto);
-    createOrUpdateSeriesImages(series, seriesDto);
+  public SeriesDto save(SeriesFormDto seriesFormDto) {
+    Series series = convertSeriesFormDtoToSeries(seriesFormDto);
+    createOrUpdateSeriesImages(series, seriesFormDto);
     return DtoConversionUtils.convertSeriesToSeriesDto(seriesRepository.save(series));
   }
 
@@ -106,81 +108,55 @@ public class SeriesService {
             .map(DtoConversionUtils::convertSeriesToSeriesSummaryDto));
   }
 
-  private Series convertSeriesDtoToSeries(SeriesDto seriesDto) {
-    Series series = seriesDto.getId() == null
+  private Series convertSeriesFormDtoToSeries(SeriesFormDto seriesFormDto) {
+    Series series = seriesFormDto.getId() == null
         ? new Series()
         : seriesRepository
-            .findById(seriesDto.getId())
+            .findById(seriesFormDto.getId())
             .orElseThrow(
                 () -> new ResourceNotFoundException(
-                    String.format("series with id %s not found", seriesDto.getId())));
+                    String.format("series with id %s not found", seriesFormDto.getId())));
 
-    if (seriesDto.getTitle() != null) {
-      series.setTitle(seriesDto.getTitle());
+    if (seriesFormDto.getTitle().isPresent()) {
+      series.setTitle(seriesFormDto.getTitle().get());
     }
 
-    if (seriesDto.getDescription() != null) {
-      series.setDescription(seriesDto.getDescription());
+    if (seriesFormDto.getDescription().isPresent()) {
+      series.setDescription(seriesFormDto.getDescription().get());
     }
 
-    if (seriesDto.getGenres() != null) {
-      series.setGenres(
-          seriesDto.getGenres().stream()
-              .map(
-                  genre -> genreRepository
-                      .findByNameIgnoreCase(genre)
-                      .orElseThrow(
-                          () -> new ResourceNotFoundException(
-                              String.format("genre with name %s not found", genre))))
-              .collect(Collectors.toList()));
+    if (seriesFormDto.getGenres() != null) {
+      series.setGenres(seriesFormDto.getGenres());
     }
 
-    if (seriesDto.getCreators() != null) {
+    if (seriesFormDto.getCreators() != null) {
       series.getCreators().clear();
       series
           .getCreators()
           .addAll(
-              seriesDto.getCreators().stream()
+              seriesFormDto.getCreators().stream()
                   .map(creator -> convertPartyCreatorDtoToSeriesCreator(creator, series))
                   .collect(Collectors.toList()));
     }
 
-    if (seriesDto.getPublishers() != null) {
+    if (seriesFormDto.getPublishers() != null) {
       series.getPublishers().clear();
       series
           .getPublishers()
           .addAll(
-              seriesDto.getPublishers().stream()
-                  .map(publisher -> convertPublisherDtoToSeriesPublisher(publisher, series))
+              seriesFormDto.getPublishers().stream()
+                  .map(publisher -> convertPublisherFormDtoToSeriesPublisher(publisher, series))
                   .collect(Collectors.toList()));
     }
 
-    if (seriesDto.getLinks() != null) {
+    if (seriesFormDto.getLinks() != null) {
       series.getLinks().clear();
       series
           .getLinks()
           .addAll(
-              seriesDto.getLinks().stream()
+              seriesFormDto.getLinks().stream()
                   .map(link -> convertLinkDtoToSeriesLink(link, series))
                   .collect(Collectors.toList()));
-    }
-
-    if (seriesDto.getBooks() != null) {
-      series.getBooks().clear();
-      series
-          .getBooks()
-          .addAll(
-              seriesDto.getBooks().stream()
-                  .filter(bookDto -> bookDto.getId() != null)
-                  .map(
-                      bookDto -> bookRepository
-                          .findById(bookDto.getId())
-                          .orElseThrow(
-                              () -> new ResourceNotFoundException(
-                                  String.format(
-                                      "book with id %s not found", bookDto.getId()))))
-                  .collect(Collectors.toList()));
-      series.getBooks().forEach(book -> book.setSeries(series));
     }
 
     return series;
@@ -230,23 +206,23 @@ public class SeriesService {
     return creator;
   }
 
-  private SeriesPublisher convertPublisherDtoToSeriesPublisher(
-      PublisherDto publisherDto, Series series) {
+  private SeriesPublisher convertPublisherFormDtoToSeriesPublisher(
+      PublisherFormDto publisherFormDto, Series series) {
     SeriesPublisher publisher = new SeriesPublisher();
 
     Party party = null;
-    if (publisherDto.getPartyId() == null || publisherDto.getPartyId().isEmpty()) {
+    if (publisherFormDto.getPartyId() == null) {
       party = new Party();
-      if (publisherDto.getFullName() != null && publisherDto.getFullName().isPresent()) {
-        party.setFullName(publisherDto.getFullName().get());
+      if (publisherFormDto.getFullName().isPresent()) {
+        party.setFullName(publisherFormDto.getFullName().get());
       }
     } else {
       party = partyRepository
-          .findById(publisherDto.getPartyId().get())
+          .findById(publisherFormDto.getPartyId())
           .orElseThrow(
               () -> new ResourceNotFoundException(
                   String.format(
-                      "party with id %s not found", publisherDto.getPartyId().get())));
+                      "party with id %s not found", publisherFormDto.getPartyId())));
 
       if (series.getId() != null) {
         SeriesPartyId creatorId = new SeriesPartyId();
@@ -256,29 +232,54 @@ public class SeriesService {
       }
     }
 
-    if (publisherDto.getUrl() != null && publisherDto.getUrl().isPresent()) {
-      publisher.setUrl(publisherDto.getUrl().get());
-    }
-
     publisher.setParty(party);
     publisher.setSeries(series);
+
+    if (publisherFormDto.getUrl().isPresent()) {
+      publisher.setUrl(publisherFormDto.getUrl().get());
+    }
+
+    if (publisherFormDto.getEpisodeCount().isPresent()) {
+      publisher.setEpisodeCount(publisherFormDto.getEpisodeCount().get());
+    }
+
+    if (publisherFormDto.getCostAccess().isPresent()) {
+      publisher.setCostAccess(publisherFormDto.getCostAccess().get());
+    }
+
+    if (publisherFormDto.getCost().isPresent()) {
+      publisher.setCost(publisherFormDto.getCost().get());
+    }
+
+    if (publisherFormDto.getCompletion().isPresent()) {
+      publisher.setCompletion(publisherFormDto.getCompletion().get());
+    }
+
+    if (publisherFormDto.getDistribution().isPresent()) {
+      publisher.setDistribution(publisherFormDto.getDistribution().get());
+    }
+
+    if (publisherFormDto.getPreview().isPresent()) {
+      publisher.setPreview(publisherFormDto.getPreview().get());
+    }
+
     return publisher;
   }
 
-  private void createOrUpdateSeriesImages(Series series, SeriesDto seriesDto) {
-    if (seriesDto.getThumbnail() != null && seriesDto.getThumbnail().isPresent()) {
+  private void createOrUpdateSeriesImages(Series series, SeriesFormDto seriesFormDto) {
+    if (seriesFormDto.getThumbnail().isPresent()) {
       if (series.getThumbnailUrl() != null) {
-        imageRepository.updateImage(series.getThumbnailUrl(), seriesDto.getThumbnail().get());
+        imageRepository.updateImage(series.getThumbnailUrl(), seriesFormDto.getThumbnail().get());
       } else {
-        series.setThumbnailUrl(imageRepository.createImage(seriesDto.getThumbnail().get()));
+        series.setThumbnailUrl(imageRepository.createImage(seriesFormDto.getThumbnail().get()));
       }
     }
 
-    if (seriesDto.getBanner() != null && seriesDto.getBanner().isPresent()) {
+    if (seriesFormDto.getBanner().isPresent()) {
       if (series.getBannerUrl() != null) {
-        imageRepository.updateImage(series.getBannerUrl(), seriesDto.getBanner().get());
+        imageRepository.updateImage(series.getBannerUrl(), seriesFormDto.getBanner().get());
       } else {
-        series.setBannerUrl(imageRepository.createImage(seriesDto.getBanner().get()));
+        series.setBannerUrl(imageRepository.createImage(seriesFormDto.getBanner().get()));
       }
     }
   }

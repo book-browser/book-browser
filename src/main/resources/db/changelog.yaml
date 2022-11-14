@@ -214,3 +214,11 @@ databaseChangeLog:
         - sqlFile:
             path: changelog/scripts/27-tabroadn-alter-series-book-episode-table-remove-thumbnail-banner.sql
             relativeToChangelogFile: true
+
+  - changeSet:
+      id: alterSeriesPublisherTableAddColumns28
+      author: Tariq Broadnax
+      changes:
+        - sqlFile:
+            path: changelog/scripts/28-tabroadn-alter-series-publisher-table-add-columns.sql
+            relativeToChangelogFile: true

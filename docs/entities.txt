@@ -1,0 +1,17 @@
+series
+  title
+  description
+  thumbnail
+  banner
+
+publisher
+  party id
+  series id
+  url
+  cost
+  episode count
+  access - free, premium, unavailable
+  preview available
+  distribution - online, print
+  completion status - ongoing, complete
+  last updated
