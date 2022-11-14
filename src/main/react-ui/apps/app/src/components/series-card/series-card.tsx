@@ -1,6 +1,7 @@
 import { Card } from 'components/card/card';
 import { ImgLink } from 'components/img-link/img-link';
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Series } from 'types/series';
 import './series-card.scss';
 
@@ -25,6 +26,9 @@ const SeriesCard = ({ series }: SeriesCardProps) => {
           />
         )}
       </Card.Thumbnail>
+      <div>
+        <Link to={`/series/${series.id}`}>{series.title}</Link>
+      </div>
     </Card>
   );
 };

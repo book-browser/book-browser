@@ -235,7 +235,7 @@ public class SeriesService {
     SeriesPublisher publisher = new SeriesPublisher();
 
     Party party = null;
-    if (publisherDto.getPartyId() == null) {
+    if (publisherDto.getPartyId() == null || publisherDto.getPartyId().isEmpty()) {
       party = new Party();
       if (publisherDto.getFullName() != null && publisherDto.getFullName().isPresent()) {
         party.setFullName(publisherDto.getFullName().get());

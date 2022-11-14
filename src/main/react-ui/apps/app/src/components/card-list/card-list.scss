@@ -10,7 +10,7 @@
 
 @include media-breakpoint-up(xs) {
   .card-list {
-    .card {
+    > * {
       flex: 0 1 49.5%; // 2
       // 101/n - 1 = p
     }
@@ -19,7 +19,7 @@
 
 @include media-breakpoint-up(sm) {
   .card-list {
-    .card {
+    > * {
       flex: 0 1 32.66%; // 2
     }
   }
@@ -27,7 +27,7 @@
 
 @include media-breakpoint-up(md) {
   .card-list {
-    .card {
+    > * {
       flex: 0 1 24.25%; // 4
     }
   }
@@ -35,7 +35,7 @@
 
 @include media-breakpoint-up(lg) {
   .card-list {
-    .card {
+    > * {
       flex: 0 1 19.2%; // 5
     }
   }
@@ -43,7 +43,7 @@
 
 @include media-breakpoint-up(xl) {
   .card-list {
-    .card {
+    > * {
       flex: 0 1 15.83%; // 6
     }
   }

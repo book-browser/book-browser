@@ -3,6 +3,16 @@
 .series-card {
   img {
     width: 100%;
-    height: 15.625rem;
+    height: 14.625rem;
+  }
+  background: transparent;
+  border: none;
+
+  a {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    display: block;
+    width: 100%;
   }
 }

@@ -33,7 +33,7 @@ const RecentlyUpdatedSeriesPageContent = () => {
   const { data: seriesList, loading, error, execute: findAll } = useFindAllSeries();
 
   const onPageChange = (newPage) => {
-    navigate(generateEncodedUrl('series', { page: newPage + 1 }));
+    navigate(generateEncodedUrl('/series/recently-updated', { page: newPage + 1 }));
   };
 
   useEffect(() => {
