@@ -9,7 +9,7 @@ export const ExternalLink = ({ children, ...remainingProps }: ExternalLinkProps)
   return (
     <a {...remainingProps} rel="noreferrer" target="_blank">
       <span className="me-1">{children}</span>
-      <OpenInNewIcon />
+      <OpenInNewIcon fontSize="small" />
     </a>
   );
 };

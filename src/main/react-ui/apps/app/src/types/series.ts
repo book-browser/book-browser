@@ -2,7 +2,7 @@ import { Book } from './book';
 import { Episode } from './episode';
 import { Link } from './link';
 import { Creator } from './creator';
-import { Publisher } from './publisher';
+import { Publisher, PublisherForm } from './publisher';
 
 export type Series = {
   id: number;
@@ -19,4 +19,16 @@ export type Series = {
   episodes: Episode[];
   bannerUrl?: string;
   thumbnailUrl?: string;
+};
+
+export type SeriesForm = {
+  id: number;
+  title?: string;
+  description?: string;
+  banner?: File;
+  thumbnail?: File;
+  genres: string[];
+  links: Link[];
+  creators: Creator[];
+  publishers: PublisherForm[];
 };

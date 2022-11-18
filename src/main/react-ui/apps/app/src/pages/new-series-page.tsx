@@ -17,7 +17,7 @@ const NewSeriesForm = ({
   error
 }: {
   loading: boolean;
-  onChange: () => void;
+  onChange: (data: Series) => void;
   onSubmit: (series: Series) => void;
   error: Error;
 }) => {
@@ -80,7 +80,8 @@ const NewSeriesPageContent = () => {
   const [saved, setSaved] = useState(true);
   usePrompt('Are you sure to leave (all changes will be lost)?', !saved);
 
-  const onChange = () => {
+  const onChange = (data: Series) => {
+    console.log(data);
     setSaved(false);
   };
 

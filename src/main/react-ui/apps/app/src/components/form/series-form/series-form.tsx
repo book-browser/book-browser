@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable prefer-spread */
 import { debounce } from 'debounce';
+import { CompletionEnum, CostAccessEnum, DistributionEnum } from 'enum';
 import { useSearch } from 'hooks/book.hook';
 import { useReferenceData } from 'hooks/reference-data.hook';
 import React, { ReactNode, useEffect, useState } from 'react';
@@ -32,7 +33,13 @@ const schema = yup.object().shape({
   publishers: yup.array(
     yup.object().shape({
       fullName: yup.string().required().label('name'),
-      link: yup.string().nullable()
+      url: yup.string().nullable(),
+      episodeCount: yup.number().nullable(),
+      costAccess: yup.mixed<CostAccessEnum>().oneOf(Object.values(CostAccessEnum)).nullable(),
+      cost: yup.number().nullable(),
+      completion: yup.mixed<CompletionEnum>().oneOf(Object.values(CompletionEnum)).nullable(),
+      distribution: yup.mixed<DistributionEnum>().oneOf(Object.values(DistributionEnum)).nullable(),
+      preview: yup.boolean().nullable()
     })
   ),
   links: yup.array(
@@ -62,9 +69,10 @@ const defaultSeries = {
   description: '',
   banner: undefined,
   thumbnail: undefined,
+  publishers: [],
   creators: [{}],
   genres: [],
-  links: [{}],
+  links: [],
   books: []
 } as Series;
 
@@ -205,9 +213,7 @@ const SeriesForm = (props: SeriesFormProps) => {
                 touched={touched.publishers}
                 errors={errors.publishers as any}
                 onChange={(name, publishers) => {
-                  values.publishers.length = 0;
-                  values.publishers.push.apply(values.publishers, publishers);
-                  setFieldValue(name, values.publishers);
+                  setFieldValue(name, publishers);
                 }}
                 onBlur={setFieldTouched}
               />

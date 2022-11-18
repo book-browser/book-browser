@@ -5,7 +5,7 @@ import { ErrorAlert } from 'components/error/error-alert';
 import Loading from 'components/loading/loading';
 import { ErrorMessage } from 'components/message/error-message/error-message';
 import Message from 'components/message/message';
-import SeriesDetails from 'components/series-details/series-details';
+import SeriesDetails from 'components/details/series-details/series-details';
 import { useDeleteSeriesById, useGetById } from 'hooks/series.hook';
 import React, { useEffect } from 'react';
 import { Breadcrumb, Button } from 'react-bootstrap';

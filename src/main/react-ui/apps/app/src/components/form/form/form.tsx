@@ -1,3 +1,7 @@
+import CompletionControl from 'components/controls/completion-control/completion-control';
+import CostAccessControl from 'components/controls/cost-access-control/cost-access-control';
+import DistributionControl from 'components/controls/distribution-control/distribution-control';
+import { PublisherControl } from 'components/controls/publisher-control/publisher-control';
 import { Formik, FormikConfig, FormikProps, FormikValues } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { Form as BootstrapForm } from 'react-bootstrap';
@@ -7,6 +11,7 @@ import DateControl from './date-control/date-control';
 import ImageControl from './image-control/image-control';
 import LinksField from './links-field/links-field';
 import MarkdownControl from './markdown-control/markdown-control';
+import { PublisherField } from './publishers-field/publisher-field';
 import PublishersField from './publishers-field/publishers-field';
 import SeriesControl from './series-control/series-control';
 
@@ -51,12 +56,20 @@ Form.Label = BootstrapForm.Label;
 Form.Control = BootstrapForm.Control;
 Form.Text = BootstrapForm.Text;
 Form.Select = BootstrapForm.Select;
+Form.Check = BootstrapForm.Check;
+
 Form.DateControl = DateControl;
 Form.MarkdownControl = MarkdownControl;
 Form.ImageControl = ImageControl;
 Form.SeriesControl = SeriesControl;
+Form.PublisherControl = PublisherControl;
+Form.CostAccessControl = CostAccessControl;
+Form.CompletionControl = CompletionControl;
+Form.DistributionControl = DistributionControl;
+
 Form.LinksField = LinksField;
 Form.CreatorsField = CreatorsField;
+Form.PublisherField = PublisherField;
 Form.PublishersField = PublishersField;
 
 export default Form;
