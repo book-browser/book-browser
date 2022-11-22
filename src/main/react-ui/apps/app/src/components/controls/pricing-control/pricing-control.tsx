@@ -1,30 +1,23 @@
 import classNames from 'classnames';
 import Form from 'components/form/form/form';
-import { Distribution } from 'consts';
-import { DistributionEnum } from 'enum';
+import { Pricing } from 'consts';
+import { PricingEnum } from 'enum';
 import React from 'react';
 import { noop } from 'utils/noop';
 
-export type DistributionControlProps = {
+export type PricingControlProps = {
   id: string;
   name: string;
-  value?: DistributionEnum;
+  value?: PricingEnum;
   isInvalid?: boolean;
-  onChange?: (name, value?: DistributionEnum) => void;
+  onChange?: (name, value?: PricingEnum) => void;
   onBlur?: (name: string) => void;
 };
 
-type Keys = keyof typeof Distribution;
-type Values = typeof Distribution[Keys];
+type Keys = keyof typeof Pricing;
+type Values = typeof Pricing[Keys];
 
-const DistributionControl = ({
-  id,
-  name,
-  value,
-  isInvalid,
-  onChange = noop,
-  onBlur = noop
-}: DistributionControlProps) => {
+const PricingControl = ({ id, name, value, isInvalid, onChange = noop, onBlur = noop }: PricingControlProps) => {
   const className = classNames({
     'is-invalid': isInvalid
   });
@@ -34,13 +27,13 @@ const DistributionControl = ({
       name={name}
       value={value || ''}
       onChange={(e) => {
-        onChange(name, (e.target.value as DistributionEnum) || null);
+        onChange(name, (e.target.value as PricingEnum) || null);
       }}
       onBlur={() => onBlur(name)}
       className={className}
     >
       <option value=""></option>
-      {Object.values(Distribution).map((item: Values) => (
+      {Object.values(Pricing).map((item: Values) => (
         <option key={item.value} value={item.value}>
           {item.label}
         </option>
@@ -49,4 +42,4 @@ const DistributionControl = ({
   );
 };
 
-export default DistributionControl;
+export default PricingControl;

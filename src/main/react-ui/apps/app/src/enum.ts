@@ -1,15 +1,39 @@
-export enum CostAccessEnum {
+export enum PricingEnum {
   FREE = 'FREE',
-  PREMIUM = 'PREMIUM'
+  PREMIUM = 'PREMIUM',
+  FREMIUM = 'FREMIUM',
+  SUBSCRIPTION = 'SUBSCRIPTION'
 }
 
-export enum CompletionEnum {
+export enum StatusEnum {
   ONGOING = 'ONGOING',
   COMPLETED = 'COMPLETED'
 }
 
 export enum DistributionEnum {
   DIGITAL = 'DIGITAL',
-  PRINT = 'PRINT',
-  BOTH = 'BOTH'
+  PRINT = 'PRINT'
+}
+
+export enum GenreEnum {
+  DRAMA = 'DRAMA',
+  FANTASY = 'FANTASY',
+  COMEDY = 'COMEDY',
+  ACTION = 'ACTION',
+  SLICE_OF_LIFE = 'SLICE_OF_LIFE',
+  SUPERHERO = 'SUPERHERO',
+  ROMANCE = 'ROMANCE',
+  SCI_FI = 'SCI_FI',
+  SUPERNATURAL = 'SUPERNATURAL',
+  HORROR = 'HORROR',
+  MYSTERY = 'MYSTERY',
+  SPORTS = 'SPORTS',
+  HISTORICAL = 'HISTORICAL',
+  HAREM = 'HAREM',
+  MUSIC = 'MUSIC',
+  MECHA = 'MECHA',
+  GL = 'GL',
+  ADVENTURE = 'ADVENTURE',
+  GAMING = 'GAMING',
+  BL = 'BL'
 }

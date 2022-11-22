@@ -22,8 +22,6 @@ const SeriesPage = () => {
 
   const { id } = useParams();
 
-  console.log(deleteError);
-
   const onDelete = () => {
     if (window.confirm('Are you sure that you want to delete this series?')) {
       deleteSeries(series.id);

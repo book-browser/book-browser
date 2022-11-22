@@ -3,15 +3,17 @@ import { Episode } from './episode';
 import { Link } from './link';
 import { Creator } from './creator';
 import { Publisher, PublisherForm } from './publisher';
+import { GenreEnum, StatusEnum } from 'enum';
 
 export type Series = {
   id: number;
   title: string;
   description: string;
+  status?: StatusEnum;
   lastUpdated?: string;
   banner?: File;
   thumbnail?: File;
-  genres: string[];
+  genres: GenreEnum[];
   links: Link[];
   creators: Creator[];
   publishers: Publisher[];
@@ -25,9 +27,10 @@ export type SeriesForm = {
   id: number;
   title?: string;
   description?: string;
+  status?: StatusEnum;
   banner?: File;
   thumbnail?: File;
-  genres: string[];
+  genres: GenreEnum[];
   links: Link[];
   creators: Creator[];
   publishers: PublisherForm[];

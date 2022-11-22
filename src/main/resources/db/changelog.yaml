@@ -222,3 +222,19 @@ databaseChangeLog:
         - sqlFile:
             path: changelog/scripts/28-tabroadn-alter-series-publisher-table-add-columns.sql
             relativeToChangelogFile: true
+
+  - changeSet:
+      id: alterSeriesTableAddStatusColumn
+      author: Tariq Broadnax
+      changes:
+        - sqlFile:
+            path: changelog/scripts/29-tabroadn-alter-series-table-add-status-column.sql
+            relativeToChangelogFile: true
+
+  - changeSet:
+      id: createPricingStatusDistributionTables
+      author: Tariq Broadnax
+      changes:
+        - sqlFile:
+            path: changelog/scripts/30-create-pricing-status-distribution-tables.sql
+            relativeToChangelogFile: true

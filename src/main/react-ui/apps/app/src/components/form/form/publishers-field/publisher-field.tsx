@@ -1,5 +1,5 @@
 import { RequiredSymbol } from 'components/form/required-symbol';
-import { CostAccessEnum } from 'enum';
+import { PricingEnum } from 'enum';
 import { FormikErrors, FormikTouched } from 'formik';
 import React from 'react';
 import { Publisher, PublisherForm } from 'types/publisher';
@@ -68,7 +68,7 @@ export const PublisherField = ({
         <Form.Control
           id={`${id}-episode-count-input`}
           type="number"
-          name={`${name}.episode-count`}
+          name={`${name}.episodeCount`}
           value={value?.episodeCount || ''}
           isInvalid={errors?.episodeCount && touched?.episodeCount}
           onChange={(e) => {
@@ -82,21 +82,21 @@ export const PublisherField = ({
       </Form.Group>
 
       <Form.Group className="mb-3">
-        <Form.Label htmlFor={`${id}-cost-access-control`}>Content Restriction</Form.Label>
-        <Form.CostAccessControl
-          id={`${id}-cost-access-control`}
-          name={`${name}.cost-access`}
-          value={value?.costAccess}
-          isInvalid={errors?.costAccess && touched?.costAccess}
+        <Form.Label htmlFor={`${id}-cost-access-control`}>Pricing</Form.Label>
+        <Form.PricingControl
+          id={`${id}-pricing-control`}
+          name={`${name}.pricing`}
+          value={value?.pricing}
+          isInvalid={errors?.pricing && touched?.pricing}
           onChange={(name, newValue) =>
             onChange(name, {
               ...value,
-              costAccess: newValue
+              pricing: newValue
             })
           }
           onBlur={onBlur}
         />
-        <Form.Control.Feedback type="invalid">{errors?.costAccess}</Form.Control.Feedback>
+        <Form.Control.Feedback type="invalid">{errors?.pricing}</Form.Control.Feedback>
       </Form.Group>
 
       <Form.Group className="mb-3">
@@ -105,9 +105,9 @@ export const PublisherField = ({
           id={`${id}-cost-input`}
           type="currency"
           name={`${name}.cost`}
-          value={value?.cost}
+          value={value?.cost || ''}
           isInvalid={errors?.cost && touched?.cost}
-          disabled={value?.costAccess !== CostAccessEnum.PREMIUM}
+          disabled={value?.pricing !== PricingEnum.PREMIUM}
           onChange={(e) => {
             const newValue = { ...value, cost: Number.parseInt(e.target.value, 10) };
             onChange(name, newValue);
@@ -124,27 +124,27 @@ export const PublisherField = ({
           type="checkbox"
           label="Preview Available"
           checked={value?.preview || false}
-          disabled={value?.costAccess !== CostAccessEnum.PREMIUM}
+          disabled={value?.pricing !== PricingEnum.PREMIUM}
           onChange={(e) => onChange(`${name}.preview`, { ...value, preview: e.target.checked })}
         />
       </Form.Group>
 
       <Form.Group className="mb-3">
-        <Form.Label htmlFor={`${id}-completion-control`}>Completion Status</Form.Label>
-        <Form.CompletionControl
-          id={`${id}-completion-control`}
-          name={`${name}.completion`}
-          value={value?.completion}
-          isInvalid={errors?.completion && touched?.completion}
+        <Form.Label htmlFor={`${id}-status-control`}>Listed Status</Form.Label>
+        <Form.StatusControl
+          id={`${id}-status-control`}
+          name={`${name}.status`}
+          value={value?.status}
+          isInvalid={errors?.status && touched?.status}
           onChange={(name, newValue) =>
             onChange(name, {
               ...value,
-              completion: newValue
+              status: newValue
             })
           }
           onBlur={onBlur}
         />
-        <Form.Control.Feedback type="invalid">{errors?.completion}</Form.Control.Feedback>
+        <Form.Control.Feedback type="invalid">{errors?.status}</Form.Control.Feedback>
       </Form.Group>
 
       <Form.Group className="mb-3">

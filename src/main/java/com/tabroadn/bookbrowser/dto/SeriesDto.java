@@ -9,6 +9,8 @@ import javax.validation.Valid;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.tabroadn.bookbrowser.domain.GenreEnum;
+import com.tabroadn.bookbrowser.domain.StatusEnum;
 
 import lombok.Data;
 import lombok.ToString;
@@ -32,7 +34,9 @@ public class SeriesDto {
 
   private LocalDate lastUpdated;
 
-  private List<String> genres = new ArrayList<>();
+  private StatusEnum status;
+
+  private List<GenreEnum> genres = new ArrayList<>();
 
   @Valid
   private List<LinkDto> links = new ArrayList<>();

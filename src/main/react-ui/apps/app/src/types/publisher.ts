@@ -1,13 +1,13 @@
-import { CompletionEnum, CostAccessEnum, DistributionEnum } from 'enum';
+import { StatusEnum, PricingEnum, DistributionEnum } from 'enum';
 
 export type Publisher = {
   partyId: number;
   fullName: string;
   url: string;
   episodeCount?: number;
-  costAccess?: CostAccessEnum;
+  pricing?: PricingEnum;
   cost?: number;
-  completion?: CompletionEnum;
+  status?: StatusEnum;
   distribution?: DistributionEnum;
   preview?: boolean;
 };
@@ -17,9 +17,9 @@ export type PublisherForm = {
   fullName?: string | null;
   url?: string | null;
   episodeCount?: number | null;
-  costAccess?: CostAccessEnum | null;
+  pricing?: PricingEnum | null;
   cost?: number | null;
-  completion?: CompletionEnum | null;
+  status?: StatusEnum | null;
   distribution?: DistributionEnum | null;
   preview?: boolean | null;
 };

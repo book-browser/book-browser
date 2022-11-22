@@ -36,8 +36,7 @@ export const PublishersField = ({
               touched={touched?.[index]}
               onChange={(fieldName, newValue) => {
                 const newValues = [...value];
-                newValues[index] = newValue;
-                console.log(newValues);
+                Object.assign(newValues[index], newValue);
                 onChange(name, newValues);
               }}
               onBlur={(name) => onBlur(name)}

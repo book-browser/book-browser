@@ -25,12 +25,13 @@ export const parseParams = <E extends ParamType>(location: Location, schema: yup
       if (Array.isArray(params[fieldName])) {
         params[fieldName] = params[fieldName][0];
       }
-
-      if (params[fieldName] == null || !field.isValidSync(params[fieldName])) {
-        params[fieldName] = field.getDefault();
-      } else {
-        params[fieldName] = field.cast(params[fieldName]);
-      }
+    }
+    if (!params[fieldName] && fieldName in (params as any) && field.isValidSync(null)) {
+      params[fieldName] = null;
+    } else if (!(fieldName in (params as any)) || !field.isValidSync(params[fieldName])) {
+      params[fieldName] = field.getDefault();
+    } else {
+      params[fieldName] = field.cast(params[fieldName]);
     }
   });
 
@@ -47,17 +48,27 @@ export const generateEncodedUrl = (url: string, params: ParamType) => {
       if (Array.isArray(paramVal)) {
         Object.values(paramVal).forEach((val) => {
           const joinKey = paramAdded ? '&' : '?';
-          joinedUrl = `${joinedUrl}${joinKey}${paramName}=${val}`;
+          joinedUrl = `${joinedUrl}${joinKey}${paramName}=${val !== null ? encodeURIComponent(val) : ''}`;
           paramAdded = true;
         });
       } else {
         const joinKey = paramAdded ? '&' : '?';
         if (paramVal !== '') {
-          joinedUrl = `${joinedUrl}${joinKey}${paramName}=${paramVal}`;
+          joinedUrl = `${joinedUrl}${joinKey}${paramName}=${paramVal !== null ? encodeURIComponent(paramVal) : ''}`;
           paramAdded = true;
         }
       }
     });
-
   return joinedUrl;
+};
+
+export const convertUrlEnumStringToEnumString = (str: string) => {
+  if (typeof str === 'string') {
+    return str.toLocaleUpperCase().replace(/-/g, '_');
+  }
+  return str;
+};
+
+export const convertEnumStringToUrlEnumString = (str: string) => {
+  return str.toLocaleLowerCase().replace(/_/g, '-');
 };

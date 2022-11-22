@@ -9,15 +9,15 @@ import org.springframework.core.convert.converter.Converter;
 
 @Configuration
 public class StringToGenreConverter implements Converter<String, Genre> {
-  @Autowired private GenreRepository genreRepository;
+  @Autowired
+  private GenreRepository genreRepository;
 
   @Override
   public Genre convert(String source) {
     return genreRepository
         .findByNameIgnoreCase(source)
         .orElseThrow(
-            () ->
-                new ResourceNotFoundException(
-                    String.format("genre with name %s not found", source)));
+            () -> new ResourceNotFoundException(
+                String.format("genre with name %s not found", source)));
   }
 }

@@ -1,5 +1,5 @@
 import DataView, { DataViewItem } from 'components/representation/data-view/data-view';
-import { Completion, CostAccess, Distribution } from 'consts';
+import { Status, Pricing, Distribution } from 'consts';
 import React from 'react';
 import { Publisher } from 'types/publisher';
 
@@ -19,7 +19,7 @@ const PUBLISHER_DATA_VIEW_ITEM: DataViewItem<Publisher>[] = [
   },
   {
     heading: 'Content Restriction:',
-    content: (data) => (data.costAccess ? CostAccess[data.costAccess].label : 'N/A')
+    content: (data) => (data.pricing ? Pricing[data.pricing].label : 'N/A')
   },
   {
     heading: 'Cost:',
@@ -32,7 +32,7 @@ const PUBLISHER_DATA_VIEW_ITEM: DataViewItem<Publisher>[] = [
   },
   {
     heading: 'Listed Status:',
-    content: (data) => (data.completion ? Completion[data.completion].label : 'N/A')
+    content: (data) => (data.status ? Status[data.status].label : 'N/A')
   },
   {
     heading: 'Preview Available:',

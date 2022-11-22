@@ -1,4 +1,4 @@
-import { Genre } from 'types/genre';
+import { GenreEnum, StatusEnum } from 'enum';
 import { Letter } from 'types/letter';
 import { Page } from 'types/page';
 import { Series } from 'types/series';
@@ -39,6 +39,7 @@ export const deleteSeriesById = async (id: number) => {
 
 export const findAll = async ({
   query,
+  status,
   limit,
   page,
   sort,
@@ -47,18 +48,25 @@ export const findAll = async ({
   genres
 }: {
   query?: string;
+  status?: StatusEnum | null;
+  titleStartsWith?: Letter;
+  genres?: GenreEnum[];
   page?: number;
   limit?: number;
   sort?: keyof Series;
   order?: 'asc' | 'desc';
-  titleStartsWith?: Letter;
-  genres?: Genre[];
 }) => {
   const params = new URLSearchParams();
 
   if (query) {
     params.append('query', `${query}`);
   }
+  if (status) {
+    params.append('status', `${status}`);
+  } else if (status === null) {
+    params.append('status', '');
+  }
+
   if (page) {
     params.append('page', `${page}`);
   }
@@ -75,7 +83,7 @@ export const findAll = async ({
     params.append('titleStartsWith', titleStartsWith.value);
   }
   if (genres) {
-    genres.map((genre) => genre.name).forEach((genreName) => params.append('genres', genreName));
+    genres.forEach((genre) => params.append('genres', genre));
   }
 
   const response = await fetch('/api/series?' + params.toString());

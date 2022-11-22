@@ -1,5 +1,7 @@
 package com.tabroadn.bookbrowser.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,25 +10,31 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
+import com.tabroadn.bookbrowser.domain.DistributionEnum;
+import com.tabroadn.bookbrowser.domain.GenreEnum;
+import com.tabroadn.bookbrowser.domain.PricingEnum;
+import com.tabroadn.bookbrowser.domain.StatusEnum;
 import com.tabroadn.bookbrowser.dto.CreatorDto;
 import com.tabroadn.bookbrowser.dto.LinkDto;
 import com.tabroadn.bookbrowser.dto.PageDto;
-import com.tabroadn.bookbrowser.dto.PublisherDto;
 import com.tabroadn.bookbrowser.dto.PublisherFormDto;
 import com.tabroadn.bookbrowser.dto.SeriesDto;
 import com.tabroadn.bookbrowser.dto.SeriesFormDto;
 import com.tabroadn.bookbrowser.dto.SeriesSearchCriteriaDto;
 import com.tabroadn.bookbrowser.dto.SeriesSummaryDto;
+import com.tabroadn.bookbrowser.entity.Distribution;
+import com.tabroadn.bookbrowser.entity.Genre;
 import com.tabroadn.bookbrowser.entity.Party;
+import com.tabroadn.bookbrowser.entity.Pricing;
 import com.tabroadn.bookbrowser.entity.Series;
 import com.tabroadn.bookbrowser.entity.SeriesCreator;
 import com.tabroadn.bookbrowser.entity.SeriesLink;
 import com.tabroadn.bookbrowser.entity.SeriesLinkId;
 import com.tabroadn.bookbrowser.entity.SeriesPartyId;
 import com.tabroadn.bookbrowser.entity.SeriesPublisher;
+import com.tabroadn.bookbrowser.entity.Status;
 import com.tabroadn.bookbrowser.exception.ResourceNotFoundException;
 import com.tabroadn.bookbrowser.repository.BookRepository;
-import com.tabroadn.bookbrowser.repository.GenreRepository;
 import com.tabroadn.bookbrowser.repository.ImageRepository;
 import com.tabroadn.bookbrowser.repository.PartyRepository;
 import com.tabroadn.bookbrowser.repository.SeriesRepository;
@@ -39,8 +47,6 @@ public class SeriesService {
 
   private BookRepository bookRepository;
 
-  private GenreRepository genreRepository;
-
   private PartyRepository partyRepository;
 
   private ImageRepository imageRepository;
@@ -49,12 +55,10 @@ public class SeriesService {
   public SeriesService(
       SeriesRepository seriesRepository,
       BookRepository bookRepository,
-      GenreRepository genreRepository,
       PartyRepository partyRepository,
       ImageRepository imageRepository) {
     this.seriesRepository = seriesRepository;
     this.bookRepository = bookRepository;
-    this.genreRepository = genreRepository;
     this.partyRepository = partyRepository;
     this.imageRepository = imageRepository;
   }
@@ -84,6 +88,10 @@ public class SeriesService {
 
     if (seriesSearchCriteriaDto.getQuery().isPresent()) {
       specification = specification.and(SeriesSpecification.hasText(seriesSearchCriteriaDto.getQuery().get()));
+    }
+
+    if (seriesSearchCriteriaDto.getStatus().isPresent()) {
+      specification = specification.and(SeriesSpecification.hasStatus(seriesSearchCriteriaDto.getStatus().get()));
     }
 
     if (seriesSearchCriteriaDto.getTitleStartsWith().isPresent()) {
@@ -125,8 +133,15 @@ public class SeriesService {
       series.setDescription(seriesFormDto.getDescription().get());
     }
 
-    if (seriesFormDto.getGenres() != null) {
-      series.setGenres(seriesFormDto.getGenres());
+    if (seriesFormDto.getStatus().isPresent()) {
+      StatusEnum statusEnum = seriesFormDto.getStatus().get();
+      series.setStatus(statusEnum == null ? null : new Status(statusEnum.getId()));
+    }
+
+    if (seriesFormDto.getGenres().isPresent()) {
+      List<GenreEnum> genres = seriesFormDto.getGenres().get();
+      series
+          .setGenres(genres == null ? new ArrayList<>() : genres.stream().map(Genre::new).collect(Collectors.toList()));
     }
 
     if (seriesFormDto.getCreators() != null) {
@@ -157,6 +172,24 @@ public class SeriesService {
               seriesFormDto.getLinks().stream()
                   .map(link -> convertLinkDtoToSeriesLink(link, series))
                   .collect(Collectors.toList()));
+    }
+
+    if (seriesFormDto.getBooks() != null) {
+      series.getBooks().clear();
+      series
+          .getBooks()
+          .addAll(
+              seriesFormDto.getBooks().stream()
+                  .filter(bookDto -> bookDto.getId() != null)
+                  .map(
+                      bookDto -> bookRepository
+                          .findById(bookDto.getId())
+                          .orElseThrow(
+                              () -> new ResourceNotFoundException(
+                                  String.format(
+                                      "book with id %s not found", bookDto.getId()))))
+                  .collect(Collectors.toList()));
+      series.getBooks().forEach(book -> book.setSeries(series));
     }
 
     return series;
@@ -243,20 +276,23 @@ public class SeriesService {
       publisher.setEpisodeCount(publisherFormDto.getEpisodeCount().get());
     }
 
-    if (publisherFormDto.getCostAccess().isPresent()) {
-      publisher.setCostAccess(publisherFormDto.getCostAccess().get());
+    if (publisherFormDto.getPricing().isPresent()) {
+      PricingEnum pricing = publisherFormDto.getPricing().get();
+      publisher.setPricing(pricing == null ? null : new Pricing(pricing.getId()));
     }
 
     if (publisherFormDto.getCost().isPresent()) {
       publisher.setCost(publisherFormDto.getCost().get());
     }
 
-    if (publisherFormDto.getCompletion().isPresent()) {
-      publisher.setCompletion(publisherFormDto.getCompletion().get());
+    if (publisherFormDto.getStatus().isPresent()) {
+      StatusEnum status = publisherFormDto.getStatus().get();
+      publisher.setStatus(status == null ? null : new Status(status.getId()));
     }
 
     if (publisherFormDto.getDistribution().isPresent()) {
-      publisher.setDistribution(publisherFormDto.getDistribution().get());
+      DistributionEnum distribution = publisherFormDto.getDistribution().get();
+      publisher.setDistribution(distribution == null ? null : new Distribution(distribution.getId()));
     }
 
     if (publisherFormDto.getPreview().isPresent()) {

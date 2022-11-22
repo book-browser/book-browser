@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable prefer-spread */
+import { Genre } from 'consts';
 import { debounce } from 'debounce';
-import { CompletionEnum, CostAccessEnum, DistributionEnum } from 'enum';
+import { DistributionEnum, GenreEnum, PricingEnum, StatusEnum } from 'enum';
+import { FormikErrors } from 'formik';
 import { useSearch } from 'hooks/book.hook';
-import { useReferenceData } from 'hooks/reference-data.hook';
 import React, { ReactNode, useEffect, useState } from 'react';
 import Select from 'react-select';
 import { Book } from 'types/book';
-import { Genre } from 'types/genre';
 import { Series } from 'types/series';
 import * as yup from 'yup';
 import Form from '../form/form';
@@ -24,6 +24,10 @@ const schema = yup.object().shape({
   thumbnail: yup.mixed().test('fileSize', 'The file is too large', (file?: File) => {
     return !(file && file.size > 1024 * 1024);
   }),
+  status: yup
+    .mixed<StatusEnum>()
+    .nullable()
+    .oneOf([null].concat(Object.values(StatusEnum))),
   creators: yup.array(
     yup.object().shape({
       fullName: yup.string().required().label('name'),
@@ -35,10 +39,19 @@ const schema = yup.object().shape({
       fullName: yup.string().required().label('name'),
       url: yup.string().nullable(),
       episodeCount: yup.number().nullable(),
-      costAccess: yup.mixed<CostAccessEnum>().oneOf(Object.values(CostAccessEnum)).nullable(),
+      pricing: yup
+        .mixed<PricingEnum>()
+        .nullable()
+        .oneOf([null].concat(Object.values(PricingEnum))),
       cost: yup.number().nullable(),
-      completion: yup.mixed<CompletionEnum>().oneOf(Object.values(CompletionEnum)).nullable(),
-      distribution: yup.mixed<DistributionEnum>().oneOf(Object.values(DistributionEnum)).nullable(),
+      status: yup
+        .mixed<StatusEnum>()
+        .nullable()
+        .oneOf([null].concat(Object.values(StatusEnum))),
+      distribution: yup
+        .mixed<DistributionEnum>()
+        .nullable()
+        .oneOf([null].concat(Object.values(DistributionEnum))),
       preview: yup.boolean().nullable()
     })
   ),
@@ -48,7 +61,7 @@ const schema = yup.object().shape({
       description: yup.string().required('description is a required field').max(50).label('description')
     })
   ),
-  genres: yup.array(yup.string()),
+  genres: yup.array(yup.mixed<GenreEnum>().oneOf(Object.values(GenreEnum))).required(),
   books: yup.array(
     yup.object().shape({
       id: yup.number().required()
@@ -57,7 +70,7 @@ const schema = yup.object().shape({
 });
 
 export type SeriesFormProps = {
-  onChange?: (series: Series, valid: boolean) => void;
+  onChange?: (series: Series, valid: boolean, errors: FormikErrors<Series>) => void;
   onSubmit?: (series: Series) => void;
   footer?: ReactNode;
   initialValue?: Series;
@@ -67,6 +80,7 @@ export type SeriesFormProps = {
 const defaultSeries = {
   title: '',
   description: '',
+  status: null,
   banner: undefined,
   thumbnail: undefined,
   publishers: [],
@@ -80,17 +94,15 @@ const convertBookToBookOption = (book: Book) => {
   return { value: book.id, label: book.title };
 };
 
-const convertGenreToSelectOptions = (genres: Genre[]) => {
-  return genres.map(({ name }) => ({ value: name, label: name }));
+const convertGenreToSelectOptions = (genres: GenreEnum[]) => {
+  return genres.map((genre) => ({ value: genre, label: Genre[genre].label }));
 };
 
 const SeriesForm = (props: SeriesFormProps) => {
   const [books, setBooks] = useState<Book[]>([]);
   const bookOptions = books.map(convertBookToBookOption);
 
-  const { data: referenceData } = useReferenceData();
-
-  const genreOptions = referenceData ? convertGenreToSelectOptions(referenceData.genres) : [];
+  const genreOptions = convertGenreToSelectOptions(Object.values(GenreEnum));
 
   const { data: fetchedBooks, execute: search, loading: searching } = useSearch();
 
@@ -130,7 +142,9 @@ const SeriesForm = (props: SeriesFormProps) => {
                 type="text"
                 name="title"
                 value={values.title}
-                onChange={handleChange}
+                onChange={(e) => {
+                  handleChange(e);
+                }}
                 onBlur={handleBlur}
                 isInvalid={touched.title && !!errors.title}
               />
@@ -175,19 +189,32 @@ const SeriesForm = (props: SeriesFormProps) => {
             <Form.Group controlId="genre-select" className="mb-3">
               <Form.Label>Genres</Form.Label>
               <Select
+                id="genres-control"
+                className={errors?.genres && touched?.genres ? 'is-invalid' : undefined}
                 inputId="genre-select"
                 isMulti
                 name="genres"
                 options={genreOptions}
-                value={values.genres.map((genre) => ({
-                  value: genre,
-                  label: genre
-                }))}
+                value={values.genres.map((genre) => genreOptions.find((option) => option.value === genre))}
                 onChange={(data) => {
                   const genres = data.map((item) => item.value);
                   setFieldValue('genres', genres);
+                  setFieldTouched('genres');
                 }}
               />
+              <Form.Control.Feedback type="invalid">{errors?.genres}</Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label htmlFor="series-status-control">Status</Form.Label>
+              <Form.StatusControl
+                id="series-status-control"
+                name="status"
+                value={values.status}
+                isInvalid={errors?.status && touched?.status}
+                onChange={setFieldValue}
+                onBlur={setFieldTouched}
+              />
+              <Form.Control.Feedback type="invalid">{errors?.status}</Form.Control.Feedback>
             </Form.Group>
             <Form.Group>
               <Form.Label>Creators</Form.Label>

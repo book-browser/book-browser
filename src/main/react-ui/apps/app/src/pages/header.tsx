@@ -5,7 +5,14 @@ import React, { useState } from 'react';
 import { Alert, Button, Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { useLocation, Link } from 'react-router-dom';
 import AddIcon from '@mui/icons-material/Add';
+import Home from '@mui/icons-material/Home';
+import Shuffle from '@mui/icons-material/Shuffle';
+import Menu from '@mui/icons-material/Menu';
+import LoginIcon from '@mui/icons-material/Login';
+import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
+
 import './header.scss';
+import classNames from 'classnames';
 
 const Header = () => {
   const { user } = useUser();
@@ -31,9 +38,11 @@ const Header = () => {
     'username/recover/'
   ].includes(location.pathname);
 
+  console.log(location.pathname);
+
   return (
     <div style={{ marginBottom: '5rem' }}>
-      <Navbar fixed="top" collapseOnSelect expand="md" bg="primary" variant="dark">
+      <Navbar fixed="top" collapseOnSelect expand="lg" bg="primary" variant="dark">
         <Container fluid>
           <Navbar.Brand as={Link} to="/home">
             BookBrowser
@@ -44,7 +53,29 @@ const Header = () => {
               <SearchBar className="me-2" />
             </div>
             <Nav className="me-auto">
-              <NavDropdown title="Browse" id="test" className="multiline-navbar-dropdown">
+              <Nav.Link as={Link} to="/home" active={['/home', '/'].includes(location.pathname)}>
+                <Home className="mb-1 me-1" />
+                <span>Home</span>
+              </Nav.Link>
+              <NavDropdown
+                active={[
+                  '/books',
+                  '/books/search',
+                  '/recent',
+                  '/coming-soon',
+                  '/series/search',
+                  '/series/recently-updated',
+                  'series'
+                ].includes(location.pathname)}
+                title={
+                  <>
+                    <Menu className="mb-1 me-1" />
+                    <span>Browse</span>
+                  </>
+                }
+                id="test"
+                className="multiline-navbar-dropdown"
+              >
                 <div className="d-flex ms-3 me-3">
                   <div>
                     <div className="pl-4 mb-1">
@@ -80,7 +111,8 @@ const Header = () => {
                 </div>
               </NavDropdown>
               <Nav.Link as={Link} to="/random">
-                Random
+                <Shuffle className="mb-1 me-1" />
+                <span>Random</span>
               </Nav.Link>
             </Nav>
             <SearchBar className="me-2" />
@@ -91,11 +123,11 @@ const Header = () => {
             </Nav>
             {!user && !isAuthLocation && (
               <>
-                <Button variant="nav" onClick={() => openModal('login')}>
-                  Login
+                <Button variant="nav" className="me-2" onClick={() => openModal('login')}>
+                  <LoginIcon className="mb-1" /> <span>Login</span>
                 </Button>
                 <Button variant="nav" onClick={() => openModal('register')}>
-                  Register
+                  <AppRegistrationIcon className="mb-1" /> <span>Register</span>
                 </Button>
               </>
             )}

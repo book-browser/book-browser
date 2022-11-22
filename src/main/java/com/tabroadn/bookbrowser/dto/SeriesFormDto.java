@@ -6,7 +6,8 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
-import com.tabroadn.bookbrowser.entity.Genre;
+import com.tabroadn.bookbrowser.domain.GenreEnum;
+import com.tabroadn.bookbrowser.domain.StatusEnum;
 
 import lombok.Data;
 import lombok.ToString;
@@ -19,14 +20,18 @@ public class SeriesFormDto {
 
   private Optional<String> description = Optional.empty();
 
+  private Optional<StatusEnum> status = Optional.empty();
+
   private Optional<String> banner = Optional.empty();
 
   private Optional<String> thumbnail = Optional.empty();
 
-  private List<Genre> genres = new ArrayList<>();
+  private Optional<List<GenreEnum>> genres = Optional.of(new ArrayList<>());
 
   @Valid
   private List<LinkDto> links = new ArrayList<>();
+
+  private List<BookDto> books = new ArrayList<>();
 
   @Valid
   private List<CreatorDto> creators = new ArrayList<>();

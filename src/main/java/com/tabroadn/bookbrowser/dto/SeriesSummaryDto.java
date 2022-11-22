@@ -6,6 +6,9 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.tabroadn.bookbrowser.domain.GenreEnum;
+import com.tabroadn.bookbrowser.domain.StatusEnum;
+
 import lombok.Data;
 
 @Data
@@ -22,7 +25,9 @@ public class SeriesSummaryDto {
 
   private String thumbnailUrl;
 
-  private List<String> genres = new ArrayList<>();
+  private StatusEnum status;
+
+  private List<GenreEnum> genres = new ArrayList<>();
 
   private List<LinkDto> links = new ArrayList<>();
 

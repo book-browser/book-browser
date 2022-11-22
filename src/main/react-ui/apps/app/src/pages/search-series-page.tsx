@@ -1,37 +1,50 @@
+import AutorenewIcon from '@mui/icons-material/Autorenew';
+import LabelIcon from '@mui/icons-material/Label';
+import SortIcon from '@mui/icons-material/Sort';
 import { Container } from '@mui/material';
-import Pagination from 'components/pagination/pagination';
-import SeriesList from 'components/series-list/series-list';
-import { useReferenceData } from 'hooks/reference-data.hook';
-import { useFindAll } from 'hooks/series.hook';
-import React, { KeyboardEvent, useEffect, useMemo, useState } from 'react';
-import { Breadcrumb, Button, ButtonGroup, Form, FormControl, InputGroup, ToggleButton } from 'react-bootstrap';
-import { Link, useNavigate, useLocation, Location } from 'react-router-dom';
-import { Genre } from 'types/genre';
-import { ReferenceData } from 'types/reference-data';
-import { Series } from 'types/series';
-import { generateEncodedUrl, parseParams } from 'utils/location-utils';
-import * as yup from 'yup';
+import { ErrorAlert } from 'components/error/error-alert';
+import Form from 'components/form/form/form';
 import Loading from 'components/loading/loading';
 import Heading from 'components/navigation/heading/heading';
-import { ErrorAlert } from 'components/error/error-alert';
+import Pagination from 'components/pagination/pagination';
+import SeriesList from 'components/series-list/series-list';
+import { Genre } from 'consts';
+import { GenreEnum, StatusEnum } from 'enum';
+import { useFindAll } from 'hooks/series.hook';
+import React, { KeyboardEvent, useEffect, useMemo, useState } from 'react';
+import { Breadcrumb, Button, ButtonGroup, Col, FormControl, InputGroup, Row, ToggleButton } from 'react-bootstrap';
+import { Link, Location, useLocation, useNavigate } from 'react-router-dom';
+import { Series } from 'types/series';
+import {
+  convertEnumStringToUrlEnumString,
+  convertUrlEnumStringToEnumString,
+  generateEncodedUrl,
+  parseParams
+} from 'utils/location-utils';
+import * as yup from 'yup';
 
 type SearchSeriesPageParams = {
-  query: string;
-  genres: string[];
-  sort: string;
-  page: number;
+  query?: string;
+  genres?: GenreEnum[];
+  status?: StatusEnum | null;
+  sort?: string;
+  page?: number;
 };
 
-const readParams = (location: Location, referenceData: ReferenceData) => {
-  const genreNames = referenceData.genres.map((genre) => genre.name.toLocaleLowerCase());
-
+const readParams = (location: Location) => {
   const schema = yup.object().shape({
     query: yup.string().default(''),
     genres: yup.array(
-      yup.string().test({
-        test: (val) => genreNames.includes(val.toLocaleLowerCase())
-      })
+      yup
+        .mixed<GenreEnum>()
+        .oneOf(Object.values(GenreEnum))
+        .transform((val) => convertUrlEnumStringToEnumString(val))
     ),
+    status: yup
+      .mixed<StatusEnum>()
+      .nullable()
+      .oneOf([null].concat(Object.values(StatusEnum)))
+      .transform((val) => convertUrlEnumStringToEnumString(val)),
     sort: yup.string().oneOf(['id', 'title', 'lastUpdated']).default('id'),
     page: yup
       .number()
@@ -44,41 +57,37 @@ const readParams = (location: Location, referenceData: ReferenceData) => {
 };
 
 const SearchSeriesPage = () => {
-  const { data } = useReferenceData();
   const location = useLocation();
   const navigate = useNavigate();
-  const params = useMemo(() => readParams(location, data), [location, data]);
-  const formattedGenreParams = params.genres.map((paramGenre) =>
-    data.genres.find((genre) => genre.name.toLocaleLowerCase() === paramGenre.toLocaleLowerCase())
-  );
+  const params = useMemo(() => readParams(location), [location]);
 
-  const [page, setPage] = useState(params.page);
-  const [selectedGenres, setSelectedGenres] = useState<Genre[]>(formattedGenreParams);
-
+  const [criteria, setCriteria] = useState<SearchSeriesPageParams>(params);
   const [query, setQuery] = useState(params.query);
-  const [activeQuery, setActiveQuery] = useState(params.query);
-  const [activeSort, setActiveSort] = useState(params.sort);
 
   const { data: seriesList, loading, error, execute } = useFindAll();
 
-  const toggleGenre = (genre: Genre) => {
-    const newSelectedGenres = [...selectedGenres];
+  const toggleGenre = (genre: GenreEnum) => {
+    const newSelectedGenres = [...criteria.genres];
     const index = newSelectedGenres.indexOf(genre);
     if (index > -1) {
       newSelectedGenres.splice(index, 1);
     } else {
       newSelectedGenres.push(genre);
     }
-    changeParams({ genres: newSelectedGenres });
+    changeParams({ genres: newSelectedGenres, page: 0 });
   };
 
-  const changeParams = (newParams: { query?: string; genres?: Genre[]; page?: number; sort?: string }) => {
-    const sort = newParams.sort || activeSort;
+  const changeParams = (newParams: SearchSeriesPageParams) => {
+    const sort = newParams.sort || criteria.sort;
+    const resolvedPage = (newParams.page !== undefined ? newParams.page : criteria.page) + 1;
+    const status = 'status' in newParams ? newParams.status : criteria.status;
+
     navigate(
       generateEncodedUrl('/series/search', {
-        query: newParams.query || activeQuery,
-        genres: (newParams.genres || selectedGenres).map((selectedGenre) => selectedGenre.name.toLocaleLowerCase()),
-        page: (newParams.page !== undefined ? newParams.page : page) + 1,
+        query: newParams.query || criteria.query,
+        genres: (newParams.genres || criteria.genres).map(convertEnumStringToUrlEnumString),
+        status: status ? convertEnumStringToUrlEnumString(status) : status,
+        page: resolvedPage === 1 ? '' : resolvedPage,
         sort: sort !== 'id' ? sort : ''
       }),
       { replace: true }
@@ -95,35 +104,26 @@ const SearchSeriesPage = () => {
     changeParams({ page: newPage });
   };
 
+  const reset = () => {
+    navigate('/series/search');
+  };
+
   useEffect(() => {
     execute({
-      query: activeQuery,
-      genres: selectedGenres,
-      sort: activeSort as keyof Series,
-      order: activeSort === 'lastUpdated' ? 'desc' : 'asc',
-      page,
+      query: criteria.query,
+      genres: criteria.genres,
+      status: criteria.status,
+      sort: criteria.sort as keyof Series,
+      order: criteria.sort === 'lastUpdated' ? 'desc' : 'asc',
+      page: criteria.page,
       limit: 18
     });
-  }, [selectedGenres, activeQuery, activeSort, page, execute]);
+  }, [criteria, execute]);
 
   useEffect(() => {
-    if (params.query !== activeQuery) {
-      setActiveQuery(params.query);
+    if (JSON.stringify(params) !== JSON.stringify(criteria)) {
+      setCriteria(params);
       setQuery(params.query);
-    }
-
-    if (formattedGenreParams !== selectedGenres) {
-      setSelectedGenres(
-        params.genres.map((paramGenre) =>
-          data.genres.find((genre) => genre.name.toLocaleLowerCase() === paramGenre.toLocaleLowerCase())
-        )
-      );
-    }
-    if (params.sort !== activeSort) {
-      setActiveSort(params.sort);
-    }
-    if (params.page !== page) {
-      setPage(params.page);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params]);
@@ -159,53 +159,73 @@ const SearchSeriesPage = () => {
         <Button variant="primary" onClick={() => changeParams({ query })}>
           Search
         </Button>
+        <Button variant="link" onClick={reset}>
+          Reset
+        </Button>
       </InputGroup>
 
-      <Heading as="h2" className="mb-2">
-        Genres
-      </Heading>
-      <div className="d-flex flex-wrap mb-4">
-        {data &&
-          data.genres.map((genre) => (
-            <ButtonGroup key={genre.id}>
+      <Form.Group className="mb-3">
+        <Form.Label>
+          <LabelIcon className="me-1 mb-1" />
+          <span>Genres</span>
+        </Form.Label>
+        <div className="d-flex flex-wrap mb-4">
+          {Object.keys(GenreEnum).map((genre: GenreEnum) => (
+            <ButtonGroup key={genre}>
               <ToggleButton
                 type="checkbox"
                 variant="outline-primary"
                 className="me-2 mb-2"
-                checked={selectedGenres.includes(genre)}
-                value={genre.id}
+                checked={criteria.genres.includes(genre)}
+                value={genre}
                 onClick={() => toggleGenre(genre)}
               >
-                {genre.name}
+                {Genre[genre].label}
               </ToggleButton>
             </ButtonGroup>
           ))}
-      </div>
-
-      <Heading as="h2" className="mb-2">
-        Filter
-      </Heading>
-      <Form.Group controlId="sort-select" className="mb-3">
-        <Form.Label>Sort</Form.Label>
-        <Form.Control
-          as="select"
-          style={{ width: '15.625rem' }}
-          value={activeSort}
-          onChange={(e) => changeParams({ sort: e.target.value })}
-        >
-          <option value="id">Default</option>
-          <option value="title">Title</option>
-          <option value="lastUpdated">Last Updated</option>
-        </Form.Control>
+        </div>
       </Form.Group>
+
+      <Row>
+        <Col xs={6} sm={3}>
+          <Form.Group controlId="sort-select" className="mb-3">
+            <Form.Label>
+              <SortIcon className="me-1 mb-1" />
+              <span>Sort</span>
+            </Form.Label>
+            <Form.Select value={criteria.sort} onChange={(e) => changeParams({ sort: e.target.value })}>
+              <option value="id">Default</option>
+              <option value="title">Title</option>
+              <option value="lastUpdated">Last Updated</option>
+            </Form.Select>
+          </Form.Group>
+        </Col>
+        <Col xs={6} sm={3}>
+          <Form.Group className="mb-3">
+            <Form.Label htmlFor="status-control">
+              <AutorenewIcon className="mb-1 me-1" />
+              <span>Status</span>
+            </Form.Label>
+            <Form.StatusControl
+              id="status-control"
+              allOption
+              value={criteria.status}
+              onChange={(_name, value) => changeParams({ status: value })}
+            />
+          </Form.Group>
+        </Col>
+      </Row>
 
       {loading && <Loading />}
       {error && <ErrorAlert uiMessage="Unable to load content" error={error} />}
       {seriesList && (
         <div>
-          <Heading as="h2">{seriesList.totalElements > 0 ? 'Results' : 'No Results'}</Heading>
+          <Heading as="h2">
+            {seriesList.totalElements > 0 ? `Results (${seriesList.totalElements})` : 'No Results'}
+          </Heading>
           <SeriesList seriesList={seriesList.items} />
-          <Pagination page={page} totalPages={seriesList.totalPages} onPageChange={onPageChange} />
+          <Pagination page={criteria.page} totalPages={seriesList.totalPages} onPageChange={onPageChange} />
         </div>
       )}
     </Container>

@@ -1,5 +1,7 @@
 package com.tabroadn.bookbrowser.repository;
 
+import com.tabroadn.bookbrowser.domain.StatusEnum;
+import com.tabroadn.bookbrowser.domain.GenreEnum;
 import com.tabroadn.bookbrowser.domain.LetterEnum;
 import com.tabroadn.bookbrowser.domain.OrderEnum;
 import com.tabroadn.bookbrowser.entity.Genre;
@@ -8,10 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
+
 import org.springframework.data.jpa.domain.Specification;
 
 public class SeriesSpecification {
-  private SeriesSpecification() {}
+  private SeriesSpecification() {
+  }
 
   public static Specification<Series> hasText(String text) {
     String[] parts = text.split(" ");
@@ -35,13 +41,12 @@ public class SeriesSpecification {
     return (series, cq, cb) -> {
       Expression<String> expression = series.get(field);
       if (field.equals("title")) {
-        expression =
-            cb.function(
-                "replace",
-                String.class,
-                cb.upper(series.get("title")),
-                cb.literal("THE "),
-                cb.literal(""));
+        expression = cb.function(
+            "replace",
+            String.class,
+            cb.upper(series.get("title")),
+            cb.literal("THE "),
+            cb.literal(""));
       }
       if (order == OrderEnum.ASC) {
         cq.orderBy(cb.asc(expression));
@@ -76,13 +81,27 @@ public class SeriesSpecification {
     };
   }
 
-  public static Specification<Series> hasGenres(List<Genre> genres) {
+  public static Specification<Series> hasStatus(StatusEnum status) {
+    return (series, cq, cb) -> {
+      return cb.equal(series.get("status").get("id"), status.getId());
+    };
+  }
+
+  public static Specification<Series> hasGenres(List<GenreEnum> genres) {
     return (series, cq, cb) -> {
       cq.distinct(true);
+      Subquery<Long> sq = cq.subquery(Long.class);
+      Root<Genre> subRoot = sq.from(Genre.class);
+
       List<Predicate> predicates = new ArrayList<>();
 
-      for (Genre genre : genres) {
-        predicates.add(cb.equal(series.join("genres").get("id"), genre.getId()));
+      for (GenreEnum genre : genres) {
+        if (genre == null) {
+          predicates.add(cb.equal(sq.select(cb.count(subRoot)).where(
+              cb.equal(series.get("id"), subRoot.join("series").get("id"))), 0));
+        } else {
+          predicates.add(cb.equal(series.join("genres").get("id"), genre.getId()));
+        }
       }
 
       return cb.and(predicates.toArray(Predicate[]::new));

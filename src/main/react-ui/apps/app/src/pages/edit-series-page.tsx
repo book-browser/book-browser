@@ -10,6 +10,8 @@ import React, { useEffect, useState } from 'react';
 import { Alert, Breadcrumb, Button } from 'react-bootstrap';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Series } from 'types/series';
+import { FormikErrors } from 'formik';
+import ErrorListButton from 'components/form/form/error-list-button/error-list-button';
 
 const EditSeriesPageContent = () => {
   const { id } = useParams();
@@ -19,11 +21,16 @@ const EditSeriesPageContent = () => {
 
   const [series, setSeries] = useState<Series>();
   const [saved, setSaved] = useState(true);
+  const [errors, setErrors] = useState<FormikErrors<Series>>({});
+
   usePrompt('Are you sure to leave (all changes will be lost)?', !saved);
 
-  const onChange = (changedSeries: Series) => {
-    setSeries(changedSeries);
-    setSaved(false);
+  const onChange = (changedSeries: Series, valid, errors: FormikErrors<Series>) => {
+    if (changedSeries !== series) {
+      setSeries(changedSeries);
+      setSaved(false);
+      setErrors(errors);
+    }
   };
 
   const onSubmit = (changedSeries: Series) => {
@@ -106,6 +113,7 @@ const EditSeriesPageContent = () => {
                 <Button className="me-auto" variant="secondary" disabled={savingSeries} onClick={reset}>
                   Reset
                 </Button>
+                <ErrorListButton errors={errors} />
                 <Button variant="primary" type="submit" disabled={savingSeries}>
                   {!savingSeries && <span>Save</span>}
                   {savingSeries && (

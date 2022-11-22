@@ -1,5 +1,6 @@
 package com.tabroadn.bookbrowser.entity;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.validation.constraints.NotBlank;
@@ -24,7 +26,7 @@ import lombok.Data;
 
 @Data
 @Entity
-public class Series {
+public class Series implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -42,6 +44,13 @@ public class Series {
 
     @Size(max = 200)
     private String bannerUrl;
+
+    @ManyToOne
+    @JoinColumn(name = "status_id", referencedColumnName = "id")
+    private Status status;
+
+    @Formula("(select min(e.release_date) from episode e where e.series_id = id)")
+    private LocalDate releaseDate;
 
     @Formula("(select max(e.release_date) from episode e where e.series_id = id)")
     private LocalDate lastUpdated;

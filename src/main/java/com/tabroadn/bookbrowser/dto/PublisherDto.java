@@ -1,7 +1,7 @@
 package com.tabroadn.bookbrowser.dto;
 
-import com.tabroadn.bookbrowser.domain.CompletionEnum;
-import com.tabroadn.bookbrowser.domain.CostAccessEnum;
+import com.tabroadn.bookbrowser.domain.StatusEnum;
+import com.tabroadn.bookbrowser.domain.PricingEnum;
 import com.tabroadn.bookbrowser.domain.DistributionEnum;
 
 import lombok.Data;
@@ -16,11 +16,11 @@ public class PublisherDto {
 
   private Long episodeCount;
 
-  private CostAccessEnum costAccess;
+  private PricingEnum pricing;
 
   private Long cost;
 
-  private CompletionEnum completion;
+  private StatusEnum status;
 
   private DistributionEnum distribution;
 

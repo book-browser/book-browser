@@ -1,6 +1,10 @@
 package com.tabroadn.bookbrowser.util;
 
+import com.tabroadn.bookbrowser.domain.DistributionEnum;
+import com.tabroadn.bookbrowser.domain.GenreEnum;
 import com.tabroadn.bookbrowser.domain.LetterEnum;
+import com.tabroadn.bookbrowser.domain.PricingEnum;
+import com.tabroadn.bookbrowser.domain.StatusEnum;
 import com.tabroadn.bookbrowser.dto.BookDto;
 import com.tabroadn.bookbrowser.dto.BookSummaryDto;
 import com.tabroadn.bookbrowser.dto.CreatorDto;
@@ -73,13 +77,16 @@ public class DtoConversionUtils {
     seriesDto.setDescription(series.getDescription());
     seriesDto.setBannerUrl(series.getBannerUrl());
     seriesDto.setThumbnailUrl(series.getThumbnailUrl());
+    seriesDto.setStatus(series.getStatus() == null ? null
+        : StatusEnum.valueOfId(
+            series.getStatus().getId()));
     seriesDto.setLastUpdated(series.getLastUpdated());
     seriesDto.setCreators(
         series.getCreators().stream()
             .map(DtoConversionUtils::convertSeriesCreatorToPartyCreatorDto)
             .collect(Collectors.toList()));
     seriesDto.setGenres(
-        series.getGenres().stream().map(Genre::getName).collect(Collectors.toList()));
+        series.getGenres().stream().map(GenreEnum::valueOfGenre).collect(Collectors.toList()));
     seriesDto.setLinks(
         series.getLinks().stream()
             .map(DtoConversionUtils::convertSeriesLinkToLinkDto)
@@ -106,12 +113,15 @@ public class DtoConversionUtils {
     seriesSummaryDto.setLastUpdated(series.getLastUpdated());
     seriesSummaryDto.setThumbnailUrl(series.getThumbnailUrl());
     seriesSummaryDto.setBannerUrl(series.getBannerUrl());
+    seriesSummaryDto.setStatus(series.getStatus() == null ? null
+        : StatusEnum.valueOfId(
+            series.getStatus().getId()));
     seriesSummaryDto.setCreators(
         series.getCreators().stream()
             .map(DtoConversionUtils::convertSeriesCreatorToPartyCreatorDto)
             .collect(Collectors.toList()));
     seriesSummaryDto.setGenres(
-        series.getGenres().stream().map(Genre::getName).collect(Collectors.toList()));
+        series.getGenres().stream().map(GenreEnum::valueOfGenre).collect(Collectors.toList()));
     seriesSummaryDto.setLinks(
         series.getLinks().stream()
             .map(DtoConversionUtils::convertSeriesLinkToLinkDto)
@@ -185,10 +195,14 @@ public class DtoConversionUtils {
     publisherDto.setFullName(publisher.getParty().getFullName());
     publisherDto.setUrl(publisher.getUrl());
     publisherDto.setEpisodeCount(publisher.getEpisodeCount());
-    publisherDto.setCostAccess(publisher.getCostAccess());
+    publisherDto
+        .setPricing(publisher.getPricing() == null ? null : PricingEnum.valueOfId(publisher.getPricing().getId()));
     publisherDto.setCost(publisher.getCost());
-    publisherDto.setCompletion(publisher.getCompletion());
-    publisherDto.setDistribution(publisher.getDistribution());
+    publisherDto.setStatus(publisher.getStatus() == null ? null
+        : StatusEnum.valueOfId(
+            publisher.getStatus().getId()));
+    publisherDto.setDistribution(
+        publisher.getDistribution() == null ? null : DistributionEnum.valueOfId(publisher.getDistribution().getId()));
     publisherDto.setPreview(publisher.getPreview());
     return publisherDto;
   }

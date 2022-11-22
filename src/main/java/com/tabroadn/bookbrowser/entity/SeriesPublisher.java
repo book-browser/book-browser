@@ -1,20 +1,15 @@
 package com.tabroadn.bookbrowser.entity;
 
 import java.io.Serializable;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.validation.constraints.Size;
-
-import com.tabroadn.bookbrowser.domain.CompletionEnum;
-import com.tabroadn.bookbrowser.domain.CostAccessEnum;
-import com.tabroadn.bookbrowser.domain.DistributionEnum;
 
 import lombok.Data;
 import lombok.ToString;
@@ -34,17 +29,20 @@ public class SeriesPublisher implements Serializable {
   @Column
   private Long episodeCount;
 
-  @Enumerated(EnumType.STRING)
-  private CostAccessEnum costAccess;
+  @ManyToOne
+  @JoinColumn(name = "pricing_id", referencedColumnName = "id")
+  private Pricing pricing;
 
   @Column
   private Long cost;
 
-  @Enumerated(EnumType.STRING)
-  private CompletionEnum completion;
+  @ManyToOne
+  @JoinColumn(name = "status_id", referencedColumnName = "id")
+  private Status status;
 
-  @Enumerated(EnumType.STRING)
-  private DistributionEnum distribution;
+  @ManyToOne
+  @JoinColumn(name = "distribution_id", referencedColumnName = "id")
+  private Distribution distribution;
 
   @Column
   private Boolean preview;

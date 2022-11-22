@@ -81,7 +81,6 @@ const NewSeriesPageContent = () => {
   usePrompt('Are you sure to leave (all changes will be lost)?', !saved);
 
   const onChange = (data: Series) => {
-    console.log(data);
     setSaved(false);
   };
 

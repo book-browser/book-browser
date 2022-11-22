@@ -9,6 +9,7 @@ import { Series } from 'types/series';
 import { Button, OverlayTrigger, Popover } from 'react-bootstrap';
 import { Info } from '@mui/icons-material';
 import PublisherDetails from 'components/details/publisher-details/publisher-details';
+import { Status } from 'consts';
 
 export type SeriesDataViewProps = {
   data: Series;
@@ -31,6 +32,10 @@ const getAllExternalLinks = (series: Series) => {
 };
 
 const SERIES_DATA_VIEW_ITEMS: DataViewItem<Series>[] = [
+  {
+    heading: 'Status:',
+    content: (series) => (series.status ? Status[series.status].label : 'N/A')
+  },
   {
     heading: 'Genres:',
     content: (series) =>
@@ -83,5 +88,3 @@ export const SeriesDataView = ({ data }: SeriesDataViewProps) => {
 };
 
 export default SeriesDataView;
-
-// <Button variant="outline-info">Info</Button>

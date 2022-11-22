@@ -1,8 +1,8 @@
-import CompletionControl from 'components/controls/completion-control/completion-control';
-import CostAccessControl from 'components/controls/cost-access-control/cost-access-control';
+import StatusControl from 'components/controls/status-control/status-control';
+import PricingControl from 'components/controls/pricing-control/pricing-control';
 import DistributionControl from 'components/controls/distribution-control/distribution-control';
 import { PublisherControl } from 'components/controls/publisher-control/publisher-control';
-import { Formik, FormikConfig, FormikProps, FormikValues } from 'formik';
+import { Formik, FormikConfig, FormikErrors, FormikProps, FormikValues } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { Form as BootstrapForm } from 'react-bootstrap';
 import { noop } from 'utils/noop';
@@ -21,7 +21,7 @@ export type FormProps<Values extends FormikValues, ExtraProps = {}> = Omit<
   'onSubmit'
 > & {
   value?: Values;
-  onChange?: (values: Values, valid: boolean) => void;
+  onChange?: (values: Values, valid: boolean, errors: FormikErrors<Values>) => void;
   onSubmit?: (values: Values) => void;
   children: (bag: FormikProps<Values>) => React.ReactNode;
 };
@@ -31,15 +31,15 @@ export const Form = <Values,>({ onChange = noop, onSubmit = noop, children, ...p
   const actualValue = props.value || value;
 
   return (
-    <Formik {...props} enableReinitialize onSubmit={onSubmit}>
+    <Formik {...props} onSubmit={onSubmit}>
       {(formikProps) => {
         // eslint-disable-next-line react-hooks/rules-of-hooks
         useEffect(() => {
           if (formikProps.values !== actualValue) {
             setValue(formikProps.values);
-            onChange(formikProps.values, formikProps.isValid);
           }
-        }, [formikProps.values, formikProps.isValid]);
+          onChange(formikProps.values, formikProps.isValid, formikProps.errors);
+        }, [formikProps.values, formikProps.isValid, formikProps.errors]);
 
         return (
           <BootstrapForm className="mb-3" noValidate onSubmit={formikProps.handleSubmit}>
@@ -63,8 +63,8 @@ Form.MarkdownControl = MarkdownControl;
 Form.ImageControl = ImageControl;
 Form.SeriesControl = SeriesControl;
 Form.PublisherControl = PublisherControl;
-Form.CostAccessControl = CostAccessControl;
-Form.CompletionControl = CompletionControl;
+Form.PricingControl = PricingControl;
+Form.StatusControl = StatusControl;
 Form.DistributionControl = DistributionControl;
 
 Form.LinksField = LinksField;
