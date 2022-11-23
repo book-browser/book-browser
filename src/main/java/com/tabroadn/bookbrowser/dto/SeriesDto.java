@@ -26,6 +26,8 @@ public class SeriesDto {
 
   private String bannerUrl;
 
+  private String urlTitle;
+
   private String thumbnailUrl;
 
   private Optional<String> banner;

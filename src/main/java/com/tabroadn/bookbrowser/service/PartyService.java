@@ -1,5 +1,16 @@
 package com.tabroadn.bookbrowser.service;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Component;
+
 import com.tabroadn.bookbrowser.dto.PageDto;
 import com.tabroadn.bookbrowser.dto.PartyDto;
 import com.tabroadn.bookbrowser.dto.PartySearchCriteriaDto;
@@ -9,16 +20,6 @@ import com.tabroadn.bookbrowser.repository.PartyRepository;
 import com.tabroadn.bookbrowser.repository.PartySpecification;
 import com.tabroadn.bookbrowser.util.DtoConversionUtils;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Component;
-
 @Component
 public class PartyService {
   @Autowired
@@ -26,6 +27,14 @@ public class PartyService {
 
   public PartyDto getById(Long id) {
     return DtoConversionUtils.convertPartyToPartyDto(getPartyById(id));
+  }
+
+  public PartyDto getPublisherById(Long id) {
+    return DtoConversionUtils.convertPartyToPartyDto(getPublisherByIdOrElse(id));
+  }
+
+  public PartyDto getPublisherByUrlName(String urlName) {
+    return DtoConversionUtils.convertPartyToPartyDto(getPublisherByUrlNameOrElse(urlName));
   }
 
   public PartyDto createOrUpdate(PartyDto partyDto) {
@@ -104,5 +113,20 @@ public class PartyService {
         .findById(id)
         .orElseThrow(
             () -> new ResourceNotFoundException(String.format("party with id %s not found", id)));
+  }
+
+  private Party getPublisherByIdOrElse(Long id) {
+    return partyRepository
+        .findByIdAndSeriesPublicationsIsNotEmpty(id)
+        .orElseThrow(
+            () -> new ResourceNotFoundException(String.format("publisher with id %s not found", id)));
+  }
+
+  private Party getPublisherByUrlNameOrElse(String urlName) {
+    return partyRepository
+        .findByUrlNameIgnoreCaseAndSeriesPublicationsIsNotEmpty(
+            urlName)
+        .orElseThrow(
+            () -> new ResourceNotFoundException(String.format("publisher with url name %s not found", urlName)));
   }
 }

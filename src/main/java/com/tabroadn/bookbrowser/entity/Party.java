@@ -11,6 +11,8 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.Formula;
+
 import lombok.Data;
 import lombok.ToString;
 
@@ -24,6 +26,9 @@ public class Party {
   @NotBlank
   @Size(max = 150)
   private String fullName;
+
+  @Formula("regexp_replace(regexp_replace(lower(full_name), '[ ]', '-'), '[\\']', '')")
+  private String urlName;
 
   @Size(max = 2000)
   private String description;

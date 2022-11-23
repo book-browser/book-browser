@@ -1,26 +1,26 @@
-@import '../../variables.scss';
+@import '../../../variables.scss';
 
-.episode-details-header {
+.book-details-header {
   display: flex;
 }
 
-.episode-details {
+.book-details {
   margin-bottom: $margin-component-y;
   display: flex;
   gap: $margin-component-x;
 }
 
 @media screen and (max-width: 768px) {
-  .episode-details {
+  .book-details {
     flex-wrap: wrap;
-  }
-
-  .episode-details-thumbnail {
-    margin: auto;
   }
 }
 
-.episode-details-thumbnail {
+.book-details-thumbnail {
   width: 18.75rem;
   height: 25rem;
+}
+
+.side {
+  min-width: 15.625rem;
 }

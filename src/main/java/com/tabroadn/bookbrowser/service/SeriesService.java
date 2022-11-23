@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -67,6 +69,13 @@ public class SeriesService {
     return DtoConversionUtils.convertSeriesToSeriesDto(getSeriesById(id));
   }
 
+  public SeriesDto getByUrlTitle(String urlTitle) {
+    return DtoConversionUtils.convertSeriesToSeriesDto(seriesRepository
+        .findByUrlTitle(urlTitle)
+        .orElseThrow(
+            () -> new ResourceNotFoundException(String.format("series with url title %s not found", urlTitle))));
+  }
+
   public SeriesDto save(SeriesFormDto seriesFormDto) {
     Series series = convertSeriesFormDtoToSeries(seriesFormDto);
     createOrUpdateSeriesImages(series, seriesFormDto);
@@ -92,6 +101,17 @@ public class SeriesService {
 
     if (seriesSearchCriteriaDto.getStatus().isPresent()) {
       specification = specification.and(SeriesSpecification.hasStatus(seriesSearchCriteriaDto.getStatus().get()));
+    }
+
+    if (seriesSearchCriteriaDto.getPublisher().isPresent()) {
+      String publisher = seriesSearchCriteriaDto.getPublisher().get();
+      if (StringUtils.isBlank(publisher)) {
+        specification = specification.and(SeriesSpecification.hasNoPublisher());
+      } else if (NumberUtils.isDigits(publisher)) {
+        specification = specification.and(SeriesSpecification.hasPublisherId(Long.parseLong(publisher)));
+      } else {
+        specification = specification.and(SeriesSpecification.hasPublisherUrlName(publisher));
+      }
     }
 
     if (seriesSearchCriteriaDto.getTitleStartsWith().isPresent()) {

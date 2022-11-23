@@ -1,23 +1,23 @@
 import { GenreEnum, StatusEnum } from 'enum';
 import { Letter } from 'types/letter';
 import { Page } from 'types/page';
-import { Series } from 'types/series';
+import { Series, SeriesForm } from 'types/series';
 import { getFileBase64 } from 'utils/file-utils';
 import { handleEmptyResponse, handleResponse } from './response.service';
 
-export const save = async (series: Series) => {
+export const save = async (series: SeriesForm) => {
   const response = await fetch('/api/series', {
     headers: {
       'Content-Type': 'application/json'
     },
     method: 'PATCH',
-    body: JSON.stringify(await mapSeriesToSeriesDto(series))
+    body: JSON.stringify(await mapSeriesFormToSeriesDto(series))
   });
 
   return await handleResponse<Series>(response);
 };
 
-const mapSeriesToSeriesDto = async (series: Series) => {
+const mapSeriesFormToSeriesDto = async (series: SeriesForm) => {
   return {
     ...series,
     banner: series.banner ? await getFileBase64(series.banner as File) : series.banner,
@@ -25,7 +25,7 @@ const mapSeriesToSeriesDto = async (series: Series) => {
   };
 };
 
-export const getById = async (id: number) => {
+export const getById = async (id: number | string) => {
   const response = await fetch(`/api/series/${id}`);
   return await handleResponse<Series>(response);
 };
@@ -40,17 +40,19 @@ export const deleteSeriesById = async (id: number) => {
 export const findAll = async ({
   query,
   status,
+  titleStartsWith,
+  genres,
+  publisher,
   limit,
   page,
   sort,
-  order,
-  titleStartsWith,
-  genres
+  order
 }: {
   query?: string;
   status?: StatusEnum | null;
   titleStartsWith?: Letter;
   genres?: GenreEnum[];
+  publisher?: string | number;
   page?: number;
   limit?: number;
   sort?: keyof Series;
@@ -66,7 +68,9 @@ export const findAll = async ({
   } else if (status === null) {
     params.append('status', '');
   }
-
+  if (publisher) {
+    params.append('publisher', `${publisher}`);
+  }
   if (page) {
     params.append('page', `${page}`);
   }

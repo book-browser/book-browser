@@ -49,6 +49,9 @@ public class Series implements Serializable {
     @JoinColumn(name = "status_id", referencedColumnName = "id")
     private Status status;
 
+    @Formula("regexp_replace(regexp_replace(lower(title), '[ ]', '-'), '[\\']', '')")
+    private String urlTitle;
+
     @Formula("(select min(e.release_date) from episode e where e.series_id = id)")
     private LocalDate releaseDate;
 

@@ -1,6 +1,7 @@
 import { DeepPartial } from '@reduxjs/toolkit';
 import { Page } from 'types/page';
 import { Party } from 'types/party';
+import { Publisher } from 'types/publisher';
 import { getFileBase64 } from 'utils/file-utils';
 import { generateEncodedUrl } from 'utils/location-utils';
 import { handleResponse } from './response.service';
@@ -37,6 +38,10 @@ const mapPartyDtoToParty = async (partyDto: PartyDto) => {
 
 export const getPartyById = async (id: number) => {
   return mapPartyDtoToParty(await handleResponse<PartyDto>(await fetch(`/api/party/${id}`)));
+};
+
+export const getPublisherByIdOrUrlName = async (idOrUrlName: number | string) => {
+  return mapPartyDtoToParty(await handleResponse<PartyDto>(await fetch(`/api/publisher/${idOrUrlName}`)));
 };
 
 export const createOrUpdateParty = async (party: DeepPartial<Party>) => {

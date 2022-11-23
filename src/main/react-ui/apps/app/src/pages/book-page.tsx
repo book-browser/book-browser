@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import EditIcon from '@mui/icons-material/Edit';
 import { Container } from '@mui/material';
-import { BookDetails } from 'components/book-details/book-details';
+import { BookDetails } from 'components/details/book-details/book-details';
 import Loading from 'components/loading/loading';
 import { ErrorMessage } from 'components/message/error-message/error-message';
 import { useGetBook } from 'hooks/book.hook';

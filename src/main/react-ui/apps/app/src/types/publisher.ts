@@ -3,6 +3,7 @@ import { StatusEnum, PricingEnum, DistributionEnum } from 'enum';
 export type Publisher = {
   partyId: number;
   fullName: string;
+  urlName: string;
   url: string;
   episodeCount?: number;
   pricing?: PricingEnum;

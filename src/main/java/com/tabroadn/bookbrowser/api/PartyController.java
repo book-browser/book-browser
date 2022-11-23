@@ -10,6 +10,8 @@ import com.tabroadn.bookbrowser.service.PartyService;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.WebDataBinder;
@@ -30,6 +32,14 @@ public class PartyController {
   @GetMapping("/party/{id}")
   public PartyDto getById(@PathVariable("id") Long id) {
     return partyService.getById(id);
+  }
+
+  @GetMapping("/publisher/{idOrUrlName}")
+  public PartyDto getPublisherById(@PathVariable("idOrUrlName") String idOrUrlName) {
+    if (NumberUtils.isCreatable(idOrUrlName)) {
+      return partyService.getPublisherById(Long.parseLong(idOrUrlName));
+    }
+    return partyService.getPublisherByUrlName(idOrUrlName);
   }
 
   @GetMapping(value = "/party/{id}/picture", produces = { MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE })

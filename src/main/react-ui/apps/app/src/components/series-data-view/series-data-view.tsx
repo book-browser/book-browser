@@ -48,7 +48,7 @@ const SERIES_DATA_VIEW_ITEMS: DataViewItem<Series>[] = [
     content: (series) =>
       series.publishers.map((publisher, index) => (
         <span key={publisher.partyId}>
-          <RouterLink to={`/parties/${publisher.partyId}`}>{publisher.fullName}</RouterLink>
+          <RouterLink to={`/publishers/${publisher.urlName}`}>{publisher.fullName}</RouterLink>
           <OverlayTrigger
             trigger="click"
             placement="top"

@@ -1,22 +1,26 @@
-@import '../../variables.scss';
+@import '../../../variables.scss';
 
-.party-details-header {
+.episode-details-header {
   display: flex;
 }
 
-.party-details {
+.episode-details {
   margin-bottom: $margin-component-y;
   display: flex;
   gap: $margin-component-x;
 }
 
 @media screen and (max-width: 768px) {
-  .party-details {
+  .episode-details {
     flex-wrap: wrap;
+  }
+
+  .episode-details-thumbnail {
+    margin: auto;
   }
 }
 
-.party-details-picture {
+.episode-details-thumbnail {
   width: 18.75rem;
   height: 25rem;
 }

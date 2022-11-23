@@ -74,6 +74,7 @@ public class DtoConversionUtils {
     SeriesDto seriesDto = new SeriesDto();
     seriesDto.setId(series.getId());
     seriesDto.setTitle(series.getTitle());
+    seriesDto.setUrlTitle(series.getUrlTitle());
     seriesDto.setDescription(series.getDescription());
     seriesDto.setBannerUrl(series.getBannerUrl());
     seriesDto.setThumbnailUrl(series.getThumbnailUrl());
@@ -93,7 +94,7 @@ public class DtoConversionUtils {
             .collect(Collectors.toList()));
     seriesDto.setPublishers(
         series.getPublishers().stream()
-            .map(DtoConversionUtils::convertSeriesCreatorToPartyCreatorDto)
+            .map(DtoConversionUtils::convertSeriesCreatorToPublisherDto)
             .collect(Collectors.toList()));
     seriesDto.setBooks(series.getBooks()
         .stream().map(DtoConversionUtils::convertBookToBookDto)
@@ -109,6 +110,7 @@ public class DtoConversionUtils {
     SeriesSummaryDto seriesSummaryDto = new SeriesSummaryDto();
     seriesSummaryDto.setId(series.getId());
     seriesSummaryDto.setTitle(series.getTitle());
+    seriesSummaryDto.setUrlTitle(series.getUrlTitle());
     seriesSummaryDto.setDescription(series.getDescription());
     seriesSummaryDto.setLastUpdated(series.getLastUpdated());
     seriesSummaryDto.setThumbnailUrl(series.getThumbnailUrl());
@@ -128,7 +130,7 @@ public class DtoConversionUtils {
             .collect(Collectors.toList()));
     seriesSummaryDto.setPublishers(
         series.getPublishers().stream()
-            .map(DtoConversionUtils::convertSeriesCreatorToPartyCreatorDto)
+            .map(DtoConversionUtils::convertSeriesCreatorToPublisherDto)
             .collect(Collectors.toList()));
     return seriesSummaryDto;
   }
@@ -189,10 +191,11 @@ public class DtoConversionUtils {
     return creatorDto;
   }
 
-  public static PublisherDto convertSeriesCreatorToPartyCreatorDto(SeriesPublisher publisher) {
+  public static PublisherDto convertSeriesCreatorToPublisherDto(SeriesPublisher publisher) {
     PublisherDto publisherDto = new PublisherDto();
     publisherDto.setPartyId(publisher.getParty().getId());
     publisherDto.setFullName(publisher.getParty().getFullName());
+    publisherDto.setUrlName(publisher.getParty().getUrlName());
     publisherDto.setUrl(publisher.getUrl());
     publisherDto.setEpisodeCount(publisher.getEpisodeCount());
     publisherDto
@@ -228,6 +231,7 @@ public class DtoConversionUtils {
     PartyDto partyDto = new PartyDto();
     partyDto.setId(party.getId());
     partyDto.setFullName(Optional.ofNullable(party.getFullName()));
+    partyDto.setUrlName(party.getUrlName());
     partyDto.setDescription(Optional.ofNullable(party.getDescription()));
     partyDto.setHasPicture(party.getPicture() != null);
     return partyDto;

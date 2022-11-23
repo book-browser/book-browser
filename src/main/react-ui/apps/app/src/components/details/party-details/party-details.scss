@@ -1,26 +1,22 @@
-@import '../../variables.scss';
+@import '../../../variables.scss';
 
-.book-details-header {
+.party-details-header {
   display: flex;
 }
 
-.book-details {
+.party-details {
   margin-bottom: $margin-component-y;
   display: flex;
   gap: $margin-component-x;
 }
 
 @media screen and (max-width: 768px) {
-  .book-details {
+  .party-details {
     flex-wrap: wrap;
   }
 }
 
-.book-details-thumbnail {
+.party-details-picture {
   width: 18.75rem;
   height: 25rem;
-}
-
-.side {
-  min-width: 15.625rem;
 }

@@ -46,7 +46,7 @@ const SeriesSearchBarOption = ({ option, position }: { option: Series; position:
   return (
     <Link to={`/series/${option.id}`} className={`dropdown-item ${newProps.active ? 'active' : ''}`} {...props}>
       <div className="search-option">
-        <img className="search-option-thumbnail" src={`/api/series/${option.id}/thumbnail`} alt="search thumbnail" />
+        <img className="search-option-thumbnail" src={option.thumbnailUrl} alt="search thumbnail" />
         <div>{option.title}</div>
       </div>
     </Link>

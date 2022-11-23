@@ -6,6 +6,8 @@ import com.tabroadn.bookbrowser.domain.LetterEnum;
 import com.tabroadn.bookbrowser.domain.OrderEnum;
 import com.tabroadn.bookbrowser.entity.Genre;
 import com.tabroadn.bookbrowser.entity.Series;
+import com.tabroadn.bookbrowser.entity.SeriesPublisher;
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.criteria.Expression;
@@ -72,6 +74,30 @@ public class SeriesSpecification {
                   cb.literal("")),
               cb.literal(pattern)),
           1);
+    };
+  }
+
+  public static Specification<Series> hasPublisherUrlName(String urlName) {
+    return (series, cq, cb) -> {
+      return cb.equal(series.join("publishers").join("party").get("urlName"), urlName.toLowerCase());
+    };
+  }
+
+  public static Specification<Series> hasPublisherId(Long id) {
+    return (series, cq, cb) -> {
+      return cb.equal(series.join("publishers").get("id").get("partyId"), id);
+    };
+  }
+
+  public static Specification<Series> hasNoPublisher() {
+    return (series, cq, cb) -> {
+      Subquery<Long> sq = cq.subquery(Long.class);
+      Root<SeriesPublisher> subRoot = sq.from(SeriesPublisher.class);
+
+      return cb.equal(
+          sq.select(cb.count(subRoot))
+              .where(cb.notEqual(series.get("id"), subRoot.get("series").get("id"))),
+          0L);
     };
   }
 

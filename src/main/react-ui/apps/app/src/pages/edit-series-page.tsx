@@ -1,17 +1,17 @@
 import { CircularProgress, Container } from '@mui/material';
 import { ErrorAlert } from 'components/error/error-alert';
+import ErrorListButton from 'components/form/form/error-list-button/error-list-button';
 import SeriesForm from 'components/form/series-form/series-form';
 import Loading from 'components/loading/loading';
 import { ErrorMessage } from 'components/message/error-message/error-message';
 import Heading from 'components/navigation/heading/heading';
+import { FormikErrors } from 'formik';
 import { usePrompt } from 'hooks/router.hook';
 import { useGetById, useSave } from 'hooks/series.hook';
 import React, { useEffect, useState } from 'react';
 import { Alert, Breadcrumb, Button } from 'react-bootstrap';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { Series } from 'types/series';
-import { FormikErrors } from 'formik';
-import ErrorListButton from 'components/form/form/error-list-button/error-list-button';
+import { SeriesForm as SeriesFormType } from 'types/series';
 
 const EditSeriesPageContent = () => {
   const { id } = useParams();
@@ -19,13 +19,13 @@ const EditSeriesPageContent = () => {
   const { data: loadedSeries, execute: load, loading: loadingSeries, error: loadError } = useGetById();
   const { data: savedSeries, execute: save, loading: savingSeries, error: saveError } = useSave();
 
-  const [series, setSeries] = useState<Series>();
+  const [series, setSeries] = useState<SeriesFormType>();
   const [saved, setSaved] = useState(true);
-  const [errors, setErrors] = useState<FormikErrors<Series>>({});
+  const [errors, setErrors] = useState<FormikErrors<SeriesFormType>>({});
 
   usePrompt('Are you sure to leave (all changes will be lost)?', !saved);
 
-  const onChange = (changedSeries: Series, valid, errors: FormikErrors<Series>) => {
+  const onChange = (changedSeries: SeriesFormType, valid, errors: FormikErrors<SeriesFormType>) => {
     if (changedSeries !== series) {
       setSeries(changedSeries);
       setSaved(false);
@@ -33,7 +33,7 @@ const EditSeriesPageContent = () => {
     }
   };
 
-  const onSubmit = (changedSeries: Series) => {
+  const onSubmit = (changedSeries: SeriesFormType) => {
     save(changedSeries);
   };
 

@@ -38,8 +38,6 @@ const Header = () => {
     'username/recover/'
   ].includes(location.pathname);
 
-  console.log(location.pathname);
-
   return (
     <div style={{ marginBottom: '5rem' }}>
       <Navbar fixed="top" collapseOnSelect expand="lg" bg="primary" variant="dark">

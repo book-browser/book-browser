@@ -3,7 +3,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { Container } from '@mui/material';
 import Loading from 'components/loading/loading';
 import { ErrorMessage } from 'components/message/error-message/error-message';
-import { PartyDetails } from 'components/party-details/party-details';
+import { PartyDetails } from 'components/details/party-details/party-details';
 import { useGetPartyById } from 'hooks/party.hook';
 import React, { useEffect } from 'react';
 import { Breadcrumb, Button } from 'react-bootstrap';

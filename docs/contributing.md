@@ -14,9 +14,10 @@
 
 1. Update the types
 2. Update the entity service
-3. Update yup schema and form component
-4. Update the details component
-5. Update the search pages
+3. Update the entity service hooks
+4. Update yup schema and form component
+5. Update the details component
+6. Update the search pages
 
 ### Other
 

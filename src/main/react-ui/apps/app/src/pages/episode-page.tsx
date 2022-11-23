@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import EditIcon from '@mui/icons-material/Edit';
 import { Container } from '@mui/material';
-import { EpisodeDetails } from 'components/episode-details/episode-details';
+import { EpisodeDetails } from 'components/details/episode-details/episode-details';
 import Loading from 'components/loading/loading';
 import { ErrorMessage } from 'components/message/error-message/error-message';
 import { useGetEpisodeById } from 'hooks/episode.hook';

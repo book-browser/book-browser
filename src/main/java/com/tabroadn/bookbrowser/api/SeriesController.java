@@ -2,6 +2,7 @@ package com.tabroadn.bookbrowser.api;
 
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
@@ -35,9 +36,13 @@ public class SeriesController {
     this.seriesService = seriesService;
   }
 
-  @GetMapping("/series/{id}")
-  public SeriesDto getById(@PathVariable("id") Long id) {
-    return seriesService.getById(id);
+  @GetMapping("/series/{titleOrId}")
+  public SeriesDto getById(@PathVariable("titleOrId") String titleOrId) {
+    if (NumberUtils.isDigits(titleOrId)) {
+      return seriesService.getById(Long.parseLong(titleOrId));
+    } else {
+      return seriesService.getByUrlTitle(titleOrId);
+    }
   }
 
   @DeleteMapping("/series/{id}")

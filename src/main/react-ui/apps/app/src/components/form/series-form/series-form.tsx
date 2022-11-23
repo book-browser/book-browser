@@ -8,7 +8,7 @@ import { useSearch } from 'hooks/book.hook';
 import React, { ReactNode, useEffect, useState } from 'react';
 import Select from 'react-select';
 import { Book } from 'types/book';
-import { Series } from 'types/series';
+import { Series, SeriesForm as SeriesFormType } from 'types/series';
 import * as yup from 'yup';
 import Form from '../form/form';
 import { RequiredFieldLegend } from '../required-field-legend';
@@ -70,11 +70,11 @@ const schema = yup.object().shape({
 });
 
 export type SeriesFormProps = {
-  onChange?: (series: Series, valid: boolean, errors: FormikErrors<Series>) => void;
-  onSubmit?: (series: Series) => void;
+  onChange?: (series: SeriesFormType, valid: boolean, errors: FormikErrors<SeriesFormType>) => void;
+  onSubmit?: (series: SeriesFormType) => void;
   footer?: ReactNode;
-  initialValue?: Series;
-  value?: Series;
+  initialValue?: SeriesFormType;
+  value?: SeriesFormType;
 };
 
 const defaultSeries = {
@@ -84,11 +84,15 @@ const defaultSeries = {
   banner: undefined,
   thumbnail: undefined,
   publishers: [],
-  creators: [{}],
+  creators: [
+    {
+      fullName: undefined
+    }
+  ],
   genres: [],
   links: [],
   books: []
-} as Series;
+} as SeriesFormType;
 
 const convertBookToBookOption = (book: Book) => {
   return { value: book.id, label: book.title };
@@ -130,6 +134,7 @@ const SeriesForm = (props: SeriesFormProps) => {
         isValid,
         errors
       }) => {
+        console.log('touched', touched);
         return (
           <>
             <RequiredFieldLegend />

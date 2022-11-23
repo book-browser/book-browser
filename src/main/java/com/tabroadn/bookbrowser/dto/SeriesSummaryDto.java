@@ -19,6 +19,8 @@ public class SeriesSummaryDto {
 
   private String description;
 
+  private String urlTitle;
+
   private LocalDate lastUpdated;
 
   private String bannerUrl;

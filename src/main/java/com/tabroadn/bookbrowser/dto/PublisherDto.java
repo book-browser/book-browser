@@ -12,6 +12,8 @@ public class PublisherDto {
 
   private String fullName;
 
+  private String urlName;
+
   private String url;
 
   private Long episodeCount;

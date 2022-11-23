@@ -34,6 +34,8 @@ public class SeriesSearchCriteriaDto {
 
   private Optional<String> link = Optional.empty();
 
+  private Optional<String> publisher = Optional.empty();
+
   private Optional<StatusEnum> status = Optional.empty();
 
   private Optional<LetterEnum> titleStartsWith = Optional.empty();

@@ -12,6 +12,7 @@ import lombok.ToString;
 public class PartyDto {
   private Long id;
   private Optional<String> fullName;
+  private String urlName;
   private Optional<String> description;
   @ToString.Exclude
   private Optional<String> picture;
