@@ -31,7 +31,7 @@ export const SeriesDetails = ({ series }: SeriesDetailsProps) => {
       <p>
         {series.creators.map((creator, index) => (
           <span key={creator.partyId}>
-            <Link to={`/parties/${creator.partyId}`}>{creator.fullName}</Link>
+            <Link to={`/creators/${creator.partyId}`}>{creator.fullName}</Link>
             {index !== series.creators.length - 1 && ', '}
           </span>
         ))}
@@ -65,7 +65,7 @@ export const SeriesDetails = ({ series }: SeriesDetailsProps) => {
           <EpisodeList episodes={series.episodes.slice(0, 12)} />
           {series.episodes.length > 12 && (
             <div>
-              <Link to={`/series/${series.id}/episodes`}>View More</Link>
+              <Link to={`/series/${series.urlTitle}/episodes`}>View More</Link>
             </div>
           )}
         </div>

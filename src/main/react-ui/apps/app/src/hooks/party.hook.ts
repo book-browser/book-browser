@@ -2,6 +2,7 @@ import {
   createOrUpdateParty,
   findAllParties,
   findAllPublishers,
+  getCreatorByIdOrUrlName,
   getPartyById,
   getPublisherByIdOrUrlName
 } from 'services/party.service';
@@ -16,3 +17,5 @@ export const useCreateOrUpdateParty = () => usePromise(createOrUpdateParty);
 export const useGetPartyById = () => usePromise(getPartyById);
 
 export const useGetPublisherByIdOrUrlName = () => usePromise(getPublisherByIdOrUrlName);
+
+export const useGetCreatorByIdOrUrlName = () => usePromise(getCreatorByIdOrUrlName);

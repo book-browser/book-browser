@@ -6,6 +6,7 @@ import com.tabroadn.bookbrowser.domain.LetterEnum;
 import com.tabroadn.bookbrowser.domain.OrderEnum;
 import com.tabroadn.bookbrowser.entity.Genre;
 import com.tabroadn.bookbrowser.entity.Series;
+import com.tabroadn.bookbrowser.entity.SeriesCreator;
 import com.tabroadn.bookbrowser.entity.SeriesPublisher;
 
 import java.util.ArrayList;
@@ -93,6 +94,30 @@ public class SeriesSpecification {
     return (series, cq, cb) -> {
       Subquery<Long> sq = cq.subquery(Long.class);
       Root<SeriesPublisher> subRoot = sq.from(SeriesPublisher.class);
+
+      return cb.equal(
+          sq.select(cb.count(subRoot))
+              .where(cb.notEqual(series.get("id"), subRoot.get("series").get("id"))),
+          0L);
+    };
+  }
+
+  public static Specification<Series> hasCreatorUrlName(String urlName) {
+    return (series, cq, cb) -> {
+      return cb.equal(series.join("creators").join("party").get("urlName"), urlName.toLowerCase());
+    };
+  }
+
+  public static Specification<Series> hasCreatorId(Long id) {
+    return (series, cq, cb) -> {
+      return cb.equal(series.join("creators").get("id").get("partyId"), id);
+    };
+  }
+
+  public static Specification<Series> hasNoCreator() {
+    return (series, cq, cb) -> {
+      Subquery<Long> sq = cq.subquery(Long.class);
+      Root<SeriesCreator> subRoot = sq.from(SeriesCreator.class);
 
       return cb.equal(
           sq.select(cb.count(subRoot))

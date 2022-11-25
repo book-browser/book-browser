@@ -29,17 +29,25 @@ public class PartyController {
   @Autowired
   private PartyService partyService;
 
-  @GetMapping("/party/{id}")
+  @GetMapping("/parties/{id}")
   public PartyDto getById(@PathVariable("id") Long id) {
     return partyService.getById(id);
   }
 
-  @GetMapping("/publisher/{idOrUrlName}")
+  @GetMapping("/publishers/{idOrUrlName}")
   public PartyDto getPublisherById(@PathVariable("idOrUrlName") String idOrUrlName) {
     if (NumberUtils.isCreatable(idOrUrlName)) {
       return partyService.getPublisherById(Long.parseLong(idOrUrlName));
     }
     return partyService.getPublisherByUrlName(idOrUrlName);
+  }
+
+  @GetMapping("/creators/{idOrUrlName}")
+  public PartyDto getCreatorById(@PathVariable("idOrUrlName") String idOrUrlName) {
+    if (NumberUtils.isCreatable(idOrUrlName)) {
+      return partyService.getCreatorById(Long.parseLong(idOrUrlName));
+    }
+    return partyService.getCreatorByUrlName(idOrUrlName);
   }
 
   @GetMapping(value = "/party/{id}/picture", produces = { MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE })
@@ -49,7 +57,7 @@ public class PartyController {
   }
 
   @Valid
-  @PatchMapping("/party")
+  @PatchMapping("/parties")
   public PartyDto createOrUpdate(@Valid @RequestBody PartyDto partyDto) {
     return partyService.createOrUpdate(partyDto);
   }
@@ -59,10 +67,16 @@ public class PartyController {
     return partyService.findAll(partySearchCriteriaDto);
   }
 
-  @GetMapping("/parties/publisher")
-  public PageDto<PartyDto> getPublisherParties(
+  @GetMapping("/publishers")
+  public PageDto<PartyDto> getPublishers(
       @Valid PartySearchCriteriaDto partySearchCriteriaDto) {
     return partyService.findAllPublishers(partySearchCriteriaDto);
+  }
+
+  @GetMapping("/creators")
+  public PageDto<PartyDto> getCreators(
+      @Valid PartySearchCriteriaDto partySearchCriteriaDto) {
+    return partyService.findAllCreators(partySearchCriteriaDto);
   }
 
   @InitBinder

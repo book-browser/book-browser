@@ -114,6 +114,17 @@ public class SeriesService {
       }
     }
 
+    if (seriesSearchCriteriaDto.getCreator().isPresent()) {
+      String creator = seriesSearchCriteriaDto.getCreator().get();
+      if (StringUtils.isBlank(creator)) {
+        specification = specification.and(SeriesSpecification.hasNoCreator());
+      } else if (NumberUtils.isDigits(creator)) {
+        specification = specification.and(SeriesSpecification.hasCreatorId(Long.parseLong(creator)));
+      } else {
+        specification = specification.and(SeriesSpecification.hasCreatorUrlName(creator));
+      }
+    }
+
     if (seriesSearchCriteriaDto.getTitleStartsWith().isPresent()) {
       specification = specification.and(
           SeriesSpecification.titleStartsWith(

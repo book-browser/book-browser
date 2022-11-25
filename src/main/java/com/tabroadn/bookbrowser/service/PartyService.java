@@ -33,8 +33,16 @@ public class PartyService {
     return DtoConversionUtils.convertPartyToPartyDto(getPublisherByIdOrElse(id));
   }
 
+  public PartyDto getCreatorById(Long id) {
+    return DtoConversionUtils.convertPartyToPartyDto(getCreatorByIdOrElse(id));
+  }
+
   public PartyDto getPublisherByUrlName(String urlName) {
     return DtoConversionUtils.convertPartyToPartyDto(getPublisherByUrlNameOrElse(urlName));
+  }
+
+  public PartyDto getCreatorByUrlName(String urlName) {
+    return DtoConversionUtils.convertPartyToPartyDto(getCreatorByUrlNameOrElse(urlName));
   }
 
   public PartyDto createOrUpdate(PartyDto partyDto) {
@@ -90,6 +98,23 @@ public class PartyService {
         partyRepository.findAll(specification, pageable).map(DtoConversionUtils::convertPartyToPartyDto));
   }
 
+  public PageDto<PartyDto> findAllCreators(PartySearchCriteriaDto partySearchCriteriaDto) {
+    Pageable pageable = PageRequest.of(partySearchCriteriaDto.getPage(), partySearchCriteriaDto.getLimit());
+
+    Specification<Party> specification = PartySpecification.orderBy(
+        partySearchCriteriaDto.getSort(), partySearchCriteriaDto.getOrder());
+
+    if (partySearchCriteriaDto.getName() != null) {
+      specification = specification.and(
+          PartySpecification.fullNameLike(partySearchCriteriaDto.getName().orElse("")));
+    }
+
+    specification = specification.and(PartySpecification.isCreator());
+
+    return new PageDto<>(
+        partyRepository.findAll(specification, pageable).map(DtoConversionUtils::convertPartyToPartyDto));
+  }
+
   private Party convertPartyDtoToParty(PartyDto partyDto) {
     Party party = partyDto.getId() != null ? getPartyById(partyDto.getId()) : new Party();
 
@@ -122,11 +147,26 @@ public class PartyService {
             () -> new ResourceNotFoundException(String.format("publisher with id %s not found", id)));
   }
 
+  private Party getCreatorByIdOrElse(Long id) {
+    return partyRepository
+        .findByIdAndSeriesCreatorsIsNotEmpty(id)
+        .orElseThrow(
+            () -> new ResourceNotFoundException(String.format("creator with id %s not found", id)));
+  }
+
   private Party getPublisherByUrlNameOrElse(String urlName) {
     return partyRepository
         .findByUrlNameIgnoreCaseAndSeriesPublicationsIsNotEmpty(
             urlName)
         .orElseThrow(
             () -> new ResourceNotFoundException(String.format("publisher with url name %s not found", urlName)));
+  }
+
+  private Party getCreatorByUrlNameOrElse(String urlName) {
+    return partyRepository
+        .findByUrlNameIgnoreCaseAndSeriesCreatorsIsNotEmpty(
+            urlName)
+        .orElseThrow(
+            () -> new ResourceNotFoundException(String.format("creator with url name %s not found", urlName)));
   }
 }

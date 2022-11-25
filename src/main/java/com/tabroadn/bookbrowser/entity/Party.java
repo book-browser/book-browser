@@ -42,5 +42,9 @@ public class Party {
 
   @OneToMany(mappedBy = "party")
   @ToString.Exclude
+  private List<SeriesCreator> seriesCreators = new ArrayList<>();
+
+  @OneToMany(mappedBy = "party")
+  @ToString.Exclude
   private List<SeriesPublisher> seriesPublications = new ArrayList<>();
 }

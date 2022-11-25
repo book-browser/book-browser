@@ -2,6 +2,7 @@ package com.tabroadn.bookbrowser.repository;
 
 import com.tabroadn.bookbrowser.domain.OrderEnum;
 import com.tabroadn.bookbrowser.entity.Party;
+import com.tabroadn.bookbrowser.entity.SeriesCreator;
 import com.tabroadn.bookbrowser.entity.SeriesPublisher;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Root;
@@ -32,6 +33,18 @@ public class PartySpecification {
     return (party, cq, cb) -> {
       Subquery<Long> sq = cq.subquery(Long.class);
       Root<SeriesPublisher> subRoot = sq.from(SeriesPublisher.class);
+
+      return cb.greaterThan(
+          sq.select(cb.count(subRoot))
+              .where(cb.equal(party.get("id"), subRoot.get("party").get("id"))),
+          0L);
+    };
+  }
+
+  public static Specification<Party> isCreator() {
+    return (party, cq, cb) -> {
+      Subquery<Long> sq = cq.subquery(Long.class);
+      Root<SeriesCreator> subRoot = sq.from(SeriesCreator.class);
 
       return cb.greaterThan(
           sq.select(cb.count(subRoot))

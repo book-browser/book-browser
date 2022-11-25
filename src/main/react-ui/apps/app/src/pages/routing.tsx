@@ -4,6 +4,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import BookListPage from './book-list-page';
 import BookPage from './book-page';
 import CreateBookPage from './create-book-page';
+import CreatorPage from './creator-page';
 import EditBookPage from './edit-book-page';
 import EditEpisodePage from './edit-episode-page';
 import EditPartyPage from './edit-party-page';
@@ -16,7 +17,7 @@ import NewEpisodePage from './new-episode-page';
 import NewSeriesPage from './new-series-page';
 import NotFoundPage from './not-found-page';
 import PartyPage from './party-page';
-import PublisherPartyPage from './publisher-party-page';
+import PublisherPage from './publisher-page';
 import PublisherSeriesPage from './publisher-series-page';
 import RandomBookPage from './random-book-page';
 import RecentBookPage from './recent-book-page';
@@ -78,8 +79,15 @@ export const Routing = () => {
 
         <Route path="publishers">
           <Route path=":id">
-            <Route index element={<PublisherPartyPage />}></Route>
+            <Route index element={<PublisherPage />}></Route>
             <Route path="series" element={<PublisherSeriesPage />}></Route>
+          </Route>
+        </Route>
+
+        <Route path="creators">
+          <Route path=":id">
+            <Route index element={<CreatorPage />}></Route>
+            {/* <Route path="series" element={<PublisherSeriesPage />}></Route> */}
           </Route>
         </Route>
 

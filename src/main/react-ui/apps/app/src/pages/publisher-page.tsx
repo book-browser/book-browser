@@ -11,7 +11,7 @@ import { Breadcrumb, Button } from 'react-bootstrap';
 import { Link, useParams } from 'react-router-dom';
 import { Party } from 'types/party';
 
-const PublisherPartyPageHeader = ({ data }: { data: Party }) => {
+const PublisherPageHeader = ({ data }: { data: Party }) => {
   return (
     <div className="d-flex align-items-start">
       <Breadcrumb>
@@ -28,7 +28,7 @@ const PublisherPartyPageHeader = ({ data }: { data: Party }) => {
   );
 };
 
-const PartyPageContent = () => {
+const PublisherPageContent = () => {
   const { data, execute, loading, error } = useGetPublisherByIdOrUrlName();
   const { data: series, execute: findAllSeries, loading: loadingSeries, error: seriesError } = useFindAllSeries();
 
@@ -61,7 +61,7 @@ const PartyPageContent = () => {
   if (data && series) {
     return (
       <>
-        <PublisherPartyPageHeader data={data} />
+        <PublisherPageHeader data={data} />
         <PublisherPartyDetails party={data} series={series.items} totalSeries={series.totalElements} />
       </>
     );
@@ -69,12 +69,12 @@ const PartyPageContent = () => {
   return null;
 };
 
-const PublisherPartyPage = () => {
+const PublisherPage = () => {
   return (
     <Container maxWidth="lg">
-      <PartyPageContent />
+      <PublisherPageContent />
     </Container>
   );
 };
 
-export default PublisherPartyPage;
+export default PublisherPage;

@@ -43,6 +43,7 @@ export const findAllSeries = async ({
   titleStartsWith,
   genres,
   publisher,
+  creator,
   limit,
   page,
   sort,
@@ -53,6 +54,7 @@ export const findAllSeries = async ({
   titleStartsWith?: LetterEnum;
   genres?: GenreEnum[];
   publisher?: string | number;
+  creator?: string | number;
   page?: number;
   limit?: number;
   sort?: keyof Series;
@@ -70,6 +72,9 @@ export const findAllSeries = async ({
   }
   if (publisher) {
     params.append('publisher', `${publisher}`);
+  }
+  if (creator) {
+    params.append('creator', `${creator}`);
   }
   if (page) {
     params.append('page', `${page}`);

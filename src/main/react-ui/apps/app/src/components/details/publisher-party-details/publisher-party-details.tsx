@@ -29,7 +29,7 @@ const PublisherPartyDetails = ({ party, series, totalSeries }: PublisherPartyDet
         <div className="mb-3">
           <Heading as="h2">All Series</Heading>
           <SeriesList seriesList={series} />
-          {series.length <= totalSeries && (
+          {series.length < totalSeries && (
             <div>
               <Link to={`/publishers/${party.urlName}/series`}>View More</Link>
             </div>

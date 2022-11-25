@@ -53,7 +53,7 @@ export const SeriesEpisodePageContent = () => {
   }, [params]);
 
   useEffect(() => {
-    execute(Number(id));
+    execute(id);
   }, [id, execute]);
 
   useEffect(() => {

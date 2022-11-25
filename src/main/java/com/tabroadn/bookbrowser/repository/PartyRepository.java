@@ -15,5 +15,9 @@ public interface PartyRepository
 
   public Optional<Party> findByIdAndSeriesPublicationsIsNotEmpty(Long id);
 
+  public Optional<Party> findByIdAndSeriesCreatorsIsNotEmpty(Long id);
+
   public Optional<Party> findByUrlNameIgnoreCaseAndSeriesPublicationsIsNotEmpty(String urlName);
+
+  public Optional<Party> findByUrlNameIgnoreCaseAndSeriesCreatorsIsNotEmpty(String urlName);
 }
