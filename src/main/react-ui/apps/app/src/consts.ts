@@ -1,4 +1,4 @@
-import { StatusEnum, PricingEnum, DistributionEnum, GenreEnum } from 'enum';
+import { StatusEnum, PricingEnum, DistributionEnum, GenreEnum, LetterEnum } from 'enum';
 
 export const Pricing = {
   [PricingEnum.FREE]: {
@@ -121,5 +121,128 @@ export const Genre = {
   [GenreEnum.BL]: {
     value: GenreEnum.BL,
     label: 'BL'
+  }
+};
+
+export const Letter = {
+  [LetterEnum.ALL]: {
+    value: LetterEnum.ALL,
+    label: 'All'
+  },
+  [LetterEnum.NUMBER]: {
+    value: LetterEnum.NUMBER,
+    label: '0-9'
+  },
+  [LetterEnum.A]: {
+    value: LetterEnum.A,
+    label: 'A'
+  },
+  [LetterEnum.B]: {
+    value: LetterEnum.B,
+    label: 'B'
+  },
+  [LetterEnum.C]: {
+    value: LetterEnum.C,
+    label: 'C'
+  },
+  [LetterEnum.D]: {
+    value: LetterEnum.D,
+    label: 'D'
+  },
+  [LetterEnum.E]: {
+    value: LetterEnum.E,
+    label: 'E'
+  },
+  [LetterEnum.D]: {
+    value: LetterEnum.D,
+    label: 'D'
+  },
+  [LetterEnum.E]: {
+    value: LetterEnum.E,
+    label: 'E'
+  },
+  [LetterEnum.F]: {
+    value: LetterEnum.F,
+    label: 'F'
+  },
+  [LetterEnum.G]: {
+    value: LetterEnum.G,
+    label: 'G'
+  },
+  [LetterEnum.H]: {
+    value: LetterEnum.H,
+    label: 'H'
+  },
+  [LetterEnum.I]: {
+    value: LetterEnum.I,
+    label: 'I'
+  },
+  [LetterEnum.J]: {
+    value: LetterEnum.J,
+    label: 'J'
+  },
+  [LetterEnum.K]: {
+    value: LetterEnum.K,
+    label: 'K'
+  },
+  [LetterEnum.L]: {
+    value: LetterEnum.L,
+    label: 'L'
+  },
+  [LetterEnum.M]: {
+    value: LetterEnum.M,
+    label: 'M'
+  },
+  [LetterEnum.N]: {
+    value: LetterEnum.N,
+    label: 'N'
+  },
+  [LetterEnum.O]: {
+    value: LetterEnum.O,
+    label: 'O'
+  },
+  [LetterEnum.P]: {
+    value: LetterEnum.P,
+    label: 'P'
+  },
+  [LetterEnum.Q]: {
+    value: LetterEnum.Q,
+    label: 'Q'
+  },
+  [LetterEnum.R]: {
+    value: LetterEnum.R,
+    label: 'R'
+  },
+  [LetterEnum.S]: {
+    value: LetterEnum.S,
+    label: 'S'
+  },
+  [LetterEnum.T]: {
+    value: LetterEnum.T,
+    label: 'T'
+  },
+  [LetterEnum.U]: {
+    value: LetterEnum.U,
+    label: 'U'
+  },
+  [LetterEnum.V]: {
+    value: LetterEnum.V,
+    label: 'V'
+  },
+  [LetterEnum.W]: {
+    value: LetterEnum.W,
+    label: 'W'
+  },
+  [LetterEnum.X]: {
+    value: LetterEnum.X,
+    label: 'X'
+  },
+  [LetterEnum.Y]: {
+    value: LetterEnum.Y,
+    label: 'Y'
+  },
+  [LetterEnum.Z]: {
+    value: LetterEnum.Z,
+    label: 'Z'
   }
 };

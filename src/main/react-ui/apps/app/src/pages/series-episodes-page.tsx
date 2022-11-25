@@ -71,10 +71,10 @@ export const SeriesEpisodePageContent = () => {
   }, [series]);
 
   if (seriesError) {
-    <ErrorMessage error={seriesError} />;
+    return <ErrorMessage error={seriesError} />;
   }
 
-  if (loadingSeries || loadingEpisodes) {
+  if (loadingSeries) {
     return <Loading />;
   }
 
@@ -95,6 +95,7 @@ export const SeriesEpisodePageContent = () => {
         </Breadcrumb>
         <Heading as="h1">{`${series.title} Episodes`}</Heading>
         {episodesError && <ErrorAlert error={episodesError} />}
+        {loadingEpisodes && <Loading />}
         {episodes && (
           <>
             <EpisodeList episodes={episodes.items} />

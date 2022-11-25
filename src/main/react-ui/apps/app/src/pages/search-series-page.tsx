@@ -10,7 +10,7 @@ import Pagination from 'components/pagination/pagination';
 import SeriesList from 'components/series-list/series-list';
 import { Genre } from 'consts';
 import { GenreEnum, StatusEnum } from 'enum';
-import { useFindAll } from 'hooks/series.hook';
+import { useFindAllSeries } from 'hooks/series.hook';
 import React, { KeyboardEvent, useEffect, useMemo, useState } from 'react';
 import { Breadcrumb, Button, ButtonGroup, Col, FormControl, InputGroup, Row, ToggleButton } from 'react-bootstrap';
 import { Link, Location, useLocation, useNavigate } from 'react-router-dom';
@@ -35,16 +35,13 @@ const readParams = (location: Location) => {
   const schema = yup.object().shape({
     query: yup.string().default(''),
     genres: yup.array(
-      yup
-        .mixed<GenreEnum>()
-        .oneOf(Object.values(GenreEnum))
-        .transform((val) => convertUrlEnumStringToEnumString(val))
+      yup.mixed<GenreEnum>().oneOf(Object.values(GenreEnum)).transform(convertUrlEnumStringToEnumString)
     ),
     status: yup
       .mixed<StatusEnum>()
       .nullable()
       .oneOf([null].concat(Object.values(StatusEnum)))
-      .transform((val) => convertUrlEnumStringToEnumString(val)),
+      .transform(convertUrlEnumStringToEnumString),
     sort: yup.string().oneOf(['id', 'title', 'lastUpdated']).default('id'),
     page: yup
       .number()
@@ -64,7 +61,7 @@ const SearchSeriesPage = () => {
   const [criteria, setCriteria] = useState<SearchSeriesPageParams>(params);
   const [query, setQuery] = useState(params.query);
 
-  const { data: seriesList, loading, error, execute } = useFindAll();
+  const { data: seriesList, loading, error, execute } = useFindAllSeries();
 
   const toggleGenre = (genre: GenreEnum) => {
     const newSelectedGenres = [...criteria.genres];

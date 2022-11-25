@@ -1,4 +1,4 @@
-import { GenreEnum, StatusEnum } from 'enum';
+import { GenreEnum, LetterEnum, StatusEnum } from 'enum';
 import { Letter } from 'types/letter';
 import { Page } from 'types/page';
 import { Series, SeriesForm } from 'types/series';
@@ -37,7 +37,7 @@ export const deleteSeriesById = async (id: number) => {
   return handleEmptyResponse(response);
 };
 
-export const findAll = async ({
+export const findAllSeries = async ({
   query,
   status,
   titleStartsWith,
@@ -50,7 +50,7 @@ export const findAll = async ({
 }: {
   query?: string;
   status?: StatusEnum | null;
-  titleStartsWith?: Letter;
+  titleStartsWith?: LetterEnum;
   genres?: GenreEnum[];
   publisher?: string | number;
   page?: number;
@@ -84,7 +84,7 @@ export const findAll = async ({
     params.append('order', order);
   }
   if (titleStartsWith) {
-    params.append('titleStartsWith', titleStartsWith.value);
+    params.append('titleStartsWith', titleStartsWith);
   }
   if (genres) {
     genres.forEach((genre) => params.append('genres', genre));

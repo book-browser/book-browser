@@ -78,6 +78,8 @@ public class DtoConversionUtils {
     seriesDto.setDescription(series.getDescription());
     seriesDto.setBannerUrl(series.getBannerUrl());
     seriesDto.setThumbnailUrl(series.getThumbnailUrl());
+    seriesDto.setStartDate(series.getStartDate());
+    seriesDto.setLastUpdated(series.getLastUpdated());
     seriesDto.setStatus(series.getStatus() == null ? null
         : StatusEnum.valueOfId(
             series.getStatus().getId()));

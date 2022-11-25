@@ -6,7 +6,7 @@ import { Button, InputGroup } from 'react-bootstrap';
 import { AsyncTypeahead, Menu, useItem } from 'react-bootstrap-typeahead';
 import { Link, useNavigate } from 'react-router-dom';
 import { findAllBooks } from 'services/book.service';
-import { findAll as findAllSeries } from 'services/series.service';
+import { findAllSeries } from 'services/series.service';
 import { Book } from 'types/book';
 import { Series } from 'types/series';
 import { generateEncodedUrl } from 'utils/location-utils';

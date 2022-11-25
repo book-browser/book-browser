@@ -10,6 +10,7 @@ import { Button, OverlayTrigger, Popover } from 'react-bootstrap';
 import { Info } from '@mui/icons-material';
 import PublisherDetails from 'components/details/publisher-details/publisher-details';
 import { Status } from 'consts';
+import moment from 'moment';
 
 export type SeriesDataViewProps = {
   data: Series;
@@ -33,15 +34,23 @@ const getAllExternalLinks = (series: Series) => {
 
 const SERIES_DATA_VIEW_ITEMS: DataViewItem<Series>[] = [
   {
-    heading: 'Status:',
-    content: (series) => (series.status ? Status[series.status].label : 'N/A')
-  },
-  {
     heading: 'Genres:',
     content: (series) =>
       series.genres.length === 0
         ? 'N/A'
         : series.genres.map((genre) => <GenreBadge key={genre} genre={{ name: genre } as Genre} variant="series" />)
+  },
+  {
+    heading: 'Status:',
+    content: (series) => (series.status ? Status[series.status].label : 'N/A')
+  },
+  {
+    heading: 'Start Date:',
+    content: (series) => (series.startDate ? moment(series.startDate).format('M/D/YYYY') : 'N/A')
+  },
+  {
+    heading: 'Last Released:',
+    content: (series) => (series.lastUpdated ? moment(series.lastUpdated).format('M/D/YYYY') : 'N/A')
   },
   {
     heading: 'Publishers:',

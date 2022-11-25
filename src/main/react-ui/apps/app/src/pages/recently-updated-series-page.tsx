@@ -4,7 +4,7 @@ import Loading from 'components/loading/loading';
 import Heading from 'components/navigation/heading/heading';
 import Pagination from 'components/pagination/pagination';
 import SeriesList from 'components/series-list/series-list';
-import { useFindAll as useFindAllSeries } from 'hooks/series.hook';
+import { useFindAllSeries } from 'hooks/series.hook';
 import React, { useEffect, useState } from 'react';
 import { Breadcrumb } from 'react-bootstrap';
 import { Link, useNavigate, useLocation } from 'react-router-dom';

@@ -12,6 +12,7 @@ export type Series = {
   description: string;
   status?: StatusEnum;
   lastUpdated?: string;
+  startDate?: string;
   genres: GenreEnum[];
   links: Link[];
   creators: Creator[];

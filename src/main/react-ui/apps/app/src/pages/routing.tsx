@@ -17,6 +17,7 @@ import NewSeriesPage from './new-series-page';
 import NotFoundPage from './not-found-page';
 import PartyPage from './party-page';
 import PublisherPartyPage from './publisher-party-page';
+import PublisherSeriesPage from './publisher-series-page';
 import RandomBookPage from './random-book-page';
 import RecentBookPage from './recent-book-page';
 import RecentlyUpdatedSeriesPage from './recently-updated-series-page';
@@ -78,6 +79,7 @@ export const Routing = () => {
         <Route path="publishers">
           <Route path=":id">
             <Route index element={<PublisherPartyPage />}></Route>
+            <Route path="series" element={<PublisherSeriesPage />}></Route>
           </Route>
         </Route>
 

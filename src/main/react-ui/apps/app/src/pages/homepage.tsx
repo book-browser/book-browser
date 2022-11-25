@@ -8,7 +8,7 @@ import { useEmptyPromise } from 'hooks/promise.hook';
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { findAllBooks } from 'services/book.service';
-import { findAll as findAllSeries } from 'services/series.service';
+import { findAllSeries } from 'services/series.service';
 
 const loadData = () => {
   return Promise.all([

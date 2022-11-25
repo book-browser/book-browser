@@ -5,7 +5,7 @@ import Loading from 'components/loading/loading';
 import Heading from 'components/navigation/heading/heading';
 import SeriesList from 'components/series-list/series-list';
 import { useFindAllBooks } from 'hooks/book.hook';
-import { useFindAll as useFindAllSeries } from 'hooks/series.hook';
+import { useFindAllSeries } from 'hooks/series.hook';
 import React, { KeyboardEvent, useEffect, useState } from 'react';
 import { Breadcrumb, Button, FormControl, InputGroup } from 'react-bootstrap';
 import { Link, useNavigate, useLocation } from 'react-router-dom';

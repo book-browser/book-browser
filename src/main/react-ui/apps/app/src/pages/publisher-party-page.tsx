@@ -5,7 +5,7 @@ import PublisherPartyDetails from 'components/details/publisher-party-details/pu
 import Loading from 'components/loading/loading';
 import { ErrorMessage } from 'components/message/error-message/error-message';
 import { useGetPublisherByIdOrUrlName } from 'hooks/party.hook';
-import { useFindAll } from 'hooks/series.hook';
+import { useFindAllSeries } from 'hooks/series.hook';
 import React, { useEffect } from 'react';
 import { Breadcrumb, Button } from 'react-bootstrap';
 import { Link, useParams } from 'react-router-dom';
@@ -30,7 +30,7 @@ const PublisherPartyPageHeader = ({ data }: { data: Party }) => {
 
 const PartyPageContent = () => {
   const { data, execute, loading, error } = useGetPublisherByIdOrUrlName();
-  const { data: series, execute: findAllSeries, loading: loadingSeries, error: seriesError } = useFindAll();
+  const { data: series, execute: findAllSeries, loading: loadingSeries, error: seriesError } = useFindAllSeries();
 
   const { id } = useParams();
 

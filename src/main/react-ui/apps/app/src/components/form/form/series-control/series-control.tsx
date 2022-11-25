@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import AsyncSelect from 'react-select/async';
-import { findAll, getById } from 'services/series.service';
+import { findAllSeries, getById } from 'services/series.service';
 import { Series } from 'types/series';
 
 export type SeriesControlProps = {
@@ -28,7 +28,7 @@ export const SeriesControl = ({ name, value, isInvalid, onChange, onBlur }: Seri
   const [currentValue, setCurrentValue] = useState<SeriesOption>();
 
   const loadOptions = async (query: string) => {
-    const seriesList = await findAll({ query });
+    const seriesList = await findAllSeries({ query });
     return seriesList.items.map(mapSeriesToSeriesOption);
   };
 

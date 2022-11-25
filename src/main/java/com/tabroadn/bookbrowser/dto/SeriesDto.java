@@ -34,6 +34,8 @@ public class SeriesDto {
 
   private Optional<String> thumbnail;
 
+  private LocalDate startDate;
+
   private LocalDate lastUpdated;
 
   private StatusEnum status;

@@ -3,7 +3,7 @@ import SeriesList from 'components/series-list/series-list';
 import { ErrorAlert } from 'components/error/error-alert';
 import Loading from 'components/loading/loading';
 import Pagination from 'components/pagination/pagination';
-import { useFindAll } from 'hooks/series.hook';
+import { useFindAllSeries } from 'hooks/series.hook';
 import { useReferenceData } from 'hooks/reference-data.hook';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Breadcrumb, ToggleButton } from 'react-bootstrap';
@@ -43,7 +43,7 @@ const SeriesListPageContent = () => {
   const [page, setPage] = useState(params.page);
   const [letter, setLetter] = useState(params.letter);
 
-  const { data: seriesList, loading, error, execute: findAll } = useFindAll();
+  const { data: seriesList, loading, error, execute: findAll } = useFindAllSeries();
 
   const onPageChange = (newPage) => {
     navigate(generateEncodedUrl('/series', { page: newPage > 0 ? newPage + 1 : undefined }));
@@ -61,7 +61,7 @@ const SeriesListPageContent = () => {
 
   useEffect(() => {
     const actualLetter = letter && referenceData.letters.find(({ value }) => value === letter);
-    findAll({ titleStartsWith: actualLetter, page, order: 'asc', sort: 'title', limit: 48 });
+    findAll({ titleStartsWith: actualLetter.value as any, page, order: 'asc', sort: 'title', limit: 48 });
   }, [page, letter, referenceData.letters, findAll]);
 
   return (

@@ -53,7 +53,7 @@ public class Series implements Serializable {
     private String urlTitle;
 
     @Formula("(select min(e.release_date) from episode e where e.series_id = id)")
-    private LocalDate releaseDate;
+    private LocalDate startDate;
 
     @Formula("(select max(e.release_date) from episode e where e.series_id = id)")
     private LocalDate lastUpdated;
