@@ -9,6 +9,7 @@ import com.tabroadn.bookbrowser.entity.Series;
 import com.tabroadn.bookbrowser.entity.SeriesCreator;
 import com.tabroadn.bookbrowser.entity.SeriesPublisher;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.criteria.Expression;
@@ -135,6 +136,18 @@ public class SeriesSpecification {
   public static Specification<Series> hasStatus(StatusEnum status) {
     return (series, cq, cb) -> {
       return cb.equal(series.get("status").get("id"), status.getId());
+    };
+  }
+
+  public static Specification<Series> startDateAfter(LocalDate date) {
+    return (series, cq, cb) -> {
+      return cb.greaterThanOrEqualTo(series.get("startDate"), date);
+    };
+  }
+
+  public static Specification<Series> lastUpdatedBefore(LocalDate date) {
+    return (series, cq, cb) -> {
+      return cb.lessThanOrEqualTo(series.get("lastUpdated"), date);
     };
   }
 

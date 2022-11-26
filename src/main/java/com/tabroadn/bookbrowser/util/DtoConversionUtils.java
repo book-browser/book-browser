@@ -216,6 +216,7 @@ public class DtoConversionUtils {
     EpisodeDto episodeDto = new EpisodeDto();
     episodeDto.setSeriesId(Optional.ofNullable(episode.getSeries().getId()));
     episodeDto.setSeriesTitle(Optional.ofNullable(episode.getSeries().getTitle()));
+    episodeDto.setSeriesUrlTitle(episode.getSeries().getUrlTitle());
     episodeDto.setId(episode.getId());
     episodeDto.setTitle(Optional.ofNullable(episode.getTitle()));
     episodeDto.setDescription(Optional.ofNullable(episode.getDescription()));

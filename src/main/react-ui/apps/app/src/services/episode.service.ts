@@ -58,7 +58,7 @@ export const findAllEpisodes = async ({
   limit?: number;
   sort?: keyof Episode;
   order?: 'asc' | 'desc';
-  seriesId?: number;
+  seriesId?: number | string;
 }) => {
   const params = new URLSearchParams();
   if (page) {

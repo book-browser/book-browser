@@ -18,6 +18,8 @@ public class EpisodeDto {
 
   private Optional<String> seriesTitle;
 
+  private String seriesUrlTitle;
+
   private Optional<String> title;
 
   private Optional<String> description;

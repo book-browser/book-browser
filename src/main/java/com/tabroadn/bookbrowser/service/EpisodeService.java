@@ -2,6 +2,7 @@ package com.tabroadn.bookbrowser.service;
 
 import com.tabroadn.bookbrowser.domain.OrderEnum;
 import com.tabroadn.bookbrowser.dto.EpisodeDto;
+import com.tabroadn.bookbrowser.dto.EpisodeSearchCriteriaDto;
 import com.tabroadn.bookbrowser.dto.LinkDto;
 import com.tabroadn.bookbrowser.dto.PageDto;
 import com.tabroadn.bookbrowser.entity.Episode;
@@ -17,6 +18,8 @@ import com.tabroadn.bookbrowser.util.DtoConversionUtils;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
+
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -119,17 +122,18 @@ public class EpisodeService {
             () -> new ResourceNotFoundException(String.format("episode with id %s not found", id)));
   }
 
-  public PageDto<EpisodeDto> findAll(
-      Integer page, Integer size, String sort, OrderEnum order, Optional<Long> seriesId) {
+  public PageDto<EpisodeDto> findAll(EpisodeSearchCriteriaDto criteriaDto) {
+    Pageable pageable = PageRequest.of(criteriaDto.getPage(), criteriaDto.getLimit());
 
-    validateEpisodeField(sort);
+    Specification<Episode> specification = EpisodeSpecification.orderBy(criteriaDto.getSort(), criteriaDto.getOrder());
 
-    Pageable pageable = PageRequest.of(page, size);
-
-    Specification<Episode> specification = EpisodeSpecification.orderBy(sort, order);
-
-    if (seriesId.isPresent()) {
-      specification = specification.and(EpisodeSpecification.seriesIdEqual(seriesId.get()));
+    if (criteriaDto.getSeriesId().isPresent()) {
+      String seriesId = criteriaDto.getSeriesId().get();
+      if (NumberUtils.isCreatable(seriesId)) {
+        specification = specification.and(EpisodeSpecification.seriesIdEqual(Long.parseLong(seriesId)));
+      } else if (seriesId != null) {
+        specification = specification.and(EpisodeSpecification.seriesUrlTitleEqual(seriesId));
+      }
     }
 
     return new PageDto<>(
