@@ -41,6 +41,8 @@ export const findAllSeries = async ({
   query,
   status,
   titleStartsWith,
+  startDate,
+  endDate,
   genres,
   publisher,
   creator,
@@ -52,6 +54,8 @@ export const findAllSeries = async ({
   query?: string;
   status?: StatusEnum | null;
   titleStartsWith?: LetterEnum;
+  startDate?: Date;
+  endDate?: Date;
   genres?: GenreEnum[];
   publisher?: string | number;
   creator?: string | number;
@@ -75,6 +79,12 @@ export const findAllSeries = async ({
   }
   if (creator) {
     params.append('creator', `${creator}`);
+  }
+  if (startDate) {
+    params.append('startDate', startDate.toISOString().substring(0, 10));
+  }
+  if (endDate) {
+    params.append('endDate', endDate.toISOString().substring(0, 10));
   }
   if (page) {
     params.append('page', `${page}`);

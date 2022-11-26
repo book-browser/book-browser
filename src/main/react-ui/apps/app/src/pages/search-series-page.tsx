@@ -1,6 +1,7 @@
 import AutorenewIcon from '@mui/icons-material/Autorenew';
 import LabelIcon from '@mui/icons-material/Label';
 import SortIcon from '@mui/icons-material/Sort';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import { Container } from '@mui/material';
 import { ErrorAlert } from 'components/error/error-alert';
 import Form from 'components/form/form/form';
@@ -26,6 +27,8 @@ import * as yup from 'yup';
 type SearchSeriesPageParams = {
   query?: string;
   genres?: GenreEnum[];
+  startDate?: Date;
+  endDate?: Date;
   status?: StatusEnum | null;
   sort?: string;
   page?: number;
@@ -42,7 +45,9 @@ const readParams = (location: Location) => {
       .nullable()
       .oneOf([null].concat(Object.values(StatusEnum)))
       .transform(convertUrlEnumStringToEnumString),
-    sort: yup.string().oneOf(['id', 'title', 'lastUpdated']).default('id'),
+    startDate: yup.date(),
+    endDate: yup.date(),
+    sort: yup.string().oneOf(['title', 'startDate', 'lastUpdated']).default('title'),
     page: yup
       .number()
       .min(0)
@@ -75,16 +80,21 @@ const SearchSeriesPage = () => {
   };
 
   const changeParams = (newParams: SearchSeriesPageParams) => {
+    console.log(newParams);
     const sort = newParams.sort || criteria.sort;
-    const resolvedPage = (newParams.page !== undefined ? newParams.page : criteria.page) + 1;
+    const page = (newParams.page !== undefined ? newParams.page : criteria.page) + 1;
     const status = 'status' in newParams ? newParams.status : criteria.status;
+    const startDate = newParams.startDate !== undefined ? newParams.startDate : criteria.startDate;
+    const endDate = newParams.endDate !== undefined ? newParams.endDate : criteria.endDate;
 
     navigate(
       generateEncodedUrl('/series/search', {
         query: newParams.query || criteria.query,
         genres: (newParams.genres || criteria.genres).map(convertEnumStringToUrlEnumString),
         status: status ? convertEnumStringToUrlEnumString(status) : status,
-        page: resolvedPage === 1 ? '' : resolvedPage,
+        startDate: startDate ? startDate.toISOString().substring(0, 10) : undefined,
+        endDate: endDate ? endDate.toISOString().substring(0, 10) : undefined,
+        page: page === 1 ? '' : page,
         sort: sort !== 'id' ? sort : ''
       }),
       { replace: true }
@@ -110,6 +120,8 @@ const SearchSeriesPage = () => {
       query: criteria.query,
       genres: criteria.genres,
       status: criteria.status,
+      startDate: criteria.startDate,
+      endDate: criteria.endDate,
       sort: criteria.sort as keyof Series,
       order: criteria.sort === 'lastUpdated' ? 'desc' : 'asc',
       page: criteria.page,
@@ -192,8 +204,8 @@ const SearchSeriesPage = () => {
               <span>Sort</span>
             </Form.Label>
             <Form.Select value={criteria.sort} onChange={(e) => changeParams({ sort: e.target.value })}>
-              <option value="id">Default</option>
               <option value="title">Title</option>
+              <option value="startDate">Start Date</option>
               <option value="lastUpdated">Last Updated</option>
             </Form.Select>
           </Form.Group>
@@ -210,6 +222,24 @@ const SearchSeriesPage = () => {
               value={criteria.status}
               onChange={(_name, value) => changeParams({ status: value })}
             />
+          </Form.Group>
+        </Col>
+        <Col xs={6} sm={3}>
+          <Form.Group controlId="start-date-picker">
+            <Form.Label>
+              <CalendarMonthIcon className="mb-1 me-1" />
+              <span>Start Date</span>
+            </Form.Label>
+            <Form.DateControl value={criteria.startDate} onChange={(val) => changeParams({ startDate: val })} />
+          </Form.Group>
+        </Col>
+        <Col xs={6} sm={3}>
+          <Form.Group controlId="end-date-picker">
+            <Form.Label>
+              <CalendarMonthIcon className="mb-1 me-1" />
+              <span>End Date</span>
+            </Form.Label>
+            <Form.DateControl value={criteria.endDate} onChange={(val) => changeParams({ endDate: val })} />
           </Form.Group>
         </Col>
       </Row>

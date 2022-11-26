@@ -1,5 +1,6 @@
 package com.tabroadn.bookbrowser.dto;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,6 +36,10 @@ public class SeriesSearchCriteriaDto {
   private Optional<String> link = Optional.empty();
 
   private Optional<String> publisher = Optional.empty();
+
+  private Optional<LocalDate> startDate = Optional.empty();
+
+  private Optional<LocalDate> endDate = Optional.empty();
 
   private Optional<String> creator = Optional.empty();
 

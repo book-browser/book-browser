@@ -6,8 +6,8 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 public class SeriesSortValidator implements ConstraintValidator<ValidSeriesSort, String> {
-  private static final List<String> VALID_SORT_FIELDS =
-      Arrays.asList("id", "title", "description", "lastUpdated");
+  private static final List<String> VALID_SORT_FIELDS = Arrays.asList("id", "title", "description", "startDate",
+      "lastUpdated");
 
   @Override
   public boolean isValid(String sort, ConstraintValidatorContext context) {

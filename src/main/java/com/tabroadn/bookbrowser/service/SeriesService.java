@@ -103,6 +103,16 @@ public class SeriesService {
       specification = specification.and(SeriesSpecification.hasStatus(seriesSearchCriteriaDto.getStatus().get()));
     }
 
+    if (seriesSearchCriteriaDto.getStartDate().isPresent() && seriesSearchCriteriaDto.getStartDate().get() != null) {
+      specification = specification
+          .and(SeriesSpecification.startDateAfter(seriesSearchCriteriaDto.getStartDate().get()));
+    }
+
+    if (seriesSearchCriteriaDto.getEndDate().isPresent() && seriesSearchCriteriaDto.getEndDate().get() != null) {
+      specification = specification
+          .and(SeriesSpecification.lastUpdatedBefore(seriesSearchCriteriaDto.getEndDate().get()));
+    }
+
     if (seriesSearchCriteriaDto.getPublisher().isPresent()) {
       String publisher = seriesSearchCriteriaDto.getPublisher().get();
       if (StringUtils.isBlank(publisher)) {
